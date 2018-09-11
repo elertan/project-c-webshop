@@ -8,4 +8,5 @@ Zie [https://graphql-dotnet.github.io/](https://graphql-dotnet.github.io/)
 Voor de Frontend ReactJS + TypeScript + Apollo (voor het makkelijk gebruik maken van GraphQL) + e.v.t. Redux en als styling niet perse custom  hoeft te zijn iets van Material UI te gebruiken?
 
 ReactJS + TypeScript [https://github.com/wmonk/create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript)
+Apollo Client React [https://www.apollographql.com/docs/react/](https://www.apollographql.com/docs/react/)
 
