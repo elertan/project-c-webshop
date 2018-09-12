@@ -9,4 +9,11 @@ Voor de Frontend ReactJS + TypeScript + Apollo (voor het makkelijk gebruik maken
 
 ReactJS + TypeScript [https://github.com/wmonk/create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript)
 Apollo Client React [https://www.apollographql.com/docs/react/](https://www.apollographql.com/docs/react/)
+ReactRouter
 
+Frontend structure is:
+components/
+	containers/ <-- THIS ONLY CONTAINS COMPONENTS THAT CONTAIN STATE, COMPONENTS BELOW SHOULDNT CONTAIN STATE
+	views/ <-- THESE COMPONENTS ARE ALL "Stateless Functional Component"'s AKA React.SFC do not introduce state in these components
+routes/ <-- Contains all routes for the app
+utils/ <-- Utility functions for easy reuse : )

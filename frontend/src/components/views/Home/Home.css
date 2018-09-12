@@ -1,0 +1,9 @@
+.Home {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.Home-Title {
+  font-size: 1.5em;
+}

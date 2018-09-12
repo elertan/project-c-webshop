@@ -2,7 +2,7 @@ import ApolloClient from "apollo-boost";
 import * as React from 'react';
 import { ApolloProvider } from "react-apollo";
 import * as ReactDOM from 'react-dom';
-import App from './components/containers/App';
+import App from './components/App';
 import config from './config';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';

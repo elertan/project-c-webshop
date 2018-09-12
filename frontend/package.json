@@ -5,9 +5,11 @@
   "dependencies": {
     "apollo-boost": "^0.1.15",
     "graphql": "^14.0.2",
+    "history": "^4.7.2",
     "react": "^16.5.0",
     "react-apollo": "^2.1.11",
     "react-dom": "^16.5.0",
+    "react-router": "^4.3.1",
     "react-scripts-ts": "2.17.0"
   },
   "scripts": {
@@ -18,10 +20,12 @@
   },
   "devDependencies": {
     "@types/graphql": "^14.0.0",
+    "@types/history": "^4.7.0",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
+    "@types/react-router": "^4.0.30",
     "typescript": "^3.0.3"
   }
 }
