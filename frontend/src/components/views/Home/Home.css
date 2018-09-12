@@ -1,9 +1,14 @@
 .Home {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Home-Title {
   font-size: 1.5em;
+}
+
+.Home-Subtitle {
+  font-size: 1.25em;
 }
