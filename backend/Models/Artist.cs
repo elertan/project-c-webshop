@@ -1,6 +1,6 @@
 namespace backend.Models
 {
-    public class Product : BaseEntity
+    public class Artist : BaseEntity
     {
         public string Name { get; set; }
     }

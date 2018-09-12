@@ -1,19 +1,16 @@
 ﻿using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
-using GraphQL.Server.Transports.AspNetCore;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using backend.Models;
+using backend.Schemas;
+using backend.Schemas.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using StarWars;
-using StarWars.Types;
 
 namespace backend
 {
@@ -23,30 +20,46 @@ namespace backend
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            const string dbConnectionString = "Server=localhost;Database=project-c-webshop;";
+            services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
+                options => options.UseNpgsql(dbConnectionString),
+                ServiceLifetime.Singleton
+            );
+            
+            // Enable CORS options
             services.AddCors();
             
+            // Create a dependency resolver for GraphQL
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 
+            // Query parser stuff
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
-            services.AddSingleton<StarWarsData>();
-            services.AddSingleton<StarWarsQuery>();
-            services.AddSingleton<StarWarsMutation>();
-            services.AddSingleton<HumanType>();
-            services.AddSingleton<HumanInputType>();
-            services.AddSingleton<DroidType>();
-            services.AddSingleton<CharacterInterface>();
-            services.AddSingleton<EpisodeEnum>();
-            services.AddSingleton<ISchema, StarWarsSchema>();
+            // GraphQL Queries, Mutations and Types
+//            services.AddSingleton<StarWarsData>();
+//            services.AddSingleton<StarWarsQuery>();
+//            services.AddSingleton<StarWarsMutation>();
+//            services.AddSingleton<HumanType>();
+//            services.AddSingleton<HumanInputType>();
+//            services.AddSingleton<DroidType>();
+//            services.AddSingleton<CharacterInterface>();
+//            services.AddSingleton<EpisodeEnum>();
+            services.AddSingleton<TrackType>();
+            services.AddSingleton<ArtistType>();
+            services.AddSingleton<WebshopQuery>();
+            services.AddSingleton<ISchema, WebshopSchema>();
 
+            // Enable access to HttpContext
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // Add GraphQL service
             services.AddGraphQL(_ =>
             {
                 _.EnableMetrics = true;
                 _.ExposeExceptions = true;
             })
+                // Extract user information from the request
             .AddUserContextBuilder(httpContext => new GraphQLUserContext { User = httpContext.User });
         }
 
