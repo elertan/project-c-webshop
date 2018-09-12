@@ -12,8 +12,14 @@ Apollo Client React [https://www.apollographql.com/docs/react/](https://www.apol
 ReactRouter
 
 Frontend structure is:
+
 components/
+
 	containers/ <-- THIS ONLY CONTAINS COMPONENTS THAT CONTAIN STATE, COMPONENTS BELOW SHOULDNT CONTAIN STATE
+
 	views/ <-- THESE COMPONENTS ARE ALL "Stateless Functional Component"'s AKA React.SFC do not introduce state in these components
+
 routes/ <-- Contains all routes for the app
+
 utils/ <-- Utility functions for easy reuse : )
+
