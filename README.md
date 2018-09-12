@@ -1,27 +1,23 @@
 # Project C Webshop
 Hogeschool Rotterdam INF2B Project C Webshop
 
-Het idee is om als Backend met .NET Core te werken, en vervolgens te praten met een GraphQL instance.
+Team Flying Marshmallows
 
-Zie [https://graphql-dotnet.github.io/](https://graphql-dotnet.github.io/)
+Backend:
+- .NET Core
+- EntityFramework Core
+- GraphQL
 
-Voor de Frontend ReactJS + TypeScript + Apollo (voor het makkelijk gebruik maken van GraphQL) + e.v.t. Redux en als styling niet perse custom  hoeft te zijn iets van Material UI te gebruiken?
+Structured as:
+- Models/ `This contains our Database Models used by EntityFramework`
+- Schemas/ `This contains our GraphQL Schemas to resolve information from a query`
+- Schemas/Types/ `This contains our mapped Types from the Database Models to a GraphQL Type`
 
-ReactJS + TypeScript [https://github.com/wmonk/create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript)
-Apollo Client React [https://www.apollographql.com/docs/react/](https://www.apollographql.com/docs/react/)
-ReactRouter
-
-Frontend structure is:
-
-components/
-
-	containers/ <-- THIS ONLY CONTAINS COMPONENTS THAT CONTAIN STATE, COMPONENTS BELOW SHOULDNT CONTAIN STATE
-
-	views/ <-- THESE COMPONENTS ARE ALL "Stateless Functional Component"'s AKA React.SFC do not introduce state in these components
-
-routes/ <-- Contains all routes for the app
-
-utils/ <-- Utility functions for easy reuse : )
+Frontend:
+- ReactJS
+- TypeScript
+- ApolloClient (GraphQL Client)
+- React Router (Navigation)
 
 GraphQL Playground: Open this link [http://localhost:5000/ui/playground](http://localhost:5000/ui/playground)
 ![https://i.imgur.com/bmEBCwX.png](https://i.imgur.com/bmEBCwX.png)
