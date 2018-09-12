@@ -1,5 +1,5 @@
-# Project 5 Webshop
-Hogeschool Rotterdam INF2B Project 5 Webshop project
+# Project C Webshop
+Hogeschool Rotterdam INF2B Project C Webshop
 
 Het idee is om als Backend met .NET Core te werken, en vervolgens te praten met een GraphQL instance.
 
