@@ -13,9 +13,11 @@ const Home: React.SFC<IProps> = (props: IProps) => {
       <p>GraphQL Test Hieronder:</p>
       <Query query={gql`
         {
-          hero {
-            id
+          track(id: 1) {
             name
+            artist {
+              name
+            }
           }
         }
       `}>
@@ -26,9 +28,9 @@ const Home: React.SFC<IProps> = (props: IProps) => {
           if (ctx.error) {
             return <p>{ctx.error!.message}</p>;
           }
-
+          const track = ctx.data.track;
           return (
-            <div>De hero heet {ctx.data.hero.name}</div>
+            <div>Track met id 1 heet '{track.name}' en is van '{track.artist.name}'</div>
           );
         }}
       </Query>
