@@ -23,5 +23,5 @@ routes/ <-- Contains all routes for the app
 
 utils/ <-- Utility functions for easy reuse : )
 
-GraphQL Playground (Start backend and use this url in your browser)
-![https://i.imgur.com/m1g9tSn.png](https://i.imgur.com/m1g9tSn.png)
+GraphQL Playground: Open this link [http://localhost:5000/ui/playground](http://localhost:5000/ui/playground)
+![https://i.imgur.com/bmEBCwX.png](https://i.imgur.com/bmEBCwX.png)
