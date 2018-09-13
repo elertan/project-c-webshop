@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RouterProps } from 'react-router';
-import Home from '../views/Home/Home';
+import Home from '../views/home/Home';
 
 interface IState extends RouterProps {}
 interface IProps {}

@@ -1,0 +1,44 @@
+.Login-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.Login-background {
+  width: 100vw;
+  height: 100vh;
+  background-color: cornflowerblue;
+}
+
+.Login-content {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  bottom: 100vh;
+  margin-bottom: -100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Login-card {
+  width: 400px;
+  padding: 10px;
+  padding-top: 20px;
+}
+
+.Login-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 175px;
+}
+
+.Login-card-title {
+  margin-bottom: 5px;
+}
+
+.Login-card-rememberme {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

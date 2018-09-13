@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -9,9 +10,10 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180913120755_Artists-are-now-a-poly-type")]
+    partial class Artistsarenowapolytype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +26,6 @@ namespace backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
                     b.HasKey("Id");
 
                     b.ToTable("Albums");
@@ -38,36 +36,15 @@ namespace backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedAt");
-
                     b.Property<string>("Name");
 
-                    b.Property<DateTime?>("UpdatedAt");
+                    b.Property<int?>("TrackId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Artists");
-
-                    b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 13, 15, 12, 44, 258, DateTimeKind.Local), Name = "Marshmello" }
-                    );
-                });
-
-            modelBuilder.Entity("backend.Models.ArtistXTrack", b =>
-                {
-                    b.Property<int>("ArtistId");
-
-                    b.Property<int>("TrackId");
-
-                    b.HasKey("ArtistId", "TrackId");
-
                     b.HasIndex("TrackId");
 
-                    b.ToTable("ArtistXTrack");
-
-                    b.HasData(
-                        new { ArtistId = 1, TrackId = 1 }
-                    );
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("backend.Models.Product", b =>
@@ -75,11 +52,7 @@ namespace backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedAt");
-
                     b.Property<string>("Name");
-
-                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
@@ -93,11 +66,7 @@ namespace backend.Migrations
 
                     b.Property<int?>("AlbumId");
 
-                    b.Property<DateTime>("CreatedAt");
-
                     b.Property<string>("Name");
-
-                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
@@ -106,21 +75,15 @@ namespace backend.Migrations
                     b.ToTable("Tracks");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 13, 15, 12, 44, 254, DateTimeKind.Local), Name = "Happier" }
+                        new { Id = 1, Name = "Happier" }
                     );
                 });
 
-            modelBuilder.Entity("backend.Models.ArtistXTrack", b =>
+            modelBuilder.Entity("backend.Models.Artist", b =>
                 {
-                    b.HasOne("backend.Models.Artist", "Artist")
-                        .WithMany()
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("backend.Models.Track", "Track")
-                        .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("backend.Models.Track")
+                        .WithMany("Artists")
+                        .HasForeignKey("TrackId");
                 });
 
             modelBuilder.Entity("backend.Models.Track", b =>

@@ -15,7 +15,7 @@ const Home: React.SFC<IProps> = (props: IProps) => {
         {
           track(id: 1) {
             name
-            artist {
+            artists {
               name
             }
           }
@@ -30,7 +30,9 @@ const Home: React.SFC<IProps> = (props: IProps) => {
           }
           const track = ctx.data.track;
           return (
-            <div>Track met id 1 heet '{track.name}' en is van '{track.artist.name}'</div>
+          <div>
+            <div>Track met id 1 heet {track.name}</div>
+          </div>
           );
         }}
       </Query>
