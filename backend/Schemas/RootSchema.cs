@@ -3,12 +3,12 @@ using GraphQL.Types;
 
 namespace backend.Schemas
 {
-    public class WebshopSchema : Schema
+    public class RootSchema : Schema
     {
-        public WebshopSchema(IDependencyResolver resolver)
+        public RootSchema(IDependencyResolver resolver)
             : base(resolver)
         {
-            Query = resolver.Resolve<WebshopQuery>();
+            Query = resolver.Resolve<RootQuery>();
 //            Mutation = resolver.Resolve<StarWarsMutation>();
         }
     }

@@ -47,8 +47,8 @@ namespace backend
 //            services.AddSingleton<EpisodeEnum>();
             services.AddSingleton<TrackType>();
             services.AddSingleton<ArtistType>();
-            services.AddSingleton<WebshopQuery>();
-            services.AddSingleton<ISchema, WebshopSchema>();
+            services.AddSingleton<RootQuery>();
+            services.AddSingleton<ISchema, RootSchema>();
 
             // Enable access to HttpContext
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
