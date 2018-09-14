@@ -20,7 +20,7 @@ namespace backend
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            const string dbConnectionString = "Server=localhost;Database=project-c-webshop;";
+            var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(dbConnectionString),
                 ServiceLifetime.Singleton

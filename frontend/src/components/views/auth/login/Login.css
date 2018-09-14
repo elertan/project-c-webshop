@@ -42,3 +42,9 @@
   flex-direction: row;
   align-items: center;
 }
+
+.Login-card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

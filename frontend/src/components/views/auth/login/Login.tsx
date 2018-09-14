@@ -64,7 +64,7 @@ class Login extends React.Component<IProps> {
           <Typography>Remember me</Typography>
         </div>
       </CardContent>
-      <CardActions>
+      <CardActions className="Login-card-actions">
         <Button
           color="primary"
           disabled={!fprops.isValid || fprops.isSubmitting}
