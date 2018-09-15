@@ -14,16 +14,6 @@ namespace backend
     {
         public static void Main(string[] args)
         {
-            // Load .env file
-            try
-            {
-                DotNetEnv.Env.Load();
-            }
-            catch
-            {
-                throw new Exception("Something went wrong trying to load the .env file, have you created one based on the .env.bak file (does it exist?)");
-            }
-            
             CreateWebHostBuilder(args).Build().Run();
         }
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -9,9 +10,10 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180915002315_Added-cross-table-for-artist-x-track")]
+    partial class Addedcrosstableforartistxtrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,12 +51,7 @@ namespace backend.Migrations
                     b.ToTable("Artists");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Marshmello" },
-                        new { Id = 2, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Bastille" },
-                        new { Id = 3, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Anne-Marie" },
-                        new { Id = 4, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Martin Garrix" },
-                        new { Id = 5, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Khalid" },
-                        new { Id = 6, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Bonn" }
+                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 15, 2, 23, 15, 256, DateTimeKind.Local), Name = "Marshmello" }
                     );
                 });
 
@@ -71,14 +68,7 @@ namespace backend.Migrations
                     b.ToTable("ArtistXTracks");
 
                     b.HasData(
-                        new { ArtistId = 1, TrackId = 1 },
-                        new { ArtistId = 2, TrackId = 1 },
-                        new { ArtistId = 1, TrackId = 2 },
-                        new { ArtistId = 3, TrackId = 2 },
-                        new { ArtistId = 4, TrackId = 3 },
-                        new { ArtistId = 5, TrackId = 3 },
-                        new { ArtistId = 4, TrackId = 4 },
-                        new { ArtistId = 6, TrackId = 4 }
+                        new { ArtistId = 1, TrackId = 1 }
                     );
                 });
 
@@ -118,10 +108,7 @@ namespace backend.Migrations
                     b.ToTable("Tracks");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Happier" },
-                        new { Id = 2, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "FRIENDS" },
-                        new { Id = 3, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "Ocean" },
-                        new { Id = 4, CreatedAt = new DateTime(2018, 9, 15, 2, 32, 57, 327, DateTimeKind.Local), Name = "High on Life" }
+                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 15, 2, 23, 15, 252, DateTimeKind.Local), Name = "Happier" }
                     );
                 });
 

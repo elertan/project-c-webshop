@@ -1,4 +1,5 @@
-﻿using GraphQL;
+﻿using System;
+using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -20,6 +21,16 @@ namespace backend
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Load .env file
+            try
+            {
+                DotNetEnv.Env.Load();
+            }
+            catch
+            {
+                throw new Exception("Something went wrong trying to load the .env file, have you created one based on the .env.bak file (does it exist?)");
+            }
+            
             var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(dbConnectionString),
@@ -37,14 +48,6 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-//            services.AddSingleton<StarWarsData>();
-//            services.AddSingleton<StarWarsQuery>();
-//            services.AddSingleton<StarWarsMutation>();
-//            services.AddSingleton<HumanType>();
-//            services.AddSingleton<HumanInputType>();
-//            services.AddSingleton<DroidType>();
-//            services.AddSingleton<CharacterInterface>();
-//            services.AddSingleton<EpisodeEnum>();
             services.AddSingleton<TrackType>();
             services.AddSingleton<ArtistType>();
             services.AddSingleton<RootQuery>();
