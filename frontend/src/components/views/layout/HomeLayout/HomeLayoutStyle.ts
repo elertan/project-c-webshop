@@ -3,6 +3,7 @@ import {fade} from "@material-ui/core/styles/colorManipulator";
 export type StyleProps = StyledComponentProps<"root" |
     "appBar" |
     "appIcon" |
+    "appBarTitle" |
     "grow" |
     "margin" |
     "menuButton" |
@@ -34,6 +35,9 @@ const styles: StyleRulesCallback = theme => ({
     width: 40,
     borderRadius: 20,
     marginRight: 15
+  },
+  appBarTitle: {
+    fontSize: 18
   },
   grow: {
     flexGrow: 1,

@@ -28,7 +28,12 @@ class HomeLayout extends React.Component<IProps> {
         <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
             <img src="/favicon.ico" className={classes.appIcon} />
-            <Typography variant="title" color="inherit" noWrap>Flying Marshmallows's Webshop</Typography>
+            <Typography
+              variant="title"
+              color="inherit"
+              noWrap
+              className={classes.appBarTitle}
+            >Flying Marshmallows's Webshop</Typography>
             <div className={classes.grow}/>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
