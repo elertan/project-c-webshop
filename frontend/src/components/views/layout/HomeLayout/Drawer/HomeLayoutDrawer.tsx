@@ -16,84 +16,93 @@ import {
 interface IProps {
 }
 
+interface IMenuItemData {
+  label: string;
+  icon: React.ComponentType<any>;
+  onClick?: () => void;
+}
+
+const mainMenuItems: IMenuItemData[] = [
+  {
+    label: "Explore",
+    icon: ExploreIcon
+  },
+  {
+    label: "Trending",
+    icon: TrendingIcon
+  },
+  {
+    label: "Albums",
+    icon: AlbumsIcon
+  },
+  {
+    label: "Artists",
+    icon: ArtistsIcon
+  },
+  {
+    label: "Genres",
+    icon: GenresIcon
+  },
+];
+
+const myMarshmellowMenuItems: IMenuItemData[] = [
+  {
+    label: "My Albums",
+    icon: MyAlbumsIcon
+  },
+  {
+    label: "Favorites",
+    icon: FavoritesIcon
+  },
+  {
+    label: "Wishlist",
+    icon: WishlistIcon
+  },
+];
+
+const historyMenuItems: IMenuItemData[] = [
+  {
+    label: "Recently Visited",
+    icon: RecentlyVisitedIcon
+  },
+  {
+    label: "Order History",
+    icon: OrderHistoryIcon
+  },
+];
+
 class HomeLayoutDrawer extends React.Component<IProps> {
   public render() {
     return (
       <>
         <List component="nav">
-          <ListItem button>
-            <ListItemIcon>
-              <ExploreIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Explore"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <TrendingIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Trending"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AlbumsIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Albums"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <ArtistsIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Artists"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <GenresIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Genres"/>
-          </ListItem>
+          {this.renderListItems(mainMenuItems)}
         </List>
         <List
           component="nav"
           subheader={<ListSubheader component="div">My Marshmellow</ListSubheader>}
         >
-          <ListItem button>
-            <ListItemIcon>
-              <MyAlbumsIcon/>
-            </ListItemIcon>
-            <ListItemText primary="My Albums"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <FavoritesIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Favorites"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <WishlistIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Wishlist"/>
-          </ListItem>
-        </List><List
+          {this.renderListItems(myMarshmellowMenuItems)}
+        </List>
+        <List
           component="nav"
           subheader={<ListSubheader component="div">History</ListSubheader>}
         >
-          <ListItem button>
-            <ListItemIcon>
-              <RecentlyVisitedIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Recently Visited"/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <OrderHistoryIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Order History"/>
-          </ListItem>
+          {this.renderListItems(historyMenuItems)}
         </List>
       </>
     );
   }
+
+  private renderListItems = (items: IMenuItemData[]) =>
+    items.map((item, i) => (
+      <ListItem button key={i}>
+        <ListItemIcon>
+          <item.icon/>
+        </ListItemIcon>
+        <ListItemText primary={item.label}/>
+      </ListItem>
+    ));
 };
 
 export default HomeLayoutDrawer;
