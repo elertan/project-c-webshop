@@ -2,7 +2,9 @@
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules": {
     "jsx-boolean-value": [true, "never"],
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "ordered-imports": [false],
+    "object-literal-sort-keys": [false]
   },
   "linterOptions": {
     "exclude": [
