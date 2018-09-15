@@ -16,7 +16,8 @@ import {
 import styles, {StyleProps} from "./HomeLayoutStyle";
 import HomeLayoutDrawer from "./Drawer/HomeLayoutDrawer";
 
-interface IProps extends React.HTMLProps<HTMLMainElement>, StyleProps {}
+interface IProps extends React.HTMLProps<HTMLMainElement>, StyleProps {
+}
 
 class HomeLayout extends React.Component<IProps> {
   public render() {
@@ -61,7 +62,7 @@ class HomeLayout extends React.Component<IProps> {
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" classes={{paper: classes.drawerPaper}}>
-          <HomeLayoutDrawer/>
+          <HomeLayoutDrawer />
         </Drawer>
         <main className={classes.content} {...this.props} />
       </div>

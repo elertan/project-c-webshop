@@ -12,6 +12,7 @@ import {
   History as RecentlyVisitedIcon,
   CreditCard as OrderHistoryIcon
 } from '@material-ui/icons';
+import {NavLink} from "react-router-dom";
 
 interface IProps {
 }
@@ -19,55 +20,65 @@ interface IProps {
 interface IMenuItemData {
   label: string;
   icon: React.ComponentType<any>;
-  onClick?: () => void;
+  url: string;
 }
 
 const mainMenuItems: IMenuItemData[] = [
   {
     label: "Explore",
-    icon: ExploreIcon
+    icon: ExploreIcon,
+    url: "/home/explore"
   },
   {
     label: "Trending",
-    icon: TrendingIcon
+    icon: TrendingIcon,
+    url: "/home/trending"
   },
   {
     label: "Albums",
-    icon: AlbumsIcon
+    icon: AlbumsIcon,
+    url: "/home/albums"
   },
   {
     label: "Artists",
-    icon: ArtistsIcon
+    icon: ArtistsIcon,
+    url: "/home/artists"
   },
   {
     label: "Genres",
-    icon: GenresIcon
+    icon: GenresIcon,
+    url: "/home/genres"
   },
 ];
 
 const myMarshmellowMenuItems: IMenuItemData[] = [
   {
     label: "My Albums",
-    icon: MyAlbumsIcon
+    icon: MyAlbumsIcon,
+    url: "/home/my-albums"
   },
   {
     label: "Favorites",
-    icon: FavoritesIcon
+    icon: FavoritesIcon,
+    url: "/home/favorites"
   },
   {
     label: "Wishlist",
-    icon: WishlistIcon
+    icon: WishlistIcon,
+    url: "/home/wishlist"
   },
 ];
 
 const historyMenuItems: IMenuItemData[] = [
   {
     label: "Recently Visited",
-    icon: RecentlyVisitedIcon
+    icon: RecentlyVisitedIcon,
+    url: "/home/recently-visited"
   },
   {
     label: "Order History",
-    icon: OrderHistoryIcon
+    icon: OrderHistoryIcon,
+    url: "/home/order-history"
   },
 ];
 
@@ -96,12 +107,19 @@ class HomeLayoutDrawer extends React.Component<IProps> {
 
   private renderListItems = (items: IMenuItemData[]) =>
     items.map((item, i) => (
-      <ListItem button key={i}>
-        <ListItemIcon>
-          <item.icon/>
-        </ListItemIcon>
-        <ListItemText primary={item.label}/>
-      </ListItem>
+      <NavLink
+        key={i}
+        to={item.url}
+        activeStyle={{ backgroundColor: 'lightgray' }}
+        style={{ display: 'block', textDecoration: 'none' }}
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <item.icon/>
+          </ListItemIcon>
+          <ListItemText primary={item.label}/>
+        </ListItem>
+      </NavLink>
     ));
 };
 
