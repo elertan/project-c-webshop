@@ -15,6 +15,7 @@ import {
 } from "@material-ui/icons";
 import styles, {StyleProps} from "./HomeLayoutStyle";
 import HomeLayoutDrawer from "./Drawer/HomeLayoutDrawer";
+import appIcon from "../../../../img/app-icon.jpg";
 
 interface IProps extends React.HTMLProps<HTMLMainElement>, StyleProps {
 }
@@ -27,7 +28,7 @@ class HomeLayout extends React.Component<IProps> {
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
-            <img src="/favicon.ico" className={classes.appIcon} />
+            <img src={appIcon} className={classes.appIcon} />
             <Typography
               variant="title"
               color="inherit"
