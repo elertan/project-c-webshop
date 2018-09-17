@@ -14,7 +14,7 @@ const Album: React.SFC<IProps> = (props: IProps) => {
         <List >
            
            <AlbumDesign/>
-            
+           <AlbumDesign/>
         </List>
         
       </div>
