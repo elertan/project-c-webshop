@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace backend.Models
+namespace backend_datamodel.Models
 {
     public class Album : BaseEntity
     {
