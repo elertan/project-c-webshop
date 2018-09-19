@@ -1,6 +1,9 @@
-language: node_js
+sudo: required
+language: node_js,csharp
 node_js:
   - "stable"
+mono: none
+dotnet: 2.1.402
 cache:
   directories:
     - node_modules
@@ -9,3 +12,6 @@ script:
   - npm i yarn -g
   - yarn
   - yarn build
+  - cd ../backend
+  - dotnet restore
+  - dotnet build
