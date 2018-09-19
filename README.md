@@ -13,6 +13,7 @@ Structured as:
 - Schemas/ `This contains our GraphQL Schemas to resolve information from a query`
 - Schemas/Types/ `This contains our mapped Types from the Database Models to a GraphQL Type`
 
+[![Build Status](https://travis-ci.com/elertan/project-c-webshop.svg?token=xozb6YkaMhi2FuX6ddBq&branch=dev)](https://travis-ci.com/elertan/project-c-webshop)
 Frontend:
 - ReactJS
 - TypeScript
