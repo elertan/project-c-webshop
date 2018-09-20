@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Models {
+namespace backend_datamodel.Models {
   public class DatabaseContext : DbContext {
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
       : base(options)

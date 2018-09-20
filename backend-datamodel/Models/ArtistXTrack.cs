@@ -1,4 +1,4 @@
-namespace backend.Models
+namespace backend_datamodel.Models
 {
     /// <summary>
     /// Many to Many table

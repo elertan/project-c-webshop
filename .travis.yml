@@ -17,6 +17,12 @@ script:
   - npm i yarn -g
   - yarn
   - yarn build
+  - cd ../backend-datamodel
+  - dotnet restore
+  - dotnet build
+  - cd ../database-filling-tool
+  - dotnet restore
+  - dotnet build
   - cd ../backend
   - dotnet restore
   - dotnet build

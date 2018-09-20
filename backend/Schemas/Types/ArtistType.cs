@@ -1,5 +1,5 @@
 using System.Linq;
-using backend.Models;
+using backend_datamodel.Models;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
