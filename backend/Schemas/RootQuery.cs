@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Models;
 using backend.Schemas.Types;
+using backend_datamodel.Models;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 

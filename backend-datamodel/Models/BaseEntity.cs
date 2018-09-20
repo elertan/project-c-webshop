@@ -1,6 +1,6 @@
 using System;
 
-namespace backend.Models
+namespace backend_datamodel.Models
 {
     public class BaseEntity
     {
