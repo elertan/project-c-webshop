@@ -13,7 +13,7 @@ namespace database_filling_tool
             {
                 DotNetEnv.Env.Load();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await Console.Error.WriteLineAsync("Couldn't read the .env file, does one exist?");
             }
@@ -23,13 +23,22 @@ namespace database_filling_tool
 
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
             builder.UseNpgsql(connectionString);
+            Console.WriteLine("Attempting to connect to the database...");
             using (var db = new DatabaseContext(builder.Options))
             {
-                var artists = await db.Artists.ToListAsync();
-                artists.ForEach(artist => Console.WriteLine(artist.Name));
+                Console.WriteLine("Connected!");
+
+                Console.WriteLine("Extracting spotify data...");
+                var extractor = new SpotifyDataExtractor();
+                var data = await extractor.Extract();
+                Console.WriteLine("Data extracted!");
+                
+                // TODO: Fill database with extracted data
             }
 
             Console.WriteLine("Finished");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 }
