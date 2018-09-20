@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace database_filling_tool
 {
     public class SpotifyTrack
@@ -8,5 +10,6 @@ namespace database_filling_tool
         public int DurationMs { get; set; }
         public bool Explicit { get; set; }
         public string PreviewUrl { get; set; }
+        public List<SpotifyArtist> SpotifyArtists { get; set; }
     }
 }
