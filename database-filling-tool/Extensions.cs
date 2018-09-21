@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace database_filling_tool
@@ -11,6 +13,13 @@ namespace database_filling_tool
             {
                 context.Entry(p).State = EntityState.Deleted;
             }
+        }
+
+        public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> sequence, int chunkSize)
+        {
+            return sequence.Select((s, i) => new {Value = s, Index = i})
+                .GroupBy(x => x.Index / chunkSize)
+                .Select(grp => grp.Select(x => x.Value));
         }
     }
 }
