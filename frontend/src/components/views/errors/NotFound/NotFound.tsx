@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Typography, withStyles} from "@material-ui/core";
 import styles, {StyleProps} from "./NotFoundStyles";
 import {Link} from "react-router-dom";
+import sadMarshmallowIcon from "../../../../img/sad-marshmallow.png";
 
 interface IProps extends StyleProps {}
 
@@ -27,7 +28,7 @@ const NotFound: React.SFC<IProps> = (props: IProps) => {
       <div className={classes.imageContainer}>
         <img
           className={classes.image}
-          src="/img/sad-marshmallow.png"
+          src={sadMarshmallowIcon}
         />
       </div>
     </div>

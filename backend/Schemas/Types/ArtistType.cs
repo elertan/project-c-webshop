@@ -1,5 +1,5 @@
 using System.Linq;
-using backend.Models;
+using backend_datamodel.Models;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
@@ -16,10 +16,10 @@ namespace backend.Schemas.Types
             Field(a => a.Id).Description("The id of the artist.");
             Field(a => a.Name, nullable: true).Description("The name of the artist.");
 
-            Field<ListGraphType<TrackType>>(
-                "tracks",
-                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
-            );
+//            Field<ListGraphType<TrackType>>(
+//                "tracks",
+//                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
+//            );
         }
     }
 }
