@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend_datamodel.Models;
 
-namespace backend.Migrations
+namespace backend_datamodel.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180912212254_Creating-webshop-schema-implementation")]
-    partial class Creatingwebshopschemaimplementation
+    [Migration("20180920234650_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,77 +21,108 @@ namespace backend.Migrations
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("backend.Models.Album", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Album", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AlbumType");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Label");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Popularity");
+
+                    b.Property<string>("SpotifyId");
+
+                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
                     b.ToTable("Albums");
                 });
 
-            modelBuilder.Entity("backend.Models.Artist", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Artist", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("SpotifyId");
+
+                    b.Property<int?>("TrackId");
+
+                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Artists");
+                    b.HasIndex("TrackId");
 
-                    b.HasData(
-                        new { Id = 1, Name = "Marshmello" }
-                    );
+                    b.ToTable("Artists");
                 });
 
-            modelBuilder.Entity("backend.Models.Product", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<string>("Name");
+
+                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("backend.Models.Track", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Track", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("AlbumId");
 
-                    b.Property<int?>("ArtistId");
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("DurationMs");
+
+                    b.Property<bool>("Explicit");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("PreviewUrl");
+
+                    b.Property<string>("SpotifyId");
+
+                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
 
-                    b.HasIndex("ArtistId");
-
                     b.ToTable("Tracks");
-
-                    b.HasData(
-                        new { Id = 1, ArtistId = 1, Name = "Happier" }
-                    );
                 });
 
-            modelBuilder.Entity("backend.Models.Track", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Artist", b =>
                 {
-                    b.HasOne("backend.Models.Album")
+                    b.HasOne("backend_datamodel.Models.Track")
+                        .WithMany("Artists")
+                        .HasForeignKey("TrackId");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Track", b =>
+                {
+                    b.HasOne("backend_datamodel.Models.Album")
                         .WithMany("Tracks")
                         .HasForeignKey("AlbumId");
-
-                    b.HasOne("backend.Models.Artist", "Artist")
-                        .WithMany()
-                        .HasForeignKey("ArtistId");
                 });
 #pragma warning restore 612, 618
         }

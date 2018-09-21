@@ -2,18 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend_datamodel.Models;
 
-namespace backend.Migrations
+namespace backend_datamodel.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180913131244_Added-created-at-and-updated-at-fields-and-many-to-many-for-artistxtrack")]
-    partial class Addedcreatedatandupdatedatfieldsandmanytomanyforartistxtrack
+    partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,12 +19,22 @@ namespace backend.Migrations
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("backend.Models.Album", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Album", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AlbumType");
+
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Label");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Popularity");
+
+                    b.Property<string>("SpotifyId");
 
                     b.Property<DateTime?>("UpdatedAt");
 
@@ -35,7 +43,7 @@ namespace backend.Migrations
                     b.ToTable("Albums");
                 });
 
-            modelBuilder.Entity("backend.Models.Artist", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Artist", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -44,35 +52,20 @@ namespace backend.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("SpotifyId");
+
+                    b.Property<int?>("TrackId");
+
                     b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Artists");
-
-                    b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 13, 15, 12, 44, 258, DateTimeKind.Local), Name = "Marshmello" }
-                    );
-                });
-
-            modelBuilder.Entity("backend.Models.ArtistXTrack", b =>
-                {
-                    b.Property<int>("ArtistId");
-
-                    b.Property<int>("TrackId");
-
-                    b.HasKey("ArtistId", "TrackId");
-
                     b.HasIndex("TrackId");
 
-                    b.ToTable("ArtistXTrack");
-
-                    b.HasData(
-                        new { ArtistId = 1, TrackId = 1 }
-                    );
+                    b.ToTable("Artists");
                 });
 
-            modelBuilder.Entity("backend.Models.Product", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -88,7 +81,7 @@ namespace backend.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("backend.Models.Track", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Track", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -97,7 +90,15 @@ namespace backend.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<int>("DurationMs");
+
+                    b.Property<bool>("Explicit");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("PreviewUrl");
+
+                    b.Property<string>("SpotifyId");
 
                     b.Property<DateTime?>("UpdatedAt");
 
@@ -106,28 +107,18 @@ namespace backend.Migrations
                     b.HasIndex("AlbumId");
 
                     b.ToTable("Tracks");
-
-                    b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 9, 13, 15, 12, 44, 254, DateTimeKind.Local), Name = "Happier" }
-                    );
                 });
 
-            modelBuilder.Entity("backend.Models.ArtistXTrack", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Artist", b =>
                 {
-                    b.HasOne("backend.Models.Artist", "Artist")
-                        .WithMany()
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("backend.Models.Track", "Track")
-                        .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("backend_datamodel.Models.Track")
+                        .WithMany("Artists")
+                        .HasForeignKey("TrackId");
                 });
 
-            modelBuilder.Entity("backend.Models.Track", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Track", b =>
                 {
-                    b.HasOne("backend.Models.Album")
+                    b.HasOne("backend_datamodel.Models.Album")
                         .WithMany("Tracks")
                         .HasForeignKey("AlbumId");
                 });

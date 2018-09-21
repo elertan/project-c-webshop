@@ -17,10 +17,10 @@ namespace backend.Schemas.Types
             Field(t => t.Id).Description("The id of the track.");
             Field(t => t.Name, nullable: true).Description("The name of the track.");
 
-            Field<ListGraphType<ArtistType>>(
-                "artists",
-                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
-            );
+//            Field<ListGraphType<ArtistType>>(
+//                "artists",
+//                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
+//            );
         }
     }
 }

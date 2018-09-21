@@ -8,17 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="backend-datamodel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\backend-datamodel\bin\Debug\netstandard2.0\backend-datamodel.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.3" />
     <PackageReference Include="MoreLinq.Portable" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="backend-datamodel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\backend-datamodel\bin\Debug\netcoreapp2.1\backend-datamodel.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

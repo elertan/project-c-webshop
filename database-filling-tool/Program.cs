@@ -22,6 +22,11 @@ namespace database_filling_tool
             var connectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
             Console.WriteLine($"The connection string '{connectionString}' will be used.");
 
+            Console.WriteLine("Extracting spotify data...");
+            var extractor = new SpotifyDataExtractor();
+            var data = await extractor.Extract();
+            Console.WriteLine("Data extracted!");
+
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
             builder.UseNpgsql(connectionString);
             Console.WriteLine("Attempting to connect to the database...");
@@ -29,10 +34,6 @@ namespace database_filling_tool
             {
                 Console.WriteLine("Connected!");
 
-                Console.WriteLine("Extracting spotify data...");
-                var extractor = new SpotifyDataExtractor();
-                var data = await extractor.Extract();
-                Console.WriteLine("Data extracted!");
                 await StoreData(db, data);
             }
 
@@ -43,17 +44,16 @@ namespace database_filling_tool
 
         static async Task StoreData(DatabaseContext db, SpotifyData data)
         {
-            Console.WriteLine("Marking existing entities for deletion");
-            db.DeleteAll<Album>();
-            db.DeleteAll<Track>();
-            db.DeleteAll<Artist>();
-            Console.WriteLine("Deleting existing entities");
-            await db.SaveChangesAsync();
-            Console.WriteLine("Deleted entities!");
+//            Console.WriteLine("Deleting existing entities");
+//            await db.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Albums RESTART IDENTITY;");
+//            await db.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Tracks RESTART IDENTITY;");
+//            await db.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Artists RESTART IDENTITY;");
+//            Console.WriteLine("Deleted entities!");
 
             Console.WriteLine("Creating new artist entities");
             var dbArtists = data.Artists.Select(sa => new Artist
             {
+                SpotifyId = sa.Id,
                 Name = sa.Name
             });
             await db.Artists.AddRangeAsync(dbArtists);
@@ -63,17 +63,30 @@ namespace database_filling_tool
             Console.WriteLine("Creating new track entities");
             var dbTracks = data.Tracks.Select(st => new Track
             {
-                Name = st.Name
+                SpotifyId = st.Id,
+                Name = st.Name,
+                Explicit = st.Explicit,
+                DurationMs = st.DurationMs,
+                PreviewUrl = st.PreviewUrl,
+                Artists = dbArtists.Where(dbArtist => st.SpotifyArtists.Any(sa => sa.Id == dbArtist.SpotifyId)).ToList()
             });
             await db.Tracks.AddRangeAsync(dbTracks);
             Console.WriteLine("Storing new track entities");
+            await db.SaveChangesAsync();
 
             Console.WriteLine("Creating new album entities");
-            await db.Albums.AddRangeAsync(data.Albums.Select(sa => new Album
+            var dbAlbums = data.Albums.Select(sa => new Album
             {
-                Tracks = dbTracks.Where(dbtrack => dbtrack)
-            }));
+                SpotifyId = sa.Id,
+                Name = sa.Name,
+                Label = sa.Label,
+                Popularity = sa.Popularity,
+                AlbumType = sa.AlbumType,
+                Tracks = dbTracks.Where(dbTrack => sa.SpotifyTracks.Any(st => st.Id == dbTrack.SpotifyId)).ToList()
+            });
+            await db.Albums.AddRangeAsync(dbAlbums);
             Console.WriteLine("Storing new album entities");
+            await db.SaveChangesAsync();
         }
     }
 }
