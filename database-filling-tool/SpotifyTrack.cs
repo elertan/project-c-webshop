@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 
-namespace backend_datamodel.Models
+namespace database_filling_tool
 {
-    public class Track : BaseEntity
+    public class SpotifyTrack
     {
-        public string SpotifyId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
+        public int DiscNumber { get; set; }
         public int DurationMs { get; set; }
         public bool Explicit { get; set; }
         public string PreviewUrl { get; set; }
-        public virtual List<Artist> Artists { get; set; }
+        public List<SpotifyArtist> SpotifyArtists { get; set; }
     }
 }
