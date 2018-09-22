@@ -162,7 +162,8 @@ namespace database_filling_tool
                 Popularity = album.popularity,
 //                        ReleaseDate = DateTime.Parse(album.release_date),
                 ReleaseDatePrecision = album.release_date_precision,
-                SpotifyTracks = ((IEnumerable<dynamic>) album.tracks.items).Select(ExtractTrack).ToList()
+                SpotifyTracks = ((IEnumerable<dynamic>) album.tracks.items).Select(ExtractTrack).ToList(),
+                ImageUrl = album.images != null ? album.images[0].url : null
             };
         }
 
@@ -177,6 +178,7 @@ namespace database_filling_tool
                 DiscNumber = track.disc_number,
                 DurationMs = track.duration_ms,
                 PreviewUrl = track.preview_url,
+                ImageUrl = track.images != null ? track.images[0].url : null,
                 SpotifyArtists = ((IEnumerable<dynamic>) track.artists).Select(ExtractArtist).ToList()
             };
         }
@@ -187,7 +189,8 @@ namespace database_filling_tool
             return new SpotifyArtist
             {
                 Id = artist.id,
-                Name = artist.name
+                Name = artist.name,
+                ImageUrl = artist.images != null ? artist.images[0].url : null
             };
         }
     }

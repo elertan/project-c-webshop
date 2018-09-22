@@ -10,6 +10,7 @@ namespace database_filling_tool
         public int DurationMs { get; set; }
         public bool Explicit { get; set; }
         public string PreviewUrl { get; set; }
+        public string ImageUrl { get; set; }
         public List<SpotifyArtist> SpotifyArtists { get; set; }
     }
 }
