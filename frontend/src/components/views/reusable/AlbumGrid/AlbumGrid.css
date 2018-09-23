@@ -1,0 +1,9 @@
+.AlbumGrid-root {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.AlbumGrid-element {
+  margin: 10px;
+}

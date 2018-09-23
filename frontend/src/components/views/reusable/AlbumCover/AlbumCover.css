@@ -1,0 +1,18 @@
+.AlbumCover-root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 175px;
+}
+
+.AlbumCover-img {
+  width: 175px;
+  height: 175px;
+  margin-bottom: 3px;
+}
+
+.AlbumCover-name {
+  text-align: center;
+  width: 100%;
+}
