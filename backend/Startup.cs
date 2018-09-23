@@ -50,6 +50,7 @@ namespace backend
             // GraphQL Queries, Mutations and Types
             services.AddSingleton<TrackType>();
             services.AddSingleton<ArtistType>();
+            services.AddSingleton<AlbumType>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 

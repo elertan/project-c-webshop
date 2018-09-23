@@ -22,7 +22,10 @@ namespace backend.Schemas
                 "tracks",
                 resolve: ctx => db.Tracks.ToArrayAsync()
             );
-            
+            Field<ListGraphType<AlbumType>>(
+                "albums",
+                resolve: ctx => db.Albums.ToArrayAsync());
+
             Field<ArtistType>(
                 "artist",
                 arguments: new QueryArguments(
@@ -37,6 +40,11 @@ namespace backend.Schemas
                 ),
                 resolve: ctx => db.Tracks.FindAsync(ctx.GetArgument<int>("id"))
             );
+            Field<AlbumType>(
+                "album",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "id", Description = "id of the album"}),
+                resolve: ctx => db.Albums.FindAsync(ctx.GetArgument<int>("id")));
         }
     }
 }
