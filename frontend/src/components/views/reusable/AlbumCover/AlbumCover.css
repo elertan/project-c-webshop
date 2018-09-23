@@ -3,13 +3,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 175px;
+  width: 200px;
+  padding: 10px;
+}
+
+.AlbumCover-root:hover {
+  background-color: gray;
 }
 
 .AlbumCover-img {
   width: 175px;
   height: 175px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .AlbumCover-name {

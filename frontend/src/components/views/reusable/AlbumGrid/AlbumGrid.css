@@ -2,8 +2,11 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  overflow-y: auto;
+  max-height: 85vh;
 }
 
 .AlbumGrid-element {
-  margin: 10px;
+  margin: 15px;
+
 }
