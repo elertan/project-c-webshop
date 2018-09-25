@@ -17,7 +17,35 @@ namespace backend_datamodel.Models {
     public DbSet<Artist> Artists { get; set; }
     
     // Many-to-many tables
-//    public DbSet<ArtistXTrack> ArtistXTracks { get; set; }
+    public DbSet<ArtistXTrack> ArtistXTracks { get; set; }
+    public DbSet<AlbumXTrack> AlbumXTracks { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      base.OnModelCreating(modelBuilder);
+
+      // Cross ArtistXTrack
+      modelBuilder.Entity<ArtistXTrack>().HasKey(at => new {at.ArtistId, at.TrackId});
+      modelBuilder.Entity<ArtistXTrack>()
+        .HasOne(at => at.Artist)
+        .WithMany(a => a.ArtistXTracks)
+        .HasForeignKey(at => at.ArtistId);
+      modelBuilder.Entity<ArtistXTrack>()
+        .HasOne(at => at.Track)
+        .WithMany(t => t.ArtistXTracks)
+        .HasForeignKey(at => at.TrackId);
+      
+      // Cross AlbumXTrack
+      modelBuilder.Entity<AlbumXTrack>().HasKey(at => new {at.AlbumId, at.TrackId});
+      modelBuilder.Entity<AlbumXTrack>()
+        .HasOne(at => at.Album)
+        .WithMany(a => a.AlbumXTracks)
+        .HasForeignKey(at => at.AlbumId);
+      modelBuilder.Entity<AlbumXTrack>()
+        .HasOne(at => at.Track)
+        .WithMany(t => t.AlbumXTracks)
+        .HasForeignKey(at => at.TrackId);
+    }
 
     /// <summary>
     /// Automatically adds timestamps when mutating entities

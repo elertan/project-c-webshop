@@ -9,6 +9,11 @@ namespace backend_datamodel.Models
         public int DurationMs { get; set; }
         public bool Explicit { get; set; }
         public string PreviewUrl { get; set; }
-        public virtual List<Artist> Artists { get; set; }
+        public string ImageUrl { get; set; }
+        
+//        public IList<Artist> Artists { get; set; }
+//        public IList<Album> Albums { get; set; }
+        public IList<ArtistXTrack> ArtistXTracks { get; set; }
+        public IList<AlbumXTrack> AlbumXTracks { get; set; }
     }
 }

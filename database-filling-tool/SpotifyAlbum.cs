@@ -12,6 +12,7 @@ namespace database_filling_tool
         public int Popularity { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string ReleaseDatePrecision { get; set; }
+        public string ImageUrl { get; set; }
         
         public List<SpotifyTrack> SpotifyTracks { get; set; }
     }

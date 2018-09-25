@@ -1,11 +1,4 @@
-.Home {
+.Explore-root {
   width: 100%;
-}
-
-.Home-Title {
-  font-size: 1.5em;
-}
-
-.Home-Subtitle {
-  font-size: 1.25em;
+  padding: 20px;
 }
