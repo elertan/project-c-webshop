@@ -4,14 +4,11 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class AlbumType : ObjectGraphType<Album>
+    public class AlbumType : BaseGraphType<Album>
     {
         public AlbumType(DatabaseContext db)
         {
-            Field(a => a.CreatedAt).Description("The moment the entity was created");
-            Field(a => a.UpdatedAt, nullable: true).Description("The moment the entity was updated");
-
-            Field(a => a.Id).Description("The id of the track.");
+           
             Field(a => a.Name, nullable: true).Description("The name of the track.");
             Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
