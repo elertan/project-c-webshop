@@ -178,7 +178,6 @@ namespace database_filling_tool
                 DiscNumber = track.disc_number,
                 DurationMs = track.duration_ms,
                 PreviewUrl = track.preview_url,
-                ImageUrl = track.images != null ? track.images[0].url : null,
                 SpotifyArtists = ((IEnumerable<dynamic>) track.artists).Select(ExtractArtist).ToList()
             };
         }
