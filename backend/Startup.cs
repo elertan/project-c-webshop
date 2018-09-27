@@ -52,6 +52,7 @@ namespace backend
             services.AddSingleton<ProductType>();
             services.AddSingleton<ArtistType>();
             services.AddSingleton<AlbumType>();
+            services.AddSingleton<UserType>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 
