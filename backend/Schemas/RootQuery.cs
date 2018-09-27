@@ -13,7 +13,13 @@ namespace backend.Schemas
         public RootQuery(DatabaseContext db)
         {
             Name = "Query";
-
+            
+            
+            Field<ListGraphType<ProductType>>(
+                "products",
+                resolve: ctx => db.Products.ToArrayAsync()
+            );
+            
             Field<ListGraphType<ArtistType>>(
                 "artists",
                 resolve: ctx => db.Artists.ToArrayAsync()
