@@ -19,7 +19,6 @@ namespace backend.Schemas
                 "products",
                 resolve: ctx => db.Products.ToArrayAsync()
             );
-            
             Field<ListGraphType<ArtistType>>(
                 "artists",
                 resolve: ctx => db.Artists.ToArrayAsync()
@@ -30,8 +29,16 @@ namespace backend.Schemas
             );
             Field<ListGraphType<AlbumType>>(
                 "albums",
-                resolve: ctx => db.Albums.ToArrayAsync());
+                resolve: ctx => db.Albums.ToArrayAsync()
+            );
 
+            Field<ProductType>(
+                "product",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "id of the product"}
+                ),
+                resolve: ctx => db.Products.FindAsync(ctx.GetArgument<int>("id"))
+            );
             Field<ArtistType>(
                 "artist",
                 arguments: new QueryArguments(

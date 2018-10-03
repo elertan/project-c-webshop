@@ -15,10 +15,16 @@ namespace backend_datamodel.Models {
     public DbSet<Track> Tracks { get; set; }
     public DbSet<Album> Albums { get; set; }
     public DbSet<Artist> Artists { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Admin> Admins { get; set; }
     
     // Many-to-many tables
     public DbSet<ArtistXTrack> ArtistXTracks { get; set; }
     public DbSet<AlbumXTrack> AlbumXTracks { get; set; }
+    public DbSet<OrderXProduct> OrderXProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,6 +51,17 @@ namespace backend_datamodel.Models {
         .HasOne(at => at.Track)
         .WithMany(t => t.AlbumXTracks)
         .HasForeignKey(at => at.TrackId);
+      
+      // Cross OrderXProduct
+      modelBuilder.Entity<OrderXProduct>().HasKey(op => new {op.OrderId, op.ProductId});
+      modelBuilder.Entity<OrderXProduct>()
+        .HasOne(op => op.Product)
+        .WithMany(p => p.OrderXProducts)
+        .HasForeignKey(op => op.ProductId);
+      modelBuilder.Entity<OrderXProduct>()
+        .HasOne(op => op.Order)
+        .WithMany(p => p.OrderXProducts)
+        .HasForeignKey(op => op.OrderId);
     }
 
     /// <summary>

@@ -11,9 +11,7 @@ namespace backend.Schemas.Types
         {
             Name = "Track";
             
-            
             Field(t => t.Name, nullable: true).Description("The name of the track.");
-            Field(t => t.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(t => t.SpotifyId).Description("The Id that is used on Spotify's database");
             Field(t => t.Explicit).Description("Is this track an explicit release?");
             Field(t => t.DurationMs).Description("The duration of the track in milliseconds");
