@@ -1,5 +1,5 @@
 import * as React from 'react';
-import HomeLayout from "../../layout/HomeLayout/HomeLayout";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 import {Typography} from "@material-ui/core";
 
 interface IProps {}
@@ -7,9 +7,9 @@ interface IProps {}
 class Trending extends React.Component<IProps> {
   public render() {
     return (
-      <HomeLayout>
+      <AppLayout>
         <Typography>Trending!</Typography>
-      </HomeLayout>
+      </AppLayout>
     );
   }
 };
