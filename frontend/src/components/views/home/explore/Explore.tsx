@@ -12,6 +12,7 @@ interface IProps {
 const query = gql`
   {
     albums {
+      id
       name
       imageUrl
     }
@@ -29,7 +30,8 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
 
             const albumGridData = (data.data.albums as any[]).map(album => ({
               name: album.name,
-              imageSource: album.imageUrl
+              imageSource: album.imageUrl,
+              id: album.id
             }) as IAlbumGridData);
 
             return <AlbumGrid data={albumGridData} />

@@ -22,15 +22,16 @@ const styles: StyleRulesCallback = theme => ({
   },
   albumContainer: {
     position: 'relative',
-    top: -350,
-    marginBottom: -350,
+    top: -400,
+    marginBottom: -400,
     padding: 35,
     display: 'flex',
     justifyContent: 'center',
   },
   albumContainerBackground: {
     filter: 'blur(25px)',
-    height: 350,
+    height: 400,
+    width: '100%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover'
