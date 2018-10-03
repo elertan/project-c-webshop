@@ -40,6 +40,8 @@ namespace backend
             // Enable CORS options
             services.AddCors();
             
+            services.AddSingleton<ILogger, Logger>();
+
             // Create a dependency resolver for GraphQL
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 
