@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+
 namespace backend_datamodel.Models
 {
     public class Product : BaseEntity
     {
-        public string Name { get; set; }
+        public float Price { get; set; }
+        public IList<OrderXProduct> OrderXProducts { get; set; }
     }
 }

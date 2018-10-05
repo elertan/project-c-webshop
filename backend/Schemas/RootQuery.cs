@@ -13,7 +13,12 @@ namespace backend.Schemas
         public RootQuery(DatabaseContext db)
         {
             Name = "Query";
-
+            
+            
+            Field<ListGraphType<ProductType>>(
+                "products",
+                resolve: ctx => db.Products.ToArrayAsync()
+            );
             Field<ListGraphType<ArtistType>>(
                 "artists",
                 resolve: ctx => db.Artists.ToArrayAsync()
@@ -22,7 +27,18 @@ namespace backend.Schemas
                 "tracks",
                 resolve: ctx => db.Tracks.ToArrayAsync()
             );
-            
+            Field<ListGraphType<AlbumType>>(
+                "albums",
+                resolve: ctx => db.Albums.ToArrayAsync()
+            );
+
+            Field<ProductType>(
+                "product",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "id of the product"}
+                ),
+                resolve: ctx => db.Products.FindAsync(ctx.GetArgument<int>("id"))
+            );
             Field<ArtistType>(
                 "artist",
                 arguments: new QueryArguments(
@@ -37,6 +53,11 @@ namespace backend.Schemas
                 ),
                 resolve: ctx => db.Tracks.FindAsync(ctx.GetArgument<int>("id"))
             );
+            Field<AlbumType>(
+                "album",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "id", Description = "id of the album"}),
+                resolve: ctx => db.Albums.FindAsync(ctx.GetArgument<int>("id")));
         }
     }
 }

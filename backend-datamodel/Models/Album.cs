@@ -4,6 +4,16 @@ namespace backend_datamodel.Models
 {
     public class Album : BaseEntity
     {
-        public virtual List<Track> Tracks { get; set; }
+        public string SpotifyId { get; set; }
+        public string Name { get; set; }
+        public string AlbumType { get; set; }
+        public string Label { get; set; }
+        public int Popularity { get; set; }
+        public string ImageUrl { get; set; }
+        public Product Product { get; set; }
+        
+//        public IList<Track> Tracks { get; set; }
+//        public IList<Artist> Artists { get; set; }
+        public IList<AlbumXTrack> AlbumXTracks { get; set; }
     }
 }

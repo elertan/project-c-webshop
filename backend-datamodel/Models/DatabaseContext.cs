@@ -15,54 +15,55 @@ namespace backend_datamodel.Models {
     public DbSet<Track> Tracks { get; set; }
     public DbSet<Album> Albums { get; set; }
     public DbSet<Artist> Artists { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Admin> Admins { get; set; }
     
     // Many-to-many tables
     public DbSet<ArtistXTrack> ArtistXTracks { get; set; }
+    public DbSet<AlbumXTrack> AlbumXTracks { get; set; }
+    public DbSet<OrderXProduct> OrderXProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
-      
-      // Many-to-many tables
-      modelBuilder.Entity<ArtistXTrack>().HasKey(t => new {t.ArtistId, t.TrackId});
 
-      var now = DateTime.Now;
-      var tracks = new[]
-      {
-        new Track { Id = 1, Name = "Happier", CreatedAt = now },
-        new Track { Id = 2, Name = "FRIENDS", CreatedAt = now },
-        new Track { Id = 3, Name = "Ocean", CreatedAt = now },
-        new Track { Id = 4, Name = "High on Life", CreatedAt = now },
-      };
-      var artists = new[]
-      {
-        new Artist { Id = 1, Name = "Marshmello", CreatedAt = now },
-        new Artist { Id = 2, Name = "Bastille", CreatedAt = now },
-        new Artist { Id = 3, Name = "Anne-Marie", CreatedAt = now },
-        new Artist { Id = 4, Name = "Martin Garrix", CreatedAt = now },
-        new Artist { Id = 5, Name = "Khalid", CreatedAt = now },
-        new Artist { Id = 6, Name = "Bonn", CreatedAt = now },
-      };
-
-      var artistXTracks = new[]
-      {
-        new ArtistXTrack { TrackId = 1, ArtistId = 1 },
-        new ArtistXTrack { TrackId = 1, ArtistId = 2 },
-        new ArtistXTrack { TrackId = 2, ArtistId = 1 },
-        new ArtistXTrack { TrackId = 2, ArtistId = 3 },
-        new ArtistXTrack { TrackId = 3, ArtistId = 4 },
-        new ArtistXTrack { TrackId = 3, ArtistId = 5 },
-        new ArtistXTrack { TrackId = 4, ArtistId = 4 },
-        new ArtistXTrack { TrackId = 4, ArtistId = 6 },
-      };
+      // Cross ArtistXTrack
+      modelBuilder.Entity<ArtistXTrack>().HasKey(at => new {at.ArtistId, at.TrackId});
+      modelBuilder.Entity<ArtistXTrack>()
+        .HasOne(at => at.Artist)
+        .WithMany(a => a.ArtistXTracks)
+        .HasForeignKey(at => at.ArtistId);
+      modelBuilder.Entity<ArtistXTrack>()
+        .HasOne(at => at.Track)
+        .WithMany(t => t.ArtistXTracks)
+        .HasForeignKey(at => at.TrackId);
       
+      // Cross AlbumXTrack
+      modelBuilder.Entity<AlbumXTrack>().HasKey(at => new {at.AlbumId, at.TrackId});
+      modelBuilder.Entity<AlbumXTrack>()
+        .HasOne(at => at.Album)
+        .WithMany(a => a.AlbumXTracks)
+        .HasForeignKey(at => at.AlbumId);
+      modelBuilder.Entity<AlbumXTrack>()
+        .HasOne(at => at.Track)
+        .WithMany(t => t.AlbumXTracks)
+        .HasForeignKey(at => at.TrackId);
       
-      // Fill with some test data!
-      modelBuilder.Entity<Track>().HasData(tracks);
-      modelBuilder.Entity<Artist>().HasData(artists);
-      modelBuilder.Entity<ArtistXTrack>().HasData(artistXTracks);
+      // Cross OrderXProduct
+      modelBuilder.Entity<OrderXProduct>().HasKey(op => new {op.OrderId, op.ProductId});
+      modelBuilder.Entity<OrderXProduct>()
+        .HasOne(op => op.Product)
+        .WithMany(p => p.OrderXProducts)
+        .HasForeignKey(op => op.ProductId);
+      modelBuilder.Entity<OrderXProduct>()
+        .HasOne(op => op.Order)
+        .WithMany(p => p.OrderXProducts)
+        .HasForeignKey(op => op.OrderId);
     }
-    
+
     /// <summary>
     /// Automatically adds timestamps when mutating entities
     /// </summary>
