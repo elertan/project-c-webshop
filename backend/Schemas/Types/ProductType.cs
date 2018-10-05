@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using backend_datamodel.Models;
 using GraphQL.Types;
@@ -11,7 +12,10 @@ namespace backend.Schemas.Types
         {
             Name = "Product";
 
-            Field(p => p.Price).Description("The price of the product");
+            Field<DecimalGraphType>(
+                "price",
+                resolve: ctx => Convert.ToDecimal(ctx.Source.Price)
+            );
 
             // Can be null
             Field<TrackType>(
