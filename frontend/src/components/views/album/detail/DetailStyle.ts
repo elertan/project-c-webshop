@@ -7,40 +7,51 @@ export type StyleProps = StyledComponentProps<
   "image" |
   "albumContainerBackground" |
   "albumContainer" |
-  "albumInnerContainer"
+  "albumInnerContainer" |
+  "albumInnerContainerDarkenLayer"
   >;
+
+const headerSize = 400;
+const textColor = '#FFF';
 
 const styles: StyleRulesCallback = theme => ({
   root: {
   },
   title: {
     marginTop: 15,
-    fontSize: 36
-    
+    fontSize: 26,
+    color: textColor
   },
   artistsText: {
+    color: textColor
   },
   albumContainer: {
     position: 'relative',
-    top: -400,
-    marginBottom: -400,
+    top: -headerSize,
+    marginBottom: -headerSize,
     padding: 35,
     display: 'flex',
     justifyContent: 'center',
   },
   albumContainerBackground: {
     filter: 'blur(25px)',
-    height: 400,
+    height: headerSize,
     width: '100%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover'
   },
+  albumInnerContainerDarkenLayer: {
+    backgroundColor: 'rgba(20, 20, 20, 0.5)',
+    position: 'relative',
+    top: -headerSize,
+    marginBottom: -headerSize,
+    height: headerSize
+  },
   albumInnerContainer: {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column'
-
   },
   image: {
     width: 250,
