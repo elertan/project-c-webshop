@@ -48,8 +48,9 @@ class Detail extends React.Component<IProps> {
       <div>
         <div
           className={classes.albumContainerBackground}
-          style={{ background: `url(${album.imageUrl})` }}
+          style={{ backgroundImage: `url(${album.imageUrl})` }}
         />
+        <div className={classes.albumInnerContainerDarkenLayer} />
         <div
           className={classes.albumContainer}
         >

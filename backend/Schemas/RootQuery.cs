@@ -17,18 +17,22 @@ namespace backend.Schemas
             
             Field<ListGraphType<ProductType>>(
                 "products",
+                "All of the products stored in the database",
                 resolve: ctx => db.Products.ToArrayAsync()
             );
             Field<ListGraphType<ArtistType>>(
                 "artists",
+                "All of the artists stored in the database",
                 resolve: ctx => db.Artists.ToArrayAsync()
             );
             Field<ListGraphType<TrackType>>(
                 "tracks",
+                "All of the tracks stored in the database",
                 resolve: ctx => db.Tracks.ToArrayAsync()
             );
             Field<ListGraphType<AlbumType>>(
                 "albums",
+                "All of the albums stored in the database",
                 resolve: ctx => db.Albums.ToArrayAsync()
             );
 
