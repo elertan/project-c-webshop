@@ -3,9 +3,11 @@ import AppLayout from '../../layout/AppLayout/AppLayout';
 import { Typography, withStyles } from '@material-ui/core';
 import Separator from '../../reusable/Separator';
 import styles, { StyleProps } from "./DetailStyle";
+import TrackList from '../../reusable/TrackList/TrackList';
 
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import { ITrackData } from '../../reusable/TrackRow/TrackRow';
 
 interface IProps extends StyleProps {
   albumId: number;
@@ -19,6 +21,10 @@ class Detail extends React.Component<IProps> {
       album(id: ${this.props.albumId}) {
         name
         imageUrl
+        tracks {
+          name
+          durationMs
+        }
       }
     }
     `;
@@ -43,6 +49,9 @@ class Detail extends React.Component<IProps> {
 
   private renderDetail = (album: any) => {
     const classes = this.props.classes!;
+    const data: ITrackData[] = album.tracks.map((track: any) =>
+      ({ title: track.name, durationMs: track.durationMs } as ITrackData)
+    );
 
     return (
       <div>
@@ -64,6 +73,7 @@ class Detail extends React.Component<IProps> {
           </div>
         </div>
         <Separator horizontal />
+        <TrackList trackData={data} />
       </div>
     );
   };
