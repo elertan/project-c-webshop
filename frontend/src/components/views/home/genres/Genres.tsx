@@ -4,14 +4,16 @@ import {Typography} from "@material-ui/core";
 
 interface IProps {}
 
-class Trending extends React.Component<IProps> {
+class Genres extends React.Component<IProps> {
   public render() {
     return (
       <AppLayout>
-        <Typography>Trending! Test 123</Typography>
+        <Typography> 
+          Here you'll be able to browse music (albums, tracks or artists?) based on genre! 
+        </Typography>
       </AppLayout>
     );
   }
 };
 
-export default Trending;
+export default Genres;
