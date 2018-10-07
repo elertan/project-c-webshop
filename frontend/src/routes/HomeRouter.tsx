@@ -14,7 +14,7 @@ const HomeRouter: React.SFC<IProps> = (props: IProps) => {
       <Route exact path={`${props.match.url}/explore`} component={ExploreContainer} />
       <Route exact path={`${props.match.url}/trending`} component={TrendingContainer} />
       <Route exact path={`${props.match.url}/albums`} component={AlbumsContainer} />
-      <Route exact path={`${props.match.url}/genres`} components={GenresContainer} />
+      <Route exact path={`${props.match.url}/genres`} component={GenresContainer} />
 
       <Route component={NotFound} />
     </Switch>
