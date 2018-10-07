@@ -1,5 +1,5 @@
 import * as React from 'react';
-import HomeLayout from "../../layout/HomeLayout/HomeLayout";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 import {Typography} from "@material-ui/core";
 import gql from "graphql-tag";
 
@@ -18,11 +18,11 @@ class Trending extends React.Component<IProps> {
   `;
 
     return (
-      <HomeLayout>
+      <AppLayout>
         <Typography>{array.forEach(element => {
           
         });</Typography>
-      </HomeLayout>
+      </AppLayout>
     );
   }
 };

@@ -1,7 +1,7 @@
 interface IAlbumGridData {
   name: string;
   imageSource: string;
-  onClick?: () => void;
+  id: number;
 }
 
 export default IAlbumGridData;

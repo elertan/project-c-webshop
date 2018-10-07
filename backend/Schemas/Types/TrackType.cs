@@ -5,18 +5,13 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class TrackType : ObjectGraphType<Track>
+    public class TrackType : BaseGraphType<Track>
     {
         public TrackType(DatabaseContext db)
         {
             Name = "Track";
             
-            Field(a => a.CreatedAt).Description("The moment the entity was created");
-            Field(a => a.UpdatedAt, nullable: true).Description("The moment the entity was updated");
-
-            Field(t => t.Id).Description("The id of the track.");
             Field(t => t.Name, nullable: true).Description("The name of the track.");
-            Field(t => t.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(t => t.SpotifyId).Description("The Id that is used on Spotify's database");
             Field(t => t.Explicit).Description("Is this track an explicit release?");
             Field(t => t.DurationMs).Description("The duration of the track in milliseconds");

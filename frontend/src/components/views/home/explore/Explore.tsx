@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './Explore.css';
-import HomeLayout from "../../layout/HomeLayout/HomeLayout";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 import AlbumGrid from "../../reusable/AlbumGrid/AlbumGrid";
 import IAlbumGridData from "../../reusable/AlbumGrid/IAlbumGridData";
 import gql from "graphql-tag";
@@ -12,6 +12,7 @@ interface IProps {
 const query = gql`
   {
     albums {
+      id
       name
       imageUrl
     }
@@ -20,7 +21,7 @@ const query = gql`
 
 const Explore: React.SFC<IProps> = (props: IProps) => {
   return (
-    <HomeLayout>
+    <AppLayout>
       <div className="Explore-root">
         <Query query={query}>
           {(data) => {
@@ -29,7 +30,8 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
 
             const albumGridData = (data.data.albums as any[]).map(album => ({
               name: album.name,
-              imageSource: album.imageUrl
+              imageSource: album.imageUrl,
+              id: album.id
             }) as IAlbumGridData);
 
             return <AlbumGrid data={albumGridData} />
@@ -37,7 +39,7 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
         </Query>
 
       </div>
-    </HomeLayout>
+    </AppLayout>
   );
 };
 

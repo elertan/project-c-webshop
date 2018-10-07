@@ -51,6 +51,16 @@ namespace database_filling_tool
 //            await db.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Tracks RESTART IDENTITY;");
 //            await db.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Artists RESTART IDENTITY;");
 //            Console.WriteLine("Deleted entities!");
+            var trackPrices = new[]
+            {
+                1.49f,
+                1.69f,
+                1.95f,
+                1.99f,
+                2.49f,
+                2.99f
+            };
+            var rng = new Random();
 
             Console.WriteLine("Creating new artist entities");
             var dbArtists = data.Artists.Select(sa => new Artist
@@ -72,7 +82,10 @@ namespace database_filling_tool
                 Explicit = st.Explicit,
                 DurationMs = st.DurationMs,
                 PreviewUrl = st.PreviewUrl,
-                ImageUrl = st.ImageUrl
+                Product = new Product
+                {
+                    Price = trackPrices[rng.Next(trackPrices.Length)]
+                }
 //                Artists = dbArtists.Where(dbArtist => st.SpotifyArtists.Any(sa => sa.Id == dbArtist.SpotifyId)).ToList()
             });
             await db.Tracks.AddRangeAsync(dbTracks);
@@ -81,15 +94,31 @@ namespace database_filling_tool
             dbTracks = db.Tracks;
 
             Console.WriteLine("Creating new album entities");
-            var dbAlbums = data.Albums.Select(sa => new Album
+            var dbAlbums = data.Albums.Select(sa =>
             {
-                SpotifyId = sa.Id,
-                Name = sa.Name,
-                Label = sa.Label,
-                Popularity = sa.Popularity,
-                AlbumType = sa.AlbumType,
-                ImageUrl = sa.ImageUrl
+                var price = sa.SpotifyTracks
+                    .Select(strack => dbTracks.First(st => st.SpotifyId == strack.Id))
+                    .Select(track => track.Product.Price)
+                    .Aggregate((prev, curr) => prev + curr);
+                if (sa.AlbumType == "album")
+                {
+                    price *= .7f;
+                }
+                
+                return new Album
+                {
+                    SpotifyId = sa.Id,
+                    Name = sa.Name,
+                    Label = sa.Label,
+                    Popularity = sa.Popularity,
+                    AlbumType = sa.AlbumType,
+                    ImageUrl = sa.ImageUrl,
+                    Product = new Product()
+                    {
+                        Price = price
+                    }
 //                Tracks = dbTracks.Where(dbTrack => sa.SpotifyTracks.Any(st => st.Id == dbTrack.SpotifyId)).ToList()
+                };
             });
             await db.Albums.AddRangeAsync(dbAlbums);
             Console.WriteLine("Storing new album entities");

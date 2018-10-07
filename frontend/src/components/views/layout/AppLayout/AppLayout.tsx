@@ -13,14 +13,14 @@ import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon
 } from "@material-ui/icons";
-import styles, {StyleProps} from "./HomeLayoutStyle";
-import HomeLayoutDrawer from "./Drawer/HomeLayoutDrawer";
+import styles, {StyleProps} from "./AppLayoutStyle";
+import AppLayoutDrawer from "./Drawer/AppLayoutDrawer";
 import appIcon from "../../../../img/app-icon.jpg";
 
 interface IProps extends React.HTMLProps<HTMLMainElement>, StyleProps {
 }
 
-class HomeLayout extends React.Component<IProps> {
+class AppLayout extends React.Component<IProps> {
   public render() {
     const classes = this.props.classes!;
 
@@ -68,7 +68,7 @@ class HomeLayout extends React.Component<IProps> {
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" classes={{paper: classes.drawerPaper}}>
-          <HomeLayoutDrawer />
+          <AppLayoutDrawer />
         </Drawer>
         <main className={classes.content} {...this.props} />
       </div>
@@ -76,4 +76,4 @@ class HomeLayout extends React.Component<IProps> {
   }
 };
 
-export default withStyles(styles)(HomeLayout);
+export default withStyles(styles)(AppLayout);
