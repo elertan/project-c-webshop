@@ -29,10 +29,10 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
             if (data.loading) { return null; }
             if (data.error) { return <p>{data.error.message}</p>; }
 
-            const artistGridData = (data.data.artists as any[]).map(artists => ({
-              name: artists.name,
-              imageSource: artists.imageUrl,
-              id: artists.id
+            const artistGridData = (data.data.artists as any[]).map(artist => ({
+              name: artist.name,
+              imageSource: artist.imageUrl,
+              id: artist.id
             }) as IArtistsGridData);
 
             return <ArtistsGrid data={artistGridData} />
