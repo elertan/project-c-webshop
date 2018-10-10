@@ -1,48 +1,69 @@
 import * as React from 'react';
+import AppLayout from '../../layout/AppLayout/AppLayout';
+import {  withStyles } from '@material-ui/core';
 
-import AppLayout from "../../layout/AppLayout/AppLayout";
-import AlbumGrid from "../../reusable/AlbumGrid/AlbumGrid";
-import IAlbumGridData from "../../reusable/AlbumGrid/IAlbumGridData";
+import styles, { StyleProps } from "./TrackStyle";
+import TrackList from '../../reusable/TrackList/TrackList';
+
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import { ITrackData } from '../../reusable/TrackRow/TrackRow';
 
-interface IProps {
+interface IProps extends StyleProps {
+ 
 }
 
-const query = gql`
-  {
-    tracks {
-      name
-      albums {
-        id
-        imageUrl
+class Track extends React.Component<IProps> {
+
+  public render() {
+    const query = gql`
+    {
+        tracks {
+          name
+          durationMs
+          albums{
+           name
+          }
+          artists{
+            name
+          }
+        }
       }
-    }
-  }
-`;
+    
+    `;
 
-const Explore: React.SFC<IProps> = (props: IProps) => {
-  return (
-    <AppLayout>
-      <div >
+    return (
+      <AppLayout>
         <Query query={query}>
-          {(data) => {
-            if (data.loading) { return null; }
-            if (data.error) { return <p>{data.error.message}</p>; }
+          {({ loading, error, data }) => {
+            if (loading) {
+              return null;
+            }
+            if (error) {
+              return <span>{error.message}</span>;
+            }
 
-            const albumGridData = (data.data.tracks as any[]).map(track=> ({
-              name: track.name,
-              imageSource: track.albums[0].imageUrl,
-              id: track.albums[0].id
-            }) as IAlbumGridData);
-
-            return <AlbumGrid data={albumGridData} />
+            return this.renderDetail(data.tracks);
           }}
         </Query>
-          
-      </div>
-    </AppLayout>
-  );
-};
+      </AppLayout>
+    );
+  }
 
-export default Explore;
+  private renderDetail = (tracks: any[]) => {
+    const classes = this.props.classes!
+    const data: ITrackData[] = tracks.map((track: any, i: number) =>
+      ({ title: track.name, durationMs: track.durationMs, artistName: track.artists[0].name,albumsName: track.albums[0].name, index: i } as ITrackData)
+    );
+// albumsName werkt niet
+    return (
+      <div className={classes.page}>
+      <div className= {classes.title}>
+        <TrackList trackData={data} />
+      </div>
+      </div>
+    );
+  };
+}
+
+export default withStyles(styles)(Track);
