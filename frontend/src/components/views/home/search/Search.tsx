@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-interface IProps {}
+interface IProps {
+  query?: string;
+}
 interface IState {}
 
 class Search extends React.Component<IProps, IState> {
@@ -8,7 +10,7 @@ class Search extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <div>Search</div>
+      <div>Search: {this.props.query}</div>
     );
   }
 };
