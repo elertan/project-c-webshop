@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Search from "../../../views/home/search/Search";
-import AppLayout from "../../../views/layout/AppLayout/AppLayout";
 import {RouteComponentProps} from "react-router";
 import * as queryString from "query-string";
 
@@ -31,20 +30,25 @@ class SearchContainer extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <AppLayout>
-        <Search query={this.state.query} />
-      </AppLayout>
+      <Search query={this.state.query} />
     );
   }
 
   private parseQueryString = () => {
     const values = queryString.parse(this.props.location.search);
+
+    let q: string | undefined;
+
     // Query parameter given to route
     if (values.q !== undefined) {
-      this.setState({ query: values.q });
-    } else if (this.state.query !== undefined) {
-      this.setState({ query: undefined });
+      if (typeof values.q === 'string' && values.q.trim() === '') {
+        q = undefined;
+      } else {
+        q = values.q;
+      }
     }
+
+    this.setState({ query: q });
   };
 };
 
