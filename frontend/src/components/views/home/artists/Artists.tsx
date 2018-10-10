@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './Artists.css';
-import './simplegrid.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import ArtistsGrid from "../../reusable/ArtistsGrid/ArtistsGrid";
 import IArtistsGridData from "../../reusable/ArtistsGrid/IArtistGridData";

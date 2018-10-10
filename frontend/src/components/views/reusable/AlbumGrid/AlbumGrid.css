@@ -1,4 +1,4 @@
-.AlbumGrid-root {
+.GridView-root {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -6,7 +6,7 @@
   max-height: 85vh;
 }
 
-.AlbumGrid-element {
+.GridView-element {
   margin: 15px;
 
 }

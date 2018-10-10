@@ -7,11 +7,11 @@ interface IProps {
   data: IAlbumGridData[];
 }
 
-const AlbumGrid: React.SFC<IProps> = (props: IProps) => {
+const GridView: React.SFC<IProps> = (props: IProps) => {
   return (
-    <div className="AlbumGrid-root">
+    <div className="GridView-root">
       {props.data.map((dataElement, i) =>
-        <div key={i} className="AlbumGrid-element">
+        <div key={i} className="GridView-element">
           <AlbumCover {...dataElement} />
         </div>
       )}
@@ -19,4 +19,4 @@ const AlbumGrid: React.SFC<IProps> = (props: IProps) => {
   );
 };
 
-export default AlbumGrid;
+export default GridView;
