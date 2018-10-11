@@ -21,8 +21,10 @@ class Track extends React.Component<IProps> {
         tracks {
           name
           durationMs
+          previewUrl
           albums{
            name
+           id
           }
           artists{
             name
@@ -53,9 +55,8 @@ class Track extends React.Component<IProps> {
   private renderDetail = (tracks: any[]) => {
     const classes = this.props.classes!
     const data: ITrackData[] = tracks.map((track: any, i: number) =>
-      ({ title: track.name, durationMs: track.durationMs, artistName: track.artists[0].name,albumsName: track.albums[0].name, index: i } as ITrackData)
+      ({ title: track.name, previewUrl: track.previewUrl, albumId: track.albums[0].id ,durationMs: track.durationMs, artistName: track.artists[0].name,albumsName: track.albums[0].name, index: i } as ITrackData)
     );
-// albumsName werkt niet
     return (
       <div className={classes.page}>
       <div className= {classes.title}>
