@@ -1,6 +1,6 @@
 import * as React from 'react';
-import AppLayout from "../../layout/AppLayout/AppLayout";
 import {Typography} from "@material-ui/core";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 
 interface IProps {}
 

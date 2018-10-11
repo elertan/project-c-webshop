@@ -5,12 +5,15 @@ import TrendingContainer from "../components/containers/home/trending/TrendingCo
 import AlbumsContainer from "../components/containers/home/albums/AlbumsContainer";
 import GenresContainer from "../components/containers/home/genres/GenresContainer";
 import NotFound from "../components/views/errors/NotFound/NotFound";
+import SearchContainer from "../components/containers/home/search/SearchContainer";
 
 interface IProps extends RouteComponentProps<{}> {}
 
 const HomeRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
+      <Route exact path={`${props.match.url}/search`} component={SearchContainer} />
+
       <Route exact path={`${props.match.url}/explore`} component={ExploreContainer} />
       <Route exact path={`${props.match.url}/trending`} component={TrendingContainer} />
       <Route exact path={`${props.match.url}/albums`} component={AlbumsContainer} />

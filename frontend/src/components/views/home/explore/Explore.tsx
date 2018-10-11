@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './Explore.css';
-import AppLayout from "../../layout/AppLayout/AppLayout";
-import AlbumGrid from "../../reusable/AlbumGrid/AlbumGrid";
-import IAlbumGridData from "../../reusable/AlbumGrid/IAlbumGridData";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import {Query} from "react-apollo";
+import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
+import GridView from "../../reusable/GridView/GridView";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 
 interface IProps {
 }
@@ -25,19 +25,20 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
       <div className="Explore-root">
         <Query query={query}>
           {(data) => {
-            if (data.loading) { return null; }
-            if (data.error) { return <p>{data.error.message}</p>; }
+            if (data.loading) {
+              return null;
+            }
+            if (data.error) {
+              return <p>{data.error.message}</p>;
+            }
 
-            const albumGridData = (data.data.albums as any[]).map(album => ({
-              name: album.name,
-              imageSource: album.imageUrl,
-              id: album.id
-            }) as IAlbumGridData);
+            const covers = (data.data.albums as any[]).map((album, i) =>
+              <AlbumCover key={i} name={album.name} imageSource={album.imageUrl} id={album.id}/>
+            );
 
-            return <AlbumGrid data={albumGridData} />
+            return <GridView elements={covers}/>;
           }}
         </Query>
-
       </div>
     </AppLayout>
   );
