@@ -44,7 +44,7 @@ class SearchContainer extends React.Component<IProps, IState> {
       if (typeof values.q === 'string' && values.q.trim() === '') {
         q = undefined;
       } else {
-        q = values.q;
+        q = values.q as string;
       }
     }
 
