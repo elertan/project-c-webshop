@@ -18,8 +18,10 @@ const query = gql`
         tracks {
           name
           durationMs
+          previewUrl
           albums{
            name
+           id
           }
           artists{
             name
@@ -55,13 +57,14 @@ class Track extends React.Component<IProps> {
     const data: ITrackData[] = tracks.map((track: any, i: number) =>
       ({
         title: track.name,
+        previewUrl: track.previewUrl,
+        albumId: track.albums[0].id,
         durationMs: track.durationMs,
         artistName: track.artists[0].name,
         albumsName: track.albums[0].name,
         index: i
       } as ITrackData)
     );
-// albumsName werkt niet
     return (
       <div className={classes.page}>
         <div className={classes.title}>
