@@ -1,7 +1,5 @@
 import {StyledComponentProps, StyleRulesCallback} from "@material-ui/core";
 
-
-
 export type StyleProps = StyledComponentProps<
   "root" |
   "page" |
@@ -10,8 +8,6 @@ export type StyleProps = StyledComponentProps<
   "favorite"|
   "artist" |
   "album"
-  
-  
   >;
 
 const textColor = 'black';
