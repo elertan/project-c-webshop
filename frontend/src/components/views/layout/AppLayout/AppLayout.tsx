@@ -2,20 +2,13 @@
 
 import * as React from 'react';
 import {
-  AppBar, Badge,
-  Drawer, IconButton, Input,
-  Toolbar,
-  Typography,
+  AppBar,
+  Drawer,
   withStyles
 } from "@material-ui/core";
-import {
-  AccountCircle as AccountIcon,
-  Search as SearchIcon,
-  ShoppingCart as ShoppingCartIcon
-} from "@material-ui/icons";
 import styles, {StyleProps} from "./AppLayoutStyle";
 import AppLayoutDrawer from "./Drawer/AppLayoutDrawer";
-import appIcon from "../../../../img/app-icon.jpg";
+import Toolbar from "./Toolbar/Toolbar";
 
 interface IProps extends React.HTMLProps<HTMLMainElement>, StyleProps {
 }
@@ -27,45 +20,7 @@ class AppLayout extends React.Component<IProps> {
     return (
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar}>
-          <Toolbar>
-            <img src={appIcon} className={classes.appIcon} />
-            <Typography
-              variant="title"
-              color="inherit"
-              noWrap
-              className={classes.appBarTitle}
-            >Flying Marshmallows's Webshop</Typography>
-            <div className={classes.grow}/>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon/>
-              </div>
-              <Input
-                placeholder="Search…"
-                disableUnderline
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div>
-            <div className={classes.grow}/>
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge className={classes.margin} badgeContent={2} color="secondary">
-                  <ShoppingCartIcon/>
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={true /*isMenuOpen*/ ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={/*this.handleProfileMenuOpen*/undefined}
-                color="inherit"
-              >
-                <AccountIcon/>
-              </IconButton>
-            </div>
-          </Toolbar>
+          <Toolbar />
         </AppBar>
         <Drawer variant="permanent" classes={{paper: classes.drawerPaper}}>
           <AppLayoutDrawer />

@@ -15,8 +15,8 @@ const RootRouter: React.SFC<{}> = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={DefaultRedirect} />
-      <Route path="/home" component={HomeRouter} />
       <Route path="/auth" component={AuthRouter} />
+      <Route path="/home" component={HomeRouter} />
       <Route path="/album" component={AlbumRouter}/>
 
       <Route component={NotFound} />
