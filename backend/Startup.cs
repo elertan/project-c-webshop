@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
@@ -7,6 +9,7 @@ using GraphQL.Types;
 using backend.Schemas;
 using backend.Schemas.Types;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,10 +35,22 @@ namespace backend
             }
             
             var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
+            var builder = new DbContextOptionsBuilder<DatabaseContext>();
+            builder.UseNpgsql(dbConnectionString);
+            
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(dbConnectionString),
                 ServiceLifetime.Singleton
             );
+            
+            // GraphQL.EF (Filtering)
+            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
+            using (var ctx = new DatabaseContext(builder.Options))
+            {
+                EfGraphQLConventions.RegisterInContainer(services, ctx);
+            }
+
+            GetGraphQLTypes().ToList().ForEach(type => services.AddSingleton(type));
             
             // Enable CORS options
             services.AddCors();
@@ -50,12 +65,12 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-            services.AddSingleton<TrackType>();
-            services.AddSingleton<ProductType>();
-            services.AddSingleton<ArtistType>();
-            services.AddSingleton<AlbumType>();
-            services.AddSingleton<UserType>();
-            services.AddSingleton<RootQuery>();
+//            services.AddSingleton<TrackType>();
+//            services.AddSingleton<ProductType>();
+//            services.AddSingleton<ArtistType>();
+//            services.AddSingleton<AlbumType>();
+//            services.AddSingleton<UserType>();
+//            services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 
             // Enable access to HttpContext
@@ -85,15 +100,27 @@ namespace backend
             app.UseGraphQL<ISchema>("/graphql");
 
             // use graphql-playground at default url /ui/playground
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
-            {
-                Path = "/ui/playground"
-            });
+//            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+//            {
+//                Path = "/ui/playground"
+//            });
+            
+            // Use GraphiQL instead of GraphQL playground
+            app.UseGraphiQl("graphiql");
 
             // app.Run(async (context) =>
             // {
             //     await context.Response.WriteAsync("Hello World!");
             // });
+        }
+        
+        static IEnumerable<Type> GetGraphQLTypes()
+        {
+            return typeof(Startup).Assembly
+                .GetTypes()
+                .Where(x => !x.IsAbstract &&
+                            (typeof(IObjectGraphType).IsAssignableFrom(x) ||
+                             typeof(IInputObjectGraphType).IsAssignableFrom(x)));
         }
     }
 }

@@ -1,11 +1,12 @@
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class BaseGraphType<T> : ObjectGraphType<T> where T : BaseEntity
+    public abstract class BaseGraphType<T> : EfObjectGraphType<T> where T : BaseEntity
     {
-        public BaseGraphType()
+        protected BaseGraphType(IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Field(a => a.CreatedAt).Description("The moment the entity was created");
             Field(a => a.UpdatedAt, nullable: true).Description("The moment the entity was updated");
