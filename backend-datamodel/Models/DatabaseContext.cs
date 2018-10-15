@@ -15,6 +15,8 @@ namespace backend_datamodel.Models {
     public DbSet<Track> Tracks { get; set; }
     public DbSet<Album> Albums { get; set; }
     public DbSet<Artist> Artists { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
