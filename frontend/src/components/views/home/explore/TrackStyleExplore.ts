@@ -31,7 +31,7 @@ const trackstyles: StyleRulesCallback = theme => ({
     fontSize: 24,
     color: textColor,
     boxSizing: "border-box",
-    width: 1400,
+    width: 200,
    
   },
   duration:{
@@ -39,21 +39,21 @@ const trackstyles: StyleRulesCallback = theme => ({
     fontSize: 26,
     color: textColor,
     boxSizing: "border-box",
-    width: 200
+    width: 20
   },
   favorite: {
     marginTop: 15,
     fontSize: 26,
     color: textColor,
     boxSizing: "border-box",
-    width: 250
+    width: 25
   },
   artist:{
     marginTop: 15,
     fontSize: 26,
     color: textColor,
     boxSizing: "border-box",
-    width: 300
+    width: 30
     
   },
   album:{
@@ -61,7 +61,7 @@ const trackstyles: StyleRulesCallback = theme => ({
     fontSize: 26,
     color: textColor,
     boxSizing: "border-box",
-    width: 350,
+    width: 35,
     
   }
 });
