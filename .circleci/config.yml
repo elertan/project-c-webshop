@@ -20,8 +20,8 @@ jobs:
 
     steps:
       - checkout
-      - run: cd frontend && yarn
-      - run: cd frontend && yarn build
+      - run: cd frontend && npm i
+      - run: cd frontend && npm run build
       - run: cd backend-datamodel && dotnet restore
       - run: cd backend-datamodel && dotnet build
       - run: cd database-filling-tool && dotnet restore
