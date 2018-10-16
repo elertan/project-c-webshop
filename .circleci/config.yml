@@ -19,15 +19,11 @@ jobs:
 
     steps:
       - checkout
-      - working_directory: ~/repo/frontend
-      - run: yarn
-      - run: yarn build
-      - working_directory: ~/repo/backend-datamodel
-      - run: dotnet restore
-      - run: dotnet build
-      - working_directory: ~/repo/database-filling-tool
-      - run: dotnet restore
-      - run: dotnet build
-      - working_directory: ~/repo/backend
-      - run: dotnet restore
-      - run: dotnet build
+      - run: cd frontend && yarn
+      - run: cd frontend && yarn build
+      - run: cd backend-datamodel && dotnet restore
+      - run: cd backend-datamodel && dotnet build
+      - run: cd database-filling-tool && dotnet restore
+      - run: cd database-filling-tool && dotnet build
+      - run: cd backend && dotnet restore
+      - run: cd backend && dotnet build
