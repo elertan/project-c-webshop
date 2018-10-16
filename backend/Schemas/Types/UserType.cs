@@ -1,11 +1,12 @@
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Schemas.Types
 {
     public class UserType : BaseGraphType<User>
     {
-        public UserType(DbContext db)
+        public UserType(DbContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "User";
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+<<<<<<< HEAD
 import './Artists.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import ArtistsGrid from "../../reusable/ArtistsGrid/ArtistsGrid";
@@ -42,5 +43,23 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
     </AppLayout>
   );
 };
+=======
+import AppLayout from "../../layout/AppLayout/AppLayout";
+import {Typography} from "@material-ui/core";
+
+interface IProps {}
+
+class Artists extends React.Component<IProps> {
+    public render() {
+        return (
+            <AppLayout>
+                <Typography>
+                    Here all known artists will be shown.
+                </Typography>
+            </AppLayout>
+        );
+    }
+}
+>>>>>>> dev
 
 export default Artists;

@@ -1,23 +1,45 @@
 import * as React from 'react';
 import TrackRow, { ITrackData } from '../TrackRow/TrackRow';
 
-interface IProps {
+import  styles, { StyleProps } from "../../home/albums/TrackStyle";
+import { withStyles } from '@material-ui/core';
+
+
+interface IProps  extends StyleProps{
   trackData: ITrackData[];
 }
 
 class TrackList extends React.Component<IProps> {
+  
   public render() {
+    const classes = this.props.classes!
     return (
-      <div>
+      <table>
+        <tr>
+         <td className={classes.favorite}/>
+          <td className= {classes.title}>
+            Title
+          </td>
+          <td className= {classes.artist}>Artist</td>
+          <td className= {classes.album}>Album</td>
+          <td className= {classes.duration}>
+            duration
+          
+          
+          </td>
+          <td className= {classes.favorite}/>
+        </tr>
         {this.props.trackData.map((trackData, i) =>
           <TrackRow
             key={i}
             data={trackData}
+           
           />
         )}
-      </div>
+        
+      </table>
     );
   }
 }
 
-export default TrackList;
+export default withStyles(styles)(TrackList);

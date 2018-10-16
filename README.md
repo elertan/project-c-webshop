@@ -1,4 +1,4 @@
-# Project C Webshop [![Build Status](https://travis-ci.com/elertan/project-c-webshop.svg?token=xozb6YkaMhi2FuX6ddBq&branch=dev)](https://travis-ci.com/elertan/project-c-webshop)
+# Project C Webshop [![Build Status](https://travis-ci.com/elertan/project-c-webshop.svg?token=xozb6YkaMhi2FuX6ddBq&branch=dev)](https://travis-ci.com/elertan/project-c-webshop) [![CircleCI](https://circleci.com/gh/elertan/project-c-webshop.svg?style=svg&circle-token=6e3994fa5bda5e537bc9e7428dad57ce06067c34)](https://circleci.com/gh/elertan/project-c-webshop)
 Hogeschool Rotterdam INF2B Project C Webshop
 
 Team Flying Marshmallows

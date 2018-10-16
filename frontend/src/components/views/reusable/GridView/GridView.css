@@ -1,0 +1,11 @@
+.GridView-root {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  max-height: 85vh;
+}
+
+.GridView-element {
+  margin: 15px;
+}

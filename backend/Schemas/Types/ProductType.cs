@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace backend.Schemas.Types
 {
     public class ProductType : BaseGraphType<Product>
     {
-        public ProductType(DatabaseContext db)
+        public ProductType(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "Product";
 
