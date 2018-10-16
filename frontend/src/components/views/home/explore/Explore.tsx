@@ -45,6 +45,7 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
       <div className="Explore-root">
        <div className="top">
         <img className= "photo" src={photo} height="600" width="905"/>
+       <div className="tracks">
         <Query query ={queryTracks}>
 
             {(dataTracks) => {
@@ -55,8 +56,8 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
                 return <span>{dataTracks.error.message}</span>;
               }
               const tracks = dataTracks.data.tracks;
-              const filteredTracks = tracks.slice(0,9);
-              const tracksList: ITrackData[] = filteredTracks.map((track: any, i: number) =>
+              
+              const tracksList: ITrackData[] = tracks.map((track: any, i: number) =>
               ({
                 title: track.name,
                 previewUrl: track.previewUrl,
@@ -75,7 +76,8 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
             }}
               </Query>
               </div>
-        
+              </div>
+        <div className ="albums">
         <Query query={query}>
           {(data) => {
             if (data.loading) {
@@ -94,6 +96,7 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
             return <GridView elements={covers}/>;
           }}
         </Query>
+        </div>
       </div>
     </AppLayout>
 
