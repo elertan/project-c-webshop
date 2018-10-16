@@ -62,6 +62,21 @@ namespace database_filling_tool
             };
             var rng = new Random();
 
+            Console.WriteLine("Creating genre entities");
+            var dbGenres = data.Genres.Select(genre => new Genre { Name = genre });
+            await db.Genres.AddRangeAsync(dbGenres);
+            Console.WriteLine("Created genres");
+            
+            Console.WriteLine("Creating category entities");
+            var dbCategories = data.Categories.Select(category => new Category
+            {
+                Name = category.Name,
+                ImageUrl = category.ImageUrl,
+                SpotifyId = category.Id
+            });
+            await db.Categories.AddRangeAsync(dbCategories);
+            Console.WriteLine("Created categories");
+
             Console.WriteLine("Creating new artist entities");
             var dbArtists = data.Artists.Select(sa => new Artist
             {
