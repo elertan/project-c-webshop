@@ -27,6 +27,12 @@ namespace backend.Schemas
             AddQueryField<AlbumGraph, Album>(
                 name: "albums",
                 resolve: ctx => db.Albums);
+            AddQueryField<GenreGraph, Genre>(
+                name: "genres",
+                resolve: ctx => db.Genres);
+            AddQueryField<CategoryGraph, Category>(
+                name: "categories",
+                resolve: ctx => db.Categories);
         }
     }
 }

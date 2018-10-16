@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
@@ -7,6 +9,7 @@ using GraphQL.Types;
 using backend.Schemas;
 using backend.Schemas.Types;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,10 +35,22 @@ namespace backend
             }
             
             var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
+            var builder = new DbContextOptionsBuilder<DatabaseContext>();
+            builder.UseNpgsql(dbConnectionString);
+            
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(dbConnectionString),
                 ServiceLifetime.Singleton
             );
+            
+            // GraphQL.EF (Filtering)
+            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
+            using (var ctx = new DatabaseContext(builder.Options))
+            {
+                EfGraphQLConventions.RegisterInContainer(services, ctx);
+            }
+
+            GetGraphQLTypes().ToList().ForEach(type => services.AddSingleton(type));
             
             // Enable CORS options
             services.AddCors();
@@ -94,6 +109,15 @@ namespace backend
             // {
             //     await context.Response.WriteAsync("Hello World!");
             // });
+        }
+        
+        static IEnumerable<Type> GetGraphQLTypes()
+        {
+            return typeof(Startup).Assembly
+                .GetTypes()
+                .Where(x => !x.IsAbstract &&
+                            (typeof(IObjectGraphType).IsAssignableFrom(x) ||
+                             typeof(IInputObjectGraphType).IsAssignableFrom(x)));
         }
     }
 }
