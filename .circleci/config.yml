@@ -1,0 +1,34 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+      - image: microsoft/dotnet:2.1-sdk
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run: cd frontend
+      - run: npm i yarn -g
+      - run: yarn
+      - run: yarn build
+      - run: cd ../backend-datamodel
+      - run: dotnet restore
+      - run: dotnet build
+      - run: cd ../database-filling-tool
+      - run: dotnet restore
+      - run: dotnet build
+      - run: cd ../backend
+      - run: dotnet restore
+      - run: dotnet build
