@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       #- image: circleci/node:8.12-stretch
-      - image: microsoft/aspnetcore-build:2.0.9-sdk-2.1.202
+      - image: microsoft/aspnetcore-build
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
