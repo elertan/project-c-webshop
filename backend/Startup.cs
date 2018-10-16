@@ -50,11 +50,11 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-            services.AddSingleton<TrackType>();
-            services.AddSingleton<ProductType>();
-            services.AddSingleton<ArtistType>();
-            services.AddSingleton<AlbumType>();
-            services.AddSingleton<UserType>();
+            services.AddSingleton<TrackGraph>();
+            services.AddSingleton<ProductGraph>();
+            services.AddSingleton<ArtistGraph>();
+            services.AddSingleton<AlbumGraph>();
+            services.AddSingleton<UserGraph>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 

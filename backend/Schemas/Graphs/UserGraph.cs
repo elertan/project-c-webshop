@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Schemas.Types
 {
-    public class UserType : BaseGraphType<User>
+    public class UserGraph : BaseGraphType<User>
     {
-        public UserType(DbContext db)
+        public UserGraph(DbContext db)
         {
             Name = "User";
 

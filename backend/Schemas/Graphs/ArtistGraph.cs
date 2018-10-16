@@ -4,9 +4,9 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class ArtistType : BaseGraphType<Artist>
+    public class ArtistGraph : BaseGraphType<Artist>
     {
-        public ArtistType(DatabaseContext db)
+        public ArtistGraph(DatabaseContext db)
         {
             Name = "Artist";
 
@@ -15,11 +15,11 @@ namespace backend.Schemas.Types
             Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
 
-            Field<ListGraphType<TrackType>>(
+            Field<ListGraphType<TrackGraph>>(
                 "tracks",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
             );
-            Field<ListGraphType<AlbumType>>(
+            Field<ListGraphType<AlbumGraph>>(
                 "albums",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id)
                     .Join(db.AlbumXTracks,

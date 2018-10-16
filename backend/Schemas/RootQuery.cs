@@ -15,49 +15,49 @@ namespace backend.Schemas
             Name = "Query";
             
             
-            Field<ListGraphType<ProductType>>(
+            Field<ListGraphType<ProductGraph>>(
                 "products",
                 "All of the products stored in the database",
                 resolve: ctx => db.Products.ToArrayAsync()
             );
-            Field<ListGraphType<ArtistType>>(
+            Field<ListGraphType<ArtistGraph>>(
                 "artists",
                 "All of the artists stored in the database",
                 resolve: ctx => db.Artists.ToArrayAsync()
             );
-            Field<ListGraphType<TrackType>>(
+            Field<ListGraphType<TrackGraph>>(
                 "tracks",
                 "All of the tracks stored in the database",
                 resolve: ctx => db.Tracks.ToArrayAsync()
             );
-            Field<ListGraphType<AlbumType>>(
+            Field<ListGraphType<AlbumGraph>>(
                 "albums",
                 "All of the albums stored in the database",
                 resolve: ctx => db.Albums.ToArrayAsync()
             );
 
-            Field<ProductType>(
+            Field<ProductGraph>(
                 "product",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "id of the product"}
                 ),
                 resolve: ctx => db.Products.FindAsync(ctx.GetArgument<int>("id"))
             );
-            Field<ArtistType>(
+            Field<ArtistGraph>(
                 "artist",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "id", Description = "id of the artist"}
                 ),
                 resolve: ctx => db.Artists.FindAsync(ctx.GetArgument<int>("id"))
             );
-            Field<TrackType>(
+            Field<TrackGraph>(
                 "track",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "id", Description = "id of the track"}
                 ),
                 resolve: ctx => db.Tracks.FindAsync(ctx.GetArgument<int>("id"))
             );
-            Field<AlbumType>(
+            Field<AlbumGraph>(
                 "album",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "id", Description = "id of the album"}),

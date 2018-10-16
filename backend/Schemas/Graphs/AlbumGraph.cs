@@ -4,9 +4,9 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class AlbumType : BaseGraphType<Album>
+    public class AlbumGraph : BaseGraphType<Album>
     {
-        public AlbumType(DatabaseContext db)
+        public AlbumGraph(DatabaseContext db)
         {
            
             Field(a => a.Name, nullable: true).Description("The name of the track.");
@@ -17,7 +17,7 @@ namespace backend.Schemas.Types
             Field(a => a.AlbumType).Description("The type of album, either 'single' or 'album'");
             
             
-            Field<ListGraphType<TrackType>>(
+            Field<ListGraphType<TrackGraph>>(
                 "tracks",
                 resolve: ctx => db.AlbumXTracks.Where(e => e.AlbumId == ctx.Source.Id).Select(e => e.Track)
             );

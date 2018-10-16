@@ -5,9 +5,9 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class TrackType : BaseGraphType<Track>
+    public class TrackGraph : BaseGraphType<Track>
     {
-        public TrackType(DatabaseContext db)
+        public TrackGraph(DatabaseContext db)
         {
             Name = "Track";
             
@@ -17,11 +17,11 @@ namespace backend.Schemas.Types
             Field(t => t.DurationMs).Description("The duration of the track in milliseconds");
             Field(t => t.PreviewUrl, nullable: true).Description("The preview url of this track, can be null");
 
-            Field<ListGraphType<ArtistType>>(
+            Field<ListGraphType<ArtistGraph>>(
                 "artists",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
             );
-            Field<ListGraphType<AlbumType>>(
+            Field<ListGraphType<AlbumGraph>>(
                 "albums",
                 resolve: ctx => db.AlbumXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Album)
             );
