@@ -1,0 +1,23 @@
+.AlbumCover-root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+}
+
+.AlbumCover-root:hover {
+  background-color: gray;
+}
+
+.AlbumCover-img {
+  width: 175px;
+  height: 175px;
+  margin-bottom: 5px;
+}
+
+.AlbumCover-name {
+  text-align: center;
+  width: 100%;
+}

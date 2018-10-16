@@ -1,9 +1,8 @@
 import * as React from 'react';
-<<<<<<< HEAD
 import './Artists.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import ArtistsGrid from "../../reusable/ArtistsGrid/ArtistsGrid";
-import IArtistsGridData from "../../reusable/ArtistsGrid/IArtistGridData";
+import ArtistGrid from "../../reusable/ArtistsGrid/ArtistsGrid";
+import GridView from "../../reusable/GridView/GridView";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 
@@ -29,13 +28,29 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
             if (data.loading) { return null; }
             if (data.error) { return <p>{data.error.message}</p>; }
 
-            const artistGridData = (data.data.artists as any[]).map(artist => ({
-              name: artist.name,
-              imageSource: artist.imageUrl,
-              id: artist.id
-            }) as IArtistsGridData);
+            
+            // const covers = (data.data.albums as any[]).map((album, i) =>
+            //   <GridView key={i} name={album.name} imageSource={album.imageUrl} id={album.id}/>
+            // );
 
-            return <ArtistsGrid data={artistGridData} />
+            // return <GridView elements={covers}/>;
+
+            const artists = (data.data.artists as any[]).map((name, i) =>
+              <ArtistGrid key={i} name={name.name} imageSource={name.imageUrl} id={name.id}/>
+              );
+
+              return <GridView elements={artists}/>;
+
+
+
+
+            // const artistGridData = (data.data.artists as any[]).map(artist => ({
+            //   name: artist.name,
+            //   imageSource: artist.imageUrl,
+            //   id: artist.id
+            // }) as IArtistsGridData);
+
+            // return <ArtistsGrid data={artistGridData} />
           }}
         </Query>
 
@@ -43,23 +58,5 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
     </AppLayout>
   );
 };
-=======
-import AppLayout from "../../layout/AppLayout/AppLayout";
-import {Typography} from "@material-ui/core";
-
-interface IProps {}
-
-class Artists extends React.Component<IProps> {
-    public render() {
-        return (
-            <AppLayout>
-                <Typography>
-                    Here all known artists will be shown.
-                </Typography>
-            </AppLayout>
-        );
-    }
-}
->>>>>>> dev
 
 export default Artists;
