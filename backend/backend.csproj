@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="1.2.0" />
+    <PackageReference Include="GraphiQL" Version="1.1.0" />
     <PackageReference Include="GraphQL" Version="2.1.0" />
     <PackageReference Include="GraphQL.Authorization" Version="1.1.26" />
     <PackageReference Include="GraphQL.EntityFramework" Version="0.15.4" />

@@ -1,12 +1,13 @@
 using System.Linq;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
     public class AlbumGraph : BaseGraphType<Album>
     {
-        public AlbumGraph(DatabaseContext db)
+        public AlbumGraph(DatabaseContext db, IEfGraphQLService service) : base(service)
         {
            
             Field(a => a.Name, nullable: true).Description("The name of the track.");

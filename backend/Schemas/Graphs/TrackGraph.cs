@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
     public class TrackGraph : BaseGraphType<Track>
     {
-        public TrackGraph(DatabaseContext db)
+        public TrackGraph(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "Track";
             
@@ -17,11 +18,16 @@ namespace backend.Schemas.Types
             Field(t => t.DurationMs).Description("The duration of the track in milliseconds");
             Field(t => t.PreviewUrl, nullable: true).Description("The preview url of this track, can be null");
 
-            Field<ListGraphType<ArtistGraph>>(
+//            Field<ListGraphType<ArtistGraph>>(
+//                "artists",
+//                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
+//            );
+            
+            AddNavigationField<ArtistGraph, Artist>(
                 "artists",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
             );
-            Field<ListGraphType<AlbumGraph>>(
+            AddNavigationField<AlbumGraph, Album>(
                 "albums",
                 resolve: ctx => db.AlbumXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Album)
             );
