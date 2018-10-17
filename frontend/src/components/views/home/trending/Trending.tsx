@@ -7,15 +7,6 @@ interface IProps {}
 class Trending extends React.Component<IProps> {
   public render() {
 
-    const query = gql`
-    {
-      albums {
-        name
-        imageUrl
-      }
-    }
-  `;
-
     return (
       <AppLayout>
         <Typography>Trending! Test 123</Typography>
