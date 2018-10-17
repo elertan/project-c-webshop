@@ -65,12 +65,12 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-//            services.AddSingleton<TrackType>();
-//            services.AddSingleton<ProductType>();
-//            services.AddSingleton<ArtistType>();
-//            services.AddSingleton<AlbumType>();
-//            services.AddSingleton<UserType>();
-//            services.AddSingleton<RootQuery>();
+            services.AddSingleton<TrackGraph>();
+            services.AddSingleton<ProductGraph>();
+            services.AddSingleton<ArtistGraph>();
+            services.AddSingleton<AlbumGraph>();
+            services.AddSingleton<UserGraph>();
+            services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 
             // Enable access to HttpContext
@@ -100,13 +100,10 @@ namespace backend
             app.UseGraphQL<ISchema>("/graphql");
 
             // use graphql-playground at default url /ui/playground
-//            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
-//            {
-//                Path = "/ui/playground"
-//            });
-            
-            // Use GraphiQL instead of GraphQL playground
-            app.UseGraphiQl("graphiql");
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+            {
+                Path = "/ui/playground"
+            });
 
             // app.Run(async (context) =>
             // {

@@ -5,9 +5,9 @@ using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class AlbumType : BaseGraphType<Album>
+    public class AlbumGraph : BaseGraphType<Album>
     {
-        public AlbumType(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
+        public AlbumGraph(DatabaseContext db, IEfGraphQLService service) : base(service)
         {
            
             Field(a => a.Name, nullable: true).Description("The name of the track.");
@@ -16,12 +16,10 @@ namespace backend.Schemas.Types
             Field(a => a.Label).Description("The label that released this album");
             Field(a => a.Popularity).Description("The popularity of the song on a scale from 1-100");
             Field(a => a.AlbumType).Description("The type of album, either 'single' or 'album'");
-
-            // TODO: Attempted to use AddQueryField without success, since that introduces
-            // a bunch of independent queries (VERY SLOW).
-            // Need to find a way to remove the Select part to use a single query
-            AddNavigationField<TrackType, Track>(
-                name: "tracks",
+            
+            
+            Field<ListGraphType<TrackGraph>>(
+                "tracks",
                 resolve: ctx => db.AlbumXTracks.Where(e => e.AlbumId == ctx.Source.Id).Select(e => e.Track)
             );
         }

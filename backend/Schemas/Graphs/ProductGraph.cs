@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Schemas.Types
 {
-    public class ProductType : BaseGraphType<Product>
+    public class ProductGraph : BaseGraphType<Product>
     {
-        public ProductType(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
+        public ProductGraph(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "Product";
 
@@ -19,11 +19,11 @@ namespace backend.Schemas.Types
             );
 
             // Can be null
-            Field<TrackType>(
+            Field<TrackGraph>(
                 "track",
                 resolve: ctx => db.Tracks.Where(t => t.Product.Id == ctx.Source.Id).FirstOrDefaultAsync());
             // Can be null
-            Field<AlbumType>(
+            Field<AlbumGraph>(
                 "album",
                 resolve: ctx => db.Albums.Where(a => a.Product.Id == ctx.Source.Id).FirstOrDefaultAsync());
         }

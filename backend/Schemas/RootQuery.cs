@@ -15,18 +15,24 @@ namespace backend.Schemas
         {
             Name = "Query";
             
-            AddQueryField<ProductType, Product>(
+            AddQueryField<ProductGraph, Product>(
                 name: "products",
                 resolve: ctx => db.Products);
-            AddQueryField<ArtistType, Artist>(
+            AddQueryField<ArtistGraph, Artist>(
                 name: "artists",
                 resolve: ctx => db.Artists);
-            AddQueryField<TrackType, Track>(
+            AddQueryField<TrackGraph, Track>(
                 name: "tracks",
                 resolve: ctx => db.Tracks);
-            AddQueryField<AlbumType, Album>(
+            AddQueryField<AlbumGraph, Album>(
                 name: "albums",
                 resolve: ctx => db.Albums);
+            AddQueryField<GenreGraph, Genre>(
+                name: "genres",
+                resolve: ctx => db.Genres);
+            AddQueryField<CategoryGraph, Category>(
+                name: "categories",
+                resolve: ctx => db.Categories);
         }
     }
 }
