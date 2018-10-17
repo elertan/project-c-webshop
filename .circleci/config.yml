@@ -1,0 +1,31 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      #- image: circleci/node:8.12-stretch
+      #- image: microsoft/aspnetcore-build
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+      - image: microsoft/dotnet:2.1-sdk
+
+    working_directory: ~/repo
+
+    steps:
+      - run: curl -SL "https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.gz" --output nodejs.tar.gz && tar -xzf "nodejs.tar.gz" -C /usr/local --strip-components=1 && rm nodejs.tar.gz && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+      - checkout
+      - run: cd frontend && npm i
+      - run: cd frontend && npm run build
+      - run: cd backend-datamodel && dotnet restore
+      - run: cd backend-datamodel && dotnet build
+      - run: cd database-filling-tool && dotnet restore
+      - run: cd database-filling-tool && dotnet build
+      - run: cd backend && dotnet restore
+      - run: cd backend && dotnet build

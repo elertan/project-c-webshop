@@ -9,6 +9,7 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore.Internal;
 using MoreLinq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace database_filling_tool
 {
@@ -31,6 +32,13 @@ namespace database_filling_tool
 
             await Task.WhenAll(albumTasks);
             albumTasks.Select(task => task.Result as IEnumerable<SpotifyAlbum>).ForEach(spotifyData.Albums.AddRange);
+
+            var genres = GetGenresAsync(httpClient);
+            var categories = GetCategoriesAsync(httpClient);
+            await Task.WhenAll(genres, categories);
+
+            spotifyData.Genres = genres.Result;
+            spotifyData.Categories = categories.Result;
 
             return RemoveDuplicates(spotifyData);
         }
@@ -64,6 +72,34 @@ namespace database_filling_tool
             return httpClient;
         }
 
+        private async Task<List<string>> GetGenresAsync(HttpClient httpClient)
+        {
+            Console.WriteLine("Retrieving genres...");
+            var response = await httpClient.GetStringAsync("https://api.spotify.com/v1/recommendations/available-genre-seeds");
+            var data = JsonConvert.DeserializeObject<dynamic>(response);
+            Console.WriteLine("Got genres!");
+
+            var array = (JArray) data.genres;
+            
+            return array.Select(jValue => jValue.Value<string>()).ToList();
+        }
+
+        private async Task<List<SpotifyCategory>> GetCategoriesAsync(HttpClient httpClient)
+        {
+            Console.WriteLine("Retrieving categories...");
+            var response =
+                await httpClient.GetStringAsync($"https://api.spotify.com/v1/browse/categories?country=US&locale=en_US&limit=50&offset=0");
+            var data = JsonConvert.DeserializeObject<dynamic>(response);
+            Console.WriteLine("Got categories!");
+            
+            return ((IEnumerable<dynamic>) data.categories.items).Select(category => new SpotifyCategory
+            {
+                Id = category.id,
+                Name = category.name,
+                ImageUrl = category.icons[0].url
+            }).ToList();
+        }
+
         private async Task<List<SpotifyAlbum>> ExtractAlbumsFromPlaylist(HttpClient httpClient, dynamic playlist)
         {
             Console.WriteLine($"Getting tracks for playlist: '{playlist.name}'");
@@ -78,8 +114,8 @@ namespace database_filling_tool
             var chunkAlbumTasks = chunkedTracks.Select(async (trackChunk, i) =>
             {
                 Console.WriteLine($"Getting albums for a trackchunk {i}...");
-                var albumsParam = trackChunk.Select(track => track.track.album.id)
-                    .Aggregate((prev, curr) => $"{prev},{curr}");
+                var albumsParam = trackChunk.Select(track => track.track.album?.id)
+                    .Aggregate((prev, curr) => curr == null ? prev : $"{prev},{curr}");
                 var albumsResponse =
                     await httpClient.GetStringAsync(
                         $"https://api.spotify.com/v1/albums?ids={albumsParam}&market=NL");

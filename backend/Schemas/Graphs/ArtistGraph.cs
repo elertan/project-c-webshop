@@ -1,12 +1,13 @@
 using System.Linq;
 using backend_datamodel.Models;
+using GraphQL.EntityFramework;
 using GraphQL.Types;
 
 namespace backend.Schemas.Types
 {
-    public class ArtistType : BaseGraphType<Artist>
+    public class ArtistGraph : BaseGraphType<Artist>
     {
-        public ArtistType(DatabaseContext db)
+        public ArtistGraph(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "Artist";
 
@@ -15,11 +16,16 @@ namespace backend.Schemas.Types
             Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
 
-            Field<ListGraphType<TrackType>>(
+//            Field<ListGraphType<TrackGraph>>(
+//                "tracks",
+//                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
+//            );
+            
+            AddNavigationField<TrackGraph, Track>(
                 "tracks",
-                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
-            );
-            Field<ListGraphType<AlbumType>>(
+                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track));
+
+            AddNavigationField<AlbumGraph, Album>(
                 "albums",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id)
                     .Join(db.AlbumXTracks,

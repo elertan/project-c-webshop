@@ -1,7 +1,6 @@
 import * as React from 'react';
-import AppLayout from "../../layout/AppLayout/AppLayout";
 import {Typography} from "@material-ui/core";
-import gql from "graphql-tag";
+import AppLayout from "../../layout/AppLayout/AppLayout";
 
 interface IProps {}
 
@@ -19,9 +18,7 @@ class Trending extends React.Component<IProps> {
 
     return (
       <AppLayout>
-        <Typography>{array.forEach(element => {
-          
-        });</Typography>
+        <Typography>Trending! Test 123</Typography>
       </AppLayout>
     );
   }

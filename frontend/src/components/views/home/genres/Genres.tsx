@@ -1,18 +1,17 @@
 import * as React from 'react';
+import AppLayout from "../../layout/AppLayout/AppLayout";
 import {withStyles} from '@material-ui/core';
-
-import styles, {StyleProps} from "./TrackStyle";
+import styles, {StyleProps} from "../albums/TrackStyle";
 import TrackList from '../../reusable/TrackList/TrackList';
-
+import {ITrackData} from '../../reusable/TrackRow/TrackRow';
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import {ITrackData} from '../../reusable/TrackRow/TrackRow';
-import AppLayout from "../../layout/AppLayout/AppLayout";
 
 interface IProps extends StyleProps {
 
 }
-
+// Hier komt dan de query om alle tracks en bijbehorende informatie
+// te krijgen voor een specifiek genre 
 const query = gql`
     {
         tracks {
@@ -30,23 +29,20 @@ const query = gql`
       }
     `;
 
-class Track extends React.Component<IProps> {
-
+class Genres extends React.Component<IProps> {
   public render() {
-
     return (
       <AppLayout>
         <Query query={query}>
           {({loading, error, data}) => {
-            if (loading) {
-              return null;
-            }
-            if (error) {
-              return <span>{error.message}</span>;
-            }
-
-            return this.renderDetail(data.tracks);
-          }}
+              if (loading) {
+                return null;
+              }
+              if (error) {
+                return <span>{error.message}</span>;
+              }
+              return this.renderDetail(data.tracks);
+            }}
         </Query>
       </AppLayout>
     );
@@ -75,4 +71,5 @@ class Track extends React.Component<IProps> {
   };
 }
 
-export default withStyles(styles)(Track);
+export default withStyles(styles)(Genres);
+
