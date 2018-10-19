@@ -10,7 +10,12 @@ interface IProps extends React.HTMLProps<HTMLMainElement> {
 
 const styles = {
   root: {} as React.CSSProperties,
-  content: {} as React.CSSProperties
+  contentTopPadding: {
+    padding: 33 // Equal to menu bar height
+  } as React.CSSProperties,
+  content: {
+    minHeight: '65vh' // In combination with the header and footer, this will make sure the footer is always at the bottom
+  } as React.CSSProperties
 };
 
 class AppLayout extends React.Component<IProps> {
@@ -19,6 +24,7 @@ class AppLayout extends React.Component<IProps> {
       <div style={styles.root}>
         <Menu />
         <Container>
+          <div style={styles.contentTopPadding} />
           <main style={styles.content} {...this.props} />
         </Container>
         <Footer/>
