@@ -6,12 +6,15 @@ interface IProps {
 }
 
 const GridView: React.SFC<IProps> = (props: IProps) => {
+  // return (
+  //   <div className="GridView-root">
+  //     {props.elements.map((element, i) =>
+  //       <div key={i} className="GridView-element">{element}</div>
+  //     )}
+  //   </div>
+  // );
   return (
-    <div className="GridView-root">
-      {props.elements.map((element, i) =>
-        <div key={i} className="GridView-element">{element}</div>
-      )}
-    </div>
+    <p>Use semantic's ui's grid instead (with doubling)</p>
   );
 };
 

@@ -7,9 +7,9 @@
   padding: 10px;
 }
 
-.AlbumCover-root:hover {
-  background-color: gray;
-}
+/*.AlbumCover-root:hover {*/
+  /*background-color: #e2e2e2;*/
+/*}*/
 
 .AlbumCover-img {
   width: 175px;

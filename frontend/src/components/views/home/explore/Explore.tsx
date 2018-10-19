@@ -3,8 +3,8 @@ import './Explore.css';
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
 import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
-import GridView from "../../reusable/GridView/GridView";
 import AppLayout from "../../layout/AppLayout/AppLayout";
+import {Grid} from "semantic-ui-react";
 // import photo from './eminem.jpg';
 // import {ITrackData} from '../../reusable/TrackRow/TrackRow';
 //
@@ -85,12 +85,20 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
                 return <p>{data.error.message}</p>;
               }
 
-              const albums = data.data.albums;
-              const covers = (albums as any[]).map((album, i) =>
-                <AlbumCover key={i} name={album.name} imageSource={album.imageUrl} id={album.id}/>
-              );
+              const albums = data.data.albums as any[];
 
-              return <GridView elements={covers}/>;
+              return (
+                <Grid
+                  columns={5}
+                  doubling
+                >
+                  {albums.map((album, i) =>
+                    <Grid.Column key={i}>
+                      <AlbumCover key={i} name={album.name} imageSource={album.imageUrl} id={album.id}/>
+                    </Grid.Column>
+                  )}
+                </Grid>
+              );
             }}
           </Query>
         </div>
