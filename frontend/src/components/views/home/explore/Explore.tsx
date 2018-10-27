@@ -15,7 +15,8 @@ interface IProps {
 
 const query = gql`
   {
-    albums {
+    albums 
+    {
       id
       name
       imageUrl

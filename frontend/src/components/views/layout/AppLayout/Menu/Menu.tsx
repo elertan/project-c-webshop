@@ -20,20 +20,21 @@ class Menu extends React.Component<IProps, IState> {
             <SemanticMenu.Item
               as="a"
               header
+              href="/"
             >
               Marshmallow's Webshop
             </SemanticMenu.Item>
             <SemanticMenu.Item header>
               <Search fluid />
             </SemanticMenu.Item>
-            <SemanticMenu.Item header position="right">
+            <SemanticMenu.Item header position="right" as="a">
               Log In
             </SemanticMenu.Item>
-            <SemanticMenu.Item header>
+            <SemanticMenu.Item header as="a">
               Wishlist
             </SemanticMenu.Item>
-            <SemanticMenu.Item header>
-              Shoppingcart
+            <SemanticMenu.Item header as="a">
+              Shopping Cart
             </SemanticMenu.Item>
           </Container>
         </SemanticMenu>
