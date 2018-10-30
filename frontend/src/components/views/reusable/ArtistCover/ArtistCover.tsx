@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Artist.css';
+import './ArtistCover.css';
 import { Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 
@@ -9,20 +9,20 @@ interface IProps {
   id: number;
 }
 
-const ArtistGrid: React.SFC<IProps> = (props: IProps) => {
+const ArtistCover: React.SFC<IProps> = (props: IProps) => {
   return (
-    <Link to={`/artist/${props.id}`}>
+    <Link to={`/album/${props.id}`}>
       <div
-        className="GenreCover-root"
+        className="AlbumCover-root"
       >
         <img
-          className="GenreCover-img"
+          className="AlbumCover-img"
           src={props.imageSource}
         />
-        <Typography className="GenreCover-name">{props.name}</Typography>
+        <Typography className="AlbumCover-name">{props.name}</Typography>
       </div>
     </Link>
   );
 };
 
-export default ArtistGrid;
+export default ArtistCover;
