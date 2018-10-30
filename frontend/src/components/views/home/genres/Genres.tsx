@@ -4,8 +4,8 @@ import {withStyles} from '@material-ui/core';
 import styles, {StyleProps} from "../albums/TrackStyle";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import GenresGrid from "../../reusable/GenresGrid/GenresGrid";
 import GridView from "../../reusable/GridView/GridView";
+import GenreCover from '../../reusable/GenreCover/GenreCover';
 
 interface IProps extends StyleProps {
 
@@ -14,11 +14,12 @@ interface IProps extends StyleProps {
 // te krijgen voor een specifiek genre 
 const query = gql`
 {
-  categories
-  {
-    id
-    name
-    imageUrl
+  categories(first: 999) {
+    items {
+      id
+      name
+      imageUrl
+    }
   }
 }`;
 
@@ -34,7 +35,7 @@ class Genres extends React.Component<IProps> {
               if (error) {
                 return <span>{error.message}</span>;
               }
-              return this.renderDetail(data.categories);
+              return this.renderDetail(data.categories.items);
             }}
         </Query>
       </AppLayout>
@@ -43,8 +44,7 @@ class Genres extends React.Component<IProps> {
 
   private renderDetail = (categories: any[]) => {
     const data = categories.map((category: any, i: number) =>
-    
-    <GenresGrid key={i} id={category.id} name={category.name} imageUrl={category.imageUrl}/>
+      <GenreCover key={i} id={category.id} name={category.name} imageUrl={category.imageUrl}/>
     );
     return <GridView elements={data}/>;
   };
