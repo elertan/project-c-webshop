@@ -16,15 +16,21 @@ interface IProps extends StyleProps {
 const query = gql`
     {
         tracks {
-          name
-          durationMs
-          previewUrl
-          albums{
-           name
-           id
-          }
-          artists{
+          items {
             name
+            durationMs
+            previewUrl
+            albums {
+              items {
+                name
+                id
+              }
+            }
+            artists {
+              items {
+                name
+              }
+            }
           }
         }
       }
@@ -45,7 +51,7 @@ class Track extends React.Component<IProps> {
               return <span>{error.message}</span>;
             }
 
-            return this.renderDetail(data.tracks);
+            return this.renderDetail(data.tracks.items);
           }}
         </Query>
       </AppLayout>
@@ -53,15 +59,15 @@ class Track extends React.Component<IProps> {
   }
 
   private renderDetail = (tracks: any[]) => {
-    const classes = this.props.classes!
+    const classes = this.props.classes!;
     const data: ITrackData[] = tracks.map((track: any, i: number) =>
       ({
         title: track.name,
         previewUrl: track.previewUrl,
-        albumId: track.albums[0].id,
+        albumId: track.albums.items[0].id,
         durationMs: track.durationMs,
-        artistName: track.artists[0].name,
-        albumsName: track.albums[0].name,
+        artistName: track.artists.items[0].name,
+        albumsName: track.albums.items[0].name,
         index: i
       } as ITrackData)
     );

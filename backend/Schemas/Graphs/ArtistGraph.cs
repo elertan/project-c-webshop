@@ -15,28 +15,32 @@ namespace backend.Schemas.Types
             Field(a => a.Name, nullable: true).Description("The name of the artist.");
             Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
-
-//            Field<ListGraphType<TrackGraph>>(
-//                "tracks",
-//                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track)
-//            );
             
-            AddNavigationField<TrackGraph, Track>(
+            AddQueryConnectionField<TrackGraph, Track>(
                 "tracks",
-                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id).Select(e => e.Track));
+                resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id)
+                    .Join(
+                        db.Tracks,
+                        e => e.TrackId,
+                        e => e.Id,
+                        (_, e) => e
+                    )
+            );
 
-            AddNavigationField<AlbumGraph, Album>(
+            AddQueryConnectionField<AlbumGraph, Album>(
                 "albums",
                 resolve: ctx => db.ArtistXTracks.Where(e => e.ArtistId == ctx.Source.Id)
-                    .Join(db.AlbumXTracks,
-                        artistXTrack => artistXTrack.TrackId,
-                        albumXTrack => albumXTrack.TrackId,
-                        ((artistXT, albumXT) => new {artistXT, albumXT}))
+                    .Join(
+                        db.AlbumXTracks,
+                        e => e.TrackId,
+                        e => e.TrackId,
+                        (_, e) => e
+                    )
                     .Join(db.Albums,
-                        lastResult => lastResult.albumXT.AlbumId,
-                        album => album.Id,
-                        (lastResult, album) => album)
-                .Select(album => album)
+                        e => e.AlbumId,
+                        e => e.Id,
+                        (_, album) => album
+                    )
             );
         }
     }

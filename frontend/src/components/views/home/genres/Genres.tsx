@@ -2,10 +2,10 @@ import * as React from 'react';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import {withStyles} from '@material-ui/core';
 import styles, {StyleProps} from "../albums/TrackStyle";
-import TrackList from '../../reusable/TrackList/TrackList';
-import {ITrackData} from '../../reusable/TrackRow/TrackRow';
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
+import GridView from "../../reusable/GridView/GridView";
+import GenreCover from '../../reusable/GenreCover/GenreCover';
 
 interface IProps extends StyleProps {
 
@@ -13,21 +13,15 @@ interface IProps extends StyleProps {
 // Hier komt dan de query om alle tracks en bijbehorende informatie
 // te krijgen voor een specifiek genre 
 const query = gql`
-    {
-        tracks {
-          name
-          durationMs
-          previewUrl
-          albums{
-           name
-           id
-          }
-          artists{
-            name
-          }
-        }
-      }
-    `;
+{
+  categories(first: 999) {
+    items {
+      id
+      name
+      imageUrl
+    }
+  }
+}`;
 
 class Genres extends React.Component<IProps> {
   public render() {
@@ -41,33 +35,18 @@ class Genres extends React.Component<IProps> {
               if (error) {
                 return <span>{error.message}</span>;
               }
-              return this.renderDetail(data.tracks);
+              return this.renderDetail(data.categories.items);
             }}
         </Query>
       </AppLayout>
     );
   }
 
-  private renderDetail = (tracks: any[]) => {
-    const classes = this.props.classes!
-    const data: ITrackData[] = tracks.map((track: any, i: number) =>
-      ({
-        title: track.name,
-        previewUrl: track.previewUrl,
-        albumId: track.albums[0].id,
-        durationMs: track.durationMs,
-        artistName: track.artists[0].name,
-        albumsName: track.albums[0].name,
-        index: i
-      } as ITrackData)
+  private renderDetail = (categories: any[]) => {
+    const data = categories.map((category: any, i: number) =>
+      <GenreCover key={i} id={category.id} name={category.name} imageUrl={category.imageUrl}/>
     );
-    return (
-      <div className={classes.page}>
-        <div className={classes.title}>
-          <TrackList trackData={data}/>
-        </div>
-      </div>
-    );
+    return <GridView elements={data}/>;
   };
 }
 

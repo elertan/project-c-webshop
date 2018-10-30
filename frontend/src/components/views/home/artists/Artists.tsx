@@ -12,9 +12,12 @@ interface IProps {
 
 const query = gql`
   {
-    artists {
-      id
-      name
+    artists(first: 999) {
+      items {
+        id
+        name
+        imageUrl
+      }
     }
   }
 `;
@@ -25,32 +28,17 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
       <div className="Explore-root">
         <Query query={query}>
           {(data) => {
-            if (data.loading) { return null; }
-            if (data.error) { return <p>{data.error.message}</p>; }
-
-            
-            // const covers = (data.data.albums as any[]).map((album, i) =>
-            //   <GridView key={i} name={album.name} imageSource={album.imageUrl} id={album.id}/>
-            // );
-
-            // return <GridView elements={covers}/>;
-
-            const artists = (data.data.artists as any[]).map((name, i) =>
+            if (data.loading) {
+              return null;
+            }
+            if (data.error) {
+              return <p>{data.error.message}</p>;
+            }
+            const artists = (data.data.artists.items as any[]).map((name, i) =>
               <ArtistGrid key={i} name={name.name} imageSource={ArtistPicture} id={name.id}/>
-              );
+            );
 
-              return <GridView elements={artists}/>;
-
-
-
-
-            // const artistGridData = (data.data.artists as any[]).map(artist => ({
-            //   name: artist.name,
-            //   imageSource: artist.imageUrl,
-            //   id: artist.id
-            // }) as IArtistsGridData);
-
-            // return <ArtistsGrid data={artistGridData} />
+            return <GridView elements={artists}/>;
           }}
         </Query>
 

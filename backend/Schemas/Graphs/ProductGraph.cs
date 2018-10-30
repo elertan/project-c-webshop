@@ -21,11 +21,11 @@ namespace backend.Schemas.Types
             // Can be null
             Field<TrackGraph>(
                 "track",
-                resolve: ctx => db.Tracks.Where(t => t.Product.Id == ctx.Source.Id).FirstOrDefaultAsync());
+                resolve: ctx => db.Tracks.FirstOrDefaultAsync(e => e.Product.Id == ctx.Source.Id));
             // Can be null
             Field<AlbumGraph>(
                 "album",
-                resolve: ctx => db.Albums.Where(a => a.Product.Id == ctx.Source.Id).FirstOrDefaultAsync());
+                resolve: ctx => db.Albums.FirstOrDefaultAsync(e => e.Product.Id == ctx.Source.Id));
         }
     }
 }

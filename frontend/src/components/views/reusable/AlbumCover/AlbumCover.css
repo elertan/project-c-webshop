@@ -1,4 +1,4 @@
-.AlbumCover-root {
+.GenreCover-root {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,17 +7,17 @@
   padding: 10px;
 }
 
-.AlbumCover-root:hover {
+.GenreCover-root:hover {
   background-color: gray;
 }
 
-.AlbumCover-img {
+.GenreCover-img {
   width: 175px;
   height: 175px;
   margin-bottom: 5px;
 }
 
-.AlbumCover-name {
+.GenreCover-name {
   text-align: center;
   width: 100%;
 }

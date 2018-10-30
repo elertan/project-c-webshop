@@ -6,6 +6,7 @@ interface IProps {}
 
 class Trending extends React.Component<IProps> {
   public render() {
+
     return (
       <AppLayout>
         <Typography>Trending! Test 123</Typography>

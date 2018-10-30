@@ -1,23 +1,23 @@
 import * as React from 'react';
-import './AlbumCover.css';
+import './GenreCover.css';
 import { Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 
 interface IProps {
-  name: string;
-  imageSource: string;
   id: number;
+  name: string;
+  imageUrl: string;
 }
 
-const AlbumCover: React.SFC<IProps> = (props: IProps) => {
+const GenreCover: React.SFC<IProps> = (props: IProps) => {
   return (
-    <Link to={`/album/${props.id}`}>
+    <Link to={`/genre/${props.id}`}>
       <div
         className="GenreCover-root"
       >
         <img
           className="GenreCover-img"
-          src={props.imageSource}
+          src={props.imageUrl}
         />
         <Typography className="GenreCover-name">{props.name}</Typography>
       </div>
@@ -25,4 +25,4 @@ const AlbumCover: React.SFC<IProps> = (props: IProps) => {
   );
 };
 
-export default AlbumCover;
+export default GenreCover;

@@ -1,0 +1,23 @@
+.GenreCover-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    padding: 10px;
+  }
+  
+  .GenreCover-root:hover {
+    background-color: gray;
+  }
+  
+  .GenreCover-img {
+    width: 175px;
+    height: 175px;
+    margin-bottom: 5px;
+  }
+  
+  .GenreCover-name {
+    text-align: center;
+    width: 100%;
+  }
