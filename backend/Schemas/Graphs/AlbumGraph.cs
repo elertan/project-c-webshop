@@ -16,11 +16,19 @@ namespace backend.Schemas.Types
             Field(a => a.Label).Description("The label that released this album");
             Field(a => a.Popularity).Description("The popularity of the song on a scale from 1-100");
             Field(a => a.AlbumType).Description("The type of album, either 'single' or 'album'");
+
+            Field<ProductGraph>(
+                "product",
+                resolve: ctx => db.Products.FirstOrDefault(e => e.Id == ctx.Source.ProductId)
+            );
             
-            
-            Field<ListGraphType<TrackGraph>>(
+            AddQueryConnectionField<TrackGraph, Track>(
                 "tracks",
-                resolve: ctx => db.AlbumXTracks.Where(e => e.AlbumId == ctx.Source.Id).Select(e => e.Track)
+                resolve: ctx => db.AlbumXTracks.Where(e => e.AlbumId == ctx.Source.Id).Join(
+                    db.Tracks,
+                    e => e.TrackId,
+                    e => e.Id,
+                    (_, e) => e)
             );
         }
     }

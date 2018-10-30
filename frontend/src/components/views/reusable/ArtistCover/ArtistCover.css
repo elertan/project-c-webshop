@@ -1,4 +1,4 @@
-.AlbumCover-root {
+.ArtistCover-root {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,17 +7,17 @@
   padding: 10px;
 }
 
-.AlbumCover-root:hover {
-  background-color: gray;
+.ArtistCover-root:hover {
+  background-color: #ebebeb;
 }
 
-.AlbumCover-img {
+.ArtistCover-img {
   width: 175px;
   height: 175px;
   margin-bottom: 5px;
 }
 
-.AlbumCover-name {
+.ArtistCover-name {
   text-align: center;
   width: 100%;
 }

@@ -9,6 +9,7 @@ namespace backend_datamodel.Models
         public int DurationMs { get; set; }
         public bool Explicit { get; set; }
         public string PreviewUrl { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; }
         
 //        public IList<Artist> Artists { get; set; }

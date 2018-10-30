@@ -10,6 +10,7 @@ namespace backend_datamodel.Models
         public string Label { get; set; }
         public int Popularity { get; set; }
         public string ImageUrl { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; }
         
 //        public IList<Track> Tracks { get; set; }

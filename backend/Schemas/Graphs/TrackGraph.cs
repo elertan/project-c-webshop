@@ -18,18 +18,28 @@ namespace backend.Schemas.Types
             Field(t => t.DurationMs).Description("The duration of the track in milliseconds");
             Field(t => t.PreviewUrl, nullable: true).Description("The preview url of this track, can be null");
 
-//            Field<ListGraphType<ArtistGraph>>(
-//                "artists",
-//                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
-//            );
-            
-            AddNavigationField<ArtistGraph, Artist>(
-                "artists",
-                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Artist)
+            Field<ProductGraph>(
+                "product",
+                resolve: ctx => db.Products.FirstOrDefault(e => e.Id == ctx.Source.ProductId)
             );
-            AddNavigationField<AlbumGraph, Album>(
+            
+            AddQueryConnectionField<ArtistGraph, Artist>(
+                "artists",
+                resolve: ctx => db.ArtistXTracks.Where(e => e.TrackId == ctx.Source.Id).Join(
+                        db.Artists,
+                        e => e.ArtistId,
+                        e => e.Id,
+                        (_, artist) => artist
+                    )
+            );
+            AddQueryConnectionField<AlbumGraph, Album>(
                 "albums",
-                resolve: ctx => db.AlbumXTracks.Where(e => e.TrackId == ctx.Source.Id).Select(e => e.Album)
+                resolve: ctx => db.AlbumXTracks.Where(e => e.TrackId == ctx.Source.Id).Join(
+                    db.Albums,
+                    e => e.AlbumId,
+                    e => e.Id,
+                    (_, album) => album
+                )
             );
         }
     }

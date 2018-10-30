@@ -1,0 +1,23 @@
+.CategoryCover-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    padding: 10px;
+  }
+  
+  .CategoryCover-root:hover {
+    background-color: #ebebeb;
+  }
+  
+  .CategoryCover-img {
+    width: 175px;
+    height: 175px;
+    margin-bottom: 5px;
+  }
+  
+  .GategoryCover-name {
+    text-align: center;
+    width: 100%;
+  }
