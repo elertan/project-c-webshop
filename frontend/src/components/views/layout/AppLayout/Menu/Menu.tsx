@@ -3,9 +3,13 @@ import {
   Container,
   Menu as SemanticMenu, Search
 } from 'semantic-ui-react';
+// import {NavLink} from "react-router-dom";
 
-interface IProps {}
-interface IState {}
+interface IProps {
+}
+
+interface IState {
+}
 
 class Menu extends React.Component<IProps, IState> {
   public state = {};
@@ -25,11 +29,13 @@ class Menu extends React.Component<IProps, IState> {
               Marshmallow's Webshop
             </SemanticMenu.Item>
             <SemanticMenu.Item header>
-              <Search fluid />
+              <Search fluid/>
             </SemanticMenu.Item>
-            <SemanticMenu.Item header position="right" as="a">
-              Log In
-            </SemanticMenu.Item>
+            {/*<NavLink to={"/auth/login"}>*/}
+              <SemanticMenu.Item header position="right" as="a">
+                Log In
+              </SemanticMenu.Item>
+            {/*</NavLink>*/}
             <SemanticMenu.Item header as="a">
               Wishlist
             </SemanticMenu.Item>
