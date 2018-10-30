@@ -5,6 +5,7 @@ import ArtistGrid from "../../reusable/ArtistsGrid/ArtistsGrid";
 import GridView from "../../reusable/GridView/GridView";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import ArtistPicture from "../../../../img/artist.jpg";
 
 interface IProps {
 }
@@ -14,7 +15,6 @@ const query = gql`
     artists {
       id
       name
-      imageUrl
     }
   }
 `;
@@ -36,7 +36,7 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
             // return <GridView elements={covers}/>;
 
             const artists = (data.data.artists as any[]).map((name, i) =>
-              <ArtistGrid key={i} name={name.name} imageSource={name.imageUrl} id={name.id}/>
+              <ArtistGrid key={i} name={name.name} imageSource={ArtistPicture} id={name.id}/>
               );
 
               return <GridView elements={artists}/>;
