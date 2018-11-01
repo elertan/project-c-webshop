@@ -9,7 +9,7 @@ namespace backend_datamodel.Models
         public string AlbumType { get; set; }
         public string Label { get; set; }
         public int Popularity { get; set; }
-        public string ImageUrl { get; set; }
+        public virtual IList<Image> Images { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
         
