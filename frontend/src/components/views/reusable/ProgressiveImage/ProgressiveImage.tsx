@@ -9,26 +9,36 @@ interface IProps {
   imgProps?: React.HTMLProps<HTMLImageElement>;
 }
 
-const ProgressiveImage: React.SFC<IProps> = (props: IProps) => {
-  return (
-    <ReactProgressiveImage
-      placeholder={props.placeholder}
-      src={props.src}
-    >
-      {(src: string, loading: boolean) => (
-        <img
-          src={src}
-          alt="an image"
-          {...props.imgProps as any}
-          className={classNames(
-            (props.imgProps && props.imgProps.className),
-            'ProgressiveImage-placeholder',
-            { 'ProgressiveImage-src': !loading }
-          )}
-        />
-      )}
-    </ReactProgressiveImage>
-  );
+class ProgressiveImage extends React.Component<IProps> {
+  private loadingHasBeenThere: boolean = false;
+
+  public render() {
+    return (
+      <ReactProgressiveImage
+        placeholder={this.props.placeholder}
+        src={this.props.src}
+      >
+        {(src: string, loading: boolean) => {
+          if (loading) {
+            this.loadingHasBeenThere = true;
+          }
+
+          return (
+            <img
+              src={src}
+              alt="an image"
+              {...this.props.imgProps as any}
+              className={classNames(
+                (this.props.imgProps && this.props.imgProps.className),
+                {'ProgressiveImage-placeholder': this.loadingHasBeenThere},
+                {'ProgressiveImage-src': !loading}
+              )}
+            />
+          );
+        }}
+      </ReactProgressiveImage>
+    );
+  }
 };
 
 export default ProgressiveImage;
