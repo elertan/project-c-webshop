@@ -15,9 +15,8 @@ const query = gql`
         id
         name
         images(orderBy: {
-          path: "height",
-          descending: true
-        }, first: 1) {
+          path: "height"
+        }) {
           items {
             url
           }
@@ -48,7 +47,7 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
             >
               {albums.map((album, i) =>
                 <Grid.Column key={i}>
-                  <AlbumCover key={i} name={album.name} imageSource={album.images.items[0].url} id={album.id}/>
+                  <AlbumCover key={i} name={album.name} imageSource={album.images.items} id={album.id}/>
                 </Grid.Column>
               )}
             </Grid>
