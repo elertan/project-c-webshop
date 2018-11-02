@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using backend_datamodel.Models;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore.Internal;
 using MoreLinq;
@@ -23,7 +24,7 @@ namespace database_filling_tool
             Console.WriteLine("Retrieving toplists playlists...");
             var toplistsPlaylistsResponse =
                 await httpClient.GetStringAsync(
-                    "https://api.spotify.com/v1/browse/categories/toplists/playlists?limit=10");
+                    "https://api.spotify.com/v1/browse/categories/toplists/playlists?limit=3");
             var toplistsPlaylists = JsonConvert.DeserializeObject<dynamic>(toplistsPlaylistsResponse);
             Console.WriteLine("Retrieved playlists");
             var albumTasks = ((IEnumerable<dynamic>) toplistsPlaylists.playlists.items)
@@ -101,7 +102,15 @@ namespace database_filling_tool
             {
                 Id = category.id,
                 Name = category.name,
-                ImageUrl = category.icons[0].url
+                Images = category.icons != null ?
+                    ((IEnumerable<dynamic>) category.icons).Select(imgData => new Image
+                    {
+                        Url = imgData.url,
+                        Height = imgData.height,
+                        Width = imgData.width
+                    }).ToList()
+                    : 
+                    new List<Image>()
             }).ToList();
         }
 
@@ -204,7 +213,15 @@ namespace database_filling_tool
 //                        ReleaseDate = DateTime.Parse(album.release_date),
                 ReleaseDatePrecision = album.release_date_precision,
                 SpotifyTracks = ((IEnumerable<dynamic>) album.tracks.items).Select(ExtractTrack).ToList(),
-                ImageUrl = album.images != null ? album.images[0].url : null
+                Images = album.images != null ?
+                    ((IEnumerable<dynamic>) album.images).Select(imgData => new Image
+                    {
+                        Url = imgData.url,
+                        Height = imgData.height,
+                        Width = imgData.width
+                    }).ToList()
+                    : 
+                    new List<Image>()
             };
         }
 
@@ -251,7 +268,15 @@ namespace database_filling_tool
                 {
                     Id = artistData.id,
                     Name = artistData.name,
-                    ImageUrl = artistData.images != null && artistData.images.Count > 0 ? artistData.images[0].url : null
+                    Images = artistData.images != null ?
+                        ((IEnumerable<dynamic>) artistData.images).Select(imgData => new Image()
+                        {
+                            Url = imgData.url,
+                            Height = imgData.height,
+                            Width = imgData.Width
+                        }).ToList()
+                        : 
+                        new List<Image>()
                 });
             });
 
