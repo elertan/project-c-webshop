@@ -10,8 +10,8 @@ using backend_datamodel.Models;
 namespace backend_datamodel.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180927122118_Implemented almost everything on the erd")]
-    partial class Implementedalmosteverythingontheerd
+    [Migration("20181102002711_Reintial create")]
+    partial class Reintialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,15 +48,13 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("ImageUrl");
-
                     b.Property<string>("Label");
 
                     b.Property<string>("Name");
 
                     b.Property<int>("Popularity");
 
-                    b.Property<int?>("ProductId");
+                    b.Property<int>("ProductId");
 
                     b.Property<string>("SpotifyId");
 
@@ -89,8 +87,6 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("ImageUrl");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("SpotifyId");
@@ -113,6 +109,72 @@ namespace backend_datamodel.Migrations
                     b.HasIndex("TrackId");
 
                     b.ToTable("ArtistXTracks");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("SpotifyId");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AlbumId");
+
+                    b.Property<int?>("ArtistId");
+
+                    b.Property<int?>("CategoryId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int?>("Height");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.Property<string>("Url");
+
+                    b.Property<int?>("Width");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
+
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Invoice", b =>
@@ -221,7 +283,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<string>("PreviewUrl");
 
-                    b.Property<int?>("ProductId");
+                    b.Property<int>("ProductId");
 
                     b.Property<string>("SpotifyId");
 
@@ -267,7 +329,8 @@ namespace backend_datamodel.Migrations
                 {
                     b.HasOne("backend_datamodel.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.AlbumXTrack", b =>
@@ -294,6 +357,21 @@ namespace backend_datamodel.Migrations
                         .WithMany("ArtistXTracks")
                         .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Image", b =>
+                {
+                    b.HasOne("backend_datamodel.Models.Album")
+                        .WithMany("Images")
+                        .HasForeignKey("AlbumId");
+
+                    b.HasOne("backend_datamodel.Models.Artist")
+                        .WithMany("Images")
+                        .HasForeignKey("ArtistId");
+
+                    b.HasOne("backend_datamodel.Models.Category")
+                        .WithMany("Images")
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Order", b =>
@@ -331,7 +409,8 @@ namespace backend_datamodel.Migrations
                 {
                     b.HasOne("backend_datamodel.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

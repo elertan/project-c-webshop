@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using backend_datamodel.Models;
 
 namespace database_filling_tool
 {
@@ -12,7 +13,7 @@ namespace database_filling_tool
         public int Popularity { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string ReleaseDatePrecision { get; set; }
-        public string ImageUrl { get; set; }
+        public List<Image> Images { get; set; } = new List<Image>();
         
         public List<SpotifyTrack> SpotifyTracks { get; set; }
     }
