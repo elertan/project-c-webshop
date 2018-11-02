@@ -1,0 +1,21 @@
+@keyframes ProgressiveImage-placeholderToSrc {
+  0% {
+    filter: blur(10px);
+  }
+  80% {
+    filter: blur(2px);
+  }
+  100% {
+    filter: blur(0px);
+  }
+}
+
+.ProgressiveImage-placeholder {
+  filter: blur(10px);
+}
+
+.ProgressiveImage-src {
+  animation-name: ProgressiveImage-placeholderToSrc;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+}
