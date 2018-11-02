@@ -13,8 +13,14 @@ namespace backend.Schemas.Types
 
             
             Field(a => a.Name, nullable: true).Description("The name of the artist.");
-            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
+//            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
+            
+            
+            AddQueryConnectionField<ImageGraph, Image>(
+                "images",
+                resolve: ctx => db.Images.Where(e => e.ArtistId == ctx.Source.Id)
+            );
             
             AddQueryConnectionField<TrackGraph, Track>(
                 "tracks",

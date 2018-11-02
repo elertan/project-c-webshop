@@ -15,7 +15,14 @@ const query = gql`
       items {
         id
         name
-        imageUrl
+        images(orderBy: {
+          path: "height",
+          descending: true
+        }, first: 1) {
+          items {
+            url
+          }
+        }
       }
     }
   }
@@ -36,9 +43,9 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
 
             return (
               <Grid columns={5} doubling>
-                {(data.data.artists.items as any[]).map((name, i) =>
+                {(data.data.artists.items as any[]).map((artist, i) =>
                   <Grid.Column key={i}>
-                    <ArtistCover name={name.name} imageSource={name.imageUrl} id={name.id}/>
+                    <ArtistCover name={artist.name} imageSource={artist.images.items.length > 0 && artist.images.items[0].url} id={artist.id}/>
                   </Grid.Column>
                 )}
               </Grid>

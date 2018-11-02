@@ -172,7 +172,7 @@ namespace backend_datamodel.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Invoice", b =>

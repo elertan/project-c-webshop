@@ -22,6 +22,7 @@ namespace backend_datamodel.Models {
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Admin> Admins { get; set; }
+    public DbSet<Image> Images { get; set; }
     
     // Many-to-many tables
     public DbSet<ArtistXTrack> ArtistXTracks { get; set; }
