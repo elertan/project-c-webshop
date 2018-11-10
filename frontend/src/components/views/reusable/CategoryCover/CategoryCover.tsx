@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './GenreCover.css';
+import './CategoryCover.css';
 import { Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 
@@ -9,20 +9,20 @@ interface IProps {
   imageUrl: string;
 }
 
-const GenreCover: React.SFC<IProps> = (props: IProps) => {
+const CategoryCover: React.SFC<IProps> = (props: IProps) => {
   return (
     <Link to={`/genre/${props.id}`}>
       <div
-        className="GenreCover-root"
+        className="CategoryCover-root"
       >
         <img
-          className="GenreCover-img"
+          className="CategoryCover-img"
           src={props.imageUrl}
         />
-        <Typography className="GenreCover-name">{props.name}</Typography>
+        <Typography className="GategoryCover-name">{props.name}</Typography>
       </div>
     </Link>
   );
 };
 
-export default GenreCover;
+export default CategoryCover;

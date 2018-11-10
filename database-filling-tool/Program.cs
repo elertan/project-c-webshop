@@ -71,7 +71,7 @@ namespace database_filling_tool
             var dbCategories = data.Categories.Select(category => new Category
             {
                 Name = category.Name,
-                ImageUrl = category.ImageUrl,
+                Images = category.Images,
                 SpotifyId = category.Id
             });
             await db.Categories.AddRangeAsync(dbCategories);
@@ -82,7 +82,7 @@ namespace database_filling_tool
             {
                 SpotifyId = sa.Id,
                 Name = sa.Name,
-                ImageUrl = sa.ImageUrl
+                Images = sa.Images
             });
             await db.Artists.AddRangeAsync(dbArtists);
             Console.WriteLine("Storing new artists");
@@ -127,7 +127,7 @@ namespace database_filling_tool
                     Label = sa.Label,
                     Popularity = sa.Popularity,
                     AlbumType = sa.AlbumType,
-                    ImageUrl = sa.ImageUrl,
+                    Images = sa.Images,
                     Product = new Product()
                     {
                         Price = price

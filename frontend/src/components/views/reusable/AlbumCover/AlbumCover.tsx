@@ -13,13 +13,13 @@ const AlbumCover: React.SFC<IProps> = (props: IProps) => {
   return (
     <Link to={`/album/${props.id}`}>
       <div
-        className="GenreCover-root"
+        className="AlbumCover-root"
       >
         <img
-          className="GenreCover-img"
+          className="AlbumCover-img"
           src={props.imageSource}
         />
-        <Typography className="GenreCover-name">{props.name}</Typography>
+        <Typography className="AlbumCover-name">{props.name}</Typography>
       </div>
     </Link>
   );

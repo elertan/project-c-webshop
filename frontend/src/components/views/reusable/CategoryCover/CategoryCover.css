@@ -1,4 +1,4 @@
-.GenreCover-root {
+.CategoryCover-root {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,17 +7,17 @@
     padding: 10px;
   }
   
-  .GenreCover-root:hover {
-    background-color: gray;
+  .CategoryCover-root:hover {
+    background-color: #ebebeb;
   }
   
-  .GenreCover-img {
+  .CategoryCover-img {
     width: 175px;
     height: 175px;
     margin-bottom: 5px;
   }
   
-  .GenreCover-name {
+  .GategoryCover-name {
     text-align: center;
     width: 100%;
   }

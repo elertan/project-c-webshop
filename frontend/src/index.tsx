@@ -7,6 +7,8 @@ import config from './config';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
+import 'semantic-ui-css/semantic.min.css';
+
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
 });
