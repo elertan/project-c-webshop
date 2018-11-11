@@ -1,0 +1,8 @@
+.ProgressiveImage-placeholder {
+  filter: blur(10px);
+  transition: filter 300ms ease-out;
+}
+
+.ProgressiveImage-src {
+  filter: blur(0px);
+}

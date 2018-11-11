@@ -11,14 +11,13 @@ interface IProps {
 
 const query = gql`
   {
-    artists(first: 999) {
+    artists(first: 50) {
       items {
         id
         name
         images(orderBy: {
-          path: "height",
-          descending: true
-        }, first: 1) {
+          path: "height"
+        }) {
           items {
             url
           }
@@ -45,7 +44,7 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
               <Grid columns={5} doubling>
                 {(data.data.artists.items as any[]).map((artist, i) =>
                   <Grid.Column key={i}>
-                    <ArtistCover name={artist.name} imageSource={artist.images.items.length > 0 && artist.images.items[0].url} id={artist.id}/>
+                    <ArtistCover name={artist.name} imageSource={artist.images.items} id={artist.id}/>
                   </Grid.Column>
                 )}
               </Grid>
