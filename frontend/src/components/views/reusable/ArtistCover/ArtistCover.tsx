@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './ArtistCover.css';
-import { Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 
 interface IProps {
@@ -10,18 +9,20 @@ interface IProps {
 }
 
 const ArtistCover: React.SFC<IProps> = (props: IProps) => {
+  console.log(props);
   return (
-    <Link to={`/album/${props.id}`}>
-      <div
-        className="AlbumCover-root"
-      >
+    // <Link to={`/artist/${props.id}`}>
+      <div className="ArtistCover-root">
+        <Link to={`/artist/${props.id}`}>
         <img
-          className="AlbumCover-img"
+          className="ArtistCover-img"
           src={props.imageSource}
         />
-        <Typography className="AlbumCover-name">{props.name}</Typography>
+        <div className="ArtistCover-name">
+          {props.name}
+        </div>
+        </Link>
       </div>
-    </Link>
   );
 };
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './AlbumCover.css';
-import { Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 
 interface IProps {
@@ -19,7 +18,9 @@ const AlbumCover: React.SFC<IProps> = (props: IProps) => {
           className="AlbumCover-img"
           src={props.imageSource}
         />
-        <Typography className="AlbumCover-name">{props.name}</Typography>
+        <div className="AlbumCover-name">
+          {props.name}
+        </div>
       </div>
     </Link>
   );

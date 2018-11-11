@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Typography, withStyles} from '@material-ui/core';
-import Separator from '../../reusable/Separator';
-import styles, {StyleProps} from "./DetailStyle";
+// import {Typography, withStyles} from '@material-ui/core';
+// import Separator from '../../reusable/Separator';
+import {StyleProps} from "./DetailStyle";
 import TrackList from '../../reusable/TrackList/TrackList';
 
 import gql from "graphql-tag";
@@ -14,16 +14,34 @@ interface IProps extends StyleProps {
 }
 
 class Detail extends React.Component<IProps> {
-
+  
   public render() {
     const query = gql`
     {
-      album(id: ${this.props.albumId}) {
-        name
-        imageUrl
-        tracks {
-          name
-          durationMs
+      albums (ids: "${this.props.albumId}") {
+        items {
+            name
+            id
+            tracks {
+              items {
+                name
+                durationMs
+                previewUrl
+                artists {
+                  items {
+                    name
+                  }
+                }
+              }
+            }
+            images(orderBy: {
+                path: "height",
+                descending: true    
+            }, first: 1) {
+                items {
+                    url
+                }
+            }
         }
       }
     }
@@ -39,8 +57,11 @@ class Detail extends React.Component<IProps> {
             if (error) {
               return <span>{error.message}</span>;
             }
-
-            return this.renderDetail(data.album);
+            return (             
+              <div>
+                {this.renderDetail(data.albums.items[0])}
+              </div>
+            )
           }}
         </Query>
       </AppLayout>
@@ -48,19 +69,39 @@ class Detail extends React.Component<IProps> {
   }
 
   private renderDetail = (album: any) => {
-    const classes = this.props.classes!;
-    const data: ITrackData[] = album.tracks.map((track: any) =>
-      ({title: track.name, durationMs: track.durationMs} as ITrackData)
+    // const classes = this.props.classes!;
+    const ReturnTrackArtists = (track:any) => {
+        const trackArtistNames: string[] = [];
+        let countArtist = 0; 
+        
+        track.artists.items.forEach((artist: any) => {  
+          countArtist++;
+          countArtist > 1 ? (
+            trackArtistNames.push(",  " + artist.name)
+            ) : (
+              trackArtistNames.push(artist.name)
+            );
+          // console.log("Artist number: " + countArtist + " is:" + artist.name + " with track: " + track.name)         
+        })       
+        return trackArtistNames;
+    }  
+      
+    const data: ITrackData[] = album.tracks.items.map((track: any) => ({
+       title: track.name, 
+       artistName: ReturnTrackArtists(track),
+       albumsName: album.name,
+       albumId: album.id,
+       previewUrl: track.previewUrl,
+       durationMs: track.durationMs} as ITrackData)
     );
-
     return (
       <div>
-        <div
+        {/* <div
           className={classes.albumContainerBackground}
           style={{backgroundImage: `url(${album.imageUrl})`}}
         />
-        <div className={classes.albumInnerContainerDarkenLayer}/>
-        <div
+        <div className={classes.albumInnerContainerDarkenLayer}/> */}
+        {/* <div
           className={classes.albumContainer}
         >
           <div className={classes.albumInnerContainer}>
@@ -68,15 +109,15 @@ class Detail extends React.Component<IProps> {
               className={classes.image}
               src={album.imageUrl}
             />
-            <Typography className={classes.title}>{album.name}</Typography>
-            <Typography className={classes.artistsText}>ArtistName,ArtistName</Typography>
+            <div className={classes.title}>{album.name}</div>
+            <div className={classes.artistsText}>ArtistName,ArtistName</div>
           </div>
         </div>
-        <Separator horizontal/>
+        <Separator horizontal/> */}
         <TrackList trackData={data}/>
       </div>
     );
   };
 }
 
-export default withStyles(styles)(Detail);
+export default (Detail);

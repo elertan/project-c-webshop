@@ -5,7 +5,7 @@ import NotFound from "../components/views/errors/NotFound/NotFound";
 
 interface IProps extends RouteComponentProps<{}> {}
 
-const AuthRouter: React.SFC<IProps> = (props: IProps) => {
+const AlbumRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
       <Route exact path={`${props.match.url}/:id`} component={DetailContainer} />
@@ -15,4 +15,4 @@ const AuthRouter: React.SFC<IProps> = (props: IProps) => {
   );
 };
 
-export default AuthRouter;
+export default AlbumRouter;

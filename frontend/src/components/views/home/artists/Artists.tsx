@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Artists.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
@@ -11,7 +10,7 @@ interface IProps {
 
 const query = gql`
   {
-    artists(first: 999) {
+    artists(first: 999, orderBy: {path: "name"}) {
       items {
         id
         name
