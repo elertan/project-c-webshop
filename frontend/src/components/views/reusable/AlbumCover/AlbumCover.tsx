@@ -1,12 +1,13 @@
 import * as React from 'react';
 import './AlbumCover.css';
 import { Link } from 'react-router-dom';
-import ProgressiveImage from "../ProgressiveImage/ProgressiveImage";
 import IImage from "../../../../models/IImage";
+import ProgressiveImage from "../ProgressiveImage/ProgressiveImage";
+import {Typography} from "@material-ui/core";
 
 interface IProps {
   name: string;
-  imageSource: IImage[];
+  imageSource?: IImage[];
   id: number;
 }
 
@@ -30,8 +31,7 @@ const AlbumCover: React.SFC<IProps> = (props: IProps) => {
             src="default?"
           />
         }
-        {/* <Typography className="AlbumCover-name">{props.name}</Typography> */}
-        <div className="AlbumCover-name">{props.name}</div>
+        <Typography className="AlbumCover-name">{props.name}</Typography>
       </div>
     </Link>
   );
