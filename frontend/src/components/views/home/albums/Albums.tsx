@@ -1,84 +1,60 @@
 import * as React from 'react';
-import {withStyles} from '@material-ui/core';
-
-import styles, {StyleProps} from "./TrackStyle";
-import TrackList from '../../reusable/TrackList/TrackList';
-
+import AppLayout from "../../layout/AppLayout/AppLayout";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import {ITrackData} from '../../reusable/TrackRow/TrackRow';
-import AppLayout from "../../layout/AppLayout/AppLayout";
+import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
+import {Grid} from "semantic-ui-react";
 
-interface IProps extends StyleProps {
-
+interface IProps {
 }
 
-const query = gql`
-    {
-        tracks {
+const query = gql` 
+  {
+      albums (first: 100, orderBy: {path: "name"}) {
           items {
-            name
-            durationMs
-            previewUrl
-            albums {
-              items {
-                name
-                id
+              id
+              name
+              images(orderBy: {
+                  path: "height",
+                  descending: true    
+              }, first: 1) {
+                  items {
+                      url
+                  }
               }
-            }
-            artists {
-              items {
-                name
-              }
-            }
           }
-        }
       }
-    `;
+  }
+  `;
 
-class Track extends React.Component<IProps> {
-
-  public render() {
-
-    return (
-      <AppLayout>
+const Albums: React.SFC<IProps> = (props: IProps) => {
+  return (
+    <AppLayout>
+      <div className="Explore-root">
         <Query query={query}>
-          {({loading, error, data}) => {
-            if (loading) {
+          {(data) => {
+            if (data.loading) {
               return null;
             }
-            if (error) {
-              return <span>{error.message}</span>;
+            if (data.error) {
+              return <p>{data.error.message}</p>;
             }
 
-            return this.renderDetail(data.tracks.items);
+            return (
+              <Grid columns={5} doubling>
+                {(data.data.albums.items as any[]).map((album, i) =>
+                  <Grid.Column key={i}>
+                    <AlbumCover name={album.name} imageSource={album.images.items.length > 0 && album.images.items[0].url} id={album.id}/>
+                  </Grid.Column>
+                )}
+              </Grid>
+            );
           }}
         </Query>
-      </AppLayout>
-    );
-  }
 
-  private renderDetail = (tracks: any[]) => {
-    const classes = this.props.classes!;
-    const data: ITrackData[] = tracks.map((track: any, i: number) =>
-      ({
-        title: track.name,
-        previewUrl: track.previewUrl,
-        albumId: track.albums.items[0].id,
-        durationMs: track.durationMs,
-        artistName: track.artists.items[0].name,
-        albumsName: track.albums.items[0].name,
-        index: i
-      } as ITrackData)
-    );
-    return (
-      <div className={classes.page}>
-        <div className={classes.title}>
-          <TrackList trackData={data}/>
-        </div>
       </div>
-    );
-  };
-}
+    </AppLayout>
+  );
+};
 
-export default withStyles(styles)(Track);
+export default Albums;

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Artists.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
