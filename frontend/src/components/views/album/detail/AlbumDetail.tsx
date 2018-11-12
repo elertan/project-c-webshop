@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import {Typography, withStyles} from '@material-ui/core';
 // import Separator from '../../reusable/Separator';
-import {StyleProps} from "./DetailStyle";
+import {StyleProps} from "./AlbumDetailStyle";
 import TrackList from '../../reusable/TrackList/TrackList';
 
 import gql from "graphql-tag";
@@ -13,7 +13,7 @@ interface IProps extends StyleProps {
   albumId: number;
 }
 
-class Detail extends React.Component<IProps> {
+class AlbumDetail extends React.Component<IProps> {
   
   public render() {
     const query = gql`
@@ -120,4 +120,4 @@ class Detail extends React.Component<IProps> {
   };
 }
 
-export default (Detail);
+export default (AlbumDetail);
