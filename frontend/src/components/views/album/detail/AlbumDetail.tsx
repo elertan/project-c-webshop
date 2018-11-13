@@ -123,7 +123,7 @@ class AlbumDetail extends React.Component<IProps> {
 
   private addToCart = (cartState: CartState) => () => {
     const product: IProduct = {
-      id: 1,
+      id: cartState.state.products.length + 1,
       album: {
         id: 1,
         name: "test",
@@ -131,7 +131,7 @@ class AlbumDetail extends React.Component<IProps> {
         updatedAt: new Date()
       }
     };
-    cartState.setState({ products: [product] });
+    cartState.setState({ products: [...cartState.state.products, product] });
   };
 }
 

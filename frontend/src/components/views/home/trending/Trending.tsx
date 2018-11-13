@@ -11,7 +11,7 @@ class Trending extends React.Component<IProps> {
     return (
       <AppLayout>
         <Subscribe to={[CartState]}> 
-          {cartState => (
+          {(cartState: CartState) => (
             <code>
               {JSON.stringify(cartState)}
             </code>
