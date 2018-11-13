@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using backend_datamodel.Models;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore.Internal;
 using MoreLinq;
@@ -40,7 +41,12 @@ namespace database_filling_tool
             spotifyData.Genres = genres.Result;
             spotifyData.Categories = categories.Result;
 
-            return RemoveDuplicates(spotifyData);
+            var cleanData = RemoveDuplicates(spotifyData);
+            
+            // Fetch extended artist details
+            cleanData.Artists = await GetArtistsDetailed(httpClient, cleanData.Artists);
+            
+            return cleanData;
         }
 
         private async Task<HttpClient> Authorize()
@@ -53,7 +59,7 @@ namespace database_filling_tool
             Console.WriteLine($"Using ClientID: '{clientId}' and Secret: '{clientSecret}'");
             var auth = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
 
-            var httpClient = new HttpClient();
+            var httpClient = new HttpClient(new RetryHandler(new HttpClientHandler()));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
             Console.WriteLine("Requesting permission on Spotify...");
             var response = await httpClient.PostAsync("https://accounts.spotify.com/api/token",
@@ -96,7 +102,15 @@ namespace database_filling_tool
             {
                 Id = category.id,
                 Name = category.name,
-                ImageUrl = category.icons[0].url
+                Images = category.icons != null ?
+                    ((IEnumerable<dynamic>) category.icons).Select(imgData => new Image
+                    {
+                        Url = imgData.url,
+                        Height = imgData.height,
+                        Width = imgData.width
+                    }).ToList()
+                    : 
+                    new List<Image>()
             }).ToList();
         }
 
@@ -199,7 +213,15 @@ namespace database_filling_tool
 //                        ReleaseDate = DateTime.Parse(album.release_date),
                 ReleaseDatePrecision = album.release_date_precision,
                 SpotifyTracks = ((IEnumerable<dynamic>) album.tracks.items).Select(ExtractTrack).ToList(),
-                ImageUrl = album.images != null ? album.images[0].url : null
+                Images = album.images != null ?
+                    ((IEnumerable<dynamic>) album.images).Select(imgData => new Image
+                    {
+                        Url = imgData.url,
+                        Height = imgData.height,
+                        Width = imgData.width
+                    }).ToList()
+                    : 
+                    new List<Image>()
             };
         }
 
@@ -225,8 +247,47 @@ namespace database_filling_tool
             {
                 Id = artist.id,
                 Name = artist.name,
-                ImageUrl = artist.images != null ? artist.images[0].url : null
+                // ImageUrl bestaat alleen op details niveau
+//                ImageUrl = artist.images != null ? artist.images[0].url : null
             };
+        }
+
+        private async Task<List<SpotifyArtist>> GetArtistsDetailed(HttpClient httpClient, List<SpotifyArtist> simpleArtists)
+        {
+            // %2C = ,
+            var chunkedSimpleArtists = simpleArtists.ChunkBy(20);
+            var detailedArtistsTasks = chunkedSimpleArtists.Select(async simpleArtistsChunk =>
+            {
+                var artistsIds = simpleArtistsChunk.Select(e => e.Id).Join("%2C");
+                var response = await httpClient.GetStringAsync(
+                    $"https://api.spotify.com/v1/artists?ids={artistsIds}");
+                var data = JsonConvert.DeserializeObject<dynamic>(response);
+                var artists = (IEnumerable<dynamic>) data.artists;
+
+                return artists.Select(artistData => new SpotifyArtist
+                {
+                    Id = artistData.id,
+                    Name = artistData.name,
+                    Images = artistData.images != null ?
+                        ((IEnumerable<dynamic>) artistData.images).Select(imgData => new Image()
+                        {
+                            Url = imgData.url,
+                            Height = imgData.height,
+                            Width = imgData.Width
+                        }).ToList()
+                        : 
+                        new List<Image>()
+                });
+            });
+
+            await Task.WhenAll(detailedArtistsTasks);
+            return detailedArtistsTasks.Select(task => task.Result).Aggregate((prev, curr) =>
+            {
+                var list = new List<SpotifyArtist>(prev.Count() + curr.Count());
+                list.AddRange(prev);
+                list.AddRange(curr);
+                return list;
+            }).ToList();
         }
     }
 }

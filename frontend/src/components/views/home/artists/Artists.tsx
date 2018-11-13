@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Artists.css';
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
@@ -11,11 +10,17 @@ interface IProps {
 
 const query = gql`
   {
-    artists(first: 999) {
+    artists(first: 50) {
       items {
         id
         name
-        imageUrl
+        images(orderBy: {
+          path: "height"
+        }) {
+          items {
+            url
+          }
+        }
       }
     }
   }
@@ -36,9 +41,9 @@ const Artists: React.SFC<IProps> = (props: IProps) => {
 
             return (
               <Grid columns={5} doubling>
-                {(data.data.artists.items as any[]).map((name, i) =>
+                {(data.data.artists.items as any[]).map((artist, i) =>
                   <Grid.Column key={i}>
-                    <ArtistCover name={name.name} imageSource={name.imageUrl} id={name.id}/>
+                    <ArtistCover name={artist.name} imageSource={artist.images.items} id={artist.id}/>
                   </Grid.Column>
                 )}
               </Grid>

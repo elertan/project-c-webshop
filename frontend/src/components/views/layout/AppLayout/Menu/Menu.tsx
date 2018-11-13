@@ -1,8 +1,12 @@
 import * as React from 'react';
 import {
-  Container,
-  Menu as SemanticMenu, Search
+  Container, Icon, Label,
+  Menu as SemanticMenu, Popup, Search
 } from 'semantic-ui-react';
+import {Subscribe} from "unstated";
+import CartState from "../../../../../states/CartState";
+import IProduct from "../../../../../models/IProduct";
+
 // import {NavLink} from "react-router-dom";
 
 interface IProps {
@@ -16,7 +20,7 @@ class Menu extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <div style={{ marginBottom: 65 }}>
+      <div style={{marginBottom: 65}}>
         <SemanticMenu
           fixed="top"
         >
@@ -32,16 +36,37 @@ class Menu extends React.Component<IProps, IState> {
               <Search fluid/>
             </SemanticMenu.Item>
             {/*<NavLink to={"/auth/login"}>*/}
-              <SemanticMenu.Item header position="right" as="a">
-                Log In
-              </SemanticMenu.Item>
+            <SemanticMenu.Item header position="right" as="a">
+              Log In
+            </SemanticMenu.Item>
             {/*</NavLink>*/}
             <SemanticMenu.Item header as="a">
               Wishlist
             </SemanticMenu.Item>
-            <SemanticMenu.Item header as="a">
-              Shopping Cart
-            </SemanticMenu.Item>
+            <Subscribe to={[CartState]}>
+              {(cartState: CartState) => (
+                <Popup
+                  basic
+                  hideOnScroll
+                  on='click'
+                  trigger={
+                    <SemanticMenu.Item header as="a">
+                      <Label.Group circular>
+                        <Icon name="cart"/>
+                        <Label>{cartState.state.products.length}</Label>
+                      </Label.Group>
+                    </SemanticMenu.Item>
+                  }
+                  content={
+                    <ul>
+                      { cartState.state.products.map((product: IProduct, i) => (
+                        <li key={i}>{product.album!.name}</li>
+                      ))}
+                    </ul>
+                  }
+                />
+              )}
+            </Subscribe>
           </Container>
         </SemanticMenu>
       </div>
