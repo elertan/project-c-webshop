@@ -1,6 +1,6 @@
 
 import {Container} from 'unstated';
-import IProduct from 'src/models/IProduct';
+import IProduct from '../../src/models/IProduct';
 
 interface IState {
   products: IProduct[];
