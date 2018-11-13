@@ -5,6 +5,7 @@ import Menu from "./Menu/Menu";
 import {Container} from "semantic-ui-react";
 import Footer from "./Footer/Footer";
 import NavigationMenu from "./NavigationMenu/NavigationMenu";
+import MusicPlayer from "../../reusable/MusicPlayer/MusicPlayer";
 
 interface IProps extends React.HTMLProps<HTMLMainElement> {
 }
@@ -24,6 +25,7 @@ class AppLayout extends React.Component<IProps> {
     return (
       <div style={styles.root}>
         <Menu />
+        <MusicPlayer/>
         <NavigationMenu />
         <Container>
           {/*<div style={styles.contentTopPadding} />*/}

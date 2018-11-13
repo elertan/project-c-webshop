@@ -10,7 +10,8 @@ interface IProps extends StyleProps {
 class TrackList extends React.Component<IProps> {
 
   public render() {
-    const classes = this.props.classes!
+    const classes = this.props.classes!;
+    console.log(this);
     return (
       <table>
         <tr>

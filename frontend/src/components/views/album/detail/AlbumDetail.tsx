@@ -38,6 +38,7 @@ class AlbumDetail extends React.Component<IProps> {
             items {
               name
               durationMs
+              previewUrl
               artists {
                 items {
                   name
@@ -88,7 +89,7 @@ class AlbumDetail extends React.Component<IProps> {
           artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
           albumsName: album.name,
           albumId: album.id,
-          previewUrl: "NO_IMAGE",
+          previewUrl: track.previewUrl,
           durationMs: track.durationMs
         } as ITrackData)
     );
