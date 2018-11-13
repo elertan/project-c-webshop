@@ -131,7 +131,7 @@ class AlbumDetail extends React.Component<IProps> {
             )}
           </Subscribe>
           <Button icon labelPosition="left">
-            <Icon name="star" color="yellow" />
+            <Icon name="heart" color="red" />
             Add to wishlist
           </Button>
         </div>

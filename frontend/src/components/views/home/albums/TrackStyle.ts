@@ -5,12 +5,12 @@ export type StyleProps = StyledComponentProps<
   "page" |
   "title" |
   "duration"|
-  "favorite"|
+  "actions"|
   "artist" |
   "album"
   >;
 
-const textColor = 'black';
+const textColor = '#5f5f5f';
 
 const trackstyles: StyleRulesCallback = theme => ({
   root: {
@@ -24,41 +24,43 @@ const trackstyles: StyleRulesCallback = theme => ({
   },
   title: {
     marginTop: 15,
-    fontSize: 24,
+    fontSize: 14,
     color: textColor,
     boxSizing: "border-box",
     width: 1400,
-   
+    textTransform: "uppercase"
   },
   duration:{
     marginTop: 15,
-    fontSize: 26,
+    fontSize: 14,
     color: textColor,
     boxSizing: "border-box",
-    width: 200
+    width: 200,
+    textTransform: "uppercase"
   },
-  favorite: {
+  actions: {
     marginTop: 15,
-    fontSize: 26,
+    fontSize: 14,
     color: textColor,
     boxSizing: "border-box",
-    width: 250
+    width: 225,
+    textTransform: "uppercase"
   },
   artist:{
     marginTop: 15,
-    fontSize: 26,
+    fontSize: 14,
     color: textColor,
     boxSizing: "border-box",
-    width: 300
-    
+    width: 300,
+    textTransform: "uppercase"
   },
   album:{
     marginTop: 15,
-    fontSize: 26,
+    fontSize: 14,
     color: textColor,
     boxSizing: "border-box",
     width: 350,
-    
+    textTransform: "uppercase"
   }
 });
 export default trackstyles;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import {Link} from 'react-router-dom';
-import { Icon } from '@material-ui/core';
+import {Button, Icon} from "semantic-ui-react";
 
 export interface ITrackData {
   title: string[];
@@ -15,8 +15,13 @@ export interface ITrackData {
 
 interface IProps {
   data: ITrackData;
-  
 }
+
+const styles = {
+  actionsTd: {
+
+  }
+};
 
 const TrackRow: React.SFC<IProps> = (props: IProps) => {
   
@@ -28,27 +33,29 @@ const TrackRow: React.SFC<IProps> = (props: IProps) => {
       time.format('HH:mm:ss')
     ) : (
       time.format('mm:ss')
-    )
+    );
   
   if (previewUrl != null) {
     return (
       <tr>
-        <Icon>favorite</Icon>
+        <td style={styles.actionsTd}>
+          <Button.Group>
+            <Button icon><Icon name="play" color="black" /></Button>
+            <Button icon><Icon name="heart" color="red" /></Button>
+            <Button icon><Icon name="shopping basket" color="black" /></Button>
+          </Button.Group>
+        </td>
         <td>{title}</td>
         <td>{artistName}</td>
         <Link to={`/album/${albumId}`}>
           <td>{albumsName}</td>
         </Link> 
         <td>{trackTime}</td>
-        <a href={previewUrl} target="_blank">
-          <Icon fontSize = "large">play_circle_outline</Icon>
-        </a>
       </tr>
     );
   } else {
       return (
         <tr>
-          <Icon>favorite</Icon>
           <td>{title}</td>
           <td>{artistName}</td>
           <Link to={`/album/${albumId}`}>
