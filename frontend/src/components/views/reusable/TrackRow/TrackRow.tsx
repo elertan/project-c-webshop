@@ -30,24 +30,34 @@ const TrackRow: React.SFC<IProps> = (props: IProps) => {
       time.format('mm:ss')
     )
   
-  return(
-// hoe geef ik hieronder styling 
-    <tr>
-     
-      <Icon>favorite</Icon>
-      <td>{title}</td>
-      <td>{artistName}</td>
-      <Link to={`/album/${albumId}`}>
-      <td>{albumsName}</td>
-      </Link> 
-      <td>{trackTime}</td>
-      <Link to={`${previewUrl}`}>
-      <Icon  fontSize = "large">play_circle_outline</Icon>
-      </Link>
-      
-    </tr>
-    
-  );
+  if (previewUrl != null) {
+    return (
+      <tr>
+        <Icon>favorite</Icon>
+        <td>{title}</td>
+        <td>{artistName}</td>
+        <Link to={`/album/${albumId}`}>
+          <td>{albumsName}</td>
+        </Link> 
+        <td>{trackTime}</td>
+        <a href={previewUrl} target="_blank">
+          <Icon fontSize = "large">play_circle_outline</Icon>
+        </a>
+      </tr>
+    );
+  } else {
+      return (
+        <tr>
+          <Icon>favorite</Icon>
+          <td>{title}</td>
+          <td>{artistName}</td>
+          <Link to={`/album/${albumId}`}>
+            <td>{albumsName}</td>
+          </Link> 
+          <td>{trackTime}</td>
+        </tr>
+      )
+    }
 };
 
 export default TrackRow;

@@ -11,7 +11,7 @@ namespace backend.Schemas.Types
         {
            
             Field(a => a.Name, nullable: true).Description("The name of the track.");
-            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
+//            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
             Field(a => a.Label).Description("The label that released this album");
             Field(a => a.Popularity).Description("The popularity of the song on a scale from 1-100");
@@ -20,6 +20,11 @@ namespace backend.Schemas.Types
             Field<ProductGraph>(
                 "product",
                 resolve: ctx => db.Products.FirstOrDefault(e => e.Id == ctx.Source.ProductId)
+            );
+
+            AddQueryConnectionField<ImageGraph, Image>(
+                "images",
+                resolve: ctx => db.Images.Where(e => e.AlbumId == ctx.Source.Id)
             );
             
             AddQueryConnectionField<TrackGraph, Track>(

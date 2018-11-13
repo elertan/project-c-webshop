@@ -17,7 +17,13 @@ const query = gql`
     items {
       id
       name
-      imageUrl
+      images(orderBy: {
+        path: "height"
+      }) {
+        items {
+          url
+        }
+      }
     }
   }
 }`;
@@ -49,7 +55,7 @@ class Categories extends React.Component<IProps> {
           doubling
         >
           {categories.map((category: any, i: number) =>
-            <CategoryCover key={i} id={category.id} name={category.name} imageUrl={category.imageUrl}/>
+            <CategoryCover key={i} id={category.id} name={category.name} imageSource={category.images.items}/>
           )}
         </Grid>
       </div>
