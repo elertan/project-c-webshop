@@ -8,6 +8,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
+import { Provider } from "unstated";
 
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
@@ -15,7 +16,9 @@ const apolloClient = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <App />
+    <Provider>  
+      <App />
+    </Provider>
   </ApolloProvider>,
   document.getElementById('root') as HTMLElement
 );
