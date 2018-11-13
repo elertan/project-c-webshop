@@ -7,9 +7,10 @@ interface IState {
 }
 
 class CartState extends Container<IState> {
-  state = {
+  public state = {
     products: []
   };
+  
 }
 
 export default CartState;

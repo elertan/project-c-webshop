@@ -2,6 +2,7 @@ using System.Linq;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Schemas.Types
 {
@@ -19,7 +20,7 @@ namespace backend.Schemas.Types
 
             Field<ProductGraph>(
                 "product",
-                resolve: ctx => db.Products.FirstOrDefault(e => e.Id == ctx.Source.ProductId)
+                resolve: ctx => db.Products.FirstOrDefaultAsync(e => e.Id == ctx.Source.ProductId)
             );
 
             AddQueryConnectionField<ImageGraph, Image>(
