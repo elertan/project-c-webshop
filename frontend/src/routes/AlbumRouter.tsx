@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from "react-router";
-import DetailContainer from "../components/containers/album/DetailContainer";
+import AlbumDetailContainer from "../components/containers/album/AlbumDetailContainer";
 import NotFound from "../components/views/errors/NotFound/NotFound";
 
 interface IProps extends RouteComponentProps<{}> {}
@@ -8,7 +8,7 @@ interface IProps extends RouteComponentProps<{}> {}
 const AlbumRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
-      <Route exact path={`${props.match.url}/:id`} component={DetailContainer} />
+      <Route exact path={`${props.match.url}/:id`} component={AlbumDetailContainer} />
 
       <Route component={NotFound} />
     </Switch>
