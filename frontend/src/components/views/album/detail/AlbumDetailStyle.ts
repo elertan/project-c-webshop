@@ -8,6 +8,7 @@ export type StyleProps = StyledComponentProps<
   "albumContainerBackground" |
   "albumContainer" |
   "albumInnerContainer" |
+  "albumInnerActionsContainer" |
   "albumInnerContainerDarkenLayer"
   >;
 
@@ -18,19 +19,21 @@ const styles: StyleRulesCallback = theme => ({
   root: {
   },
   title: {
-    marginTop: 15,
+    marginTop: 25,
     fontSize: 26,
     color: textColor
   },
   artistsText: {
+    marginTop: 15,
     color: textColor
   },
   albumContainer: {
     position: 'relative',
     top: -headerSize,
-    marginBottom: -headerSize,
+    marginBottom: -headerSize + 25,
     padding: 35,
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   albumContainerBackground: {
@@ -52,6 +55,11 @@ const styles: StyleRulesCallback = theme => ({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column'
+  },
+  albumInnerActionsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   image: {
     width: 250,

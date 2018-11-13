@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {Typography} from "@material-ui/core";
 import AppLayout from "../../layout/AppLayout/AppLayout";
+import { Subscribe } from 'unstated';
+import CartState from 'src/states/CartState';
 
 interface IProps {}
 
@@ -9,7 +10,13 @@ class Trending extends React.Component<IProps> {
 
     return (
       <AppLayout>
-        <Typography>Trending! Test 123</Typography>
+        <Subscribe to={[CartState]}> 
+          {(cartState: CartState) => (
+            <code>
+              {JSON.stringify(cartState)}
+            </code>
+          )}
+        </Subscribe>
       </AppLayout>
     );
   }

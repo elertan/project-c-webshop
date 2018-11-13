@@ -44,7 +44,7 @@ const Albums: React.SFC<IProps> = (props: IProps) => {
               <Grid columns={5} doubling>
                 {(data.data.albums.items as any[]).map((album, i) =>
                   <Grid.Column key={i}>
-                    <AlbumCover name={album.name} imageSource={album.images.items.length > 0 && album.images.items[0].url} id={album.id}/>
+                    <AlbumCover name={album.name} imageSource={album.images.items} id={album.id}/>
                   </Grid.Column>
                 )}
               </Grid>
