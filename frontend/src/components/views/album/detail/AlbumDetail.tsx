@@ -122,7 +122,7 @@ class AlbumDetail extends React.Component<IProps> {
               <Button
                 icon
                 labelPosition="left"
-                onClick={this.addToCart(cartState, album)}
+                onClick={this.addToCart(cartState, album, album.product.id)}
                 disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
               >
                 <Icon name="shopping basket" color="black" />
@@ -142,9 +142,9 @@ class AlbumDetail extends React.Component<IProps> {
     );
   };
 
-  private addToCart = (cartState: CartState, album: IAlbum) => () => {
+  private addToCart = (cartState: CartState, album: IAlbum, productId: number) => () => {
     const product: IProduct = {
-      id: cartState.state.products.length + 1,
+      id: productId,
       album
     };
     cartState.setState({products: [...cartState.state.products, product]});
