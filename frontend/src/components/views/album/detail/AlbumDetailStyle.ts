@@ -18,17 +18,18 @@ const styles: StyleRulesCallback = theme => ({
   root: {
   },
   title: {
-    marginTop: 15,
+    marginTop: 25,
     fontSize: 26,
     color: textColor
   },
   artistsText: {
+    marginTop: 15,
     color: textColor
   },
   albumContainer: {
     position: 'relative',
     top: -headerSize,
-    marginBottom: -headerSize,
+    marginBottom: -headerSize + 50,
     padding: 35,
     display: 'flex',
     justifyContent: 'center',
