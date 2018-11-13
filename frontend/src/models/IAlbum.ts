@@ -1,4 +1,7 @@
 interface IAlbum {
+    id: number;
+    
+
 
 }
 
