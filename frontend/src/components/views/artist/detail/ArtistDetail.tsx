@@ -4,6 +4,7 @@ import { Query } from "react-apollo";
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import { StyleProps } from "../../album/detail/AlbumDetailStyle";
 import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
+import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
 import TrackList from "../../reusable/TrackList/TrackList";
 import {ITrackData} from "../../reusable/TrackRow/TrackRow";
 // import AlbumDetail from "../../album/detail/AlbumDetail";
@@ -90,8 +91,13 @@ class ArtistDetail extends React.Component<IProps> {
                         if (error) {
                             return <span>{error.message}</span>;
                         }
+                        const artistData = data.artists.items[0];
+                        const albumsWithDuplicates = data.artists.items[0].albums.items;
+                        const albumsFiltered= Array.from(new Set(albumsWithDuplicates))
+                        artistData.albums.items = albumsFiltered;
+                       
                         return (
-                            <div>{this.renderArtistDetail(data.artists.items[0])}</div>
+                            <div>{this.renderArtistDetail(artistData)}</div>
                         )
                     }}
                 </Query>
@@ -110,25 +116,30 @@ class ArtistDetail extends React.Component<IProps> {
                 artistName: track.artists.items.map((trackArtists: any) => trackArtists.name).join(', '),
                 albumsName: album.name,
                 albumId: album.id,
-                previewUrl: "NO_IMAGE",
+                previewUrl: track.previewUrl,
                 durationMs: track.durationMs
               } as ITrackData)
           ));
 
-        // console.log("data is: " + data);
+        const AllTrackData = data.map((trackData: any) => trackData)
+          .reduce((prev: string[], curr: string[]) => [...prev, ...curr])
 
         return (
             artist.albums.items.map((album: any, i: number) =>
-              <div key={i}>
-                <h3>Begin</h3>
-                <AlbumCover 
-                  name={album.name} 
-                  imageSource={album.images.items[0].url}
-                  id={album.id} />
-                <TrackList trackData={data} />
-                <h3>Eind</h3>
-              </div>
-            )  
+                <div key={i}>
+                  <h1>{artist.name}</h1>
+                  <ArtistCover 
+                    name={artist.name}
+                    imageSource={artist.images.items}
+                    id={artist.id} />
+                  <h3>Album {i + 1}</h3>
+                  <AlbumCover 
+                    name={album.name}
+                    imageSource={album.images.items}
+                    id={album.id} />
+                  <TrackList trackData={AllTrackData.filter((track:any) => track.albumId === album.id)} />
+                </div>
+            )
         )
     }
 }
