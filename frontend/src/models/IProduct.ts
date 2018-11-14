@@ -1,9 +1,10 @@
-import ITrack from "./ITrack";
+
 import IAlbum from "./IAlbum";
+import { ITrackData } from "src/components/views/reusable/TrackRow/TrackRow";
 
 interface IProduct {
     id: number;
-    track?: ITrack;
+    track?: ITrackData;
     album?: IAlbum;
 }
 

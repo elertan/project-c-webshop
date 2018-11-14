@@ -11,6 +11,7 @@ import {Subscribe} from "unstated";
 import IProduct from "src/models/IProduct";
 import {Button, Icon} from "semantic-ui-react";
 import IAlbum from "../../../../models/IAlbum";
+import WishlistState from "src/states/WishlistState";
 
 interface IProps extends StyleProps {
   albumId: number;
@@ -36,6 +37,7 @@ class AlbumDetail extends React.Component<IProps> {
           id
           tracks {
             items {
+              id
               name
               durationMs
               previewUrl
@@ -85,6 +87,7 @@ class AlbumDetail extends React.Component<IProps> {
     const data: ITrackData[] = album.tracks.items.map(
       (track: any) =>
         ({
+          id: track.id,
           title: track.name,
           artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
           albumsName: album.name,
@@ -131,10 +134,19 @@ class AlbumDetail extends React.Component<IProps> {
               </Button>
             )}
           </Subscribe>
-          <Button icon labelPosition="left">
-            <Icon name="heart" color="red" />
-            Add to wishlist
-          </Button>
+          <Subscribe to={[WishlistState]}>
+            {wishlistState => (
+              <Button
+                icon
+                labelPosition="left"
+                onClick={this.addToWishlist(wishlistState, album, album.product.id)}
+                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+              >
+                <Icon name="heart" color="red" />
+                Add to wishlist
+              </Button>
+            )}
+          </Subscribe>
         </div>
 
 
@@ -149,6 +161,13 @@ class AlbumDetail extends React.Component<IProps> {
       album
     };
     cartState.setState({products: [...cartState.state.products, product]});
+  };
+  private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
+    const product: IProduct = {
+      id: productId,
+      album
+    };
+    wishlistState.setState({products: [...wishlistState.state.products, product]});
   };
 }
 

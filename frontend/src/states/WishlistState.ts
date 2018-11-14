@@ -5,11 +5,11 @@ interface IState {
   products: IProduct[];
 }
 
-class WishState extends Container<IState> {
+class WishlistState extends Container<IState> {
   public state = {
     products: []
   };
   
 }
 
-export default WishState;
+export default WishlistState;

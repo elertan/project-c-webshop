@@ -1,6 +1,13 @@
 import IBaseModel from "./IBaseModel";
 interface ITrack extends IBaseModel {
-    name: string;
+    id: number;
+    title: string;
+    durationMs: number;
+    index?: number;
+    albumsName: string;
+    artistName: string;
+    albumId: number;
+    previewUrl: string | null;
     
 }
 

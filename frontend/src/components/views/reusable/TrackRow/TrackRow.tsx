@@ -4,8 +4,14 @@ import {Button, Icon} from "semantic-ui-react";
 import {Subscribe} from "unstated";
 import MusicPlayerState from "../../../../states/MusicPlayerState";
 import {getTrackTimeFromDurationMs} from "../../../../utils/time";
+import WishlistState from 'src/states/WishlistState';
+import IProduct from 'src/models/IProduct';
+
+
+
 
 export interface ITrackData {
+  id:number;
   title: string;
   durationMs: number;
   index?: number;
@@ -45,7 +51,16 @@ class TrackRow extends React.Component<IProps> {
                 </Button>
               )}
             </Subscribe>
-            <Button icon><Icon name="heart" color="red"/></Button>
+            <Subscribe to ={[WishlistState]}>
+            {(wishlistState: WishlistState) => (
+              <Button 
+              icon
+              disabled = {wishlistState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
+              onClick={this.addToWishlist(wishlistState, this.props.data, this.props.data.id)}>
+              <Icon name="heart" color="red"/>
+              </Button>
+            )}
+           </Subscribe>
             <Button icon><Icon name="shopping basket" color="black"/></Button>
           </Button.Group>
         </td>
@@ -61,6 +76,13 @@ class TrackRow extends React.Component<IProps> {
 
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
     musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
+  };
+  private addToWishlist = (wishlistState: WishlistState, track: ITrackData, productId: number) => () => {
+    const product: IProduct = {
+      id: productId,
+      track
+    };
+    wishlistState.setState({products: [...wishlistState.state.products, product]});
   };
 }
 
