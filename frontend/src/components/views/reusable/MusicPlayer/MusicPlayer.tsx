@@ -18,8 +18,7 @@ const styles = {
   root: {
     backgroundColor: 'rgb(240, 240, 240)',
     position: 'fixed',
-    top: 65,
-    marginBottom: 50,
+    bottom: 0,
     padding: 3,
     left: 0,
     width: '100vw',
@@ -114,7 +113,6 @@ class MusicPlayer extends React.Component<IProps, IState> {
 
   private setVolume = (volumeLevel: number) => {
     const realVolume = volumeLevel === 0 ? 0 : Math.pow(volumeLevel / 100, 1.75);
-    console.log(realVolume);
     this.audioEl!.volume = realVolume;
   };
 

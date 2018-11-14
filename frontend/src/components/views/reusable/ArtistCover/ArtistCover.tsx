@@ -13,7 +13,6 @@ interface IProps {
 }
 
 const ArtistCover: React.SFC<IProps> = (props: IProps) => {
-  // console.log(props);
   return (
     <Link to={`/artist/${props.id}`}>
       <div
