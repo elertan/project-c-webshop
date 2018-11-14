@@ -1,4 +1,4 @@
-
+#!/bin/bash
 echo "This script will set up the project assuming all required software/tools is installed."
 echo "If this is *NOT* your first time running this, please remove all tables/the entire database project-c-webshop from Postgres."
 echo "MAKE SURE THE PREVIOUS STATEMENT IS COMPLETED."
