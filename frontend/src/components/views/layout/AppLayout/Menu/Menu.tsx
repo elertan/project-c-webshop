@@ -4,7 +4,8 @@ import {
   Icon,
   Label,
   Input,
-  Button,Divider,
+  Button,
+  Divider,
   Menu as SemanticMenu,
   Popup,
   Search
@@ -12,7 +13,6 @@ import {
 import { Subscribe } from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
-
 // import {NavLink} from "react-router-dom";
 
 interface IProps {}
@@ -20,7 +20,9 @@ interface IProps {}
 interface IState {}
 
 class Menu extends React.Component<IProps, IState> {
-  public state = {};
+  public state = {
+    
+  };
 
   public render() {
     return (
@@ -49,12 +51,26 @@ class Menu extends React.Component<IProps, IState> {
               content={
                 <div>
                   <h4>E-mail</h4>
-                  <Input transparent inline size="large" placeholder="voorbeeld@voorbeeld.nl" />
+                  <Input id="email"
+                    transparent
+                    inline
+                    size="large"
+                    placeholder="voorbeeld@voorbeeld.nl"
+                  />
                   <Divider />
                   <h4>Wachtwoord</h4>
-                  <Input transparent inline size="large"  type="password" placeholder="Wachtwoord" />
+                  <Input id="password"
+                    transparent
+                    inline
+                    size="large"
+                    type="password"
+                    placeholder="Wachtwoord"
+                  />
                   <Divider />
-                  <Button primary>Login</Button>
+                  <Button primary onClick={
+                    this.authentication("test", "test")
+                  }
+                    >Login</Button>
                   <Button secondary>Registreer</Button>
                 </div>
               }
@@ -94,6 +110,10 @@ class Menu extends React.Component<IProps, IState> {
       </div>
     );
   }
+  public authentication(email:string, password:string) {
+    console.log("Method werkt email = " + email + " wachtwood = " + password);
+    return undefined
+  };
 }
 
 export default Menu;
