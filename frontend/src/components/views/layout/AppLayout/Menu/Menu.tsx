@@ -20,6 +20,10 @@ interface IProps {}
 interface IState {}
 
 class Menu extends React.Component<IProps, IState> {
+  public authentication(email:string, password:string) {
+    console.log("Method werkt email = " + document.getElementById("email") + " wachtwood = " + document.getElementById("password"))
+    return "hello"
+  }
   public state = {
     
   };
@@ -68,7 +72,7 @@ class Menu extends React.Component<IProps, IState> {
                   />
                   <Divider />
                   <Button primary onClick={
-                    this.authentication("test", "test")
+                    this.authentication(document.getElementById("email").toString(), document.getElementById("password").toString())
                   }
                     >Login</Button>
                   <Button secondary>Registreer</Button>
@@ -110,10 +114,7 @@ class Menu extends React.Component<IProps, IState> {
       </div>
     );
   }
-  public authentication(email:string, password:string) {
-    console.log("Method werkt email = " + email + " wachtwood = " + password);
-    return undefined
-  };
+
 }
 
 export default Menu;
