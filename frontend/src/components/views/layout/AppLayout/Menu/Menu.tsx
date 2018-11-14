@@ -1,15 +1,19 @@
 import * as React from 'react';
 import {
   Container, Icon, Label,
-  Menu as SemanticMenu, Popup, Search
+  Menu as SemanticMenu, Popup, Search, List, ListItem, Button
 } from 'semantic-ui-react';
 import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
+import WishState from '../../../../../states/WishState';
+
+
 
 // import {NavLink} from "react-router-dom";
 
 interface IProps {
+  
 }
 
 interface IState {
@@ -17,6 +21,10 @@ interface IState {
 
 class Menu extends React.Component<IProps, IState> {
   public state = {};
+  
+  
+
+
 
   public render() {
     return (
@@ -40,9 +48,38 @@ class Menu extends React.Component<IProps, IState> {
               Log In
             </SemanticMenu.Item>
             {/*</NavLink>*/}
-            <SemanticMenu.Item header as="a">
-              Wishlist
-            </SemanticMenu.Item>
+            <Subscribe to={[WishState]}>
+
+            
+              {(wishState: WishState) => (
+                
+                <Popup
+                  basic
+                  hideOnScroll
+                  on='click'
+                  trigger={
+                    <SemanticMenu.Item header as="a">
+                      <Label.Group circular>
+                        Wishlist
+                        <Label>{wishState.state.products.length}</Label>
+                      </Label.Group>
+                    </SemanticMenu.Item>
+                  }
+                  content={
+                    
+                    <List animated verticalAlign='middle'>
+                      { wishState.state.products.map((product: IProduct, i) => (
+
+                         
+                        <ListItem key={i}>{product.album!.name} <Button basic icon='trash' /></ListItem>
+                      ))}
+                       
+                    </List>
+                   
+                  }
+                />
+              )}
+            </Subscribe>
             <Subscribe to={[CartState]}>
               {(cartState: CartState) => (
                 <Popup
@@ -71,7 +108,10 @@ class Menu extends React.Component<IProps, IState> {
         </SemanticMenu>
       </div>
     );
-  }
-};
+  };
+
+ 
+
+  };
 
 export default Menu;
