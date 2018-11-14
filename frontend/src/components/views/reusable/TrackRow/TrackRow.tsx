@@ -1,9 +1,9 @@
 import * as React from 'react';
-import * as moment from 'moment';
 import {Link} from 'react-router-dom';
 import {Button, Icon} from "semantic-ui-react";
 import {Subscribe} from "unstated";
 import MusicPlayerState from "../../../../states/MusicPlayerState";
+import {getTrackTimeFromDurationMs} from "../../../../utils/time";
 
 export interface ITrackData {
   title: string;
@@ -27,14 +27,8 @@ class TrackRow extends React.Component<IProps> {
 
   public render() {
     const {title, durationMs, albumsName, artistName, albumId, previewUrl} = this.props.data;
-    const time = moment().startOf('day')
-      .milliseconds(durationMs);
 
-    const trackTime = time.hours() >= 1 ? (
-      time.format('HH:mm:ss')
-    ) : (
-      time.format('mm:ss')
-    );
+    const trackTime = getTrackTimeFromDurationMs(durationMs);
 
     return (
       <tr>
@@ -66,7 +60,7 @@ class TrackRow extends React.Component<IProps> {
   }
 
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
-    musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title);
+    musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
   };
 }
 

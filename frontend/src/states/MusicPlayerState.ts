@@ -3,24 +3,24 @@ import {Container} from "unstated";
 interface IState {
   source: string | null;
   name: string | null;
-  isPlaying: boolean;
+  durationMs: number | null;
 }
 
 const defaultState: IState = {
   source: null,
   name: null,
-  isPlaying: false
+  durationMs: null
 };
 
 class MusicPlayerState extends Container<IState> {
   public state = defaultState;
 
-  public startNew = (source: string, name: string) => {
-    this.setState({source, name, isPlaying: true});
+  public startNew = (source: string, name: string, durationMs: number) => {
+    this.setState({source, name, durationMs});
   };
 
   public reset = () => {
-    this.setState(defaultState);
+    this.setState({...defaultState});
   };
 }
 
