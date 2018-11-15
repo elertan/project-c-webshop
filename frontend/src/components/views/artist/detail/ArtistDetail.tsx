@@ -133,11 +133,12 @@ class ArtistDetail extends React.Component<IProps> {
                     imageSource={artist.images.items}
                     id={artist.id} />
                   <h3>Album {i + 1}</h3>
+                  
+                  <TrackList trackData={AllTrackData.filter((track:any) => track.albumId === album.id)} />
                   <AlbumCover 
                     name={album.name}
                     imageSource={album.images.items}
                     id={album.id} />
-                  <TrackList trackData={AllTrackData.filter((track:any) => track.albumId === album.id)} />
                 </div>
             )
         )
