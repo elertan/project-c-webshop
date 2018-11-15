@@ -6,7 +6,7 @@ import { StyleProps } from "../../album/detail/AlbumDetailStyle";
 import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
 import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
 import TrackList from "../../reusable/TrackList/TrackList";
-import {ITrackData} from "../../reusable/TrackRow/TrackRow";
+import ITrack from "src/models/ITrack";
 // import AlbumDetail from "../../album/detail/AlbumDetail";
 // import albumDetailStyle, { StyleProps } from "./AlbumDetailStyle";
 // import TrackList from "../../reusable/TrackList/TrackList";
@@ -109,7 +109,7 @@ class ArtistDetail extends React.Component<IProps> {
         // const classes = this.props.classes!;
         console.log(artist);
         
-        const data: ITrackData[] = artist.albums.items.map((album: any) =>
+        const data: ITrack[] = artist.albums.items.map((album: any) =>
            album.tracks.items.map((track: any) => 
              ({
                 title: track.name,
@@ -118,7 +118,7 @@ class ArtistDetail extends React.Component<IProps> {
                 albumId: album.id,
                 previewUrl: track.previewUrl,
                 durationMs: track.durationMs
-              } as ITrackData)
+              } as ITrack)
           ));
 
         const AllTrackData = data.map((trackData: any) => trackData)
