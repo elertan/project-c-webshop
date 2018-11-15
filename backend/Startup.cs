@@ -14,6 +14,7 @@ using GraphQL.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -66,13 +67,15 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-            services.AddSingleton<TrackGraph>();
-            services.AddSingleton<ProductGraph>();
-            services.AddSingleton<ArtistGraph>();
-            services.AddSingleton<AlbumGraph>();
-            services.AddSingleton<UserGraph>();
+//            services.AddSingleton<TrackGraph>();
+//            services.AddSingleton<ProductGraph>();
+//            services.AddSingleton<ArtistGraph>();
+//            services.AddSingleton<AlbumGraph>();
+//            services.AddSingleton<UserGraph>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
+
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
             
             // Custom Services
             services.AddSingleton<IAccountService, AccountService>();

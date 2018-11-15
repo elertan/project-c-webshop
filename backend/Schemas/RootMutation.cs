@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Schemas.Inputs;
 using backend.Schemas.Types;
@@ -18,7 +19,7 @@ namespace backend.Schemas
             _accountService = accountService;
             Name = "Mutation";
             
-            Field<UserGraph>(
+            Field<ApiResultGraph<UserGraph, User>>(
                 "createAccount",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<CreateAccountInput>> {Name = "account"}
@@ -26,10 +27,24 @@ namespace backend.Schemas
                 resolve: CreateAccountResolveFn);
         }
 
-        private async Task<User> CreateAccountResolveFn(ResolveFieldContext<object> context)
+        private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<CreateAccountData>("account");
-            return await _accountService.CreateAccount(null);
+            try
+            {
+                var account = await _accountService.CreateAccount(data);
+                return new ApiResult<User>
+                {
+                    Data = account
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<User>
+                {
+                    Errors = new List<ApiError> {new ApiError {Message = ex.Message}}
+                };
+            }
         }
     }
 }
