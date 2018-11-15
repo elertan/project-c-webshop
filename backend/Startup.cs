@@ -8,6 +8,7 @@ using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using backend.Schemas;
 using backend.Schemas.Types;
+using backend.Services;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using Microsoft.AspNetCore.Builder;
@@ -72,6 +73,9 @@ namespace backend
             services.AddSingleton<UserGraph>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
+            
+            // Custom Services
+            services.AddSingleton<IAccountService, AccountService>();
 
             // Enable access to HttpContext
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -99,6 +103,7 @@ namespace backend
             // add http for Schema at default url /graphql
             app.UseGraphQL<ISchema>("/graphql");
 
+            app.UseGraphiQl("/graphiql");
             // use graphql-playground at default url /ui/playground
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
             {

@@ -6,7 +6,7 @@ namespace backend.Schemas.Types
 {
     public class UserGraph : BaseGraphType<User>
     {
-        public UserGraph(DbContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
+        public UserGraph(IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
             Name = "User";
 
@@ -14,6 +14,7 @@ namespace backend.Schemas.Types
             Field(u => u.Firstname).Description("The firstname of the user");
             Field(u => u.Lastname).Description("The lastname of the user");
             Field(u => u.Password).Description("The hashed password of the user");
+            Field(u => u.Token).Description("JWT Token");
         }
     }
 }
