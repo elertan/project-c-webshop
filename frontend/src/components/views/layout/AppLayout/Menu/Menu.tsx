@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   Container, Icon, Label,
-  Menu as SemanticMenu, Popup, Search, Input, Divider, Button, ListItem, ListContent, List, ListHeader
+  Menu as SemanticMenu, Popup, Search, Button, ListItem, ListContent, List, ListHeader
 } from 'semantic-ui-react';
 import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
@@ -9,6 +9,7 @@ import IProduct from "../../../../../models/IProduct";
 import {NavLink} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
+import LoginPopupContent from "./LoginPopupContent";
 
 interface IProps {
 }
@@ -46,8 +47,6 @@ class Menu extends React.Component<IProps, IState> {
             <SemanticMenu.Item header>
               <Search fluid/>
             </SemanticMenu.Item>
-            {/*<NavLink to={"/auth/login"}>*/}
-            {/* <SemanticMenu.Item header position="right" as="a"> */}
 
             <Popup
               basic
@@ -56,45 +55,12 @@ class Menu extends React.Component<IProps, IState> {
               trigger={
                 <SemanticMenu.Item header position="right" as="a">
                   <Icon name="sign-in"/>
-                  Log In
+                  My Marshmallow
                 </SemanticMenu.Item>
               }
-              content={
-                <div>
-                  <h4>E-mail</h4>
-                  <Input
-                    id="email"
-                    transparent
-                    inline
-                    size="large"
-                    placeholder="voorbeeld@voorbeeld.nl"
-                  />
-                  <Divider/>
-                  <h4>Wachtwoord</h4>
-                  <Input
-                    id="password"
-                    transparent
-                    inline
-                    size="large"
-                    type="password"
-                    placeholder="Wachtwoord"
-                  />
-                  <Divider/>
-                  <Button
-                    primary
-                    // onClick={this.authentication(
-                    //   document.getElementById("email").toString(),
-                    //   document.getElementById("password").toString()
-                    // )}
-                  >
-                    Login
-                  </Button>
-                  <Button secondary>Registreer</Button>
-                </div>
-              }
+              content={<LoginPopupContent/>}
             />
-            {/* </SemanticMenu.Item> */}
-            {/*</NavLink>*/}
+
             <Subscribe to={[CartState]}>
               {(cartState: CartState) => (
                 <Subscribe to={[WishlistState]}>
