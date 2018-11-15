@@ -13,6 +13,7 @@ import {
 import { Subscribe } from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
+import { NavLink } from "react-router-dom";
 // import {NavLink} from "react-router-dom";
 
 interface IProps {}
@@ -20,22 +21,27 @@ interface IProps {}
 interface IState {}
 
 class Menu extends React.Component<IProps, IState> {
-  public authentication(email:string, password:string) {
-    console.log("Method werkt email = " + document.getElementById("email") + " wachtwood = " + document.getElementById("password"))
-    return "hello"
+  public authentication(email: string, password: string) {
+    console.log(
+      "Method werkt email = " +
+        document.getElementById("email") +
+        " wachtwood = " +
+        document.getElementById("password")
+    );
+    return "hello";
   }
-  public state = {
-    
-  };
+  public state = {};
 
   public render() {
     return (
       <div style={{ marginBottom: 65 }}>
         <SemanticMenu fixed="top">
           <Container>
-            <SemanticMenu.Item as="a" header href="/">
-              Marshmallow's Webshop
-            </SemanticMenu.Item>
+            <NavLink to={"/"}>
+              <SemanticMenu.Item header>
+                Marshmallow's Webshop
+              </SemanticMenu.Item>
+            </NavLink>
             <SemanticMenu.Item header>
               <Search fluid />
             </SemanticMenu.Item>
@@ -55,7 +61,8 @@ class Menu extends React.Component<IProps, IState> {
               content={
                 <div>
                   <h4>E-mail</h4>
-                  <Input id="email"
+                  <Input
+                    id="email"
                     transparent
                     inline
                     size="large"
@@ -63,7 +70,8 @@ class Menu extends React.Component<IProps, IState> {
                   />
                   <Divider />
                   <h4>Wachtwoord</h4>
-                  <Input id="password"
+                  <Input
+                    id="password"
                     transparent
                     inline
                     size="large"
@@ -71,10 +79,15 @@ class Menu extends React.Component<IProps, IState> {
                     placeholder="Wachtwoord"
                   />
                   <Divider />
-                  <Button primary onClick={
-                    this.authentication(document.getElementById("email").toString(), document.getElementById("password").toString())
-                  }
-                    >Login</Button>
+                  <Button
+                    primary
+                    onClick={this.authentication(
+                      document.getElementById("email").toString(),
+                      document.getElementById("password").toString()
+                    )}
+                  >
+                    Login
+                  </Button>
                   <Button secondary>Registreer</Button>
                 </div>
               }
@@ -114,7 +127,6 @@ class Menu extends React.Component<IProps, IState> {
       </div>
     );
   }
-
 }
 
 export default Menu;
