@@ -35,13 +35,18 @@ namespace backend
             {
                 throw new Exception("Something went wrong trying to load the .env file, have you created one based on the .env.bak file (does it exist?)");
             }
-            
-            var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
+
+            var appEnv = new AppEnv
+            {
+                DbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING"),
+                JwtSecret = DotNetEnv.Env.GetString("JWT_SECRET")
+            };
+
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
-            builder.UseNpgsql(dbConnectionString);
+            builder.UseNpgsql(appEnv.DbConnectionString);
             
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
-                options => options.UseNpgsql(dbConnectionString),
+                options => options.UseNpgsql(appEnv.DbConnectionString),
                 ServiceLifetime.Singleton
             );
             
@@ -58,6 +63,7 @@ namespace backend
             services.AddCors();
             
             services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<IAppEnv>(appEnv);
 
             // Create a dependency resolver for GraphQL
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));

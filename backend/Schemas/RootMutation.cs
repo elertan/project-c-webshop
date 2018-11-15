@@ -25,6 +25,12 @@ namespace backend.Schemas
                     new QueryArgument<NonNullGraphType<CreateAccountInput>> {Name = "account"}
                 ),
                 resolve: CreateAccountResolveFn);
+
+            Field<ApiResultGraph<UserGraph, User>>(
+                "login",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<LoginInput>> {Name = "login"}),
+                resolve: LoginResolveFn);
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -32,18 +38,26 @@ namespace backend.Schemas
             var data = context.GetArgument<CreateAccountData>("account");
             try
             {
-                var account = await _accountService.CreateAccount(data);
-                return new ApiResult<User>
-                {
-                    Data = account
-                };
+                var user = await _accountService.CreateAccount(data);
+                return new ApiResult<User> { Data = user };
             }
             catch (Exception ex)
             {
-                return new ApiResult<User>
-                {
-                    Errors = new List<ApiError> {new ApiError {Message = ex.Message}}
-                };
+                return new ApiResult<User> { Errors = new List<ApiError> {new ApiError {Message = ex.Message}} };
+            }
+        }
+
+        private async Task<ApiResult<User>> LoginResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<LoginData>("login");
+            try
+            {
+                var user = await _accountService.Login(data);
+                return new ApiResult<User> {Data = user};
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<User> { Errors = new List<ApiError> {new ApiError {Message = ex.Message}} };
             }
         }
     }
