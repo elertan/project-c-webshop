@@ -1,16 +1,9 @@
 import * as React from "react";
 import {
-  Container,
-  Icon,
-  Label,
-  Input,
-  Button,
-  Divider,
-  Menu as SemanticMenu,
-  Popup,
-  Search
-} from "semantic-ui-react";
-import { Subscribe } from "unstated";
+  Container, Icon, Label,
+  Menu as SemanticMenu, Popup, Search, Input, Divider, Button, // Button
+} from 'semantic-ui-react';
+import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
 import { NavLink } from "react-router-dom";
@@ -31,6 +24,11 @@ class Menu extends React.Component<IProps, IState> {
   //   return "hello";
   // }
   public state = {};
+
+  public removeProductFromShoppingCart = (cartState: CartState, product: IProduct) => () => {
+    // VRAAG!! Vanuit hier wil ik de megegeven product uit de cartstate list halen.
+    
+  }
 
   public render() {
     return (
@@ -113,11 +111,27 @@ class Menu extends React.Component<IProps, IState> {
                     </SemanticMenu.Item>
                   }
                   content={
-                    <ul>
-                      {cartState.state.products.map((product: IProduct, i) => (
-                        <li key={i}>{product.album!.name}</li>
-                      ))}
-                    </ul>
+                    <div>
+                      <ul>
+                        { cartState.state.products.map((product: IProduct, i) => {
+                          if (product.album !== undefined) {
+                            return <div>
+                              <li key={i}>{product.album!.name}</li>
+                              {/* <Button onClick={this.removeProductFromShoppingCart(cartState, product)}>x</Button> */}
+                            </div>
+                          }
+                          
+                          if (product.track !== undefined) {
+                            return <div>
+                              <li key={i}>{product.track!.name}</li>
+                              {/* <Button onClick={this.removeProductFromShoppingCart(cartState, product)}>x</Button> */}
+                            </div>
+                          }
+                          return console.error("An unexpected item has been tried to add to the shopping cart.");
+                        })}
+                      </ul>
+                      {/* <button>Checkout</button> */}
+                    </div>
                   }
                 />
               )}
