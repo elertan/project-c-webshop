@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using backend.Schemas.Inputs;
 using backend_datamodel.Models;
 
 namespace backend.Services
 {
     public interface IAccountService
     {
-        Task<User> CreateAccount(object data);
+        Task<User> CreateAccount(CreateAccountData data);
     }
     
     public class AccountService : IAccountService
@@ -17,9 +18,9 @@ namespace backend.Services
             _db = db;
         }
 
-        public async Task<User> CreateAccount(object data)
+        public async Task<User> CreateAccount(CreateAccountData data)
         {
-            await Task.Delay(3000);
+            if ()
             return new User() { Email = "hallo@tim.com"};
         }
     }
