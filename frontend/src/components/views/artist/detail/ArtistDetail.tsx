@@ -97,7 +97,11 @@ class ArtistDetail extends React.Component<IProps> {
                         artistData.albums.items = albumsFiltered;
                        
                         return (
-                            <div>{this.renderArtistDetail(artistData)}</div>
+                            <div>
+                                <h1><h2>Artist:</h2> {artistData.name}</h1>
+                                <ArtistCover name={artistData.name} imageSource={artistData.images.items} id={artistData.id} />
+                                {this.renderArtistDetail(artistData)}
+                            </div>
                         )
                     }}
                 </Query>
@@ -127,12 +131,7 @@ class ArtistDetail extends React.Component<IProps> {
         return (
             artist.albums.items.map((album: any, i: number) =>
                 <div key={i}>
-                  <h1>{artist.name}</h1>
-                  <ArtistCover 
-                    name={artist.name}
-                    imageSource={artist.images.items}
-                    id={artist.id} />
-                  <h3>Album {i + 1}</h3>
+                  <h3>Album {i + 1}: <h2>{album.name}</h2></h3>
                   <AlbumCover 
                     name={album.name}
                     imageSource={album.images.items}
