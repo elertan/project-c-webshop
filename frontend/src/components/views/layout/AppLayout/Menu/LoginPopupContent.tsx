@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, Divider, Input} from "semantic-ui-react";
+import {Button, Divider, Icon, Input} from "semantic-ui-react";
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import * as Yup from 'yup';
 import {Link} from "react-router-dom";
@@ -42,14 +42,12 @@ class LoginPopupContent extends React.Component<IProps, IState> {
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
     return (
-      <div style={{ width: 250 }}>
-        <h4>E-mail</h4>
+      <div>
         <Field
           name="email"
           render={this.renderEmailField}
         />
-        <Divider/>
-        <h4>Password</h4>
+        <div style={{ padding: 5 }} />
         <Field
           name="password"
           render={this.renderPasswordField}
@@ -79,27 +77,31 @@ class LoginPopupContent extends React.Component<IProps, IState> {
   private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Input
-        {...fieldProps.field}
         id="email"
-        transparent
-        inline
-        size="large"
+        iconPosition="left"
         placeholder="johndoe@example.com"
-      />
+        size="large"
+        error={Boolean(fieldProps.form.errors.email)}
+      >
+        <Icon name="at" />
+        <input {...fieldProps.field} />
+      </Input>
     );
   };
 
   private renderPasswordField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Input
-        {...fieldProps.field}
         id="password"
-        transparent
-        inline
         size="large"
         type="password"
         placeholder="Password"
-      />
+        iconPosition="left"
+        error={Boolean(fieldProps.form.errors.password)}
+      >
+        <Icon name="key" />
+        <input {...fieldProps.field} />
+      </Input>
     );
   };
 }
