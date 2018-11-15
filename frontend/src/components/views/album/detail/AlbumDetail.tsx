@@ -36,6 +36,7 @@ class AlbumDetail extends React.Component<IProps> {
           id
           tracks {
             items {
+              id
               name
               durationMs
               previewUrl
@@ -85,6 +86,7 @@ class AlbumDetail extends React.Component<IProps> {
     const data: ITrackData[] = album.tracks.items.map(
       (track: any) =>
         ({
+          id: track.id,
           title: track.name,
           artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
           albumsName: album.name,
