@@ -21,15 +21,15 @@ interface IProps {}
 interface IState {}
 
 class Menu extends React.Component<IProps, IState> {
-  public authentication(email: string, password: string) {
-    console.log(
-      "Method werkt email = " +
-        document.getElementById("email") +
-        " wachtwood = " +
-        document.getElementById("password")
-    );
-    return "hello";
-  }
+  // public authentication(email: string, password: string) {
+  //   console.log(
+  //     "Method werkt email = " +
+  //       document.getElementById("email") +
+  //       " wachtwood = " +
+  //       document.getElementById("password")
+  //   );
+  //   return "hello";
+  // }
   public state = {};
 
   public render() {
@@ -81,10 +81,10 @@ class Menu extends React.Component<IProps, IState> {
                   <Divider />
                   <Button
                     primary
-                    onClick={this.authentication(
-                      document.getElementById("email").toString(),
-                      document.getElementById("password").toString()
-                    )}
+                    // onClick={this.authentication(
+                    //   document.getElementById("email").toString(),
+                    //   document.getElementById("password").toString()
+                    // )}
                   >
                     Login
                   </Button>
