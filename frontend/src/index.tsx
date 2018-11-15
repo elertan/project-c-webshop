@@ -9,6 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
 import { Provider } from "unstated";
+import MusicPlayer from "./components/views/reusable/MusicPlayer/MusicPlayer";
 
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
@@ -16,7 +17,8 @@ const apolloClient = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <Provider>  
+    <Provider>
+      <MusicPlayer/>
       <App />
     </Provider>
   </ApolloProvider>,

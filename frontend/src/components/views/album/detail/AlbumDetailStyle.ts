@@ -45,7 +45,8 @@ const styles: StyleRulesCallback = theme => ({
     backgroundSize: 'cover'
   },
   albumInnerContainerDarkenLayer: {
-    backgroundColor: 'rgba(20, 20, 20, 0.5)',
+    // backgroundColor: 'rgba(20, 20, 20, 0.5)',
+    background: 'radial-gradient(rgba(20, 20, 20, 0.5), rgba(20, 20, 20, 0))',
     position: 'relative',
     top: -headerSize,
     marginBottom: -headerSize,
