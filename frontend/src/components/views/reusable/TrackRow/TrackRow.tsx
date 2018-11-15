@@ -7,20 +7,10 @@ import {getTrackTimeFromDurationMs} from "../../../../utils/time";
 import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
 import IProduct from 'src/models/IProduct';
-
-export interface ITrackData {
-  id: number;
-  title: string;
-  durationMs: number;
-  index?: number;
-  albumsName: string;
-  artistName: string;
-  albumId: number;
-  previewUrl: string | null;
-}
+import WishlistState from "../../../../states/WishlistState";
 
 interface IProps {
-  data: ITrackData;
+  data: ITrack;
 }
 
 const styles = {
@@ -49,7 +39,6 @@ class TrackRow extends React.Component<IProps> {
                 </Button>
               )}
             </Subscribe>
-            <Button icon><Icon name="heart" color="red"/></Button>
             <Subscribe to={[CartState]}>
               {cartState => (
                 <Button icon 
@@ -61,6 +50,16 @@ class TrackRow extends React.Component<IProps> {
                 </Button>
               )}
             </Subscribe>
+            <Subscribe to ={[WishlistState]}>
+            {(wishlistState: WishlistState) => (
+              <Button 
+              icon
+              disabled = {wishlistState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
+              onClick={this.addToWishlist(wishlistState, this.props.data, this.props.data.id)}>
+              <Icon name="heart" color="red"/>
+              </Button>
+            )}
+           </Subscribe>
           </Button.Group>
         </td>
         <td>{title}</td>
@@ -73,16 +72,7 @@ class TrackRow extends React.Component<IProps> {
     );
   }
 
-  private addToCart = (cartState: CartState, trackData: ITrackData, productId: number) => () => {
-
-    const track: ITrack = {
-      id: trackData.id,
-      name: trackData.title,
-      // VRAAG!! Waar moet ik deze date's vandaan halen.
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
+  private addToCart = (cartState: CartState, track: ITrack, productId: number) => () => {
     const product: IProduct = {
       id: productId,
       track
@@ -92,6 +82,13 @@ class TrackRow extends React.Component<IProps> {
 
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
     musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
+  };
+  private addToWishlist = (wishlistState: WishlistState, track: ITrack, productId: number) => () => {
+    const product: IProduct = {
+      id: productId,
+      track
+    };
+    wishlistState.setState({products: [...wishlistState.state.products, product]});
   };
 }
 
