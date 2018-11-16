@@ -11,16 +11,22 @@ import 'semantic-ui-css/semantic.min.css';
 import { Provider } from "unstated";
 import MusicPlayer from "./components/views/reusable/MusicPlayer/MusicPlayer";
 import UserState from "./states/UserState";
+import WishlistState from "./states/WishlistState";
+import CartState from "./states/CartState";
+import MusicPlayerState from "./states/MusicPlayerState";
 
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
 });
 
 export const userState = new UserState();
+export const wishlistState = new WishlistState();
+export const cartState = new CartState();
+export const musicPlayerState = new MusicPlayerState();
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <Provider inject={[userState]}>
+    <Provider inject={[userState, wishlistState, cartState, musicPlayerState]}>
       <MusicPlayer/>
       <App />
     </Provider>
