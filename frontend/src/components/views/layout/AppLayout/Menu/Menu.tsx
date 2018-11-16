@@ -6,7 +6,7 @@ import {
 import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
-import {NavLink} from "react-router-dom";
+import {NavLink, Link} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
 
@@ -122,10 +122,12 @@ class Menu extends React.Component<IProps, IState> {
                                 <ListItem key={i}>
                                   <ListContent verticalAlign="middle">
                                     {" "}
-                                    <ListHeader>
-                                      Track: {product.track!.title}
-                                    </ListHeader>
-                                    Album: {product.track!.albumsName}
+                                      <ListHeader>
+                                        Track: {product.track!.title}
+                                      </ListHeader>                                  
+                                    <Link to= {`/album/${product.track!.albumId}`}>
+                                      Album: {product.track!.albumsName}
+                                    </Link>
                                   </ListContent>
                                   <ListContent verticalAlign="middle">
                                     <Button
@@ -180,7 +182,9 @@ class Menu extends React.Component<IProps, IState> {
                           if (product.album !== undefined) {
                             return (
                               <ListItem key={i}>
+                              <Link to={`/album/${product.album!.id}`}>
                                 {product.album!.name}
+                              </Link>  
                               </ListItem>
                             );
                           }

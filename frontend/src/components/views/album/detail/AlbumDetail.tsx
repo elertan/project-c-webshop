@@ -150,8 +150,6 @@ class AlbumDetail extends React.Component<IProps> {
             )}
           </Subscribe>
         </div>
-
-
         <TrackList trackData={data}/>
       </div>
     );
@@ -164,6 +162,7 @@ class AlbumDetail extends React.Component<IProps> {
     };
     cartState.setState({products: [...cartState.state.products, product]});
   };
+
   private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
     const product: IProduct = {
       id: productId,

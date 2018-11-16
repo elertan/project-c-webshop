@@ -110,7 +110,6 @@ class ArtistDetail extends React.Component<IProps> {
                                       <div className={classes.title}>{artistData.name}</div>
                                     </div>
                                 </div>
-                                
                                 {this.renderArtistDetail(artistData)}
                             </div>
                         )
