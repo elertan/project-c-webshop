@@ -60,8 +60,7 @@ class TrackRow extends React.Component<IProps> {
               {cartState => (
                 <Button icon 
                   onClick={this.addToCart(cartState, this.props.data, this.props.data.id)}
-                  // Hier kan ik niet de "album" id gebruiken, maar er is geen "track" id.
-                  // disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                  disabled = {cartState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
                   >
                   <Icon name="shopping basket" color="black"/>
                 </Button>
