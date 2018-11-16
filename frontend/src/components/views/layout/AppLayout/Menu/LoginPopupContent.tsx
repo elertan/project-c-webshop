@@ -8,6 +8,7 @@ import gql from "graphql-tag";
 import IApiError from "../../../../../models/IApiError";
 import IApiResult from "../../../../../models/IApiResult";
 import IUser from "../../../../../models/IUser";
+import {userState} from "../../../../../index";
 
 interface IProps {
 }
@@ -25,6 +26,7 @@ const loginMutation = gql`
 mutation ($login: LoginInput!) {
   login(login: $login) {
     data {
+      email
       token
     }
     errors {
@@ -74,7 +76,7 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
     });
 
     const apiResult = result.data!.login as IApiResult<IUser>;
-    
+
     if (apiResult.errors) {
       this.setState({ errors: apiResult.errors });
     } else {
@@ -82,7 +84,8 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
         this.setState({ errors: [] });
       }
       // Handle token
-      alert(apiResult.data!.token);
+      // alert(apiResult.data!.token);
+      userState.setUser(apiResult.data!);
     }
 
     formik.setSubmitting(false);

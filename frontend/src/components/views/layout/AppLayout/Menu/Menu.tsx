@@ -10,6 +10,8 @@ import {NavLink} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
 import LoginPopupContent from "./LoginPopupContent";
+import UserState from "../../../../../states/UserState";
+import AccountPopupContent from "./AccountPopupContent";
 
 interface IProps {
 }
@@ -48,18 +50,43 @@ class Menu extends React.Component<IProps, IState> {
               <Search fluid/>
             </SemanticMenu.Item>
 
-            <Popup
-              basic
-              hideOnScroll
-              on="click"
-              trigger={
-                <SemanticMenu.Item header position="right" as="a">
-                  <Icon name="sign-in"/>
-                  My Marshmallow
-                </SemanticMenu.Item>
-              }
-              content={<LoginPopupContent/>}
-            />
+            <Subscribe to={[UserState]}>
+              {(userState: UserState) => {
+                let menuContent = null;
+                let popupContent = null;
+                if (userState.state.user === null) {
+                  menuContent = (
+                    <>
+                      Login
+                      <Icon name="caret down"/>
+                    </>
+                  );
+                  popupContent = <LoginPopupContent/>;
+                } else {
+                  menuContent = (
+                    <>
+                      <Icon name="user"/>
+                      {userState.state.user!.email}
+                      <Icon name="caret down"/>
+                    </>
+                  );
+                  popupContent = <AccountPopupContent/>;
+                }
+                return (
+                  <Popup
+                    basic
+                    hideOnScroll
+                    on="click"
+                    trigger={
+                      <SemanticMenu.Item header as="a">
+                        {menuContent}
+                      </SemanticMenu.Item>
+                    }
+                    content={popupContent}
+                  />
+                );
+              }}
+            </Subscribe>
 
             <Subscribe to={[CartState]}>
               {(cartState: CartState) => (

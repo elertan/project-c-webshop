@@ -10,14 +10,17 @@ import registerServiceWorker from './registerServiceWorker';
 import 'semantic-ui-css/semantic.min.css';
 import { Provider } from "unstated";
 import MusicPlayer from "./components/views/reusable/MusicPlayer/MusicPlayer";
+import UserState from "./states/UserState";
 
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
 });
 
+export const userState = new UserState();
+
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <Provider>
+    <Provider inject={[userState]}>
       <MusicPlayer/>
       <App />
     </Provider>
