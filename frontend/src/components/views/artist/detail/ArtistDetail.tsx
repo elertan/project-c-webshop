@@ -3,32 +3,30 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
-// import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
 import TrackList from "../../reusable/TrackList/TrackList";
 import ITrack from "src/models/ITrack";
-// import AlbumDetail from "../../album/detail/AlbumDetail";
 import albumDetailStyle, { StyleProps } from "../../album/detail/AlbumDetailStyle";
 import {withStyles} from "@material-ui/core";
-
-// import CartState from "src/states/CartState";
-// import {Subscribe} from "unstated";
-// import IProduct from "src/models/IProduct";
-// import {Button, Icon} from "semantic-ui-react";
-// import IAlbum from "../../../../models/IAlbum";
+import { Subscribe } from "unstated";
+import { Button, Icon } from "semantic-ui-react";
+import CartState from "src/states/CartState";
+import IProduct from "src/models/IProduct";
+import WishlistState from "src/states/WishlistState";
+import IAlbum from "../../../../models/IAlbum";
 
 interface IProps extends StyleProps {
     artistId: number
 }
 
-// const styles = {
-//     actionsContainer: {
-//         display: 'flex',
-//         justifyContent: 'center',
-//         marginBottom: 30,
-//         padding: 20,
-//         backgroundColor: 'rgb(243, 243, 243)'
-//     }
-// };
+const styles = {
+    actionsContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: 30,
+        padding: 20,
+        backgroundColor: 'rgb(243, 243, 243)'
+    }
+};
 
 class ArtistDetail extends React.Component<IProps> {
     public render() {
@@ -57,6 +55,7 @@ class ArtistDetail extends React.Component<IProps> {
                                   artists {
                                     items {
                                       name
+                                      id
                                     }
                                   }
                                 }
@@ -109,6 +108,7 @@ class ArtistDetail extends React.Component<IProps> {
                                       <div className={classes.title}>{artistData.name}</div>
                                     </div>
                                 </div>
+                                
                                 {this.renderArtistDetail(artistData)}
                             </div>
                         )
@@ -126,9 +126,10 @@ class ArtistDetail extends React.Component<IProps> {
            album.tracks.items.map((track: any) => 
              ({
                 title: track.name,
-                artistName: track.artists.items.map((trackArtists: any) => trackArtists.name).join(', '),
+                artistName: track.artists.items.map((trackArtists: any) => trackArtists.name),
                 albumsName: album.name,
                 albumId: album.id,
+                artistId: track.artists.items.map((trackArtists: any) => trackArtists.id), 
                 previewUrl: track.previewUrl,
                 durationMs: track.durationMs
               } as ITrack)
@@ -140,6 +141,34 @@ class ArtistDetail extends React.Component<IProps> {
         return (
             artist.albums.items.map((album: any, i: number) =>
                 <div key={i} style={{marginTop: 35}}>
+                    <div style={styles.actionsContainer}>
+                        <Subscribe to={[WishlistState]}>
+                            {wishlistState => (
+                            <Button
+                                icon
+                                labelPosition="left"
+                                onClick={this.addToWishlist(wishlistState, album, album.product.id)}
+                                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                            >
+                                <Icon name="heart" color="red" />
+                                Add to wishlist
+                            </Button>
+                            )}
+                        </Subscribe>
+                        <Subscribe to={[CartState]}>
+                            {cartState => (
+                            <Button
+                                icon
+                                labelPosition="left"
+                                onClick={this.addToCart(cartState, album, album.product.id)}
+                                disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                            >
+                                <Icon name="shopping basket" color="black" />
+                                Add to cart
+                            </Button>
+                            )}
+                        </Subscribe>
+                    </div>
                   <h2>Album {i + 1}: <h3>{album.name}</h3></h2>
                   <AlbumCover 
                     name={album.name}
@@ -150,6 +179,20 @@ class ArtistDetail extends React.Component<IProps> {
             )
         )
     }
+    private addToCart = (cartState: CartState, album: IAlbum, productId: number) => () => {
+        const product: IProduct = {
+          id: productId,
+          album
+        };
+        cartState.setState({products: [...cartState.state.products, product]});
+      };
+      private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
+        const product: IProduct = {
+          id: productId,
+          album
+        };
+        wishlistState.setState({products: [...wishlistState.state.products, product]});
+      };
 }
 
 export default withStyles(albumDetailStyle)(ArtistDetail);

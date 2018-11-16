@@ -90,7 +90,7 @@ class AlbumDetail extends React.Component<IProps> {
         ({
           id: track.id,
           title: track.name,
-          artistName: track.artists.items.map((artist: any) => artist.name).join(),
+          artistName: track.artists.items.map((artist: any) => artist.name),
           artistId: track.artists.items.map((artist: any) => artist.id),
           albumsName: album.name,
           albumId: album.id,
