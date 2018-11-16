@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   Container, Icon, Label,
-  Menu as SemanticMenu, Popup, Search, // Button
+  Menu as SemanticMenu, Popup, Search, Button
 } from 'semantic-ui-react';
 import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
@@ -19,8 +19,20 @@ class Menu extends React.Component<IProps, IState> {
   public state = {};
 
   public removeProductFromShoppingCart = (cartState: CartState, product: IProduct) => () => {
-    // VRAAG!! Vanuit hier wil ik de megegeven product uit de cartstate list halen.
-    
+    product: _.omit(cartState.state.products, product)
+    // cartState.state.products.forEach((stateProduct: IProduct) => {
+    //   if (product.id == stateProduct.id) {
+    //     stateProduct: _.omit(stateProduct);
+    //   }
+    // });
+
+    // // VRAAG!! Vanuit hier wil ik het megegeven product uit de cartstate list halen.
+    // console.log(cartState);
+    // const mark = cartState.state.products.map((newProduct: IProduct) => () => {
+    //   if (product.id == newProduct.id) {
+    //     delete newProduct;
+    //   }
+    // })
   }
 
   public render() {
@@ -69,7 +81,7 @@ class Menu extends React.Component<IProps, IState> {
                           if (product.album !== undefined) {
                             return <div>
                               <li key={i}>{product.album!.name}</li>
-                              {/* <Button onClick={this.removeProductFromShoppingCart(cartState, product)}>x</Button> */}
+                              <Button onClick={this.removeProductFromShoppingCart(cartState, product)}>x</Button>
                             </div>
                           }
                           
