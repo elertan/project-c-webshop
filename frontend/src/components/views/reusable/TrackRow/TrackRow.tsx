@@ -20,10 +20,27 @@ const styles = {
 class TrackRow extends React.Component<IProps> {
 
   public render() {
-    const {title, durationMs, albumsName, artistName, albumId, previewUrl} = this.props.data;
+    console.log(this.props.data);
+    const {title, durationMs, albumsName, artistName, artistId, albumId, previewUrl} = this.props.data;
+
+    // const artistIdSeparate = artistId.map((aId, i:number) => {
+    //   return (
+    //     <h3 key={i}>{aId}</h3>
+    //   )
+    // })
+    
+
+    const artistNameSeparate = artistName.map((aName: string, i: number) => {
+      return (
+        <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
+          <span key={i}>{aName}<br /></span>
+        </Link>
+      )
+    })
+
+    // console.log("artistIdSeparate: " + artistIdSeparate)
 
     const trackTime = getTrackTimeFromDurationMs(durationMs);
-
     return (
       <tr>
         <td style={styles.actionsTd}>
@@ -63,7 +80,7 @@ class TrackRow extends React.Component<IProps> {
           </Button.Group>
         </td>
         <td>{title}</td>
-        <td>{artistName}</td>
+        <td>{artistNameSeparate}</td>
         <Link to={`/album/${albumId}`}>
           <td>{albumsName}</td>
         </Link>
