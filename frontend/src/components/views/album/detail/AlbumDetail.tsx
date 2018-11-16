@@ -3,7 +3,6 @@ import albumDetailStyle, {StyleProps} from "./AlbumDetailStyle";
 import TrackList from "../../reusable/TrackList/TrackList";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import {ITrackData} from "../../reusable/TrackRow/TrackRow";
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import {withStyles} from "@material-ui/core";
 import CartState from "src/states/CartState";
@@ -11,6 +10,8 @@ import {Subscribe} from "unstated";
 import IProduct from "src/models/IProduct";
 import {Button, Icon} from "semantic-ui-react";
 import IAlbum from "../../../../models/IAlbum";
+import WishlistState from "src/states/WishlistState";
+import ITrack from "../../../../models/ITrack";
 
 interface IProps extends StyleProps {
   albumId: number;
@@ -43,6 +44,7 @@ class AlbumDetail extends React.Component<IProps> {
               artists {
                 items {
                   name
+                  id
                 }
               }
             }
@@ -83,17 +85,18 @@ class AlbumDetail extends React.Component<IProps> {
   private renderDetail = (album: any) => {
     const classes = this.props.classes!;
 
-    const data: ITrackData[] = album.tracks.items.map(
+    const data: ITrack[] = album.tracks.items.map(
       (track: any) =>
         ({
           id: track.id,
           title: track.name,
-          artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
+          artistName: track.artists.items.map((artist: any) => artist.name),
+          artistId: track.artists.items.map((artist: any) => artist.id),
           albumsName: album.name,
           albumId: album.id,
           previewUrl: track.previewUrl,
           durationMs: track.durationMs
-        } as ITrackData)
+        } as ITrack)
     );
 
     const allArtistNamesWithDuplicates = album.tracks.items.map(
@@ -120,6 +123,19 @@ class AlbumDetail extends React.Component<IProps> {
         </div>
 
         <div style={styles.actionsContainer}>
+          <Subscribe to={[WishlistState]}>
+            {wishlistState => (
+              <Button
+                icon
+                labelPosition="left"
+                onClick={this.addToWishlist(wishlistState, album, album.product.id)}
+                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+              >
+                <Icon name="heart" color="red" />
+                Add to wishlist
+              </Button>
+            )}
+          </Subscribe>
           <Subscribe to={[CartState]}>
             {cartState => (
               <Button
@@ -133,10 +149,6 @@ class AlbumDetail extends React.Component<IProps> {
               </Button>
             )}
           </Subscribe>
-          <Button icon labelPosition="left">
-            <Icon name="heart" color="red" />
-            Add to wishlist
-          </Button>
         </div>
 
 
@@ -151,6 +163,13 @@ class AlbumDetail extends React.Component<IProps> {
       album
     };
     cartState.setState({products: [...cartState.state.products, product]});
+  };
+  private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
+    const product: IProduct = {
+      id: productId,
+      album
+    };
+    wishlistState.setState({products: [...wishlistState.state.products, product]});
   };
 }
 

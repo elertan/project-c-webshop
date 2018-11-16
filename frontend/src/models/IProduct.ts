@@ -1,5 +1,6 @@
-import ITrack from "./ITrack";
+
 import IAlbum from "./IAlbum";
+import ITrack from "./ITrack";
 
 interface IProduct {
     id: number;

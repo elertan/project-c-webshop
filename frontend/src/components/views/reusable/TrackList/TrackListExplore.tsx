@@ -1,12 +1,13 @@
 import * as React from 'react';
-import TrackRow, { ITrackData } from '../TrackRow/TrackRow';
+import TrackRow from '../TrackRow/TrackRow';
 
 import  styles, { StyleProps } from "../../home/explore/TrackStyleExplore";
 import { withStyles } from '@material-ui/core';
+import ITrack from "../../../../models/ITrack";
 
 
 interface IProps  extends StyleProps{
-  trackData: ITrackData[];
+  trackData: ITrack[];
 }
 
 class TrackListExplore extends React.Component<IProps> {
