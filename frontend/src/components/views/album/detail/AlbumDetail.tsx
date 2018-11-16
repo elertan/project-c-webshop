@@ -44,6 +44,7 @@ class AlbumDetail extends React.Component<IProps> {
               artists {
                 items {
                   name
+                  id
                 }
               }
             }
@@ -89,7 +90,8 @@ class AlbumDetail extends React.Component<IProps> {
         ({
           id: track.id,
           title: track.name,
-          artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
+          artistName: track.artists.items.map((artist: any) => artist.name).join(),
+          artistId: track.artists.items.map((artist: any) => artist.id),
           albumsName: album.name,
           albumId: album.id,
           previewUrl: track.previewUrl,

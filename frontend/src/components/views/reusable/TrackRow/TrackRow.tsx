@@ -20,10 +20,10 @@ const styles = {
 class TrackRow extends React.Component<IProps> {
 
   public render() {
-    const {title, durationMs, albumsName, artistName, albumId, previewUrl} = this.props.data;
+    console.log(this.props.data);
+    const {title, durationMs, albumsName, artistName, artistId, albumId, previewUrl} = this.props.data;
 
     const trackTime = getTrackTimeFromDurationMs(durationMs);
-
     return (
       <tr>
         <td style={styles.actionsTd}>
@@ -63,7 +63,9 @@ class TrackRow extends React.Component<IProps> {
           </Button.Group>
         </td>
         <td>{title}</td>
-        <td>{artistName}</td>
+        <Link to={`/artist/${artistId}`}>
+          <td>{artistName}</td>
+        </Link>
         <Link to={`/album/${albumId}`}>
           <td>{albumsName}</td>
         </Link>
