@@ -18,18 +18,10 @@ const styles = {
 };
 
 class TrackRow extends React.Component<IProps> {
-
+  
   public render() {
-    console.log(this.props.data);
     const {title, durationMs, albumsName, artistName, artistId, albumId, previewUrl} = this.props.data;
-
-    // const artistIdSeparate = artistId.map((aId, i:number) => {
-    //   return (
-    //     <h3 key={i}>{aId}</h3>
-    //   )
-    // })
     
-
     const artistNameSeparate = artistName.map((aName: string, i: number) => {
       return (
         <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
@@ -37,9 +29,7 @@ class TrackRow extends React.Component<IProps> {
         </Link>
       )
     })
-
-    // console.log("artistIdSeparate: " + artistIdSeparate)
-
+    
     const trackTime = getTrackTimeFromDurationMs(durationMs);
     return (
       <tr>
@@ -100,6 +90,7 @@ class TrackRow extends React.Component<IProps> {
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
     musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
   };
+
   private addToWishlist = (wishlistState: WishlistState, track: ITrack, productId: number) => () => {
     const product: IProduct = {
       id: productId,
