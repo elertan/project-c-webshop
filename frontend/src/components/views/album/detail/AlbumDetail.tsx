@@ -142,7 +142,7 @@ class AlbumDetail extends React.Component<IProps> {
                 icon
                 labelPosition="left"
                 onClick={this.addToCart(cartState, album, album.product.id)}
-                
+                disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
               >
                 <Icon name="shopping basket" color="black" />
                 Add to cart
