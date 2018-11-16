@@ -9,6 +9,7 @@ import IProduct from "../../../../../models/IProduct";
 import {NavLink, Link} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
+import IAlbum from "src/models/IAlbum";
 
 interface IProps {
 }
@@ -27,11 +28,6 @@ class Menu extends React.Component<IProps, IState> {
   //   return "hello";
   // }
   public state = {};
-
-  public removeProductFromShoppingCart = (cartState: CartState, product: IProduct) => () => {
-    // VRAAG!! Vanuit hier wil ik de megegeven product uit de cartstate list halen.
-
-  }
 
   public render() {
     return (
@@ -116,42 +112,72 @@ class Menu extends React.Component<IProps, IState> {
                           {wishlistState.state.products.map(
                             (product: IProduct, i: number) => {
                               if (product.album !== undefined) {
-                                return <ListItem>album not implemented</ListItem>
+                                return (
+                                  <ListItem key={i}>
+                                    <ListContent verticalAlign="middle">
+                                      {" "}
+                                      Album: {product.album!.name}
+                                    </ListContent>
+                                    <ListContent verticalAlign="middle">
+                                      <Button
+                                        floated="right"
+                                        basic
+                                        icon="trash"
+                                        onClick={this.handleWishlistDeleteItem(
+                                          wishlistState,
+                                          product
+                                        )}
+                                      />
+                                      <Button
+                                        floated="right"
+                                        basic
+                                        icon="shopping basket"
+                                        onClick={this.handleWishlistBuyAlbum(
+                                          cartState,
+                                          product.album!,
+                                          product.album!.id
+                                        )}
+                                      />
+                                    </ListContent>
+                                  </ListItem>
+                                )
                               }
-                              return (
-                                <ListItem key={i}>
-                                  <ListContent verticalAlign="middle">
-                                    {" "}
+
+                              if (product.track !== undefined) {
+                                return (
+                                  <ListItem key={i}>
+                                    <ListContent verticalAlign="middle">
+                                      {" "}
                                       <ListHeader>
                                         Track: {product.track!.title}
-                                      </ListHeader>                                  
-                                    <Link to= {`/album/${product.track!.albumId}`}>
+                                      </ListHeader>
                                       Album: {product.track!.albumsName}
-                                    </Link>
-                                  </ListContent>
-                                  <ListContent verticalAlign="middle">
-                                    <Button
-                                      floated="right"
-                                      basic
-                                      icon="trash"
-                                      onClick={this.handleWishlistDeleteItem(
-                                        wishlistState,
-                                        product
-                                      )}
-                                    />
-                                    <Button
-                                      floated="right"
-                                      basic
-                                      icon="shopping basket"
-                                      onClick={this.handleWishlistBuyItem(
-                                        cartState,
-                                        product.track!,
-                                        product.track!.id
-                                      )}
-                                    />
-                                  </ListContent>
-                                </ListItem>
-                              );
+                                    </ListContent>
+                                    <ListContent verticalAlign="middle">
+                                      <Button
+                                        floated="right"
+                                        basic
+                                        icon="trash"
+                                        onClick={this.handleWishlistDeleteItem(
+                                          wishlistState,
+                                          product
+                                        )}
+                                      />
+                                      <Button
+                                        floated="right"
+                                        basic
+                                        icon="shopping basket"
+                                        onClick={this.handleWishlistBuyTrack(
+                                          cartState,
+                                          product.track!,
+                                          product.track!.id
+                                        )}
+                                      />
+                                    </ListContent>
+                                  </ListItem>
+                                );
+                              }
+                            return console.error("An unexpected item has been tried to add to the Wish list.");
                             }
                           )}
                         </List>
@@ -182,17 +208,44 @@ class Menu extends React.Component<IProps, IState> {
                           if (product.album !== undefined) {
                             return (
                               <ListItem key={i}>
-                              <Link to={`/album/${product.album!.id}`}>
-                                {product.album!.name}
-                              </Link>  
+                                <ListContent verticalAlign="middle">
+                                  {" "}
+                                  Album: {product.album!.name}
+                                </ListContent>
+                                <ListContent verticalAlign="middle">
+                                  <Button
+                                    floated="right"
+                                    basic
+                                    icon="trash"
+                                    onClick={this.handleShoppingCartDeleteItem(
+                                      cartState,
+                                      product
+                                    )}
+                                  />
+                                </ListContent>
                               </ListItem>
                             );
                           }
 
                           if (product.track !== undefined) {
                             return (
+
                               <ListItem key={i}>
-                                {product.track!.title}
+                                <ListContent verticalAlign="middle">
+                                  {" "}
+                                  Track: {product.track!.title}
+                                </ListContent>
+                                <ListContent verticalAlign="middle">
+                                  <Button
+                                    floated="right"
+                                    basic
+                                    icon="trash"
+                                    onClick={this.handleShoppingCartDeleteItem(
+                                      cartState,
+                                      product
+                                    )}
+                                  />
+                                </ListContent>
                               </ListItem>
                             );
                           }
@@ -220,7 +273,18 @@ class Menu extends React.Component<IProps, IState> {
     );
     wishlistState.setState({products: newProducts});
   };
-  private handleWishlistBuyItem = (
+
+    private handleShoppingCartDeleteItem = (
+      cartState: CartState,
+      product: IProduct
+    ) => () => {
+      const newProducts = cartState.state.products.filter(
+        (p: IProduct) => p.id !== product.id
+      );
+      cartState.setState({products: newProducts});
+    };
+
+  private handleWishlistBuyTrack = (
     cartState: WishlistState,
     track: ITrack,
     productId: number
@@ -228,6 +292,18 @@ class Menu extends React.Component<IProps, IState> {
     const product: IProduct = {
       id: productId,
       track
+    };
+    cartState.setState({products: [...cartState.state.products, product]});
+  };
+
+  private handleWishlistBuyAlbum = (
+    cartState: WishlistState,
+    album: IAlbum,
+    productId: number
+  ) => () => {
+    const product: IProduct = {
+      id: productId,
+      album
     };
     cartState.setState({products: [...cartState.state.products, product]});
   };
