@@ -6,7 +6,7 @@ import {
 import {Subscribe} from "unstated";
 import CartState from "../../../../../states/CartState";
 import IProduct from "../../../../../models/IProduct";
-import {NavLink} from "react-router-dom";
+import {NavLink, Link} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
 import IAlbum from "src/models/IAlbum";
@@ -115,9 +115,12 @@ class Menu extends React.Component<IProps, IState> {
                                 return (
                                   <ListItem key={i}>
                                     <ListContent verticalAlign="middle">
-                                      {" "}
-                                      Album: {product.album!.name}
+                                      <Link to={`/album/${product.album!.id}`} >
+                                        {" "}
+                                        Album: {product.album!.name}
+                                      </Link>
                                     </ListContent>
+                                    
                                     <ListContent verticalAlign="middle">
                                       <Button
                                         floated="right"
@@ -151,7 +154,9 @@ class Menu extends React.Component<IProps, IState> {
                                       <ListHeader>
                                         Track: {product.track!.title}
                                       </ListHeader>
-                                      Album: {product.track!.albumsName}
+                                      <Link to={`/album/${product.track!.albumId}`} >
+                                        Album: {product.track!.albumsName}
+                                      </Link>
                                     </ListContent>
                                     <ListContent verticalAlign="middle">
                                       <Button
@@ -209,8 +214,10 @@ class Menu extends React.Component<IProps, IState> {
                             return (
                               <ListItem key={i}>
                                 <ListContent verticalAlign="middle">
+                                <Link to={`/album/${product.album!.id}`} >
                                   {" "}
                                   Album: {product.album!.name}
+                                </Link>
                                 </ListContent>
                                 <ListContent verticalAlign="middle">
                                   <Button
