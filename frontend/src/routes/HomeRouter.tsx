@@ -27,4 +27,3 @@ const HomeRouter: React.SFC<IProps> = (props: IProps) => {
 };
 
 export default HomeRouter;
-

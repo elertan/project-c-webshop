@@ -5,15 +5,11 @@ import {Query} from "react-apollo";
 import CategoryCover from '../../reusable/CategoryCover/CategoryCover';
 import {Grid} from "semantic-ui-react";
 
-interface IProps {
+interface IProps {}
 
-}
-
-// Hier komt dan de query om alle tracks en bijbehorende informatie
-// te krijgen voor een specifiek genre 
 const query = gql`
 {
-  categories(first: 999) {
+  categories(first: 100) {
     items {
       id
       name
@@ -55,7 +51,11 @@ class Categories extends React.Component<IProps> {
           doubling
         >
           {categories.map((category: any, i: number) =>
-            <CategoryCover key={i} id={category.id} name={category.name} imageSource={category.images.items}/>
+            <CategoryCover 
+              key={i} 
+              id={category.id} 
+              name={category.name} 
+              imageSource={category.images.items}/>
           )}
         </Grid>
       </div>
@@ -64,4 +64,3 @@ class Categories extends React.Component<IProps> {
 }
 
 export default Categories;
-
