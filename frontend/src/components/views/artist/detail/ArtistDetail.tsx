@@ -50,8 +50,10 @@ class ArtistDetail extends React.Component<IProps> {
                             name
                             tracks {
                                 items {
+                                  id
                                   name
                                   durationMs
+                                  previewUrl
                                   artists {
                                     items {
                                       name
@@ -60,9 +62,9 @@ class ArtistDetail extends React.Component<IProps> {
                                   }
                                 }
                               }
-                              product {
-                                id
-                              }
+                        product {
+                            id
+                        }
                             images(orderBy: {
                                 path: "height",
                                 descending: true
@@ -108,7 +110,6 @@ class ArtistDetail extends React.Component<IProps> {
                                       <div className={classes.title}>{artistData.name}</div>
                                     </div>
                                 </div>
-                                
                                 {this.renderArtistDetail(artistData)}
                             </div>
                         )
@@ -125,6 +126,7 @@ class ArtistDetail extends React.Component<IProps> {
         const data: ITrack[] = artist.albums.items.map((album: any) =>
            album.tracks.items.map((track: any) => 
              ({
+                id: track.id, 
                 title: track.name,
                 artistName: track.artists.items.map((trackArtists: any) => trackArtists.name),
                 albumsName: album.name,
