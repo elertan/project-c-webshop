@@ -11,6 +11,7 @@ import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
 import IAlbum from "src/models/IAlbum";
 
+
 interface IProps {
 }
 
@@ -126,15 +127,17 @@ class Menu extends React.Component<IProps, IState> {
                                         floated="right"
                                         basic
                                         icon="trash"
+                                        
                                         onClick={this.handleWishlistDeleteItem(
                                           wishlistState,
                                           product
                                         )}
                                       />
-                                      <Button
+                                     <Button
                                         floated="right"
                                         basic
                                         icon="shopping basket"
+                                        disabled={this.disableButton(cartState, product)}
                                         onClick={this.handleWishlistBuyAlbum(
                                           cartState,
                                           product.album!,
@@ -172,6 +175,7 @@ class Menu extends React.Component<IProps, IState> {
                                         floated="right"
                                         basic
                                         icon="shopping basket"
+                                        disabled={this.disableButton(cartState, product)}
                                         onClick={this.handleWishlistBuyTrack(
                                           cartState,
                                           product.track!,
@@ -280,6 +284,13 @@ class Menu extends React.Component<IProps, IState> {
     );
     wishlistState.setState({products: newProducts});
   };
+  
+  private disableButton=( 
+  cartState: CartState,
+  product: IProduct
+  )  => {
+    return  cartState.state.products.find((p: IProduct) => p.id === product.id) !== undefined
+};
 
     private handleShoppingCartDeleteItem = (
       cartState: CartState,
