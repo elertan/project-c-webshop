@@ -2,12 +2,14 @@ import * as React from "react";
 import AppLayout from "../layout/AppLayout/AppLayout";
 import { Menu, Divider, Table, Form, Grid, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import styles from "./dashboardStyle";
 
 export default class Dashboard extends React.Component {
   public render() {
     return (
       <AppLayout>
         <br />
+        <div style={styles.SideMenu}>
         <Menu vertical>
           <Menu.Item>
             <Menu.Header>Overzicht</Menu.Header>
@@ -28,13 +30,10 @@ export default class Dashboard extends React.Component {
             <NavLink to={"/dashboard/betaalmethoden"}>
               <Menu.Item name="Mijn betaalmethoden" />
             </NavLink>
-            <NavLink to={"/dashboard/wachtwoordwijzigen"}>
-              <Menu.Item name="Wachtwoord wijzigen" />
-            </NavLink>
           </Menu.Item>
         </Menu>
-
-        <Table>
+        </div>
+        <Table width={10} className={styles.AccountTable}>
           <Table.Body>
             <Table.Row>
               <Table.Cell width={5}>
