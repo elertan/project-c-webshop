@@ -56,14 +56,18 @@ class TrackRow extends React.Component<IProps> {
                 </Button>
               )}
             </Subscribe>
+            <Subscribe to={[CartState]}>
+              {cartState => (
             <Subscribe to ={[WishlistState]}>
             {(wishlistState: WishlistState) => (
               <Button 
               icon
-              disabled = {wishlistState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
+              disabled = {wishlistState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined || cartState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
               onClick={this.addToWishlist(wishlistState, this.props.data, this.props.data.id)}>
               <Icon name="heart" color="red"/>
               </Button>
+              )}
+              </Subscribe>
             )}
            </Subscribe>
           </Button.Group>
