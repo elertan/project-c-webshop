@@ -9,7 +9,7 @@ namespace backend.Schemas
             : base(resolver)
         {
             Query = resolver.Resolve<RootQuery>();
-//            Mutation = resolver.Resolve<StarWarsMutation>();
+            Mutation = resolver.Resolve<RootMutation>();
         }
     }
 }

@@ -18,12 +18,19 @@ const styles = {
 };
 
 class TrackRow extends React.Component<IProps> {
-
+  
   public render() {
-    const {title, durationMs, albumsName, artistName, albumId, previewUrl} = this.props.data;
-
+    const {title, durationMs, albumsName, artistName, artistId, albumId, previewUrl} = this.props.data;
+    
+    const artistNameSeparate = artistName.map((aName: string, i: number) => {
+      return (
+        <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
+          <span key={i}>{aName}<br /></span>
+        </Link>
+      )
+    })
+    
     const trackTime = getTrackTimeFromDurationMs(durationMs);
-
     return (
       <tr>
         <td style={styles.actionsTd}>
@@ -43,8 +50,7 @@ class TrackRow extends React.Component<IProps> {
               {cartState => (
                 <Button icon 
                   onClick={this.addToCart(cartState, this.props.data, this.props.data.id)}
-                  // Hier kan ik niet de "album" id gebruiken, maar er is geen "track" id.
-                  // disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                  disabled = {cartState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
                   >
                   <Icon name="shopping basket" color="black"/>
                 </Button>
@@ -63,7 +69,7 @@ class TrackRow extends React.Component<IProps> {
           </Button.Group>
         </td>
         <td>{title}</td>
-        <td>{artistName}</td>
+        <td>{artistNameSeparate}</td>
         <Link to={`/album/${albumId}`}>
           <td>{albumsName}</td>
         </Link>
@@ -83,6 +89,7 @@ class TrackRow extends React.Component<IProps> {
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
     musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
   };
+
   private addToWishlist = (wishlistState: WishlistState, track: ITrack, productId: number) => () => {
     const product: IProduct = {
       id: productId,

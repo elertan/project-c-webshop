@@ -8,11 +8,13 @@ using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using backend.Schemas;
 using backend.Schemas.Types;
+using backend.Services;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,13 +35,18 @@ namespace backend
             {
                 throw new Exception("Something went wrong trying to load the .env file, have you created one based on the .env.bak file (does it exist?)");
             }
-            
-            var dbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING");
+
+            var appEnv = new AppEnv
+            {
+                DbConnectionString = DotNetEnv.Env.GetString("DB_CONNECTIONSTRING"),
+                JwtSecret = DotNetEnv.Env.GetString("JWT_SECRET")
+            };
+
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
-            builder.UseNpgsql(dbConnectionString);
+            builder.UseNpgsql(appEnv.DbConnectionString);
             
             services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(
-                options => options.UseNpgsql(dbConnectionString),
+                options => options.UseNpgsql(appEnv.DbConnectionString),
                 ServiceLifetime.Singleton
             );
             
@@ -56,6 +63,7 @@ namespace backend
             services.AddCors();
             
             services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<IAppEnv>(appEnv);
 
             // Create a dependency resolver for GraphQL
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
@@ -65,13 +73,18 @@ namespace backend
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
             // GraphQL Queries, Mutations and Types
-            services.AddSingleton<TrackGraph>();
-            services.AddSingleton<ProductGraph>();
-            services.AddSingleton<ArtistGraph>();
-            services.AddSingleton<AlbumGraph>();
-            services.AddSingleton<UserGraph>();
+//            services.AddSingleton<TrackGraph>();
+//            services.AddSingleton<ProductGraph>();
+//            services.AddSingleton<ArtistGraph>();
+//            services.AddSingleton<AlbumGraph>();
+//            services.AddSingleton<UserGraph>();
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
+
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+            
+            // Custom Services
+            services.AddSingleton<IAccountService, AccountService>();
 
             // Enable access to HttpContext
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -99,6 +112,7 @@ namespace backend
             // add http for Schema at default url /graphql
             app.UseGraphQL<ISchema>("/graphql");
 
+            app.UseGraphiQl("/graphiql");
             // use graphql-playground at default url /ui/playground
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
             {
