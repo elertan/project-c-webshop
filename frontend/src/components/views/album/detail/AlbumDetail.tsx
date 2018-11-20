@@ -44,6 +44,7 @@ class AlbumDetail extends React.Component<IProps> {
               artists {
                 items {
                   name
+                  id
                 }
               }
             }
@@ -89,7 +90,8 @@ class AlbumDetail extends React.Component<IProps> {
         ({
           id: track.id,
           title: track.name,
-          artistName: track.artists.items.map((artist: any) => artist.name).join(", "),
+          artistName: track.artists.items.map((artist: any) => artist.name),
+          artistId: track.artists.items.map((artist: any) => artist.id),
           albumsName: album.name,
           albumId: album.id,
           previewUrl: track.previewUrl,
@@ -148,8 +150,6 @@ class AlbumDetail extends React.Component<IProps> {
             )}
           </Subscribe>
         </div>
-
-
         <TrackList trackData={data}/>
       </div>
     );
@@ -162,6 +162,7 @@ class AlbumDetail extends React.Component<IProps> {
     };
     cartState.setState({products: [...cartState.state.products, product]});
   };
+
   private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
     const product: IProduct = {
       id: productId,
