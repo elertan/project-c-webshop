@@ -7,6 +7,7 @@ import AlbumsContainer from "../components/containers/home/albums/AlbumsContaine
 import CategoriesContainer from "../components/containers/home/categories/CategoriesContainer";
 import NotFound from "../components/views/errors/NotFound/NotFound";
 import SearchContainer from "../components/containers/home/search/SearchContainer";
+import ShoppingcartContainer from 'src/components/containers/home/shoppingcart/ShoppingcartContainer';
 
 interface IProps extends RouteComponentProps<{}> {}
 
@@ -14,7 +15,7 @@ const HomeRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
       <Route exact path={`${props.match.url}/search`} component={SearchContainer} />
-
+      <Route exact path={`${props.match.url}/shoppingcart`} component={ShoppingcartContainer} />
       <Route exact path={`${props.match.url}/explore`} component={ExploreContainer} />
       <Route exact path={`${props.match.url}/trending`} component={TrendingContainer} />
       <Route exact path={`${props.match.url}/artists`} component={ArtistsContainer} />
