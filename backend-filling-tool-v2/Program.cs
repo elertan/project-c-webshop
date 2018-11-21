@@ -17,7 +17,7 @@ namespace backend_filling_tool_v2
             try
             {
                 var datasetFetcher = serviceProvider.GetService<ISpotifyDatasetFetcher>();
-                
+                var dataset = await datasetFetcher.Fetch();
             }
             catch (Exception ex)
             {
@@ -30,8 +30,11 @@ namespace backend_filling_tool_v2
 
         static void RegisterServices(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ILogger, Logger>();
-            serviceCollection.AddSingleton<ISpotifyAPI, SpotifyAPI>();
+            serviceCollection.AddSingleton<IEnvVariables, EnvVariables>();
+            
+            var logger = new Logger(LogLevel.Verbose);
+            serviceCollection.AddSingleton<ILogger>(logger);
+            serviceCollection.AddScoped<ISpotifyAPI, SpotifyAPI>();
             serviceCollection.AddSingleton<ISpotifyDatasetFetcher, SpotifyDatasetFetcher>();
         }
     }

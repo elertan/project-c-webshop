@@ -20,7 +20,14 @@ namespace backend_filling_tool_v2
 
         public async Task<SpotifyDataset> Fetch()
         {
+            _logger.Log("Fetching started", LogLevel.Verbose);
             
+            var spotifyDataset = new SpotifyDataset();
+
+            await _spotifyApi.Initialise();
+
+            _logger.Log("Fetching finished", LogLevel.Verbose);
+            return spotifyDataset;
         }
     }
 }
