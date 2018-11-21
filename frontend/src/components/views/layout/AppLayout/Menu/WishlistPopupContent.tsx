@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {Button, List, ListContent, ListHeader, ListItem} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
-import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
 import WishlistState from "../../../../../states/WishlistState";
-import ITrack from "../../../../../models/ITrack";
 import {cartState, wishlistState} from "../../../../../index";
 import {Link} from "react-router-dom";
-import IAlbum from "../../../../../models/IAlbum";
 
 interface IProps {
 }
@@ -26,7 +23,7 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
     );
   }
 
-  private renderWithWishlistState = (state: CartState) => {
+  private renderWithWishlistState = (state: WishlistState) => {
     return (
       <List divided>
         {wishlistState.state.products.map(
@@ -46,13 +43,13 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       floated="right"
                       basic
                       icon="trash"
-                      onClick={this.handleWishlistRemoveItem(product)}
+                      onClick={() => state.removeFromWishlist(product.id)}
                     />
                     <Button
                       floated="right"
                       basic
                       icon="shopping basket"
-                      onClick={this.handleWishlistAddAlbum(product.album!, product.id)}
+                      onClick={() => cartState.addToCart({ album: product.album!, id: product.id })}
                     />
                   </ListContent>
                 </ListItem>
@@ -76,13 +73,13 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       floated="right"
                       basic
                       icon="trash"
-                      onClick={this.handleWishlistRemoveItem(product)}
+                      onClick={() => state.removeFromWishlist(product.id)}
                     />
                     <Button
                       floated="right"
                       basic
                       icon="shopping basket"
-                      onClick={this.handleWishlistAddTrack(product.track!, product.track!.id)}
+                      onClick={() => cartState.addToCart({ track: product.track!, id: product.track!.id })}
                     />
                   </ListContent>
                 </ListItem>
@@ -93,29 +90,6 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
         )}
       </List>
     );
-  };
-
-  private handleWishlistRemoveItem = (product: IProduct) => () => {
-    const newProducts = wishlistState.state.products.filter(
-      (p: IProduct) => p.id !== product.id
-    );
-    wishlistState.setState({products: newProducts});
-  };
-
-  private handleWishlistAddTrack = (track: ITrack, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      track
-    };
-    cartState.setState({products: [...cartState.state.products, product]});
-  };
-
-  private handleWishlistAddAlbum = (album: IAlbum, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      album
-    };
-    cartState.setState({products: [...cartState.state.products, product]});
   };
 }
 

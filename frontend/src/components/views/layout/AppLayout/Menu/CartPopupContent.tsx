@@ -35,6 +35,7 @@ class CartPopupContent extends React.Component<IProps, IState> {
                           floated="right"
                           basic
                           icon="trash"
+                          onClick={() => cartState.removeFromCart(product.id)}
                         />
                       </ListContent>
                     </ListItem>
@@ -43,7 +44,6 @@ class CartPopupContent extends React.Component<IProps, IState> {
 
                 if (product.track !== undefined) {
                   return (
-
                     <ListItem key={i}>
                       <ListContent verticalAlign="middle">
                         {" "}
@@ -54,6 +54,7 @@ class CartPopupContent extends React.Component<IProps, IState> {
                           floated="right"
                           basic
                           icon="trash"
+                          onClick={() => cartState.removeFromCart(product.id)}
                         />
                       </ListContent>
                     </ListItem>
