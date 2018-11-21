@@ -10,8 +10,13 @@ namespace backend_filling_tool_v2
         Warning = 4,
         Critical = 8
     }
+
+    public interface ILogger
+    {
+        void Log(string message, LogLevel logLevel = LogLevel.Normal);
+    }
     
-    public class Logger
+    public class Logger : ILogger
     {
         private readonly LogLevel _logLevel;
         private readonly DateTime _startTime;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace backend_filling_tool_v2
 {
@@ -7,11 +8,16 @@ namespace backend_filling_tool_v2
     {
         static async Task<int> Main(string[] args)
         {
-            var logger = new Logger();
+            var serviceCollection = new ServiceCollection();
+            RegisterServices(serviceCollection);
+            var serviceProvider = serviceCollection.BuildServiceProvider();
 
+            var logger = serviceProvider.GetService<ILogger>();
+            
             try
             {
-                var datasetFetcher = new SpotifyDatasetFetcher(logger);
+                var datasetFetcher = serviceProvider.GetService<ISpotifyDatasetFetcher>();
+                
             }
             catch (Exception ex)
             {
@@ -20,6 +26,13 @@ namespace backend_filling_tool_v2
             }
 
             return 0;
+        }
+
+        static void RegisterServices(ServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<ILogger, Logger>();
+            serviceCollection.AddSingleton<ISpotifyAPI, SpotifyAPI>();
+            serviceCollection.AddSingleton<ISpotifyDatasetFetcher, SpotifyDatasetFetcher>();
         }
     }
 }
