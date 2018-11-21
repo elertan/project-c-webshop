@@ -6,7 +6,6 @@ import MusicPlayerState from "../../../../states/MusicPlayerState";
 import {getTrackTimeFromDurationMs} from "../../../../utils/time";
 import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
-import IProduct from 'src/models/IProduct';
 import WishlistState from "../../../../states/WishlistState";
 
 interface IProps {
@@ -18,18 +17,18 @@ const styles = {
 };
 
 class TrackRow extends React.Component<IProps> {
-  
+
   public render() {
     const {title, durationMs, albumsName, artistName, artistId, albumId, previewUrl} = this.props.data;
-    
+
     const artistNameSeparate = artistName.map((aName: string, i: number) => {
       return (
         <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
-          <span key={i}>{aName}<br /></span>
+          <span key={i}>{aName}<br/></span>
         </Link>
       )
-    })
-    
+    });
+
     const trackTime = getTrackTimeFromDurationMs(durationMs);
     return (
       <tr>
@@ -47,29 +46,35 @@ class TrackRow extends React.Component<IProps> {
               )}
             </Subscribe>
             <Subscribe to={[CartState]}>
-              {cartState => (
-                <Button icon 
-                  onClick={this.addToCart(cartState, this.props.data, this.props.data.id)}
-                  disabled = {cartState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
-                  >
+              {(cartState: CartState) => (
+                <Button icon
+                  onClick={() => cartState.addToCart({
+                    id: this.props.data.id,
+                    track: this.props.data
+                  })}
+                  disabled={cartState.isInCart(this.props.data.id)}
+                >
                   <Icon name="shopping basket" color="black"/>
                 </Button>
               )}
             </Subscribe>
             <Subscribe to={[CartState]}>
-              {cartState => (
-            <Subscribe to ={[WishlistState]}>
-            {(wishlistState: WishlistState) => (
-              <Button 
-              icon
-              disabled = {wishlistState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined || cartState.state.products.find((product: IProduct) => product.id === this.props.data.id) !== undefined}
-              onClick={this.addToWishlist(wishlistState, this.props.data, this.props.data.id)}>
-              <Icon name="heart" color="red"/>
-              </Button>
+              {(cartState: CartState) => (
+                <Subscribe to={[WishlistState]}>
+                  {(wishlistState: WishlistState) => (
+                    <Button
+                      icon
+                      disabled={wishlistState.isInWishlist(this.props.data.id) || cartState.isInCart(this.props.data.id)}
+                      onClick={() => wishlistState.addToWishlist({
+                        track: this.props.data,
+                        id: this.props.data.id
+                      })}>
+                      <Icon name="heart" color="red"/>
+                    </Button>
+                  )}
+                </Subscribe>
               )}
-              </Subscribe>
-            )}
-           </Subscribe>
+            </Subscribe>
           </Button.Group>
         </td>
         <td>{title}</td>
@@ -82,25 +87,10 @@ class TrackRow extends React.Component<IProps> {
     );
   }
 
-  private addToCart = (cartState: CartState, track: ITrack, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      track
-    };
-    cartState.setState({products: [...cartState.state.products, product]});
-  };
-
   private handlePreviewClick = (musicPlayerState: MusicPlayerState) => () => {
     musicPlayerState.startNew(this.props.data.previewUrl!, this.props.data.title, 30000);
   };
 
-  private addToWishlist = (wishlistState: WishlistState, track: ITrack, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      track
-    };
-    wishlistState.setState({products: [...wishlistState.state.products, product]});
-  };
 }
 
 export default TrackRow;
