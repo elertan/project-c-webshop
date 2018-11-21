@@ -11,6 +11,7 @@ import WishlistState from "../../../../../states/WishlistState";
 import ITrack from "../../../../../models/ITrack";
 import IAlbum from "src/models/IAlbum";
 
+
 interface IProps {
 }
 
@@ -126,19 +127,22 @@ class Menu extends React.Component<IProps, IState> {
                                         floated="right"
                                         basic
                                         icon="trash"
+                                        
                                         onClick={this.handleWishlistDeleteItem(
                                           wishlistState,
                                           product
                                         )}
                                       />
-                                      <Button
+                                     <Button
                                         floated="right"
                                         basic
                                         icon="shopping basket"
+                                       
                                         onClick={this.handleWishlistBuyAlbum(
                                           cartState,
+                                          wishlistState,
                                           product.album!,
-                                          product.album!.id
+                                          product.id
                                         )}
                                       />
                                     </ListContent>
@@ -172,8 +176,11 @@ class Menu extends React.Component<IProps, IState> {
                                         floated="right"
                                         basic
                                         icon="shopping basket"
+                                        
                                         onClick={this.handleWishlistBuyTrack(
                                           cartState,
+                                          wishlistState,
+                                         
                                           product.track!,
                                           product.track!.id
                                         )}
@@ -259,7 +266,7 @@ class Menu extends React.Component<IProps, IState> {
                           return console.error("An unexpected item has been tried to add to the shopping cart.");
                         })}
                       </List>
-                      {/* <button>Checkout</button> */}
+                      <Button positive floated="right"><NavLink to={"/home/shoppingcart"}>Checkout</NavLink></Button>
                     </div>
                   }
                 />
@@ -280,6 +287,7 @@ class Menu extends React.Component<IProps, IState> {
     );
     wishlistState.setState({products: newProducts});
   };
+  
 
     private handleShoppingCartDeleteItem = (
       cartState: CartState,
@@ -292,7 +300,8 @@ class Menu extends React.Component<IProps, IState> {
     };
 
   private handleWishlistBuyTrack = (
-    cartState: WishlistState,
+    cartState: CartState,
+    wishlistState: WishlistState,
     track: ITrack,
     productId: number
   ) => () => {
@@ -300,11 +309,17 @@ class Menu extends React.Component<IProps, IState> {
       id: productId,
       track
     };
+    const newProducts = wishlistState.state.products.filter(
+      (p: IProduct) => p.id !== product.id
+    );
+    wishlistState.setState({products: newProducts});
+    
     cartState.setState({products: [...cartState.state.products, product]});
   };
 
   private handleWishlistBuyAlbum = (
-    cartState: WishlistState,
+    cartState: CartState,
+    wishlistState: WishlistState,
     album: IAlbum,
     productId: number
   ) => () => {
@@ -312,8 +327,14 @@ class Menu extends React.Component<IProps, IState> {
       id: productId,
       album
     };
+    const newProducts = wishlistState.state.products.filter(
+      (p: IProduct) => p.id !== product.id
+    );
+    wishlistState.setState({products: newProducts});
+    
     cartState.setState({products: [...cartState.state.products, product]});
   };
+
 }
 
 export default Menu;

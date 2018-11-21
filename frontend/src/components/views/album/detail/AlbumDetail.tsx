@@ -123,18 +123,22 @@ class AlbumDetail extends React.Component<IProps> {
         </div>
 
         <div style={styles.actionsContainer}>
+        <Subscribe to= { [CartState]}>
+        {cartState =>(
           <Subscribe to={[WishlistState]}>
             {wishlistState => (
               <Button
                 icon
                 labelPosition="left"
                 onClick={this.addToWishlist(wishlistState, album, album.product.id)}
-                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined || cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined} 
               >
                 <Icon name="heart" color="red" />
                 Add to wishlist
               </Button>
             )}
+          </Subscribe>
+        )}
           </Subscribe>
           <Subscribe to={[CartState]}>
             {cartState => (
