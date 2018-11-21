@@ -7,9 +7,7 @@ import AppLayout from "../../layout/AppLayout/AppLayout";
 import {withStyles} from "@material-ui/core";
 import CartState from "src/states/CartState";
 import {Subscribe} from "unstated";
-import IProduct from "src/models/IProduct";
 import {Button, Icon} from "semantic-ui-react";
-import IAlbum from "../../../../models/IAlbum";
 import WishlistState from "src/states/WishlistState";
 import ITrack from "../../../../models/ITrack";
 
@@ -108,7 +106,7 @@ class AlbumDetail extends React.Component<IProps> {
     const allArtistNamesStr = allArtistNames.join(", ");
 
     return (
-      <div style={{ marginTop: 50 }}>
+      <div style={{marginTop: 50}}>
         <div
           className={classes.albumContainerBackground}
           style={{backgroundImage: `url(${album.images.items[0].url})`}}
@@ -123,28 +121,38 @@ class AlbumDetail extends React.Component<IProps> {
         </div>
 
         <div style={styles.actionsContainer}>
-          <Subscribe to={[WishlistState]}>
-            {wishlistState => (
-              <Button
-                icon
-                labelPosition="left"
-                onClick={this.addToWishlist(wishlistState, album, album.product.id)}
-                disabled={wishlistState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
-              >
-                <Icon name="heart" color="red" />
-                Add to wishlist
-              </Button>
+          <Subscribe to={[CartState]}>
+            {(cartState: CartState) => (
+              <Subscribe to={[WishlistState]}>
+                {(wishlistState: WishlistState) => (
+                  <Button
+                    icon
+                    labelPosition="left"
+                    onClick={() => wishlistState.addToWishlist({
+                      id: album.product.id,
+                      album
+                    })}
+                    disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
+                  >
+                    <Icon name="heart" color="red"/>
+                    Add to wishlist
+                  </Button>
+                )}
+              </Subscribe>
             )}
           </Subscribe>
           <Subscribe to={[CartState]}>
-            {cartState => (
+            {(cartState: CartState) => (
               <Button
                 icon
                 labelPosition="left"
-                onClick={this.addToCart(cartState, album, album.product.id)}
-                disabled={cartState.state.products.find((product: IProduct) => product.id === album.product.id) !== undefined}
+                onClick={() => cartState.addToCart({
+                  id: album.product.id,
+                  album
+                })}
+                disabled={cartState.isInCart(album.product.id)}
               >
-                <Icon name="shopping basket" color="black" />
+                <Icon name="shopping basket" color="black"/>
                 Add to cart
               </Button>
             )}
@@ -153,22 +161,6 @@ class AlbumDetail extends React.Component<IProps> {
         <TrackList trackData={data}/>
       </div>
     );
-  };
-
-  private addToCart = (cartState: CartState, album: IAlbum, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      album
-    };
-    cartState.setState({products: [...cartState.state.products, product]});
-  };
-
-  private addToWishlist = (wishlistState: WishlistState, album: IAlbum, productId: number) => () => {
-    const product: IProduct = {
-      id: productId,
-      album
-    };
-    wishlistState.setState({products: [...wishlistState.state.products, product]});
   };
 }
 
