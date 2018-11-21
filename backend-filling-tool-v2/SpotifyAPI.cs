@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using backend_filling_tool_v2.APIResponses;
+using backend_filling_tool_v2.SpotifyDTOs;
 using Newtonsoft.Json;
 
 namespace backend_filling_tool_v2
@@ -11,10 +13,13 @@ namespace backend_filling_tool_v2
     public interface ISpotifyAPI
     {
         Task Initialise();
+        Task<List<Category>> GetCategories();
+        Task<List<Playlist>> GetPlaylists(string id, int limit = 0);
     }
     
     public class SpotifyAPI : ISpotifyAPI
     {
+        private readonly  Uri _baseUri = new Uri("https://api.spotify.com/v1");
         private readonly ILogger _logger;
         private readonly IEnvVariables _envVariables;
         private HttpClient _httpClient;
@@ -54,10 +59,32 @@ namespace backend_filling_tool_v2
             
             _logger.Log($"Permission granted! Token: '${token}'");
             
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             _logger.Log("Initialisation finished", LogLevel.Verbose);
+        }
+
+        private string GetUrl(string apiPath, string queryString = "")
+        {
+            var uriBuilder = new UriBuilder(_baseUri);
+            uriBuilder.Path += apiPath;
+            uriBuilder.Query += queryString;
+            return uriBuilder.Uri.AbsoluteUri;
+        }
+
+        public async Task<List<Category>> GetCategories()
+        {
+            var requestUri = GetUrl("/browse/categories", "limit=50");
+            var response = await _httpClient.GetStringAsync(requestUri);
+
+            var result = JsonConvert.DeserializeObject<GetCategoriesResponse>(response);
+            return result.Categories.Items;
+        }
+
+        public async Task<List<Playlist>> GetPlaylists(string id, int limit = 0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

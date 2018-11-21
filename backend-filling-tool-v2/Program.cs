@@ -21,7 +21,7 @@ namespace backend_filling_tool_v2
             }
             catch (Exception ex)
             {
-                logger.Log($"Global error handler:\n\n{ex.Message}\n\nThe program will now exit.", LogLevel.Critical);
+                logger.Log($"Global error handler:\n\n{ex}\n\nThe program will now exit.", LogLevel.Critical);
                 return ex.HResult;
             }
 

@@ -8,7 +8,7 @@ namespace backend_filling_tool_v2.SpotifyDTOs
         [JsonProperty("name")]
         public string Name { get; set; }
         
-        [JsonProperty("images")]
-        public List<Image> Images { get; set; }
+        [JsonProperty("icons")]
+        public List<Image> Icons { get; set; }
     }
 }

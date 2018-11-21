@@ -25,6 +25,7 @@ namespace backend_filling_tool_v2
             var spotifyDataset = new SpotifyDataset();
 
             await _spotifyApi.Initialise();
+            var categories = await _spotifyApi.GetCategories();
 
             _logger.Log("Fetching finished", LogLevel.Verbose);
             return spotifyDataset;
