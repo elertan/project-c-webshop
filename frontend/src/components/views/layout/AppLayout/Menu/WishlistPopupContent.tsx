@@ -24,6 +24,12 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
   }
 
   private renderWithWishlistState = (state: WishlistState) => {
+    if (state.state.products.length === 0) {
+      return (
+        <p>Nothing has been added to the wishlist</p>
+      );
+    }
+
     return (
       <List divided>
         {wishlistState.state.products.map(
