@@ -14,9 +14,8 @@ const styles = {
     display: "none",
     zIndex: -1
   },
-  InputPosition: {
-    zIndex: 5,
-    MarginTop: "-10%"
+  InputSpacing: {
+    
   },
 
   NotClicked: {

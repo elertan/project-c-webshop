@@ -16,20 +16,45 @@ export default class Dashboard extends React.Component {
   public state = {
     visible: false,
     visibleButton: true,
-    buttonBoolean: false,
-    buttonStyle: styles.NotClicked
+
+    visibleEmail: false,
+    visibleName: false,
+    visiblePassword: false,
+
+    visibleEmailButton: false,
+    visibleNameButton: false,
+    visiblePasswordButton: false,
+
+    EMailButtonStyle: styles.NotClicked,
+    nameButtonStyle: styles.NotClicked,
+    passwordButtonStyle: styles.NotClicked
   };
 
-  public toggleVisibility = () =>
+  public toggleEmailVisibility = () =>
     this.setState({
-      visible: !this.state.visible,
-      visibleButton: !this.state.visibleButton,
-      buttonBoolean: true,
-      buttonStyle: styles.Clicked
+      visibleEmail: !this.state.visibleEmail,
+      visibleEmailButton: !this.state.visibleEmailButton,
+      EMailButtonStyle: styles.Clicked
+    });
+
+  public toggleNameVisibility = () =>
+    this.setState({
+      visibleName: !this.state.visibleName,
+      visibleNameButton: !this.state.visibleNameButton,
+      nameButtonStyle: styles.Clicked
+    });
+
+  public togglePasswordVisibility = () =>
+    this.setState({
+      visiblePassword: !this.state.visiblePassword,
+      visiblePasswordButton: !this.state.visiblePasswordButton,
+      passwordButtonStyle: styles.Clicked
     });
 
   public render() {
-    const { visible } = this.state;
+    const { visibleEmailButton } = this.state;
+    const { visibleNameButton } = this.state;
+    const { visiblePasswordButton } = this.state;
     return (
       <AppLayout>
         <div style={styles.DashboardDiv}>
@@ -66,15 +91,14 @@ export default class Dashboard extends React.Component {
                       </h3>
                       {"tim-prins@live.nl"}
                     </Table.Cell>
-
                     <Table.Cell height={110}>
-                      <div style={this.state.buttonStyle}>
+                      <div style={this.state.EMailButtonStyle}>
                         <Button
                           animated
                           size="large"
                           fluid
-                          content={visible ? "Hide" : "Show"}
-                          onClick={this.toggleVisibility}
+                          content={visibleEmailButton ? "Hide" : "Show"}
+                          onClick={this.toggleEmailVisibility}
                         >
                           <Button.Content visible>Edit</Button.Content>
                           <Button.Content hidden>
@@ -82,14 +106,14 @@ export default class Dashboard extends React.Component {
                           </Button.Content>
                         </Button>
                       </div>
-
                       <Transition
-                        visible={visible}
+                        visible={visibleEmailButton}
                         animation="scale"
                         duration={1000}
                       >
-                        <div style={styles.InputPosition}>
-                          <Input action="Save" placeholder="New e-mail" />
+                        <div style={styles.InputSpacing}>
+                          <Input placeholder="New E-mail" />
+                          <Button color="green">Save</Button>
                         </div>
                       </Transition>
                     </Table.Cell>
@@ -102,13 +126,32 @@ export default class Dashboard extends React.Component {
                       </h3>
                       {"Tim Prins"}
                     </Table.Cell>
-                    <Table.Cell>
-                      <Button animated size="large" fluid>
-                        <Button.Content visible>Edit</Button.Content>
-                        <Button.Content hidden>Verander naam</Button.Content>
-                      </Button>
+                    <Table.Cell height={110}>
+                      <div style={this.state.nameButtonStyle}>
+                        <Button
+                          animated
+                          size="large"
+                          fluid
+                          content={visibleNameButton ? "Hide" : "Show"}
+                          onClick={this.toggleNameVisibility}
+                        >
+                          <Button.Content visible>Edit</Button.Content>
+                          <Button.Content hidden>Verander naam</Button.Content>
+                        </Button>
+                      </div>
+                      <Transition
+                        visible={visibleNameButton}
+                        animation="scale"
+                        duration={1000}
+                      >
+                        <div style={styles.InputSpacing}>
+                          <Input placeholder="Modify name" />
+                          <Button color="green">Save</Button>
+                        </div>
+                      </Transition>
                     </Table.Cell>
                   </Table.Row>
+
                   <Table.Row>
                     <Table.Cell width={5}>
                       <h3>
@@ -116,11 +159,29 @@ export default class Dashboard extends React.Component {
                       </h3>
                       {"*******"}
                     </Table.Cell>
-                    <Table.Cell>
-                      <Button animated size="large" fluid>
-                        <Button.Content visible>Edit</Button.Content>
-                        <Button.Content hidden>Nieuw wachtwoord</Button.Content>
-                      </Button>
+                    <Table.Cell height={110}>
+                      <div style={this.state.passwordButtonStyle}>
+                        <Button
+                          animated
+                          size="large"
+                          fluid
+                          content={visiblePasswordButton ? "Hide" : "Show"}
+                          onClick={this.togglePasswordVisibility}
+                        >
+                          <Button.Content visible>Edit</Button.Content>
+                          <Button.Content hidden>Change password</Button.Content>
+                        </Button>
+                      </div>
+                      <Transition
+                        visible={visiblePasswordButton}
+                        animation="scale"
+                        duration={1000}
+                      >
+                        <div style={styles.InputSpacing}>
+                          <Input placeholder="New password" />
+                          <Button color="green">Save</Button>
+                        </div>
+                      </Transition>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
