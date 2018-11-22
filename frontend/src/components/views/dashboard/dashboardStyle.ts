@@ -17,15 +17,15 @@ const styles = {
   InputPosition: {
     zIndex: 5,
     MarginTop: "-10%"
-   
   },
 
-  NotClicked: { 
-        display: "block"
-    },
-    Clicked: { 
-        display: "hidden"
-    }
+  NotClicked: {
+    display: "block"
+  },
+
+  Clicked: {
+    display: "none"
+  }
 };
 
 export default styles;

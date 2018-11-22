@@ -5,26 +5,31 @@ import {
   Divider,
   Table,
   Form,
-  Grid,
   Button,
-  Transition
+  Transition,
+  Input
 } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import styles from "./dashboardStyle";
 
 export default class Dashboard extends React.Component {
-  public state = { visible: false, visibleButton: true, buttonClass: styles.NotClicked };
+  public state = {
+    visible: false,
+    visibleButton: true,
+    buttonBoolean: false,
+    buttonStyle: styles.NotClicked
+  };
 
   public toggleVisibility = () =>
     this.setState({
       visible: !this.state.visible,
       visibleButton: !this.state.visibleButton,
-      buttonClass: "styles.Clicked"
+      buttonBoolean: true,
+      buttonStyle: styles.Clicked
     });
 
   public render() {
     const { visible } = this.state;
-    const { visibleButton } = this.state;
     return (
       <AppLayout>
         <div style={styles.DashboardDiv}>
@@ -63,11 +68,7 @@ export default class Dashboard extends React.Component {
                     </Table.Cell>
 
                     <Table.Cell height={110}>
-                      <Transition
-                        visible={visibleButton}
-                        duration={0}
-                      >
-                      <div style={this.state.buttonClass}>
+                      <div style={this.state.buttonStyle}>
                         <Button
                           animated
                           size="large"
@@ -80,8 +81,7 @@ export default class Dashboard extends React.Component {
                             Verander e-mail
                           </Button.Content>
                         </Button>
-                        </div>
-                      </Transition>
+                      </div>
 
                       <Transition
                         visible={visible}
@@ -89,16 +89,7 @@ export default class Dashboard extends React.Component {
                         duration={1000}
                       >
                         <div style={styles.InputPosition}>
-                          <Form.Field control="input" placeholder="E-Mail" />
-                          <Transition
-                            visible={visible}
-                            animation="scale"
-                            duration={1000}
-                          >
-                            <Button size="large" fluid>
-                              <Button.Content visible>Save</Button.Content>
-                            </Button>
-                          </Transition>
+                          <Input action="Save" placeholder="New e-mail" />
                         </div>
                       </Transition>
                     </Table.Cell>
@@ -137,36 +128,6 @@ export default class Dashboard extends React.Component {
             </Form>
           </div>
         </div>
-
-        <Form>
-          <Grid columns="two">
-            <Grid.Row>
-              <Grid.Column>
-                <Form.Field
-                  label={"Huidige naam hoort hier"}
-                  control="input"
-                  placeholder="Naam"
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <Form.Field
-                  label={"Huidige achternaam hoort hier"}
-                  control="input"
-                  placeholder="Achternaam"
-                />
-              </Grid.Column>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column>
-                <h1>test</h1>
-              </Grid.Column>
-              <Grid.Column>
-                <h1>test</h1>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
       </AppLayout>
     );
   }
