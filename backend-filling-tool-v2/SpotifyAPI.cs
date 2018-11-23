@@ -63,7 +63,7 @@ namespace backend_filling_tool_v2
             
             _logger.Log($"Permission granted! Token: '${token}'");
             
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient(new RetryHandler(new HttpClientHandler()));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             _logger.Log("Initialisation finished", LogLevel.Verbose);
