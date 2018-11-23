@@ -23,5 +23,8 @@ namespace backend_filling_tool_v2.SpotifyDTOs
 
         [JsonProperty("artists")]
         public List<Artist> Artists { get; set; }
+
+        [JsonProperty("album")]
+        public Album Album { get; set; }
     }
 }

@@ -6,17 +6,19 @@ namespace backend_filling_tool_v2
 {
     class Program
     {
+        public static ServiceProvider ServiceProvider;
+
         static async Task<int> Main(string[] args)
         {
             var serviceCollection = new ServiceCollection();
             RegisterServices(serviceCollection);
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            var logger = serviceProvider.GetService<ILogger>();
+            var logger = ServiceProvider.GetService<ILogger>();
             
             try
             {
-                var datasetFetcher = serviceProvider.GetService<ISpotifyDatasetFetcher>();
+                var datasetFetcher = ServiceProvider.GetService<ISpotifyDatasetFetcher>();
                 var dataset = await datasetFetcher.Fetch();
             }
             catch (Exception ex)

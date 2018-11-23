@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,6 +17,8 @@ namespace backend_filling_tool_v2
         Task<List<Category>> GetCategories();
         Task<List<Playlist>> GetPlaylists(string id, int limit = 10);
         Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10);
+        Task<List<Track>> GetTracksForPlaylist(string playlistId);
+        Task<List<Album>> GetAlbums(List<string> albumIds);
     }
     
     public class SpotifyAPI : ISpotifyAPI
@@ -94,7 +97,24 @@ namespace backend_filling_tool_v2
             var response = await _httpClient.GetStringAsync(GetUrl($"/browse/categories/{categoryId}/playlists", $"limit={limit}"));
 
             var result = JsonConvert.DeserializeObject<GetCategoryPlaylistsResponse>(response);
-            return result.Playlists.Items;
+            return result.Playlists;
+        }
+
+        public async Task<List<Track>> GetTracksForPlaylist(string playlistId)
+        {
+            var response = await _httpClient.GetStringAsync(GetUrl($"/playlists/{playlistId}/tracks", "fields=items(track(album(id,name,href)))"));
+
+            var result = JsonConvert.DeserializeObject<GetTracksForPlaylistResponse>(response);
+            return result.Items;
+        }
+
+        public async Task<List<Album>> GetAlbums(List<string> albumIds)
+        {
+            var ids = albumIds.Aggregate((curr, next) => $"{curr},${next}");
+            var response = await _httpClient.GetStringAsync(GetUrl($"/albums", $"market=NL&ids={ids}"));
+
+            var result = JsonConvert.DeserializeObject<GetAlbumsForTracksResponse>(response);
+            return result.Albums;
         }
     }
 }

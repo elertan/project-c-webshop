@@ -1,12 +1,11 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace backend_filling_tool_v2.SpotifyDTOs
 {
-    public class Artist : BaseDTO
+    public class Copyright
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }

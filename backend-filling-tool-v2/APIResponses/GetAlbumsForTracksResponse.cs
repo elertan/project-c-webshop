@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace backend_filling_tool_v2.APIResponses
 {
-    public class GetCategoryPlaylistsResponse
+    public class GetAlbumsForTracksResponse
     {
-        [JsonProperty("playlists")]
-        public List<Playlist> Playlists { get; set; }
+        [JsonProperty("albums")]
+        public List<Album> Albums { get; set; }
     }
 }
