@@ -14,7 +14,8 @@ namespace backend_filling_tool_v2
     {
         Task Initialise();
         Task<List<Category>> GetCategories();
-        Task<List<Playlist>> GetPlaylists(string id, int limit = 0);
+        Task<List<Playlist>> GetPlaylists(string id, int limit = 10);
+        Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10);
     }
     
     public class SpotifyAPI : ISpotifyAPI
@@ -65,6 +66,7 @@ namespace backend_filling_tool_v2
             _logger.Log("Initialisation finished", LogLevel.Verbose);
         }
 
+
         private string GetUrl(string apiPath, string queryString = "")
         {
             var uriBuilder = new UriBuilder(_baseUri);
@@ -85,6 +87,14 @@ namespace backend_filling_tool_v2
         public async Task<List<Playlist>> GetPlaylists(string id, int limit = 0)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10)
+        {
+            var response = await _httpClient.GetStringAsync(GetUrl($"/browse/categories/{categoryId}/playlists", $"limit={limit}"));
+
+            var result = JsonConvert.DeserializeObject<GetCategoryPlaylistsResponse>(response);
+            return result.Playlists.Items;
         }
     }
 }
