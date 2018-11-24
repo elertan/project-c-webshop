@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,7 +16,6 @@ namespace backend_filling_tool_v2
     {
         Task Initialise();
         Task<List<Category>> GetCategories();
-        Task<List<Playlist>> GetPlaylists(string id, int limit = 10);
         Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10);
         Task<List<Track>> GetTracksForPlaylist(string playlistId);
         Task<List<Album>> GetAlbums(List<string> albumIds);
@@ -62,7 +62,7 @@ namespace backend_filling_tool_v2
             string token = data.access_token;
             
             _logger.Log($"Permission granted! Token: '${token}'");
-            
+            ServicePointManager.DefaultConnectionLimit = 3;
             _httpClient = new HttpClient(new RetryHandler(new HttpClientHandler()));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
@@ -80,6 +80,7 @@ namespace backend_filling_tool_v2
 
         public async Task<List<Category>> GetCategories()
         {
+            _logger.Log("GetCategories", LogLevel.Verbose);
             var requestUri = GetUrl("/browse/categories", "limit=50");
             var response = await _httpClient.GetStringAsync(requestUri);
 
@@ -87,34 +88,38 @@ namespace backend_filling_tool_v2
             return result.Categories.Items;
         }
 
-        public async Task<List<Playlist>> GetPlaylists(string id, int limit = 0)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10)
         {
+            _logger.Log($"GetCategoryPlaylists: {categoryId}", LogLevel.Verbose);
             var response = await _httpClient.GetStringAsync(GetUrl($"/browse/categories/{categoryId}/playlists", $"limit={limit}"));
 
             var result = JsonConvert.DeserializeObject<GetCategoryPlaylistsResponse>(response);
-            return result.Playlists;
+            return result.Playlists.Items;
         }
 
         public async Task<List<Track>> GetTracksForPlaylist(string playlistId)
         {
-            var response = await _httpClient.GetStringAsync(GetUrl($"/playlists/{playlistId}/tracks", "fields=items(track(album(id,name,href)))"));
+            _logger.Log($"GetTracksForPlaylist: {playlistId}", LogLevel.Verbose);
+            var response = await _httpClient.GetStringAsync(GetUrl($"/playlists/{playlistId}/tracks", "fields=items(track(name,explicit,disc_number,duration_ms,preview_url,artists(id,name,type),album(id)))"));
 
             var result = JsonConvert.DeserializeObject<GetTracksForPlaylistResponse>(response);
-            return result.Items;
+            return result.Items.Select(item => item.Track).ToList();
         }
 
         public async Task<List<Album>> GetAlbums(List<string> albumIds)
         {
-            var ids = albumIds.Aggregate((curr, next) => $"{curr},${next}");
-            var response = await _httpClient.GetStringAsync(GetUrl($"/albums", $"market=NL&ids={ids}"));
-
-            var result = JsonConvert.DeserializeObject<GetAlbumsForTracksResponse>(response);
-            return result.Albums;
+            _logger.Log("GetAlbums", LogLevel.Verbose);
+            // Separate in chunks due to Spotify limit
+            var chunks = albumIds.ChunkBy(10);
+            var tasks = chunks.Select(async ids =>
+            {
+                var idsStr = ids.Aggregate((curr, next) => $"{curr},{next}");
+                var response = await _httpClient.GetStringAsync(GetUrl($"/albums", $"market=NL&ids={idsStr}"));
+                var result = JsonConvert.DeserializeObject<GetAlbumsForTracksResponse>(response);
+                return result.Albums;
+            });
+            await Task.WhenAll(tasks);
+            return tasks.Select(task => task.Result).SelectMany(x => x).ToList();
         }
     }
 }

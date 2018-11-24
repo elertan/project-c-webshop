@@ -20,5 +20,5 @@ namespace backend_filling_tool_v2
                 .GroupBy(x => x.Index / chunkSize)
                 .Select(grp => grp.Select(x => x.Value));
         }
-    }k
+    }
 }

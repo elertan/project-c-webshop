@@ -7,6 +7,6 @@ namespace backend_filling_tool_v2.APIResponses
     public class GetCategoryPlaylistsResponse
     {
         [JsonProperty("playlists")]
-        public List<Playlist> Playlists { get; set; }
+        public SpotifyEnumerableApiResult<Playlist> Playlists { get; set; }
     }
 }

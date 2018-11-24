@@ -31,26 +31,30 @@ namespace backend_filling_tool_v2
                empty category pages, we keep 25 of them to reduce the overall fetching duration
             */
             var categories = (await _spotifyApi.GetCategories()).Take(25).ToList();
+            _logger.Log("Received categories");
             
             // Get a list of associated playlists for every category
             var playlistsByCategories = await GetPlaylistsForCategories(categories);
+            _logger.Log("Received playlists for categories");
             
             // Put all fetched playlists into a single vector 
             var allPlaylists = playlistsByCategories.Select(dict => dict.Value.Take(10)).SelectMany(e => e).ToList();
             
             // Get a list of associated tracks for every playlist
             var tracksByPlaylists = await GetTracksForPlaylists(allPlaylists);
+            _logger.Log("Received tracks for playlists");
             
             // Put all fetched tracks of their playlist (max 10 to reduce overall fetching duration) into a single vector
             var allTracks = tracksByPlaylists.Select(dict => dict.Value.Take(10)).SelectMany(e => e).ToList();
 
-            var albumsByTracks = await GetAlbumsForTracks(allTracks);
+            var albumByTracks = await GetAlbumsForTracks(allTracks);
+            _logger.Log("Received albums for tracks");
 
             var spotifyDataset = BuildDataset(
                 categories,
                 playlistsByCategories,
                 tracksByPlaylists,
-                albumsByTracks
+                albumByTracks
             );
 
             _logger.Log("Fetching finished", LogLevel.Verbose);
@@ -61,7 +65,7 @@ namespace backend_filling_tool_v2
             List<Category> categories,
             Dictionary<Category, List<Playlist>> playlistsByCategories,
             Dictionary<Playlist, List<Track>> tracksByPlaylists,
-            Dictionary<Track, List<Album>> albumsByTracks
+            Dictionary<Track, Album> albumByTracks
         )
         {
             var dataset = new SpotifyDataset
@@ -77,7 +81,17 @@ namespace backend_filling_tool_v2
         private async Task<Dictionary<Category, List<Playlist>>> GetPlaylistsForCategories(List<Category> categories)
         {
             // We will limit (1) the amount of playlist to a single playlist to reduce the overall fetching duration
-            var tasks = categories.Select(category => _spotifyApi.GetCategoryPlaylists(category.Id, limit: 1));
+            var tasks = categories.Select(async category =>
+            {
+                try
+                {
+                    return await _spotifyApi.GetCategoryPlaylists(category.Id, limit: 1);
+                }
+                catch
+                {
+                    return await Task.FromResult(new List<Playlist>());
+                }
+            });
             await Task.WhenAll(tasks);
             
             var dictionary = new Dictionary<Category, List<Playlist>>(
@@ -99,17 +113,12 @@ namespace backend_filling_tool_v2
             return dictionary;
         }
         
-        private async Task<Dictionary<Track, List<Album>>> GetAlbumsForTracks(List<Track> tracks)
+        private async Task<Dictionary<Track, Album>> GetAlbumsForTracks(List<Track> tracks)
         {
-            // Separate in chunks due to Spotify limit
-            var chunkedTracks = tracks.ChunkBy(20).ToList();
-            
-            // Gather all albums ids from their respective tracks
-            var tasks = chunkedTracks.Select(cTracks => _spotifyApi.GetAlbums(cTracks.Select(track => track.Album.Id).ToList()));
-            await Task.WhenAll(tasks);
+            var albums = await _spotifyApi.GetAlbums(tracks.Select(t => t.Album.Id).ToList());
 
-            var dictionary = new Dictionary<Track, List<Album>>(
-                tasks.Select((task, i) => new KeyValuePair<Track, List<Album>>(tracks[i], task.Result))
+            var dictionary = new Dictionary<Track, Album>(
+                albums.Select((album, i) => new KeyValuePair<Track, Album>(tracks[i], album))
             );
             
             return dictionary;
