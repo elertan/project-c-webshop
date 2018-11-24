@@ -58,47 +58,57 @@ class CategoryDetail extends React.Component<IProps> {
               }
         }`;
 
-      return (
-        <AppLayout>
-          <h1>Category</h1>
-          <Query query={query}>
-            {({ loading, error, data }) => {
-              if (loading) {
-                return null;
-              }
-              if (error) {
-                return <span>{error.message}</span>
-              }
-              return <div>{this.renderDetail(data.categories.items)}</div>
-            }}
-          </Query>
-          <h1>Albums</h1>
-          <Query query={dummyAlbumsQuery}>
-            {({ loading, error, data }) => {
-              if (loading) {
-                return null;
-              }
-              if (error) {
-                return <span>{error.message}</span>
-              }
-              return <div>{this.renderAlbumsDetail(data.albums.items)}</div>
-            }}
-          </Query>
-          <h1>Artists</h1>
-
-          <Query query={dummyArtistsQuery}>
-            {({ loading, error, data }) => {
-              if (loading) {
-                return null;
-              }
-              if (error) {
-                return <span>{error.message}</span>
-              }
-              return <div>{this.renderArtistsDetail(data.artists.items)}</div>
-            }}
-          </Query>
-        </AppLayout>
-      )
+        return (
+            <AppLayout>
+              <h1>Category</h1>  
+              <Query query={query}>
+                {({loading, error, data }) => {
+                  if (loading) {
+                    return null;
+                  }
+                  if (error) {
+                    return <span>{error.message}</span>
+                  }
+                  console.log(data);
+                  return <div>{this.renderDetail(data.categories.items)}</div>
+                }}
+              </Query>
+              <h1>Albums</h1>
+              <div className="slider slider1">
+                <div className="slides">
+                  <div className="slide-item item1">
+                    <Query query={dummyAlbumsQuery}>
+                      {({loading, error, data }) => {
+                        if (loading) {
+                          return null;
+                        }
+                        if (error) {
+                          return <span>{error.message}</span>
+                        }
+                        console.log(data);
+                        return <div>{this.renderAlbumsDetail(data.albums.items)}</div>
+                      }}
+                    </Query>
+                  </div>
+                  <h1>Artists</h1>
+                  <div className="slide-item item2">
+                    <Query query={dummyArtistsQuery}>
+                      {({loading, error, data }) => {
+                        if (loading) {
+                          return null;
+                        }
+                        if (error) {
+                          return <span>{error.message}</span>
+                        }
+                        console.log(data);
+                        return <div>{this.renderArtistsDetail(data.artists.items)}</div>
+                      }}
+                    </Query>
+                  </div>
+                </div>
+              </div>
+            </AppLayout>
+        )
     }
 
     private renderDetail = (categories: any[]) => {
