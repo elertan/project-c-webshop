@@ -55,8 +55,21 @@ namespace backend_filling_tool_v2
                 });
                 await Task.WhenAll(truncateTasks);
                 _logger.Log("Removed all data!");
-                
-                
+            }
+
+            using (var db = new DatabaseContext(builder.Options))
+            {
+                db.Categories.AddRange(dataset.Categories.Select(c => new Category
+                {
+                    SpotifyId = c.Id,
+                    Name = c.Name,
+                    Images = c.Icons.Select(e => new Image
+                    {
+                        Url = e.Url,
+                        Height = e.Height,
+                        Width = e.Width
+                    }).ToList()
+                }));
             }
         }
     }
