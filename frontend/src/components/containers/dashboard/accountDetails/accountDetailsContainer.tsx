@@ -1,7 +1,8 @@
 import * as React from 'react';
+import {RouteProps} from "react-router";
 import AccountDetails from "../../../views/dashboard/accountDetails/acountDetails";
 
-interface IProps {}
+interface IProps extends RouteProps {}
 interface IState {}
 
 class AcountDetailsContainer extends React.Component<IProps, IState> {
