@@ -20,6 +20,9 @@ namespace backend_filling_tool_v2
             {
                 var datasetFetcher = ServiceProvider.GetService<ISpotifyDatasetFetcher>();
                 var dataset = await datasetFetcher.Fetch();
+
+                var databaseFiller = ServiceProvider.GetService<IDatabaseFiller>();
+                await databaseFiller.FillWith(dataset);
             }
             catch (Exception ex)
             {
@@ -38,6 +41,7 @@ namespace backend_filling_tool_v2
             serviceCollection.AddSingleton<ILogger>(logger);
             serviceCollection.AddScoped<ISpotifyAPI, SpotifyAPI>();
             serviceCollection.AddSingleton<ISpotifyDatasetFetcher, SpotifyDatasetFetcher>();
+            serviceCollection.AddSingleton<IDatabaseFiller, DatabaseFiller>();
         }
     }
 }

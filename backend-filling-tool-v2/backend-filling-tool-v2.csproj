@@ -9,8 +9,18 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="1.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="NewtonSoft.Json" Version="11.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="backend-datamodel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\backend-datamodel\bin\Debug\netcoreapp2.1\backend-datamodel.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
