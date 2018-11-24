@@ -1,11 +1,4 @@
 const styles = {
-  DashboardDiv: {},
-
-  SideMenu: {
-    display: "inline-block",
-    margin: "3% 4% 0 10%"
-  },
-
   DashboardTable: {
     display: "inline-block",
     width: "60%"

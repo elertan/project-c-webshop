@@ -1,16 +1,14 @@
 import * as React from "react";
 import AppLayout from "../layout/AppLayout/AppLayout";
 import {
-  Menu,
-  Divider,
   Table,
   Form,
   Button,
   Transition,
   Input
 } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
 import styles from "./dashboardStyle";
+import DashboardMenu from "../reusable/DashboardMenu/DashboarMenu";
 
 export default class Dashboard extends React.Component {
   public state = {
@@ -57,137 +55,112 @@ export default class Dashboard extends React.Component {
     const { visiblePasswordButton } = this.state;
     return (
       <AppLayout>
-        <div style={styles.DashboardDiv}>
-          {/* Side menu  */}
-          <div style={styles.SideMenu}>
-            <Menu vertical>
-              <Menu.Item>
-                <Menu.Header>Overzicht</Menu.Header>
-                <Divider />
-                <Menu.Header>Bestellingen</Menu.Header>
-                <NavLink to={"/dashboard/aankoopgeschiedenis"}>
-                  <Menu.Item name="Aankoopgeschiedenis" />
-                </NavLink>
-                <Divider />
-                <Menu.Header>Account details</Menu.Header>
-                <NavLink to={"/dashboard/gegevens"}>
-                  <Menu.Item name="Mijn gegevens" />
-                </NavLink>
-                <NavLink to={"/dashboard/betaalmethoden"}>
-                  <Menu.Item name="Mijn betaalmethoden" />
-                </NavLink>
-              </Menu.Item>
-            </Menu>
-          </div>
-
-          <div style={styles.DashboardTable}>
-            <Form>
-              <Table>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>
-                      <h3>
-                        <b>Email : </b>
-                      </h3>
-                      {"tim-prins@live.nl"}
-                    </Table.Cell>
-                    <Table.Cell height={110}>
-                      <div style={this.state.EMailButtonStyle}>
-                        <Button
-                          animated
-                          size="large"
-                          fluid
-                          content={visibleEmailButton ? "Hide" : "Show"}
-                          onClick={this.toggleEmailVisibility}
-                        >
-                          <Button.Content visible>Edit</Button.Content>
-                          <Button.Content hidden>
-                            Verander e-mail
-                          </Button.Content>
-                        </Button>
-                      </div>
-                      <Transition
-                        visible={visibleEmailButton}
-                        animation="scale"
-                        duration={1000}
+        <DashboardMenu/>
+        <div style={styles.DashboardTable}>
+          <Form>
+            <Table>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>
+                    <h3>
+                      <b>Email : </b>
+                    </h3>
+                    {"tim-prins@live.nl"}
+                  </Table.Cell>
+                  <Table.Cell height={110}>
+                    <div style={this.state.EMailButtonStyle}>
+                      <Button
+                        animated
+                        size="large"
+                        fluid
+                        content={visibleEmailButton ? "Hide" : "Show"}
+                        onClick={this.toggleEmailVisibility}
                       >
-                        <div style={styles.InputSpacing}>
-                          <Input placeholder="New E-mail" />
-                          <Button color="green">Save</Button>
-                        </div>
-                      </Transition>
-                    </Table.Cell>
-                  </Table.Row>
-
-                  <Table.Row>
-                    <Table.Cell width={5}>
-                      <h3>
-                        <b>Naam : </b>
-                      </h3>
-                      {"Tim Prins"}
-                    </Table.Cell>
-                    <Table.Cell height={110}>
-                      <div style={this.state.nameButtonStyle}>
-                        <Button
-                          animated
-                          size="large"
-                          fluid
-                          content={visibleNameButton ? "Hide" : "Show"}
-                          onClick={this.toggleNameVisibility}
-                        >
-                          <Button.Content visible>Edit</Button.Content>
-                          <Button.Content hidden>Verander naam</Button.Content>
-                        </Button>
+                        <Button.Content visible>Edit</Button.Content>
+                        <Button.Content hidden>Verander e-mail</Button.Content>
+                      </Button>
+                    </div>
+                    <Transition
+                      visible={visibleEmailButton}
+                      animation="scale"
+                      duration={1000}
+                    >
+                      <div style={styles.InputSpacing}>
+                        <Input placeholder="New E-mail" />
+                        <Button color="green">Save</Button>
                       </div>
-                      <Transition
-                        visible={visibleNameButton}
-                        animation="scale"
-                        duration={1000}
-                      >
-                        <div style={styles.InputSpacing}>
-                          <Input placeholder="Modify name" />
-                          <Button color="green">Save</Button>
-                        </div>
-                      </Transition>
-                    </Table.Cell>
-                  </Table.Row>
+                    </Transition>
+                  </Table.Cell>
+                </Table.Row>
 
-                  <Table.Row>
-                    <Table.Cell width={5}>
-                      <h3>
-                        <b>Wachtwoord : </b>
-                      </h3>
-                      {"*******"}
-                    </Table.Cell>
-                    <Table.Cell height={110}>
-                      <div style={this.state.passwordButtonStyle}>
-                        <Button
-                          animated
-                          size="large"
-                          fluid
-                          content={visiblePasswordButton ? "Hide" : "Show"}
-                          onClick={this.togglePasswordVisibility}
-                        >
-                          <Button.Content visible>Edit</Button.Content>
-                          <Button.Content hidden>Change password</Button.Content>
-                        </Button>
-                      </div>
-                      <Transition
-                        visible={visiblePasswordButton}
-                        animation="scale"
-                        duration={1000}
+                <Table.Row>
+                  <Table.Cell width={5}>
+                    <h3>
+                      <b>Naam : </b>
+                    </h3>
+                    {"Tim Prins"}
+                  </Table.Cell>
+                  <Table.Cell height={110}>
+                    <div style={this.state.nameButtonStyle}>
+                      <Button
+                        animated
+                        size="large"
+                        fluid
+                        content={visibleNameButton ? "Hide" : "Show"}
+                        onClick={this.toggleNameVisibility}
                       >
-                        <div style={styles.InputSpacing}>
-                          <Input placeholder="New password" />
-                          <Button color="green">Save</Button>
-                        </div>
-                      </Transition>
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Form>
-          </div>
+                        <Button.Content visible>Edit</Button.Content>
+                        <Button.Content hidden>Verander naam</Button.Content>
+                      </Button>
+                    </div>
+                    <Transition
+                      visible={visibleNameButton}
+                      animation="scale"
+                      duration={1000}
+                    >
+                      <div style={styles.InputSpacing}>
+                        <Input placeholder="Modify name" />
+                        <Button color="green">Save</Button>
+                      </div>
+                    </Transition>
+                  </Table.Cell>
+                </Table.Row>
+
+                <Table.Row>
+                  <Table.Cell width={5}>
+                    <h3>
+                      <b>Wachtwoord : </b>
+                    </h3>
+                    {"*******"}
+                  </Table.Cell>
+                  <Table.Cell height={110}>
+                    <div style={this.state.passwordButtonStyle}>
+                      <Button
+                        animated
+                        size="large"
+                        fluid
+                        content={visiblePasswordButton ? "Hide" : "Show"}
+                        onClick={this.togglePasswordVisibility}
+                      >
+                        <Button.Content visible>Edit</Button.Content>
+                        <Button.Content hidden>Change password</Button.Content>
+                      </Button>
+                    </div>
+                    <Transition
+                      visible={visiblePasswordButton}
+                      animation="scale"
+                      duration={1000}
+                    >
+                      <div style={styles.InputSpacing}>
+                        <Input placeholder="New password" />
+                        <Button color="green">Save</Button>
+                      </div>
+                    </Transition>
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Form>
         </div>
       </AppLayout>
     );
