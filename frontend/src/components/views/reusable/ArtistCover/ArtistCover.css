@@ -5,6 +5,7 @@
   align-items: center;
   width: 200px;
   padding: 10px;
+  border-radius: 50%
 }
 
 .ArtistCover-root:hover {
@@ -15,6 +16,7 @@
   width: 175px;
   height: 175px;
   margin-bottom: 5px;
+  border-radius: 50%
 }
 
 .ArtistCover-name {
