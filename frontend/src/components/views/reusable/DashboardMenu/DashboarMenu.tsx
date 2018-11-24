@@ -20,16 +20,16 @@ class DashboardMenu extends React.Component<IProps> {
             <Menu.Header>Overzicht</Menu.Header>
             <Divider />
             <Menu.Header>Bestellingen</Menu.Header>
-            <NavLink to={"/dashboard/aankoopgeschiedenis"}>
-              <Menu.Item name="Aankoopgeschiedenis" />
+            <NavLink to={"/dashboard/orderhistory"}>
+              <Menu.Item name="Orderhistory" />
             </NavLink>
             <Divider />
             <Menu.Header>Account details</Menu.Header>
-            <NavLink to={"/dashboard/gegevens"}>
-              <Menu.Item name="Mijn gegevens" />
+            <NavLink to={"/dashboard/accountdetails"}>
+              <Menu.Item name="My account details" />
             </NavLink>
-            <NavLink to={"/dashboard/betaalmethoden"}>
-              <Menu.Item name="Mijn betaalmethoden" />
+            <NavLink to={"/dashboard/paymentmethods"}>
+              <Menu.Item name="My payment methods" />
             </NavLink>
           </Menu.Item>
         </Menu>
