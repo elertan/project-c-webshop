@@ -8,6 +8,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Provider } from "unstated";
 import MusicPlayer from "./components/views/reusable/MusicPlayer/MusicPlayer";
 import UserState from "./states/UserState";

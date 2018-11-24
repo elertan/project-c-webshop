@@ -1,6 +1,6 @@
 namespace backend_datamodel.Models 
 {
-    public class ArtistXGenre {
+    public class ArtistXGenre : BaseEntity {
         public int ArtistId { get; set; }
         public Artist Artist { get; set; }
 

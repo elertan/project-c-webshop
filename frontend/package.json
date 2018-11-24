@@ -45,5 +45,11 @@
     "@types/react-router": "^4.0.30",
     "@types/react-router-dom": "^4.3.1",
     "typescript": "^3.0.3"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

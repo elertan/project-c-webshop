@@ -1,6 +1,6 @@
 namespace backend_datamodel.Models 
 {
-    public class AlbumXGenre {
+    public class AlbumXGenre : BaseEntity {
         public int AlbumId { get; set; }
         public Album Album { get; set; }
 

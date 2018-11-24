@@ -1,14 +1,13 @@
 import * as React from 'react';
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Grid } from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import {Query} from "react-apollo";
 import CategoryCover from '../../reusable/CategoryCover/CategoryCover';
 import AlbumCover from '../../reusable/AlbumCover/AlbumCover';
 import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
-// import { Carousel } from 'react-responsive-carousel';
-
-// import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {Carousel} from "react-responsive-carousel";
+import {arrayChunkBy} from "../../../../utils/array";
 
 interface IProps {
   categoryId: number;
@@ -65,7 +64,7 @@ class CategoryDetail extends React.Component<IProps> {
       <AppLayout>
         <h1>Category</h1>
         <Query query={query}>
-          {({ loading, error, data }) => {
+          {({loading, error, data}) => {
             if (loading) {
               return null;
             }
@@ -78,7 +77,7 @@ class CategoryDetail extends React.Component<IProps> {
         </Query>
         <h1>Albums</h1>
         <Query query={dummyAlbumsQuery}>
-          {({ loading, error, data }) => {
+          {({loading, error, data}) => {
             if (loading) {
               return null;
             }
@@ -91,7 +90,7 @@ class CategoryDetail extends React.Component<IProps> {
         </Query>
         <h1>Artists</h1>
         <Query query={dummyArtistsQuery}>
-          {({ loading, error, data }) => {
+          {({loading, error, data}) => {
             if (loading) {
               return null;
             }
@@ -114,42 +113,48 @@ class CategoryDetail extends React.Component<IProps> {
             key={i}
             id={category.id}
             name={category.name}
-            imageSource={category.images.items} />
+            imageSource={category.images.items}
+          />
         )}
       </div>
     )
-  }
+  };
 
   private renderAlbumsDetail = (albums: any[]) => {
     return (
       <div>
-        <div style={{ marginTop: 15 }}>
-          <Grid
-            columns={4}
-            doubling
-          >
-            {albums.map((album: any, i: number) =>
-              <AlbumCover
-                key={i}
-                id={album.id}
-                name={album.name}
-                imageSource={album.images.items} />
+        <div style={{marginTop: 15}}>
+          <Carousel showThumbs={false}>
+            {/*<div>*/}
+              {/*<img*/}
+                {/*src="https://www.dierenbescherming.nl/cache/userfiles/content/Spreekbeurten/Egels/egel_gras.jpg?w=720&fit=max&s=63f878e4d1f88c143ed5bfe07f331d8c"/>*/}
+            {/*</div>*/}
+            {arrayChunkBy(albums, 3).map((chunkedAlbums: any[], i: number) =>
+              <div key={i}>
+                <Grid
+                  columns={4}
+                  doubling
+                >
+                  {chunkedAlbums.map((album: any, i2: number) =>
+                    <AlbumCover
+                      key={i2}
+                      id={album.id}
+                      name={album.name}
+                      imageSource={album.images.items}/>
+                  )}
+                </Grid>
+              </div>
             )}
-          </Grid>
+          </Carousel>
         </div>
-        {/* <Carousel>
-          <div>
-            <img src= "https://www.dierenbescherming.nl/cache/userfiles/content/Spreekbeurten/Egels/egel_gras.jpg?w=720&fit=max&s=63f878e4d1f88c143ed5bfe07f331d8c"/>
-          </div>
-      </Carousel> */}
       </div>
     )
-  }
+  };
 
   private renderArtistsDetail = (artists: any[]) => {
     return (
       <div>
-        <div style={{ marginTop: 15 }}>
+        <div style={{marginTop: 15}}>
           <Grid
             columns={4}
             doubling
@@ -159,7 +164,7 @@ class CategoryDetail extends React.Component<IProps> {
                 key={i}
                 id={artist.id}
                 name={artist.name}
-                imageSource={artist.images.items} />
+                imageSource={artist.images.items}/>
             )}
           </Grid>
         </div>
