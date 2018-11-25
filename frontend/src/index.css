@@ -16,3 +16,12 @@ a {
 a:hover {
   text-decoration: underline !important;
 }
+
+/* Overwrite background color style carousel */
+.carousel .slide {
+  background: none !important;
+}
+
+.carousel.carousel-slider .control-arrow {
+  background: #000 !important;
+}

@@ -124,13 +124,20 @@ class CategoryDetail extends React.Component<IProps> {
     return (
       <div>
         <div style={{marginTop: 15}}>
-          <Carousel showThumbs={false}>
+          <Carousel
+            showThumbs={false}
+            showIndicators={false}
+            autoPlay
+            infiniteLoop
+            interval={4000}
+            showStatus={false}
+          >
             {/*<div>*/}
               {/*<img*/}
                 {/*src="https://www.dierenbescherming.nl/cache/userfiles/content/Spreekbeurten/Egels/egel_gras.jpg?w=720&fit=max&s=63f878e4d1f88c143ed5bfe07f331d8c"/>*/}
             {/*</div>*/}
-            {arrayChunkBy(albums, 3).map((chunkedAlbums: any[], i: number) =>
-              <div key={i}>
+            {arrayChunkBy(albums, 4).map((chunkedAlbums: any[], i: number) =>
+              <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
                 <Grid
                   columns={4}
                   doubling
