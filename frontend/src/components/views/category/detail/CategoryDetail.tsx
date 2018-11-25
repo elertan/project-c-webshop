@@ -3,15 +3,26 @@ import AppLayout from "../../layout/AppLayout/AppLayout";
 import {Grid} from "semantic-ui-react";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import CategoryCover from '../../reusable/CategoryCover/CategoryCover';
 import AlbumCover from '../../reusable/AlbumCover/AlbumCover';
 import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
 import {Carousel} from "react-responsive-carousel";
 import {arrayChunkBy} from "../../../../utils/array";
+import albumDetailStyle, {StyleProps} from "../../album/detail/AlbumDetailStyle";
+import {withStyles} from "@material-ui/core";
 
-interface IProps {
+interface IProps extends StyleProps {
   categoryId: number;
 }
+
+// const styles = {
+//   actionsContainer: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//     marginBottom: 30,
+//     padding: 20,
+//     backgroundColor: 'rgb(243, 243, 243)'
+//   }
+// };
 
 class CategoryDetail extends React.Component<IProps> {
   public render() {
@@ -62,7 +73,6 @@ class CategoryDetail extends React.Component<IProps> {
 
     return (
       <AppLayout>
-        <h1>Category</h1>
         <Query query={query}>
           {({loading, error, data}) => {
             if (loading) {
@@ -84,7 +94,7 @@ class CategoryDetail extends React.Component<IProps> {
             if (error) {
               return <span>{error.message}</span>
             }
-            console.log(data);
+            // console.log(data);
             return <div>{this.renderAlbumsDetail(data.albums.items)}</div>
           }}
         </Query>
@@ -97,7 +107,7 @@ class CategoryDetail extends React.Component<IProps> {
             if (error) {
               return <span>{error.message}</span>
             }
-            console.log(data);
+            // console.log(data);
             return <div>{this.renderArtistsDetail(data.artists.items)}</div>
           }}
         </Query>
@@ -106,16 +116,25 @@ class CategoryDetail extends React.Component<IProps> {
   }
 
   private renderDetail = (categories: any[]) => {
+    const classes = this.props.classes!;
+    const categoryName = categories[0].name;
+    // const categoryId = categories[0].id;
+    const categoryImg = categories[0].images.items[0].url;
+    
     return (
-      <div>
-        {categories.map((category: any, i: number) =>
-          <CategoryCover
-            key={i}
-            id={category.id}
-            name={category.name}
-            imageSource={category.images.items}
-          />
-        )}
+      <div style={{marginTop: 50}}>
+        <div
+          className={classes.albumContainerBackground}
+          style={{backgroundImage: `url(${categoryImg})`}}
+        />
+        <div className={classes.albumInnerContainerDarkenLayer}/>
+        <div className={classes.albumContainer}>
+          <div className={classes.albumInnerContainer}>
+            <img className={classes.image} src={categoryImg}/>
+            <div className={classes.title}>{categoryName}</div>
+            {/* <div className={classes.artistsText}>{allArtistNamesStr}</div> */}
+          </div>
+        </div>
       </div>
     )
   };
@@ -132,10 +151,6 @@ class CategoryDetail extends React.Component<IProps> {
             interval={4000}
             showStatus={false}
           >
-            {/*<div>*/}
-              {/*<img*/}
-                {/*src="https://www.dierenbescherming.nl/cache/userfiles/content/Spreekbeurten/Egels/egel_gras.jpg?w=720&fit=max&s=63f878e4d1f88c143ed5bfe07f331d8c"/>*/}
-            {/*</div>*/}
             {arrayChunkBy(albums, 4).map((chunkedAlbums: any[], i: number) =>
               <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
                 <Grid
@@ -162,22 +177,35 @@ class CategoryDetail extends React.Component<IProps> {
     return (
       <div>
         <div style={{marginTop: 15}}>
-          <Grid
-            columns={4}
-            doubling
+        <Carousel
+            showThumbs={false}
+            showIndicators={false}
+            autoPlay
+            infiniteLoop
+            interval={4000}
+            showStatus={false}
           >
-            {artists.map((artist: any, i: number) =>
-              <ArtistCover
-                key={i}
-                id={artist.id}
-                name={artist.name}
-                imageSource={artist.images.items}/>
+            {arrayChunkBy(artists, 4).map((chunkedArtists: any[], i: number) =>
+              <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+                <Grid
+                  columns={4}
+                  doubling
+                >
+                  {chunkedArtists.map((artist: any, i2: number) =>
+                    <ArtistCover
+                      key={i2}
+                      id={artist.id}
+                      name={artist.name}
+                      imageSource={artist.images.items}/>
+                  )}
+                </Grid>
+              </div>
             )}
-          </Grid>
+          </Carousel>
         </div>
       </div>
     )
   }
 }
 
-export default CategoryDetail;
+export default withStyles(albumDetailStyle)(CategoryDetail);
