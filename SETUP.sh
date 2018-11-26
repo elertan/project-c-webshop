@@ -11,8 +11,8 @@ dotnet build
 echo "Updating database with latest structure"
 dotnet ef database update
 
-echo "Run filling tool"
-cd ../database-filling-tool
+echo "Run filling tool v2"
+cd ../database-filling-tool-v2
 dotnet run
 
 echo "If nothing failed, assume everything worked"
