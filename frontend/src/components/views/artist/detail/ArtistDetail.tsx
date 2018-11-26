@@ -89,6 +89,7 @@ class ArtistDetail extends React.Component<IProps> {
               return <span>{error.message}</span>;
             }
             const artistData = data.artists.items[0];
+            console.log(artistData);
             const albumsWithDuplicates = data.artists.items[0].albums.items;
             const albumsFiltered = Array.from(new Set(albumsWithDuplicates))
             artistData.albums.items = albumsFiltered;

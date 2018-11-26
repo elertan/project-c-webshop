@@ -36,6 +36,15 @@ namespace backend.Schemas.Types
                     e => e.Id,
                     (_, e) => e)
             );
+
+            AddQueryConnectionField<CategoryGraph, Category>(
+                "categories",
+                resolve: ctx => db.AlbumXCategories.Where(e => e.AlbumId == ctx.Source.Id).Join(
+                    db.Categories,
+                    e => e.CategoryId,
+                    e => e.Id,
+                    (_, e) => e)
+            );
         }
     }
 }
