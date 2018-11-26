@@ -56,9 +56,11 @@ namespace backend_filling_tool_v2
                     _logger.Log($"Trying to remove all data from {tableName}", LogLevel.Verbose);
                     try
                     {
-                        var task = await db.Database.ExecuteSqlCommandAsync($"TRUNCATE TABLE \"{tableName}\"");
-                        _logger.Log($"Removed data for table {tableName}", LogLevel.Verbose);
-                        return task;
+                        // TODO: Remove table contents
+                        return await Task.FromResult(0);
+//                        var task = await db.Database.ExecuteSqlCommandAsync($"TRUNCATE TABLE \"{tableName}\"");
+//                        _logger.Log($"Removed data for table {tableName}", LogLevel.Verbose);
+//                        return task;
                     }
                     catch (Exception ex)
                     {
@@ -139,9 +141,54 @@ namespace backend_filling_tool_v2
                 await db.Artists.AddRangeAsync(artists);
                 await db.SaveChangesAsync();
                 _logger.Log("Saved artist entities to database");
-                
                 _logger.Log("Creating many-to-many relationships between the tables");
                 
+                _logger.Log("Creating Album X Track relationships...");
+                var albumXTracks = relationalStructure.Select(x => x.tracks.Select(t => new AlbumXTrack
+                {
+                    Track = tracks.First(track => track.SpotifyId == t.track.SpotifyId),
+                    Album = albums.First(album => album.SpotifyId == t.album.SpotifyId)
+                }))
+                    .SelectMany(x => x)
+                    .DistinctBy(x => $"{x.Album.SpotifyId}{x.Track.SpotifyId}");
+                await db.AddRangeAsync(albumXTracks);
+                await db.SaveChangesAsync();
+                _logger.Log("Created Album X Track relationships!");
+                
+                _logger.Log("Creating Artist X Track relationships...");
+                var artistXTracks = artists.Select(a =>
+                {
+                    var trs = relationalStructure.Select(x =>
+                            x.tracks.Where(t => t.artists.Any(ar => ar.SpotifyId == a.SpotifyId)).Select(e => tracks.First(tr => tr.SpotifyId == e.track.SpotifyId)))
+                        .SelectMany(x => x)
+                        .DistinctBy(x => x.SpotifyId);
+                    return trs.Select(x => new ArtistXTrack
+                    {
+                        Track = x,
+                        Artist = a
+                    });
+                })
+                    .SelectMany(x => x)
+                    .DistinctBy(x => $"{x.Artist.SpotifyId}{x.Track.SpotifyId}");
+                await db.AddRangeAsync(artistXTracks);
+                await db.SaveChangesAsync();
+                _logger.Log("Created Artist X Track relationships!");
+                
+                _logger.Log("Creating Album X Category relationships...");
+                var albumXCategories = albums.Select(a =>
+                {
+                    var ctgrs = relationalStructure.Where(rs => rs.tracks.Any(tr => tr.album.SpotifyId == a.SpotifyId)).Select(x => categories.First(c => c.SpotifyId == x.category.SpotifyId));
+                    return ctgrs.Select(ctgr => new AlbumXCategory
+                    {
+                        Album = a,
+                        Category = ctgr
+                    });
+                })
+                    .SelectMany(x => x)
+                    .DistinctBy(x => $"{x.Category.SpotifyId}{x.Album.SpotifyId}");
+                await db.AddRangeAsync(albumXCategories);
+                await db.SaveChangesAsync();
+                _logger.Log("Created Album X Category relationships!");
             }
         }
 
