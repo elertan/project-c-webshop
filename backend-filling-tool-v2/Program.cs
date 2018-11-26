@@ -8,7 +8,7 @@ namespace backend_filling_tool_v2
     {
         public static ServiceProvider ServiceProvider;
 
-        static async Task<int> Main(string[] args)
+        public static async Task<int> MainAsync(string[] args)
         {
             var serviceCollection = new ServiceCollection();
             RegisterServices(serviceCollection);
@@ -23,6 +23,7 @@ namespace backend_filling_tool_v2
 
                 var databaseFiller = ServiceProvider.GetService<IDatabaseFiller>();
                 await databaseFiller.FillWith(dataset);
+                logger.Log("Finished!");
             }
             catch (Exception ex)
             {
