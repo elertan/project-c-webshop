@@ -10,6 +10,5 @@ namespace backend_datamodel.Models
 //        public IList<Track> Tracks { get; set; }
 //        public IList<Album> Albums { get; set; }
         public IList<ArtistXTrack> ArtistXTracks { get; set; }
-        public IList<ArtistXGenre> ArtistXGenres { get; set; }
     }
 }

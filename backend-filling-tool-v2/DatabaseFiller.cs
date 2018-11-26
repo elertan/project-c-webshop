@@ -139,6 +139,9 @@ namespace backend_filling_tool_v2
                 await db.Artists.AddRangeAsync(artists);
                 await db.SaveChangesAsync();
                 _logger.Log("Saved artist entities to database");
+                
+                _logger.Log("Creating many-to-many relationships between the tables");
+                
             }
         }
 
