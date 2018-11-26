@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import {Query} from "react-apollo";
 import {Grid} from "semantic-ui-react";
 import AlbumCover from '../../reusable/AlbumCover/AlbumCover';
-// import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
+import ArtistCover from "../../reusable/ArtistCover/ArtistCover";
 import {Carousel} from "react-responsive-carousel";
 import {arrayChunkBy} from "../../../../utils/array";
 import albumDetailStyle, {StyleProps} from "../../album/detail/AlbumDetailStyle";
@@ -76,21 +76,19 @@ class CategoryDetail extends React.Component<IProps> {
             if (error) {
               return <span>{error.message}</span>
             }
-            // console.log(data);
-
             const CategoryBannerData = data.categories.items;
             const CategoryAlbumData = data.categories.items[0].albums.items;
-            const CategoryArtistData = data.categories.items[0].albums.items.map((album: any) =>
-              album.tracks.items[0]
-            )
-
-            console.log("Tracks", CategoryArtistData);
+            const CategoryArtistData = data.categories.items[0].albums.items.map(
+              (album: any) => album.tracks.items[0])
+            const AllArtists = CategoryArtistData.map((track: any) => track.artists)
 
             return (
               <div>
                 <div>{this.renderCategoryBannerDetail(CategoryBannerData)}</div>
+                <h1>Albums</h1>
                 <div>{this.renderCategoryAlbumsDetail(CategoryAlbumData)}</div>
-                {/* <div>{this.renderCategoryArtistsDetail(CategoryArtistData)}</div>} */}
+                <h1>Artists</h1>
+                <div>{this.renderCategoryArtistsDetail(AllArtists)}</div>
               </div>
             )
           }}
@@ -102,7 +100,6 @@ class CategoryDetail extends React.Component<IProps> {
   private renderCategoryBannerDetail = (categories: any[]) => {
     const classes = this.props.classes!;
     const categoryName = categories[0].name;
-    // const categoryId = categories[0].id;
     const categoryImg = categories[0].images.items[0].url;
     
     return (
@@ -116,7 +113,6 @@ class CategoryDetail extends React.Component<IProps> {
           <div className={classes.albumInnerContainer}>
             <img className={classes.image} src={categoryImg}/>
             <div className={classes.title}>{categoryName}</div>
-            {/* <div className={classes.artistsText}>{allArtistNamesStr}</div> */}
           </div>
         </div>
       </div>
@@ -157,39 +153,47 @@ class CategoryDetail extends React.Component<IProps> {
     )
   };
 
-  // private renderCategoryArtistsDetail = (artists: any[]) => {
-  //   return (
-  //     <div>
-  //       <div style={{marginTop: 15}}>
-  //       <Carousel
-  //           showThumbs={false}
-  //           showIndicators={false}
-  //           autoPlay
-  //           infiniteLoop
-  //           interval={4000}
-  //           showStatus={false}
-  //         >
-  //           {arrayChunkBy(artists, 4).map((chunkedArtists: any[], i: number) =>
-  //             <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-  //               <Grid
-  //                 columns={4}
-  //                 doubling
-  //               >
-  //                 {chunkedArtists.map((artist: any, i2: number) =>
-  //                   <ArtistCover
-  //                     key={i2}
-  //                     id={artist.id}
-  //                     name={artist.name}
-  //                     imageSource={artist.images.items}/>
-  //                 )}
-  //               </Grid>
-  //             </div>
-  //           )}
-  //         </Carousel>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  private renderCategoryArtistsDetail = (artists: any[]) => {
+    const artistDataWithDuplicates = artists.map(
+      (artistObject: any) => artistObject.items.map(
+       (artist: any) => artist))
+       .reduce((prev: string[], curr: string[]) => [...prev, ...curr]);
+    
+    const artistData = Array.from(new Set(artistDataWithDuplicates));
+
+    return (
+      <div>
+        <div style={{marginTop: 15}}>
+        <Carousel
+            showThumbs={false}
+            showIndicators={false}
+            autoPlay
+            infiniteLoop
+            interval={4000}
+            showStatus={false}
+          >
+            {arrayChunkBy(artistData, 4).map((chunkedArtists: any[], i: number) =>
+              <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+                <Grid
+                  columns={4}
+                  doubling
+                >
+                  {chunkedArtists.map((artist: any, i2: number) =>
+                    <ArtistCover
+                      key={i2}
+                      id={artist.id}
+                      name={artist.name}
+                      imageSource={artist.images.items}
+                      />
+                  )}
+                </Grid>
+              </div>
+            )}
+          </Carousel>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default withStyles(albumDetailStyle)(CategoryDetail);
