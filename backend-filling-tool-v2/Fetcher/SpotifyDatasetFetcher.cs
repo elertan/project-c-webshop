@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using backend_filling_tool_v2.SpotifyDTOs;
+using MoreLinq;
+using Artist = backend_filling_tool_v2.SpotifyDTOs.Extended.Artist;
 
 namespace backend_filling_tool_v2
 {
@@ -50,11 +52,22 @@ namespace backend_filling_tool_v2
             var albumByTracks = await GetAlbumsForTracks(allTracks);
             _logger.Log("Received albums for tracks");
 
+            var fullArtists = await _spotifyApi.GetArtists(
+                tracksByPlaylists.Select(kvp =>
+                    kvp.Value.Select(
+                        t => t.Artists.Select(
+                            a => a.Id
+                        )
+                    )
+                ).SelectMany(x => x).SelectMany(x => x).DistinctBy(x => x).ToList()
+            );
+
             var spotifyDataset = BuildDataset(
                 categories,
                 playlistsByCategories,
                 tracksByPlaylists,
-                albumByTracks
+                albumByTracks,
+                fullArtists
             );
 
             _logger.Log("Fetching finished", LogLevel.Verbose);
@@ -65,14 +78,16 @@ namespace backend_filling_tool_v2
             List<Category> categories,
             Dictionary<Category, List<Playlist>> playlistsByCategories,
             Dictionary<Playlist, List<Track>> tracksByPlaylists,
-            Dictionary<Track, Album> albumByTracks
+            Dictionary<Track, Album> albumByTracks,
+            List<Artist> fullArtists
         )
         {
             var dataset = new SpotifyDataset
             {
                 Categories = categories,
                 PlaylistsByCategories = playlistsByCategories,
-                TracksByPlaylists = tracksByPlaylists
+                TracksByPlaylists = tracksByPlaylists,
+                FullArtists = fullArtists
             };
 
             return dataset;

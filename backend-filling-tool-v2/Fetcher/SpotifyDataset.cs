@@ -9,5 +9,6 @@ namespace backend_filling_tool_v2
         public List<Category> Categories;
         public Dictionary<Category, List<Playlist>> PlaylistsByCategories;
         public Dictionary<Playlist, List<Track>> TracksByPlaylists;
+        public List<Artist> FullArtists;
     }
 }

@@ -134,9 +134,8 @@ namespace backend_filling_tool_v2
                 await db.SaveChangesAsync();
                 _logger.Log("Stored album entities in database");
 
-                var artists = relationalStructure.Select(x => x.tracks.Select(t => t.artists).SelectMany(x1 => x1))
-                    .SelectMany(x => x)
-                    .DistinctBy(x => x.SpotifyId);
+                var artists = dataset.FullArtists.Select(ExtractFullArtist);
+                
                 _logger.Log("Created artist entities");
                 await db.Artists.AddRangeAsync(artists);
                 await db.SaveChangesAsync();
@@ -242,6 +241,16 @@ namespace backend_filling_tool_v2
             {
                 Name = sArtist.Name,
                 SpotifyId = sArtist.Id
+            };
+        }
+        
+        private Artist ExtractFullArtist(SpotifyDTOs.Extended.Artist sArtist)
+        {
+            return new Artist
+            {
+                Name = sArtist.Name,
+                SpotifyId = sArtist.Id,
+                Images = sArtist.Images.Select(ExtractImage).ToList()
             };
         }
     }
