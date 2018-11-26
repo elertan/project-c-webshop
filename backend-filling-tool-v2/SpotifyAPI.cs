@@ -10,6 +10,8 @@ using backend_filling_tool_v2.APIResponses;
 using backend_filling_tool_v2.SpotifyDTOs;
 using Newtonsoft.Json;
 
+using Artist = backend_filling_tool_v2.SpotifyDTOs.Extended.Artist;
+
 namespace backend_filling_tool_v2
 {
     public interface ISpotifyAPI
@@ -19,6 +21,7 @@ namespace backend_filling_tool_v2
         Task<List<Playlist>> GetCategoryPlaylists(string categoryId, int limit = 10);
         Task<List<Track>> GetTracksForPlaylist(string playlistId);
         Task<List<Album>> GetAlbums(List<string> albumIds);
+        Task<List<Artist>> GetArtists(List<string> artistIds);
     }
     
     public class SpotifyAPI : ISpotifyAPI
@@ -117,6 +120,22 @@ namespace backend_filling_tool_v2
                 var response = await _httpClient.GetStringAsync(GetUrl($"/albums", $"market=NL&ids={idsStr}"));
                 var result = JsonConvert.DeserializeObject<GetAlbumsForTracksResponse>(response);
                 return result.Albums;
+            });
+            await Task.WhenAll(tasks);
+            return tasks.Select(task => task.Result).SelectMany(x => x).ToList();
+        }
+
+        public async Task<List<Artist>> GetArtists(List<string> artistIds)
+        {
+            _logger.Log("GetArtists", LogLevel.Verbose);
+            // Separate in chunks due to Spotify limit
+            var chunks = artistIds.ChunkBy(10);
+            var tasks = chunks.Select(async ids =>
+            {
+                var idsStr = ids.Aggregate((curr, next) => $"{curr},{next}");
+                var response = await _httpClient.GetStringAsync(GetUrl($"/artists", $"ids={idsStr}"));
+                var result = JsonConvert.DeserializeObject<GetArtistsResponse>(response);
+                return result.Artists;
             });
             await Task.WhenAll(tasks);
             return tasks.Select(task => task.Result).SelectMany(x => x).ToList();
