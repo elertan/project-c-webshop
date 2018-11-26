@@ -100,7 +100,7 @@ namespace backend_filling_tool_v2
         public async Task<List<Track>> GetTracksForPlaylist(string playlistId)
         {
             _logger.Log($"GetTracksForPlaylist: {playlistId}", LogLevel.Verbose);
-            var response = await _httpClient.GetStringAsync(GetUrl($"/playlists/{playlistId}/tracks", "fields=items(track(name,explicit,disc_number,duration_ms,preview_url,artists(id,name,type),album(id,name,images,artists,album_type)))"));
+            var response = await _httpClient.GetStringAsync(GetUrl($"/playlists/{playlistId}/tracks", "fields=items(track(id,name,explicit,disc_number,duration_ms,preview_url,artists(id,name,type),album(id,name,images,artists,album_type)))"));
 
             var result = JsonConvert.DeserializeObject<GetTracksForPlaylistResponse>(response);
             return result.Items.Select(item => item.Track).ToList();

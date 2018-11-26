@@ -12,13 +12,16 @@ namespace backend_filling_tool_v2
     {
         Task FillWith(SpotifyDataset dataset);
     }
-    
+
     public class DatabaseFiller : IDatabaseFiller
     {
         private readonly ILogger _logger;
         private readonly IEnvVariables _envVariables;
 
-        private readonly float[] _trackPrices = {
+        private readonly Random _rnd = new Random();
+
+        private readonly float[] _trackPrices =
+        {
             0.69f,
             0.79f,
             0.85f,
@@ -31,17 +34,17 @@ namespace backend_filling_tool_v2
             _logger = logger;
             _envVariables = envVariables;
         }
-        
+
         public async Task FillWith(SpotifyDataset dataset)
         {
             _logger.Log("Connecting to the database...");
-            
+
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
             builder.UseNpgsql(_envVariables.DbConnectionString);
             using (var db = new DatabaseContext(builder.Options))
             {
                 _logger.Log("Connected to the database!");
-                
+
                 _logger.Log("Removing current stored data...");
                 var tableNames = typeof(DatabaseContext).GetProperties().Where(prop =>
                         prop.PropertyType.IsGenericType &&
@@ -53,13 +56,13 @@ namespace backend_filling_tool_v2
                     _logger.Log($"Trying to remove all data from {tableName}", LogLevel.Verbose);
                     try
                     {
-                        var task = await db.Database.ExecuteSqlCommandAsync($"TRUNCATE TABLE [{tableName}]");
+                        var task = await db.Database.ExecuteSqlCommandAsync($"TRUNCATE TABLE \"{tableName}\"");
                         _logger.Log($"Removed data for table {tableName}", LogLevel.Verbose);
                         return task;
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        _logger.Log($"Failed to remove data for {tableName}", LogLevel.Warning);
+                        _logger.Log($"Failed to remove data for {tableName}\n\n{ex}\n", LogLevel.Warning);
                         return await Task.FromResult(0);
                     }
                 });
@@ -85,12 +88,12 @@ namespace backend_filling_tool_v2
                                 Width = e.Width
                             }).ToList()
                         },
-                        sPlaylists = dataset.PlaylistsByCategories[sCategory]
+                        sPlaylists = dataset.PlaylistsByCategories.First(pbc => pbc.Key.Id == sCategory.Id).Value
                     })
                     .Select(rs1 => new
                     {
                         rs1.category,
-                        sTracks = rs1.sPlaylists.Select(sPlaylist => dataset.TracksByPlaylists[sPlaylist])
+                        sTracks = rs1.sPlaylists.Select(sPlaylist => dataset.TracksByPlaylists.First(tbp => tbp.Key.Id == sPlaylist.Id).Value)
                             .SelectMany(x => x)
                             .DistinctBy(x => x.Id)
                     })
@@ -112,22 +115,22 @@ namespace backend_filling_tool_v2
                 await db.Categories.AddRangeAsync(categories);
                 await db.SaveChangesAsync();
                 _logger.Log("Saved category entities to database");
-                
+
                 var tracks = relationalStructure.Select(x => x.tracks.Select(t => t.track))
                     .SelectMany(x => x)
                     .DistinctBy(x => x.SpotifyId);
                 _logger.Log("Created track entities");
-                await db.Tracks.AddRangeAsync(tracks);
+                await db.AddRangeAsync(tracks);
                 await db.SaveChangesAsync();
-                _logger.Log("Saved track entities to database");
-                
+                _logger.Log("Stored track entities in database");
+
                 var albums = relationalStructure.Select(x => x.tracks.Select(t => t.album))
                     .SelectMany(x => x)
                     .DistinctBy(x => x.SpotifyId);
                 _logger.Log("Created album entities");
-                await db.Albums.AddRangeAsync(albums);
+                await db.AddRangeAsync(albums);
                 await db.SaveChangesAsync();
-                _logger.Log("Saved album entities to database");
+                _logger.Log("Stored album entities in database");
 
                 var artists = relationalStructure.Select(x => x.tracks.Select(t => t.artists).SelectMany(x1 => x1))
                     .SelectMany(x => x)
@@ -136,27 +139,6 @@ namespace backend_filling_tool_v2
                 await db.Artists.AddRangeAsync(artists);
                 await db.SaveChangesAsync();
                 _logger.Log("Saved artist entities to database");
-                
-                _logger.Log("Generating product entities");
-                var products = new List<Product>(tracks.Count() + albums.Count());
-                var rnd = new Random();
-                
-                products.AddRange(tracks.Select(track => new Product
-                {
-                    Price = _trackPrices[rnd.Next(0, _trackPrices.Length - 1)],
-                }));
-                _logger.Log("Generated product entities for tracks");
-                
-                products.AddRange(albums.Select(album => new Product
-                {
-                    // TODO: Implement logic for album price
-                    Price = 1337f
-                }));
-                _logger.Log("Generated product entities for albums");
-
-                await db.AddRangeAsync(products);
-                await db.SaveChangesAsync();
-                _logger.Log("Saved products entities to database");
             }
         }
 
@@ -179,27 +161,29 @@ namespace backend_filling_tool_v2
                 DurationMs = sTrack.DurationMs,
                 PreviewUrl = sTrack.PreviewUrl,
                 SpotifyId = sTrack.Id,
+                Product = new Product
+                {
+                    Price = _trackPrices[_rnd.Next(0, _trackPrices.Length - 1)],
+                }
             };
         }
 
         private Album ExtractAlbum(SpotifyDTOs.Album sAlbum)
         {
-            try
+            return new Album
             {
-                return new Album
+                Label = sAlbum.Label,
+                Name = sAlbum.Name,
+                Popularity = sAlbum.Popularity,
+                AlbumType = sAlbum.AlbumType,
+                SpotifyId = sAlbum.Id,
+                Images = sAlbum.Images.Select(ExtractImage).ToList(),
+                Product = new Product
                 {
-                    Label = sAlbum.Label,
-                    Name = sAlbum.Name,
-                    Popularity = sAlbum.Popularity,
-                    AlbumType = sAlbum.AlbumType,
-                    SpotifyId = sAlbum.Id,
-                    Images = sAlbum.Images.Select(ExtractImage).ToList()
-                };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+                    // TODO: Implement logic
+                    Price = 10f
+                }
+            };
         }
 
         private Artist ExtractArtist(SpotifyDTOs.Artist sArtist)

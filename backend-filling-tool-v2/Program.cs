@@ -8,7 +8,7 @@ namespace backend_filling_tool_v2
     {
         public static ServiceProvider ServiceProvider;
 
-        public static async Task<int> MainAsync(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             var serviceCollection = new ServiceCollection();
             RegisterServices(serviceCollection);
