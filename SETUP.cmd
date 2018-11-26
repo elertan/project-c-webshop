@@ -13,8 +13,8 @@ dotnet build
 ECHO Updating database with latest structure
 dotnet ef database update
 
-ECHO Run filling tool
-cd ../database-filling-tool
+ECHO Run filling tool v2
+cd ../database-filling-tool-v2
 dotnet run
 
 ECHO If nothing failed, assume everything worked : )

@@ -13,7 +13,7 @@ interface IProps {
 
 const CategoryCover: React.SFC<IProps> = (props: IProps) => {
   return (
-    <Link to={`/genre/${props.id}`}>
+    <Link to={`/category/${props.id}`}>
       <div
         className="CategoryCover-root"
       >
@@ -31,7 +31,7 @@ const CategoryCover: React.SFC<IProps> = (props: IProps) => {
             src="default?"
           />
         }
-        <Typography className="GategoryCover-name">{props.name}</Typography>
+        <Typography className="CategoryCover-name">{props.name}</Typography>
       </div>
     </Link>
   );
