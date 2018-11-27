@@ -1,8 +1,7 @@
 const styles = {
     SideMenu: {
         display: "inline-block",
-        margin: "0",
-        padding: "3%",
+        padding: "3%"
       }
   };
   

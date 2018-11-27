@@ -5,19 +5,16 @@ const styles = {
     padding: "3%"
   },
   ButtonPosition: {
-    display: "none",
-    zIndex: -1
-  },
-  TablePosition: {
-    width: "100%"
+    display: "none"
   },
 
   InputSpacing: {
-    
+    paddingLeft: "3%",
   },
 
   NotClicked: {
-    display: "block"
+    display: "block",
+    paddingLeft: "3%"
   },
 
   Clicked: {
