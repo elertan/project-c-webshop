@@ -1,15 +1,8 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, Divider } from "semantic-ui-react";
-
+import styles from "./DashboardMenuStyles";
 interface IProps {}
-
-const styles = {
-  SideMenu: {
-    display: "inline-block",
-    margin: "0 5% 0 0"
-  }
-};
 
 class DashboardMenu extends React.Component<IProps> {
   public render() {
@@ -17,9 +10,12 @@ class DashboardMenu extends React.Component<IProps> {
       <div style={styles.SideMenu}>
         <Menu vertical>
           <Menu.Item>
-            <Menu.Header>Overzicht</Menu.Header>
+          <Menu.Header>Overview</Menu.Header>
+            <NavLink to={"/dashboard/overview"}>
+            <Menu.Item name="Overview" />
+            </NavLink>
             <Divider />
-            <Menu.Header>Bestellingen</Menu.Header>
+            <Menu.Header>Orders</Menu.Header>
             <NavLink to={"/dashboard/orderhistory"}>
               <Menu.Item name="Orderhistory" />
             </NavLink>
