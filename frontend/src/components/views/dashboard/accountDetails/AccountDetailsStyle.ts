@@ -7,9 +7,13 @@ const styles = {
   ButtonPosition: {
     display: "none"
   },
+  SaveButtonPosition: {
+    marginLeft: "3%",
+    display: "inline"
+  },
 
   InputSpacing: {
-    paddingLeft: "3%",
+    paddingLeft: "3%"
   },
 
   NotClicked: {

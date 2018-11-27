@@ -3,6 +3,7 @@ import AppLayout from "../../layout/AppLayout/AppLayout";
 import { Table, Form, Button, Transition, Input } from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
+import { NavLink } from "react-router-dom";
 
 class AccountDetails extends React.Component {
   public state = {
@@ -11,15 +12,12 @@ class AccountDetails extends React.Component {
 
     visibleEmail: false,
     visibleName: false,
-    visiblePassword: false,
 
     visibleEmailButton: false,
     visibleNameButton: false,
-    visiblePasswordButton: false,
 
     EMailButtonStyle: styles.NotClicked,
-    nameButtonStyle: styles.NotClicked,
-    passwordButtonStyle: styles.NotClicked
+    nameButtonStyle: styles.NotClicked
   };
 
   public toggleEmailVisibility = () =>
@@ -36,17 +34,9 @@ class AccountDetails extends React.Component {
       nameButtonStyle: styles.Clicked
     });
 
-  public togglePasswordVisibility = () =>
-    this.setState({
-      visiblePassword: !this.state.visiblePassword,
-      visiblePasswordButton: !this.state.visiblePasswordButton,
-      passwordButtonStyle: styles.Clicked
-    });
-
   public render() {
     const { visibleEmailButton } = this.state;
     const { visibleNameButton } = this.state;
-    const { visiblePasswordButton } = this.state;
     return (
       <AppLayout>
         <DashboardMenu />
@@ -81,7 +71,9 @@ class AccountDetails extends React.Component {
                     >
                       <div style={styles.InputSpacing}>
                         <Input placeholder="New E-mail" />
-                        <Button color="green">Save</Button>
+                        <div style={styles.SaveButtonPosition}>
+                          <Button color="green">Save</Button>
+                        </div>
                       </div>
                     </Transition>
                   </Table.Cell>
@@ -114,7 +106,9 @@ class AccountDetails extends React.Component {
                     >
                       <div style={styles.InputSpacing}>
                         <Input placeholder="Modify name" />
-                        <Button color="green">Save</Button>
+                        <div style={styles.SaveButtonPosition}>
+                          <Button color="green">Save</Button>
+                        </div>
                       </div>
                     </Transition>
                   </Table.Cell>
@@ -128,28 +122,16 @@ class AccountDetails extends React.Component {
                     {"*******"}
                   </Table.Cell>
                   <Table.Cell>
-                    <div style={this.state.passwordButtonStyle}>
-                      <Button
-                        animated
-                        size="large"
-                        fluid
-                        content={visiblePasswordButton ? "Hide" : "Show"}
-                        onClick={this.togglePasswordVisibility}
-                      >
-                        <Button.Content visible>Edit</Button.Content>
-                        <Button.Content hidden>Change password</Button.Content>
-                      </Button>
+                    <div style={styles.NotClicked}>
+                      <NavLink to={"/dashboard/accountdetails/passwordreset"}>
+                        <Button animated size="large" fluid>
+                          <Button.Content visible>Edit</Button.Content>
+                          <Button.Content hidden>
+                            Change password
+                          </Button.Content>
+                        </Button>
+                      </NavLink>
                     </div>
-                    <Transition
-                      visible={visiblePasswordButton}
-                      animation="scale"
-                      duration={1000}
-                    >
-                      <div style={styles.InputSpacing}>
-                        <Input placeholder="New password" />
-                        <Button color="green">Save</Button>
-                      </div>
-                    </Transition>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
