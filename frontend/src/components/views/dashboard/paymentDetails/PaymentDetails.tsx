@@ -1,7 +1,15 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Dropdown, Form, Table } from "semantic-ui-react";
+import { Dropdown, Table } from "semantic-ui-react";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
+
+const styles = {
+  DashboardPositioning: {
+    display: "inline-block",
+    width: "60%",
+    padding: "3%"
+  }
+};
 
 class PaymentDetails extends React.Component {
   public state = {};
@@ -10,39 +18,35 @@ class PaymentDetails extends React.Component {
     return (
       <AppLayout>
         <DashboardMenu />
-        <Form>
+        <div style={styles.DashboardPositioning}>
           <Table>
             <Table.Body>
               <Table.Row>
                 <Table.Cell>
-                  <h1>Ideal</h1>
-                </Table.Cell>
-                <Table.Cell>
-                  <Dropdown
-                    text="Filter Posts"
-                    icon="filter"
-                    floating
-                    labeled
-                    button
-                    className="icon"
-                  >
+                  <Dropdown text="Choose your bank">
                     <Dropdown.Menu>
+                      <Dropdown.Item text="ING" />
                       <Dropdown.Divider />
-                      <Dropdown.Header icon="tags" content="Kies uw bank" />
-                      <Dropdown.Menu scrolling>
-                        <h1> Ideal </h1>
-                        <h1> Ideal </h1>
-                        <h1> Ideal </h1>
-                        <h1> Ideal </h1>
-                      </Dropdown.Menu>
+                      <Dropdown.Item text="Rabobank" />
+                      <Dropdown.Item text="ABN" />
                     </Dropdown.Menu>
                   </Dropdown>
                 </Table.Cell>
+                <Table.Cell />
+              </Table.Row>
+
+              <Table.Row>
+                <Table.Cell />
+                <Table.Cell />
+              </Table.Row>
+
+              <Table.Row>
+                <Table.Cell />
+                <Table.Cell />
               </Table.Row>
             </Table.Body>
           </Table>
-        </Form>
-        <h1> PaymentDetails </h1>
+        </div>
       </AppLayout>
     );
   }
