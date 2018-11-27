@@ -15,6 +15,7 @@
   width: 175px;
   height: 175px;
   margin-bottom: 5px;
+  border-radius: 50%
 }
 
 .ArtistCover-name {

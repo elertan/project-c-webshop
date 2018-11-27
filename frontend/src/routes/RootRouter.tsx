@@ -6,9 +6,10 @@ import HomeRouter from "./HomeRouter";
 import AlbumRouter from "./AlbumRouter";
 import ArtistRouter from "./ArtistRouter";
 import DashboardRouter from "./DashboardRouter"
+import CategoryRouter from './CategoryRouter';
 
-import {BrowserRouter} from "react-router-dom";
-import NotFound from "../components/views/errors/NotFound/NotFound";
+import {BrowserRouter} from 'react-router-dom';
+import NotFound from '../components/views/errors/NotFound/NotFound';
 
 const DefaultRedirect = () => <Redirect to="/home/explore"/>;
 
@@ -22,6 +23,7 @@ const RootRouter: React.SFC<{}> = () => (
       <Route path="/album" component={AlbumRouter}/>
       <Route path="/artist" component={ArtistRouter}/>
       <Route path="/dashboard" component={DashboardRouter}/>
+      <Route path="/category" component={CategoryRouter} />
 
       <Route component={NotFound} />
     </Switch>

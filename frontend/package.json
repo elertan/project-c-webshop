@@ -15,13 +15,14 @@
     "history": "^4.7.2",
     "moment": "^2.22.2",
     "query-string": "^6.2.0",
-    "react": "^16.5.0",
+    "react": "^16.6.3",
     "react-apollo": "^2.1.11",
     "react-dom": "^16.5.0",
     "react-progressive-image": "^0.6.0",
+    "react-responsive-carousel": "^3.1.43",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "2.17.0",
+    "react-scripts-ts": "^4.0.8",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.82.5",
     "unstated": "^2.1.1",
@@ -39,10 +40,16 @@
     "@types/history": "^4.7.0",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
-    "@types/react": "^16.4.14",
+    "@types/react": "^16.7.7",
     "@types/react-dom": "^16.0.7",
     "@types/react-router": "^4.0.30",
     "@types/react-router-dom": "^4.3.1",
     "typescript": "^3.0.3"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
