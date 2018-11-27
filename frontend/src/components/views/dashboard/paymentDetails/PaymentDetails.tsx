@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Dropdown, Table } from "semantic-ui-react";
+import { Dropdown, Table, Button } from "semantic-ui-react";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
 
 const styles = {
@@ -23,6 +23,9 @@ class PaymentDetails extends React.Component {
             <Table.Body>
               <Table.Row>
                 <Table.Cell>
+                  <h3>IDeal</h3>
+                </Table.Cell>
+                <Table.Cell>
                   <Dropdown text="Choose your bank">
                     <Dropdown.Menu>
                       <Dropdown.Item text="ING" />
@@ -36,12 +39,18 @@ class PaymentDetails extends React.Component {
               </Table.Row>
 
               <Table.Row>
-                <Table.Cell />
-                <Table.Cell />
+                <Table.Cell>
+                  <h3>PayPal</h3>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button color="green">Redirect to paypal page</Button>
+                </Table.Cell>
               </Table.Row>
 
               <Table.Row>
-                <Table.Cell />
+                <Table.Cell>
+                  <h3>Nog een payment provider, creditcard ofso</h3>
+                </Table.Cell>
                 <Table.Cell />
               </Table.Row>
             </Table.Body>
