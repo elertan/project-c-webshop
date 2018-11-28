@@ -1,6 +1,14 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Table, Form, Button, Transition, Input } from "semantic-ui-react";
+import {
+  Table,
+  Form,
+  Button,
+  Transition,
+  Input,
+  Header,
+  Icon
+} from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
 import { NavLink } from "react-router-dom";
@@ -39,7 +47,17 @@ class AccountDetails extends React.Component {
     const { visibleNameButton } = this.state;
     return (
       <AppLayout>
+        <div style={styles.HeaderPositioning}>
+          <Header as="h2">
+            <Icon name="settings" />
+            <Header.Content>
+              Account Details
+              <Header.Subheader>Manage your account preferences</Header.Subheader>
+            </Header.Content>
+          </Header>
+        </div>
         <DashboardMenu />
+
         <div style={styles.DashboardPositioning}>
           <Form>
             <Table>

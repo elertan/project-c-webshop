@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Table } from "semantic-ui-react";
+import { Item, Header, Icon } from "semantic-ui-react";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
 
 const styles = {
@@ -8,6 +8,9 @@ const styles = {
     display: "inline-block",
     width: "60%",
     padding: "3%"
+  },
+  HeaderPositioning: {
+    margin: "3% 0 0 0"
   }
 };
 
@@ -17,26 +20,44 @@ class OrderHistory extends React.Component {
   public render() {
     return (
       <AppLayout>
+        <div style={styles.HeaderPositioning}>
+          <Header as="h2">
+            <Icon name="send" />
+            <Header.Content>
+              Order History
+              <Header.Subheader>
+                View your recent orders
+              </Header.Subheader>
+            </Header.Content>
+          </Header>
+        </div>
         <DashboardMenu />
         <div style={styles.DashboardPositioning}>
-            <Table>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell />
-                  <Table.Cell />
-                </Table.Row>
+          <Item.Group divided>
+            <Item>
+              <Item.Image
+                size="tiny"
+                src="https://react.semantic-ui.com/images/wireframe/image.png"
+              />
+              <Item.Content verticalAlign="middle">Content A</Item.Content>
+            </Item>
 
-               <Table.Row>
-                  <Table.Cell />
-                  <Table.Cell />
-                </Table.Row>
+            <Item>
+              <Item.Image
+                size="tiny"
+                src="https://react.semantic-ui.com/images/wireframe/image.png"
+              />
+              <Item.Content verticalAlign="middle">Content B</Item.Content>
+            </Item>
 
-                <Table.Row>
-                  <Table.Cell />
-                  <Table.Cell />
-                </Table.Row>
-              </Table.Body>
-            </Table>
+            <Item>
+              <Item.Image
+                size="tiny"
+                src="https://react.semantic-ui.com/images/wireframe/image.png"
+              />
+              <Item.Content content="Content C" verticalAlign="middle" />
+            </Item>
+          </Item.Group>
         </div>
       </AppLayout>
     );

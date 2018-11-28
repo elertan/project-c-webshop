@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Dropdown, Table, Button } from "semantic-ui-react";
+import { Dropdown, Table, Button, Header, Icon } from "semantic-ui-react";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
 
 const styles = {
@@ -8,6 +8,9 @@ const styles = {
     display: "inline-block",
     width: "60%",
     padding: "3%"
+  },
+  HeaderPositioning: {
+    margin: "3% 0 0 0"
   }
 };
 
@@ -17,6 +20,17 @@ class PaymentDetails extends React.Component {
   public render() {
     return (
       <AppLayout>
+        <div style={styles.HeaderPositioning}>
+          <Header as="h2">
+            <Icon name="payment" />
+            <Header.Content>
+              Payment Mehtods
+              <Header.Subheader>
+                Manage your payment preferences
+              </Header.Subheader>
+            </Header.Content>
+          </Header>
+        </div>
         <DashboardMenu />
         <div style={styles.DashboardPositioning}>
           <Table>

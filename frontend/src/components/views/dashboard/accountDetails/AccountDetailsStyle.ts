@@ -4,6 +4,10 @@ const styles = {
     width: "60%",
     padding: "3%"
   },
+
+  HeaderPositioning: {
+    margin: "3% 0 0 0"
+  },
   ButtonPosition: {
     display: "none"
   },
