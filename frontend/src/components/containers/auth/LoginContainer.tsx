@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import Login from "../../views/auth/login/Login";
+import LoginDetail from "../../views/auth/login/LoginDetail";
 
 interface IProps extends RouteProps {}
 interface IState {}
@@ -10,7 +10,7 @@ class LoginContainer extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <Login/>
+      <LoginDetail/>
     );
   }
 };

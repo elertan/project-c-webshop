@@ -8,7 +8,7 @@ import {
   Input
 } from "semantic-ui-react";
 import styles from "./dashboardStyle";
-import DashboardMenu from "../reusable/DashboardMenu/DashboarMenu";
+import DashboardMenu from "../reusable/DashboardMenu/DashboardMenu";
 
 export default class Dashboard extends React.Component {
   public state = {
