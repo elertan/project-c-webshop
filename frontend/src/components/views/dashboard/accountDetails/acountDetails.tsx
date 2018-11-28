@@ -52,7 +52,9 @@ class AccountDetails extends React.Component {
             <Icon name="settings" />
             <Header.Content>
               Account Details
-              <Header.Subheader>Manage your account preferences</Header.Subheader>
+              <Header.Subheader>
+                Manage your account preferences
+              </Header.Subheader>
             </Header.Content>
           </Header>
         </div>

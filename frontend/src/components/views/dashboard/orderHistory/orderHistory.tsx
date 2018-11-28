@@ -25,9 +25,7 @@ class OrderHistory extends React.Component {
             <Icon name="send" />
             <Header.Content>
               Order History
-              <Header.Subheader>
-                View your recent orders
-              </Header.Subheader>
+              <Header.Subheader>View your recent orders</Header.Subheader>
             </Header.Content>
           </Header>
         </div>
