@@ -136,10 +136,10 @@ namespace backend_filling_tool_v2
 
                 var artists = dataset.FullArtists.Select(ExtractFullArtist);
                 
-                _logger.Log("Created artist entities");
-                await db.Artists.AddRangeAsync(artists);
-                await db.SaveChangesAsync();
-                _logger.Log("Saved artist entities to database");
+//                _logger.Log("Created artist entities");
+//                await db.Artists.AddRangeAsync(artists);
+//                await db.SaveChangesAsync();
+//                _logger.Log("Saved artist entities to database");
                 _logger.Log("Creating many-to-many relationships between the tables");
                 
                 _logger.Log("Creating Album X Track relationships...");
