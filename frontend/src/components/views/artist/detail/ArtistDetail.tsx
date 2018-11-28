@@ -46,6 +46,14 @@ class ArtistDetail extends React.Component<IProps> {
                         items {
                             id
                             name
+                            images(orderBy: {
+                              path: "height",
+                              descending: true
+                            }, first: 1) {
+                                items {
+                                    url
+                                }
+                            }
                             tracks {
                                 items {
                                   id
@@ -63,15 +71,7 @@ class ArtistDetail extends React.Component<IProps> {
                         product {
                             id
                         }
-                            images(orderBy: {
-                                path: "height",
-                                descending: true
-                            }, first: 1) {
-                                items {
-                                    url
-                                }
-                            }
-                        }
+                      }
                     }
                 }
             }
@@ -89,6 +89,7 @@ class ArtistDetail extends React.Component<IProps> {
               return <span>{error.message}</span>;
             }
             const artistData = data.artists.items[0];
+            console.log(artistData);
             const albumsWithDuplicates = data.artists.items[0].albums.items;
             const albumsFiltered = Array.from(new Set(albumsWithDuplicates))
             artistData.albums.items = albumsFiltered;
