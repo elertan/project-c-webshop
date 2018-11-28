@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 
-import AuthRouter from './AuthRouter';
-import HomeRouter from './HomeRouter';
-import AlbumRouter from './AlbumRouter';
-import ArtistRouter from './ArtistRouter';
+import AuthRouter from "./AuthRouter";
+import HomeRouter from "./HomeRouter";
+import AlbumRouter from "./AlbumRouter";
+import ArtistRouter from "./ArtistRouter";
+import DashboardRouter from "./DashboardRouter"
 import CategoryRouter from './CategoryRouter';
 
 import {BrowserRouter} from 'react-router-dom';
@@ -21,6 +22,7 @@ const RootRouter: React.SFC<{}> = () => (
       <Route path="/home" component={HomeRouter} />
       <Route path="/album" component={AlbumRouter}/>
       <Route path="/artist" component={ArtistRouter}/>
+      <Route path="/dashboard" component={DashboardRouter}/>
       <Route path="/category" component={CategoryRouter} />
 
       <Route component={NotFound} />
