@@ -99,9 +99,12 @@ class PasswordReset extends React.Component {
             }}
             onSubmit={values => {
               console.log(values);
+              <NavLink to={"/accountdetails/passwordresetsucces"}/>
             }}
             validationSchema={Yup.object().shape({
-              currentPassword: Yup.string().required("Please fill in your current password"),
+              currentPassword: Yup.string().required(
+                "Please fill in your current password"
+              ),
               newPassword: Yup.string()
                 .required("Please fill in your new password")
                 .min(5, "New password should be atleast 5 characters long"),
@@ -120,7 +123,7 @@ class PasswordReset extends React.Component {
                 handleSubmit
               } = props;
               return (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} >
                   <Table>
                     <Table.Body>
                       <Table.Row>
@@ -182,7 +185,7 @@ class PasswordReset extends React.Component {
                           <div style={styles.InputSpacing}>
                             <Input
                               fluid
-                              placeholder="New password"
+                              placeholder="Confirm new password"
                               id="repeatNewPassword"
                               value={values.repeatNewPassword}
                               onChange={handleChange}
