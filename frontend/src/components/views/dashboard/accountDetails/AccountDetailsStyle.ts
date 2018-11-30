@@ -13,11 +13,12 @@ const styles = {
   },
   SaveButtonPosition: {
     marginLeft: "3%",
-    display: "inline"
+    display: "inline-block"
   },
 
   InputSpacing: {
-    paddingLeft: "3%"
+    paddingLeft: "3%",
+    display: "inline-block"
   },
 
   NotClicked: {
@@ -27,6 +28,9 @@ const styles = {
 
   Clicked: {
     display: "none"
+  },
+  Secoration: {
+    decoration: "none"
   }
 };
 

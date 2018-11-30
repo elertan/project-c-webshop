@@ -17,7 +17,7 @@ class DashboardMenu extends React.Component<IProps> {
             <Divider />
             <Menu.Header>Orders</Menu.Header>
             <NavLink to={"/dashboard/orderhistory"}>
-              <Menu.Item name="Orderhistory" />
+              <Menu.Item name="Order history" />
             </NavLink>
             <Divider />
             <Menu.Header>Account details</Menu.Header>
