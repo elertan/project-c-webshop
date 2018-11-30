@@ -20,10 +20,10 @@ const styles = {
 
   InputSpacing: {
     display: "inline-block",
-    width: "18vw"
+    width: "15vw"
   },
   LabelWitdh: {
-    maxWidth: "10vw",
+    maxWidth: "12vw",
     display: "inline-block"
   }
 };

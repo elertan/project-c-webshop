@@ -21,6 +21,10 @@ const styles = {
   },
   SaveButtonPosition: {
     display: "inline-block"
+  },
+  LabelWitdh: {
+    maxWidth: "6vw",
+    display: "inline-block"
   }
 };
 
@@ -89,9 +93,11 @@ class NameReset extends React.Component {
                             />
                           </div>
                           {errors.name && touched.name && (
-                            <Label basic pointing="left" color="red">
-                              {errors.name}
-                            </Label>
+                            <div style={styles.LabelWitdh}>
+                              <Label basic pointing="left" color="red">
+                                {errors.name}
+                              </Label>
+                            </div>
                           )}{" "}
                         </Table.Cell>
                       </Table.Row>
@@ -136,9 +142,11 @@ class NameReset extends React.Component {
                             />
                           </div>
                           {errors.surname && touched.surname && (
-                            <Label basic pointing="left" color="red">
-                              {errors.surname}
-                            </Label>
+                            <div style={styles.LabelWitdh}>
+                              <Label basic pointing="left" color="red">
+                                {errors.surname}
+                              </Label>
+                            </div>
                           )}{" "}
                         </Table.Cell>
                       </Table.Row>
