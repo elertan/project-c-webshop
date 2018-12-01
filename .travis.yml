@@ -14,9 +14,8 @@ install:
   - sudo apt-get install dotnet-sdk-2.1
 script:
   - cd frontend
-  - npm i yarn -g
-  - yarn
-  - yarn build
+  - npm i
+  - npm run build
   - cd ../backend-datamodel
   - dotnet restore
   - dotnet build
