@@ -26,7 +26,7 @@ namespace backend.Services
         private readonly IAppEnv _appEnv;
         private readonly IEmailService _emailService;
         private const string LoginFailErrorMessage = "A user with that email/password combination does not exist.";
-
+        private const string CreateAccountErrorMessage = "A user with that email address already exist.";
         public AccountService(DatabaseContext db, IPasswordHasher<User> passwordHasher, IAppEnv appEnv,
             IEmailService emailService)
         {
@@ -41,13 +41,15 @@ namespace backend.Services
             // Does email exist?
             if (await _db.Users.AnyAsync(e => e.Email == data.Email))
             {
-                throw new Exception("A user with that email address already exist.");
+                throw new Exception(CreateAccountErrorMessage);
             }
 
             var user = new User
             {
-                Email = data.Email
-                
+                Email = data.Email,
+                Firstname = data.Firstname,
+                Lastname = data.Lastname,
+                DateOfBirth = data.DateOfBirth
             };
 
             var hashedPassword = _passwordHasher.HashPassword(user, data.Password);
@@ -63,7 +65,6 @@ namespace backend.Services
 
             return user;
         }
-
         public async Task<User> Login(LoginData data)
         {
             var user = await _db.Users.FirstOrDefaultAsync(e => e.Email == data.Email);

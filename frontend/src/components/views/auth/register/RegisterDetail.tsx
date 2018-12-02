@@ -1,32 +1,68 @@
 import * as React from "react";
 import * as Yup from 'yup';
 import { Button, Icon, Input, Form, Label } from "semantic-ui-react";
-// Divider
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-// import { Link } from "react-router-dom";
-// import './LoginDetail.css';
+import gql from "graphql-tag";
+import IApiError from "../../../../models/IApiError";
+import IApiResult from "../../../../models/IApiResult";
+import IUser from "../../../../models/IUser";
+import {userState} from "../../../../index";
+import {withApollo, WithApolloClient} from "react-apollo";
 
-interface IFormikValues {
-    firstName: string,
-    lastName: string,
-    infix: string,
-    email: string;
-    password: string;
+interface IProps {
+
 }
 
-const initialValues = {} as IFormikValues;
+interface IState {
+    errors: IApiError[];
+}
+
+interface IFormikValues {
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string,
+    dateofbirth: string
+};
+
+const createAccountMutation = gql`
+mutation ($createAccount: CreateAccountInput!) {
+    createAccount(account: $createAccount) {
+        data {
+            email
+            firstname
+            lastname
+            dateofbirth
+        }
+        errors {
+            message
+        }
+    }
+}
+`;
+
+const initialValues: IFormikValues = {
+    email: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+    dateofbirth: ""
+};
+
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required("A first name is required"),
-    lastName: Yup.string().required("A last name is required"),
-    infix: Yup.string().notRequired(),
+    firstname: Yup.string().required("A first name is required"),
+    lastname: Yup.string().required("A last name is required"),
     email: Yup.string().required("Email is a required field").email("Entered email is not a valid email"),
     password: Yup.string().required("Password is a required field").min(5, "Password should be at least 5 characters."),
+    dateofbirth: Yup.date().notRequired()
 });
 
+class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
+    public state = {
+        errors: []
+    };
 
-
-class RegisterDetail extends React.Component {
     public render() {
         return (
             <AppLayout>
@@ -40,9 +76,35 @@ class RegisterDetail extends React.Component {
         )
     }
 
+    private handleSubmit = async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+        console.log("Handling submit");
+        formik.setSubmitting(true);
+        console.log("values: ", values)
+        const result = await this.props.client.mutate({
+            mutation: createAccountMutation,
+            variables: {
+                createAccount: {
+                    email: values.email,
+                    password: values.password,
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    dateofbirth: values.dateofbirth
+                }
+            }
+        });
+        console.log("Result is: ", result);
 
-    private handleSubmit = (values: IFormikValues) => {
-        alert(JSON.stringify(values));
+        const apiResult = result.data!.createAccount as IApiResult<IUser>;
+        console.log("apiResult is: ", apiResult);
+        if (apiResult.errors) {
+            this.setState({ errors: apiResult.errors })
+        } else {
+            if (this.state.errors.length > 0) {
+                this.setState( {errors: [] })
+            }
+            userState.setUser(apiResult.data!);
+        }
+        formik.setSubmitting(false);
     };
 
     private renderFormik = (formik: FormikProps<IFormikValues>) => {
@@ -50,19 +112,23 @@ class RegisterDetail extends React.Component {
             <div style={ {marginTop: "50px"} }>
                 <Form className="ui form">
                     <h2 className="ui dividing header">Welcome to Marshmallow</h2>
-                    <Field
-                        name="firstName"
-                        render={this.renderFirstNameField}
-                    />
-                    <div style={{ padding: 5 }} />
-                    <Field
-                        name="infix"
-                        render={this.renderInfixField}
-                    />
-                    <div style={{ padding: 5 }} />
-                    <Field
-                        name="lastName"
-                        render={this.renderLastNameField}
+                    <div className="fields">
+                        <div className="field">
+                            <Field
+                                name="firstname"
+                                render={this.renderFirstNameField}
+                            />
+                        </div>
+                        <div className="field">
+                            <Field
+                                name="lastname"
+                                render={this.renderLastNameField}
+                            />
+                        </div>
+                    </div>
+                    <Field 
+                        name="dateofbirth"
+                        render={this.renderDateOfBirth}
                     />
                     <div style= { {marginBottom: "15px", marginTop: "40px"} }>
                         <h3 className="ui dividing header">Login details</h3>
@@ -85,23 +151,23 @@ class RegisterDetail extends React.Component {
                     >
                         Register
                     </Button>
-                    {/* {this.state.errors.length > 0 &&
+                    {this.state.errors.length > 0 &&
                         <p style={{ textAlign: 'center', marginTop: 15, color: 'red' }}>{(this.state.errors[0] as IApiError).message}</p>
-                    } */}
+                    }
                 </Form>
             </div>
         )
     }
 
     private renderFirstNameField = (fieldProps: FieldProps<IFormikValues>) => {
-        const error = fieldProps.form.touched.firstName && fieldProps.form.errors.firstName;
+        const error = fieldProps.form.touched.firstname && fieldProps.form.errors.firstname;
 
         return (
 
             <Form.Field>
                 <label>First name *</label>
                 <Input
-                    id="firstName"
+                    id="firstname"
                     iconPosition="left"
                     placeholder="John"
                     size="large"
@@ -116,32 +182,38 @@ class RegisterDetail extends React.Component {
         );
     };
 
-    private renderInfixField = (fieldProps: FieldProps<IFormikValues>) => {
-
-        return (
-            <Form.Field>
-                <label>Infix</label>
-                <Input
-                    id="lastName"
-                    iconPosition="left"
-                    size="large"
-                >
-                    <input {...fieldProps.field} />
-                </Input>
-            </Form.Field>
-        );
-    };
-
     private renderLastNameField = (fieldProps: FieldProps<IFormikValues>) => {
-        const error = fieldProps.form.touched.lastName && fieldProps.form.errors.lastName;
+        const error = fieldProps.form.touched.lastname && fieldProps.form.errors.lastname;
 
         return (
             <Form.Field>
                 <label>Last name *</label>
                 <Input
-                    id="lastName"
+                    id="lastname"
                     iconPosition="left"
                     placeholder="Doe"
+                    size="large"
+                    error={Boolean(error)}
+                >
+                    <input {...fieldProps.field} />
+                </Input>
+                {error &&
+                    <Label basic pointing="above" color="red">{error}</Label>
+                }
+            </Form.Field>
+        );
+    };
+
+    private renderDateOfBirth = (fieldProps: FieldProps<IFormikValues>) => {
+        const error = fieldProps.form.touched.dateofbirth && fieldProps.form.errors.dateofbirth;
+
+        return (
+            <Form.Field>
+                <label>Date of birth</label>
+                <Input
+                    id="dateofbirth"
+                    iconPosition="left"
+                    placeholder="dd/mm/year"
                     size="large"
                     error={Boolean(error)}
                 >
@@ -200,8 +272,6 @@ class RegisterDetail extends React.Component {
             </Form.Field>
         );
     };
-
-
 }
 
-export default RegisterDetail;
+export default withApollo(RegisterDetail);

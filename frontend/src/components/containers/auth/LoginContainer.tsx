@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {RouteProps} from "react-router";
+import { RouteProps } from "react-router";
 import LoginDetail from "../../views/auth/login/LoginDetail";
 
 interface IProps extends RouteProps {}
