@@ -9,6 +9,8 @@ import IApiResult from "../../../../models/IApiResult";
 import IUser from "../../../../models/IUser";
 import { userState } from "../../../../index";
 import { withApollo, WithApolloClient } from "react-apollo";
+import * as moment from "moment";
+import BirthdatePicker from "../../reusable/BirthdatePicker/BirthdatePicker";
 
 interface IProps {
 
@@ -23,8 +25,9 @@ interface IFormikValues {
     lastname: string,
     email: string,
     password: string,
-    dateOfBirth: string
-};
+    repeatpassword: string,
+    dateOfBirth: moment.Moment;
+}
 
 const createAccountMutation = gql`
 mutation ($createAccount: CreateAccountInput!) {
@@ -44,9 +47,10 @@ mutation ($createAccount: CreateAccountInput!) {
 const initialValues: IFormikValues = {
     email: "",
     password: "",
+    repeatpassword: "",
     firstname: "",
     lastname: "",
-    dateOfBirth: ""
+    dateOfBirth: moment().subtract(1, 'year')
 };
 
 const validationSchema = Yup.object().shape({
@@ -54,6 +58,8 @@ const validationSchema = Yup.object().shape({
     lastname: Yup.string().required("A last name is required"),
     email: Yup.string().required("Email is a required field").email("Entered email is not a valid email"),
     password: Yup.string().required("Password is a required field").min(5, "Password should be at least 5 characters."),
+    repeatpassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords do not match")
+        .required("Repeated password is a required field"),
     dateOfBirth: Yup.date().notRequired()
 });
 
@@ -147,6 +153,10 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
                         name="password"
                         render={this.renderPasswordField}
                     />
+                    <Field
+                        name="repeatpassword"
+                        render={this.renderRepeatPasswordField}
+                    />
                     <Button
                         primary
                         disabled={!formik.isValid || formik.isSubmitting || formik.isValidating}
@@ -160,13 +170,11 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
                 </Form>
             </div>
         )
-    }
+    };
 
     private renderFirstNameField = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.firstname && fieldProps.form.errors.firstname;
-
         return (
-
             <Form.Field>
                 <label>First name *</label>
                 <Input
@@ -187,7 +195,6 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
 
     private renderLastNameField = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.lastname && fieldProps.form.errors.lastname;
-
         return (
             <Form.Field>
                 <label>Last name *</label>
@@ -209,19 +216,13 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
 
     private renderDateOfBirth = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.dateOfBirth && fieldProps.form.errors.dateOfBirth;
-
         return (
             <Form.Field>
                 <label>Date of birth</label>
-                <Input
-                    id="dateOfBirth"
-                    iconPosition="left"
-                    placeholder="dd/mm/year"
-                    size="large"
-                    error={Boolean(error)}
-                >
-                    <input {...fieldProps.field} />
-                </Input>
+                <BirthdatePicker
+                  date={fieldProps.field.value}
+                  onChange={date => fieldProps.form.setFieldValue(fieldProps.field.name, date)}
+                />
                 {error &&
                     <Label basic pointing="above" color="red">{error}</Label>
                 }
@@ -231,7 +232,6 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
 
     private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
-
         return (
             <Form.Field>
                 <label>Email address *</label>
@@ -254,7 +254,6 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
 
     private renderPasswordField = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.password && fieldProps.form.errors.password;
-
         return (
             <Form.Field>
                 <label>Password *</label>
@@ -263,6 +262,29 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
                     size="large"
                     type="password"
                     placeholder="Password"
+                    iconPosition="left"
+                    error={Boolean(error)}
+                >
+                    <Icon name="key" />
+                    <input {...fieldProps.field} />
+                </Input>
+                {error &&
+                    <Label basic pointing="above" color="red">{error}</Label>
+                }
+            </Form.Field>
+        );
+    };
+
+    private renderRepeatPasswordField = (fieldProps: FieldProps<IFormikValues>) => {
+        const error = fieldProps.form.touched.repeatpassword && fieldProps.form.errors.repeatpassword;
+        return (
+            <Form.Field>
+                <label>Repeat password *</label>
+                <Input
+                    id="repeatpassword"
+                    size="large"
+                    type="password"
+                    placeholder="Repeat your password"
                     iconPosition="left"
                     error={Boolean(error)}
                 >
