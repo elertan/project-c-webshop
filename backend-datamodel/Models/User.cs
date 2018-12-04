@@ -11,5 +11,8 @@ namespace backend_datamodel.Models
         public string Lastname { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string Token { get; set; }
+        // This token will only be set if the user registers anonymously
+        // (buys something from the store with only giving an email)
+        public string AnonymousRegistrationToken { get; set; }
     }
 }
