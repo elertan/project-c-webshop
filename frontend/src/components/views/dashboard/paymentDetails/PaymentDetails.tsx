@@ -1,7 +1,7 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
 import { Dropdown, Table, Button, Header, Icon } from "semantic-ui-react";
-import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
+import DashboardMenu from "../../reusable/DashboardMenu/DashboardMenu";
 
 const styles = {
   DashboardPositioning: {

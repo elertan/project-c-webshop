@@ -20,8 +20,8 @@ namespace backend.Schemas.Inputs
 
             Field(e => e.Email);
             Field(e => e.Password);
-            Field(e => e.Firstname, nullable: true);
-            Field(e => e.Lastname, nullable: true);
+            Field(e => e.Firstname);
+            Field(e => e.Lastname);
             Field(e => e.DateOfBirth, nullable: true);
         }
     }
