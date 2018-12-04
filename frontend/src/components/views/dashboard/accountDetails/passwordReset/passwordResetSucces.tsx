@@ -1,8 +1,6 @@
 import * as React from "react";
-import AppLayout from "../../../layout/AppLayout/AppLayout";
-import {Header, Icon, Message } from "semantic-ui-react";
-import DashboardMenu from "../../../reusable/DashboardMenu/DashboarMenu";
-
+// import AppLayout from "../../../layout/AppLayout/AppLayout";
+import { Header, Icon, Message } from "semantic-ui-react";
 
 const styles = {
   DashboardPositioning: {
@@ -19,7 +17,7 @@ const styles = {
 class PasswordResetSucces extends React.Component {
   public render() {
     return (
-      <AppLayout>
+      <div>
         <div style={styles.HeaderPositioning}>
           <Header as="h2">
             <Icon name="key" />
@@ -30,7 +28,6 @@ class PasswordResetSucces extends React.Component {
           </Header>
         </div>
 
-        <DashboardMenu />
         <div style={styles.DashboardPositioning}>
           <Message
             icon="inbox"
@@ -38,7 +35,7 @@ class PasswordResetSucces extends React.Component {
             content="You have succesfully updated your password! You may now continue listening to our marsh-mellowy tunes."
           />
         </div>
-      </AppLayout>
+      </div>
     );
   }
 }
