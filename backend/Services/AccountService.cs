@@ -61,6 +61,7 @@ namespace backend.Services
 
             await _emailService.SendEmail(new MailAddress(data.Email), "Welcome to the Marshmallow's Webshop",
                 $"Hi {user.Email}!\n\nWe're glad you're on board.");
+            
             // Don't emit password to client
 //            user.Password = null;
 
