@@ -129,7 +129,7 @@ namespace backend_filling_tool_v2
         {
             _logger.Log("GetArtists", LogLevel.Verbose);
             // Separate in chunks due to Spotify limit
-            var chunks = artistIds.ChunkBy(10);
+            var chunks = artistIds.ChunkBy(30);
             var tasks = chunks.Select(async ids =>
             {
                 var idsStr = ids.Aggregate((curr, next) => $"{curr},{next}");

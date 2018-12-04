@@ -7,7 +7,6 @@ using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using backend.Schemas;
-using backend.Schemas.Types;
 using backend.Services;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;

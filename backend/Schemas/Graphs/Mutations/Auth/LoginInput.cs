@@ -1,6 +1,6 @@
 using GraphQL.Types;
 
-namespace backend.Schemas.Inputs
+namespace backend.Schemas.Graphs.Mutations.Auth
 {
     public class LoginData
     {

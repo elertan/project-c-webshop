@@ -1,17 +1,13 @@
 using System.Linq;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
-using GraphQL.Types;
 
-namespace backend.Schemas.Types
+namespace backend.Schemas.Graphs
 {
     public class ArtistGraph : BaseGraphType<Artist>
     {
         public ArtistGraph(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
-            Name = "Artist";
-
-            
             Field(a => a.Name, nullable: true).Description("The name of the artist.");
 //            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");

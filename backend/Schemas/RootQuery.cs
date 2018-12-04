@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Schemas.Types;
+using backend.Schemas.Graphs;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
