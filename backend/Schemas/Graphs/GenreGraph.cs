@@ -1,7 +1,7 @@
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 
-namespace backend.Schemas.Types
+namespace backend.Schemas.Graphs
 {
     public class GenreGraph : BaseGraphType<Genre>
     {
