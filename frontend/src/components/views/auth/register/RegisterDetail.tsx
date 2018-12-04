@@ -9,10 +9,8 @@ import IApiResult from "../../../../models/IApiResult";
 import IUser from "../../../../models/IUser";
 import { userState } from "../../../../index";
 import { withApollo, WithApolloClient } from "react-apollo";
-
-import AllMonths from './BirthMonths';
-import AllDays from './BirthDays';
-import AllYears from './BirthYears';
+import * as moment from "moment";
+import BirthdatePicker from "../../reusable/BirthdatePicker/BirthdatePicker";
 
 interface IProps {
 
@@ -28,8 +26,8 @@ interface IFormikValues {
     email: string,
     password: string,
     repeatpassword: string,
-    dateOfBirth: string
-};
+    dateOfBirth: moment.Moment;
+}
 
 const createAccountMutation = gql`
 mutation ($createAccount: CreateAccountInput!) {
@@ -52,7 +50,7 @@ const initialValues: IFormikValues = {
     repeatpassword: "",
     firstname: "",
     lastname: "",
-    dateOfBirth: ""
+    dateOfBirth: moment().subtract(1, 'year')
 };
 
 const validationSchema = Yup.object().shape({
@@ -172,7 +170,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
                 </Form>
             </div>
         )
-    }
+    };
 
     private renderFirstNameField = (fieldProps: FieldProps<IFormikValues>) => {
         const error = fieldProps.form.touched.firstname && fieldProps.form.errors.firstname;
@@ -221,39 +219,10 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
         return (
             <Form.Field>
                 <label>Date of birth</label>
-                <div className="fields">
-                    <div className="field">
-                        <label>Month</label>
-                        <Input
-                            id="birthmonth"
-                            placeholder="month"
-                            size="large"
-                        >
-                            <AllMonths {...fieldProps.field} />
-                        </Input>
-                    </div>
-                    <div className="field">
-                        <label>Day</label>
-                        <Input
-                            id="birthday"
-                            placeholder="day"
-                            size="large"
-                        >
-                            <AllDays {...fieldProps.field} />
-                        </Input>
-                    </div>
-                    <div className="field">
-                        <label>Year</label>
-                        <Input
-                            id="birthyear"
-                            placeholder="year"
-                            size="large"
-                        >
-                            <AllYears {...fieldProps.field} />
-                        </Input>
-                    </div>
-                </div>
-
+                <BirthdatePicker
+                  date={fieldProps.field.value}
+                  onChange={date => fieldProps.form.setFieldValue(fieldProps.field.name, date)}
+                />
                 {error &&
                     <Label basic pointing="above" color="red">{error}</Label>
                 }
