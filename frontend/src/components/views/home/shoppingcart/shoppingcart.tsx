@@ -12,6 +12,7 @@ import IProduct from "src/models/IProduct";
 
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
+import { NavLink } from "react-router-dom";
 
 interface IProps {}
 
@@ -77,8 +78,8 @@ class Shoppingcart extends React.Component<IProps> {
                   )}
                   <ListItem>
                     <div style={{ marginTop: 60 }}>
-                      <Button color="green" floated="right">
-                        Proceed to checkout
+                      <Button color="green" floated="right" ><NavLink to={"/home/payment"}>Proceed to checkout</NavLink>
+                        
                       </Button>
                     </div>
                   </ListItem>

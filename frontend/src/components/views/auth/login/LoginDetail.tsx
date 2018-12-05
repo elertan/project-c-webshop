@@ -2,7 +2,7 @@ import {Button, Card, CardActions, CardContent, Checkbox, TextField, Typography}
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import * as React from 'react';
 import * as Yup from 'yup';
-import './Login.css';
+import './LoginDetail.css';
 
 interface IProps {}
 interface IFormikValues {

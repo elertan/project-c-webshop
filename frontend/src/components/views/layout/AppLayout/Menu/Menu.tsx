@@ -30,7 +30,17 @@ class Menu extends React.Component<IProps, IState> {
   //   );
   //   return "hello";
   // }
-  public state = {};
+  public state = {
+    ShoppingCartButton: false,
+    WishlistButton: false
+  };
+
+  public setStateShoppingCartButton =() => {
+    this.setState({WishlistButton: false ,ShoppingCartButton: true})
+  }
+  public setStateWishListButton =() => {
+    this.setState({ShoppingCartButton: false, WishlistButton: true})
+  }
 
   public render() {
     return (
@@ -99,6 +109,8 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
+      open={this.state.WishlistButton}
+      onOpen={this.setStateWishListButton}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>
@@ -116,6 +128,8 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
+      open={this.state.ShoppingCartButton}
+      onOpen={this.setStateShoppingCartButton}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>

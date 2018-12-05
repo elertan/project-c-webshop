@@ -14,16 +14,6 @@ interface IProps extends StyleProps {
   categoryId: number;
 }
 
-// const styles = {
-//   actionsContainer: {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     marginBottom: 30,
-//     padding: 20,
-//     backgroundColor: 'rgb(243, 243, 243)'
-//   }
-// };
-
 class CategoryDetail extends React.Component<IProps> {
   public render() {
     const query = gql`

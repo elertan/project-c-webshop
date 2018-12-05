@@ -1,9 +1,9 @@
 using System;
 using GraphQL.Types;
 
-namespace backend.Schemas.Inputs
+namespace backend.Schemas.Graphs.Mutations.Auth
 {
-    public class CreateAccountData
+    public class RegisterData
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -12,16 +12,16 @@ namespace backend.Schemas.Inputs
         public DateTime? DateOfBirth { get; set; }
     }
     
-    public class CreateAccountInput : InputObjectGraphType<CreateAccountData>
+    public class RegisterInput : InputObjectGraphType<RegisterData>
     {
-        public CreateAccountInput()
+        public RegisterInput()
         {
-            Name = "CreateAccountInput";
+            Name = "RegisterInput";
 
             Field(e => e.Email);
             Field(e => e.Password);
-            Field(e => e.Firstname, nullable: true);
-            Field(e => e.Lastname, nullable: true);
+            Field(e => e.Firstname);
+            Field(e => e.Lastname);
             Field(e => e.DateOfBirth, nullable: true);
         }
     }
