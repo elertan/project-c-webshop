@@ -1,11 +1,17 @@
 import * as React from "react";
-
+import * as Yup from 'yup';
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import { Table, Header, Icon, Button, Step } from "semantic-ui-react";
+import { Table, Header,Form, Icon, Button, Step, Input, Label } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
+import { Field, FieldProps, Formik, FormikProps,  } from "formik";
+import { withApollo, WithApolloClient } from "react-apollo";
+import IApiResult from "src/models/IApiResult";
+import IUser from "src/models/IUser";
+import { userState } from "src";
+import gql from "graphql-tag";
 
 interface IProps {}
 const styles = {
@@ -30,7 +36,37 @@ const styles = {
     width: "60%"
   }
 };
-class Order extends React.Component<IProps> {
+const createOrderMutation = gql`
+mutation ($createOrder: CreateOrderInput!) {
+    createOrder(order: $createOrder) {
+        data {
+            email
+          
+        }
+        errors {
+            message
+        }
+    }
+}
+`;
+
+interface IFormikValues {
+  email: string,
+}
+
+const initialValues: IFormikValues = {
+  email: "",
+};
+
+const validationSchema = Yup.object().shape({
+
+  email: Yup.string().required("Email is a required field").email("Entered email is not a valid email"),
+});
+
+class Order extends React.Component<WithApolloClient<IProps> > {
+  public state = {
+    errors: []
+};
   public render() {
     return (
       <Subscribe to={[CartState]}>
@@ -66,16 +102,16 @@ class Order extends React.Component<IProps> {
                               <Table.Cell>
                                 Album: {product.album!.name}
                               </Table.Cell>
-                              <Table.Cell>prijs</Table.Cell>
+                              <Table.Cell>Price</Table.Cell>
                             </Table.Row>
                           );
                         }
                         return (
                           <Table.Row key={i}>
                             <Table.Cell>
-                              track: {product.track!.title}
+                              Track: {product.track!.title}
                             </Table.Cell>
-                            <Table.Cell>prijs</Table.Cell>
+                            <Table.Cell>Price</Table.Cell>
                           </Table.Row>
                         );
                       }
@@ -93,7 +129,7 @@ class Order extends React.Component<IProps> {
                         <Step.Title>Shipping</Step.Title>
                       </Step.Content>
                     </Step>
-                    <Step >
+                    <Step disabled>
                       <Icon name="credit card" />
                       <Step.Content>
                         <Step.Title>Billing</Step.Title>
@@ -123,7 +159,13 @@ class Order extends React.Component<IProps> {
                           <h3>Emailaddress</h3>
                         </Table.Cell>
                         <Table.Cell>
-                          <input />
+
+                          <Formik
+                    onSubmit={this.handleSubmit}
+                    initialValues={initialValues}
+                    render={this.renderFormik}
+                    validationSchema={validationSchema}
+                />
                         </Table.Cell>
                       </Table.Row>
                     </Table.Body>
@@ -139,7 +181,73 @@ class Order extends React.Component<IProps> {
       </Subscribe>
     );
   }
+  private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
+    const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
+    return (
+        <Form.Field>
+            
+            <Input
+                id="email"
+                iconPosition="left"
+                placeholder="johndoe@example.com"
+                size="large"
+                error={Boolean(error)}
+            >
+                <Icon name="at" />
+                <input {...fieldProps.field} />
+            </Input>
+            {error &&
+                <Label basic pointing="above" color="red">{error}</Label>
+            }
+        </Form.Field>
+    );
+};
+
+private handleSubmit = async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+  console.log("Handling submit");
+  formik.setSubmitting(true);
+  console.log("values: ", values)
+  const result = await this.props.client.mutate({
+      mutation: createOrderMutation,
+      variables: {
+          createOrder: {
+              email: values.email,
+            
+          }
+      }
+  });
+  console.log("Result is: ", result);
+
+  const apiResult = result.data!.createOrder as IApiResult<IUser>;
+  console.log("apiResult is: ", apiResult);
+  if (apiResult.errors) {
+      this.setState({ errors: apiResult.errors })
+  } else {
+      if (this.state.errors.length > 0) {
+          this.setState({ errors: [] })
+      }
+      userState.setUser(apiResult.data!);
+  }
+  formik.setSubmitting(false);
+};
+
+private renderFormik = (formik: FormikProps<IFormikValues>) => {
+  return (
+      <div style={{ marginTop: "50px" }}>
+          <Form className="ui form">
+              
+              <Field
+                  name="email"
+                  render={this.renderEmailField}
+              />
+             
+          </Form>
+      </div>
+  )
+};
+
+
 }
 
-export default Order;
+export default withApollo(Order);
 

@@ -65,7 +65,7 @@ class Payment extends React.Component<IProps> {
                               <Table.Cell>
                                 Album: {product.album!.name}
                               </Table.Cell>
-                              <Table.Cell>prijs</Table.Cell>
+                              <Table.Cell>Price</Table.Cell>
                             </Table.Row>
                           );
                         }
@@ -74,7 +74,7 @@ class Payment extends React.Component<IProps> {
                             <Table.Cell>
                               track: {product.track!.title}
                             </Table.Cell>
-                            <Table.Cell>prijs</Table.Cell>
+                            <Table.Cell>Price</Table.Cell>
                           </Table.Row>
                         );
                       }
