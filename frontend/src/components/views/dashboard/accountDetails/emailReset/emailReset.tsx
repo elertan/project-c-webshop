@@ -104,7 +104,7 @@ class EmailReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>E-mail : </b>
+                            <b>Email : </b>
                           </h3>
                           {"tim-prins@live.nl"}
                         </Table.Cell>
@@ -129,16 +129,21 @@ class EmailReset extends React.Component {
                         </Table.Cell>
                       </Table.Row>
 
-
                       {/* Confirm and return button */}
                       {/* Confirm and return button */}
                       {/* Confirm and return button */}
                       <Table.Cell>
                         <div style={styles.SaveButtonPosition}>
                           <NavLink to={"/dashboard/accountdetails"}>
-                            <Button animated="fade">
-                              <Button.Content visible>Back</Button.Content>
-                              <Button.Content hidden>Back</Button.Content>
+                            <Button animated="fade" color="red">
+                              <Button.Content visible>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
+                              <Button.Content hidden>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
                             </Button>
                           </NavLink>
                           <Button
@@ -150,54 +155,6 @@ class EmailReset extends React.Component {
                             <Button.Content visible>Continue</Button.Content>
                             <Button.Content hidden>Continue</Button.Content>
                           </Button>
-
-
-                          {/* Modal */}
-                          {/* Modal */}
-                          {/* Modal */}
-                          <Modal
-                            style={styles.modalContentPositioning}
-                            closeOnEscape={false}
-                            closeOnDimmerClick={false}
-                            open={this.state.openModal}
-                            basic
-                            size="fullscreen"
-                          >
-                            <Header icon="key" content="Confirm Email change" />
-                            <Modal.Content>
-                              <p>
-                                Are you sure you want to change 
-                                {" Current email"} into {"New email"}
-                              </p>
-                              <p>
-                                We need to confirm it's you to change your
-                                email!
-                              </p>
-                              <Input
-                                placeholder="Fill in password"
-                                type="password"
-                              />
-                            </Modal.Content>
-                            <Modal.Actions>
-                              <Button
-                                color="red"
-                                onClick={this.closePasswordModal}
-                                inverted
-                              >
-                                <Button.Content>
-                                  <Icon name="remove" /> Back
-                                </Button.Content>
-                              </Button>
-                              <Button color="green" animated="fade">
-                                <Button.Content visible>
-                                  <Icon name="checkmark" /> Confirm email change
-                                </Button.Content>
-                                <Button.Content hidden>
-                                  <Icon name="checkmark" /> Confirm email change
-                                </Button.Content>
-                              </Button>
-                            </Modal.Actions>
-                          </Modal>
                         </div>
                       </Table.Cell>
                     </Table.Body>
@@ -206,6 +163,44 @@ class EmailReset extends React.Component {
               );
             }}
           </Formik>
+
+          {/* Modal */}
+          {/* Modal */}
+          {/* Modal */}
+          <Modal
+            style={styles.modalContentPositioning}
+            closeOnEscape={false}
+            closeOnDimmerClick={false}
+            open={this.state.openModal}
+            basic
+            size="fullscreen"
+          >
+            <Header icon="key" content="Confirm Email change" />
+            <Modal.Content>
+              <p>
+                Are you sure you want to change
+                {" Current email"} into {"New email"}
+              </p>
+              <br />
+              <p>Fill in your password to confirm it's you!</p>
+              <Input placeholder="Fill in password" type="password" />
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color="red" onClick={this.closePasswordModal} inverted>
+                <Button.Content>
+                  <Icon name="remove" /> Back
+                </Button.Content>
+              </Button>
+              <Button color="green" animated="fade">
+                <Button.Content visible>
+                  <Icon name="checkmark" /> Confirm email change
+                </Button.Content>
+                <Button.Content hidden>
+                  <Icon name="checkmark" /> Confirm email change
+                </Button.Content>
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </div>
       </AppLayout>
     );

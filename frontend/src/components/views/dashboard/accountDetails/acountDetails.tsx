@@ -1,20 +1,9 @@
 import * as React from "react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
-import {
-  Table,
-  // Form,
-  Button,
-  Transition,
-  Input,
-  Header,
-  Icon,
-  Label
-} from "semantic-ui-react";
+import { Table, Button, Header, Icon } from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboardMenu";
 import { NavLink } from "react-router-dom";
-import { Formik } from "formik";
-import * as Yup from "yup";
 
 class AccountDetails extends React.Component {
   public state = {
@@ -78,6 +67,7 @@ class AccountDetails extends React.Component {
                 </Table.Cell>
                 <Table.Cell>
                   <div style={this.state.EMailButtonStyle}>
+                  <NavLink to={"/dashboard/accountdetails/emailreset"}>
                     <Button
                       animated="fade"
                       size="large"
@@ -88,70 +78,10 @@ class AccountDetails extends React.Component {
                       <Button.Content visible>Edit</Button.Content>
                       <Button.Content hidden>Change e-mail</Button.Content>
                     </Button>
+                    </NavLink>
                   </div>
-                  <Transition
-                    visible={visibleEmailButton}
-                    animation="scale"
-                    duration={1000}
-                  >
-                    <Formik
-                      initialValues={{
-                        email: ""
-                      }}
-                      onSubmit={values => {
-                        console.log(values);
-                      }}
-                      validationSchema={Yup.object().shape({
-                        email: Yup.string().required("Please fill in email")
-                      })}
-                    >
-                      {props => {
-                        const {
-                          values,
-                          touched,
-                          errors,
-                          isSubmitting,
-                          handleChange,
-                          handleSubmit
-                        } = props;
-                        return (
-                          <form onSubmit={handleSubmit}>
-                            <div style={styles.EmailInputSpacing}>
-                              <div style={styles.InputSpacing}>
-                                <Input
-                                  fluid
-                                  id="email"
-                                  placeholder="Modify email"
-                                  type="text"
-                                  value={values.email}
-                                  onChange={handleChange}
-                                />
-                              </div>
-                              <div style={styles.EmailSaveButtonPosition}>
-                                <Button
-                                  animated="fade"
-                                  color="green"
-                                  fluid
-                                  disabled={isSubmitting}
-                                >
-                                  <Button.Content visible>Save</Button.Content>
-                                  <Button.Content hidden>Save</Button.Content>
-                                </Button>
-                              </div>
-                            </div>
-                            {errors.email && touched.email && (
-                              <div style={styles.DashboardPositioning}>
-                                <Label basic pointing="left" color="red">
-                                  {errors.email}
-                                </Label>
-                              </div>
-                            )}{" "}
-                          </form>
-                        );
-                      }}
-                    </Formik>
 
-                    {/* <div style={styles.InputSpacing}>
+                  {/* <div style={styles.InputSpacing}>
                       <Input placeholder="New E-mail" />
                       <div style={styles.SaveButtonPosition}>
                         <Button animated="fade" color="green" fluid>
@@ -160,7 +90,6 @@ class AccountDetails extends React.Component {
                         </Button>
                       </div>
                     </div> */}
-                  </Transition>
                 </Table.Cell>
               </Table.Row>
 

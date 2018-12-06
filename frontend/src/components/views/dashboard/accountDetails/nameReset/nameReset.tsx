@@ -154,19 +154,32 @@ class NameReset extends React.Component {
                       <Table.Cell>
                         <div style={styles.SaveButtonPosition}>
                           <NavLink to={"/dashboard/accountdetails"}>
-                            <Button animated="fade">
-                              <Button.Content visible>Back</Button.Content>
-                              <Button.Content hidden>Back</Button.Content>
+                            <Button animated="fade" color="red">
+                              <Button.Content visible>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
+                              <Button.Content hidden>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
                             </Button>
                           </NavLink>
+
                           <Button
-                            animated="fade"
                             color="green"
+                            animated="fade"
                             type="submit"
                             disabled={isSubmitting}
                           >
-                            <Button.Content visible>Save</Button.Content>
-                            <Button.Content hidden>Save</Button.Content>
+                            <Button.Content visible>
+                              <Icon name="checkmark" />
+                              Confirm
+                            </Button.Content>
+                            <Button.Content hidden>
+                              <Icon name="checkmark" />
+                              Confirm
+                            </Button.Content>
                           </Button>
                         </div>
                       </Table.Cell>

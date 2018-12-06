@@ -23,7 +23,7 @@ const styles = {
     width: "15vw"
   },
   LabelWitdh: {
-    maxWidth: "12vw",
+    maxWidth: "10vw",
     display: "inline-block"
   }
 };
@@ -99,7 +99,6 @@ class PasswordReset extends React.Component {
             }}
             onSubmit={values => {
               console.log(values);
-              <NavLink to={"/accountdetails/passwordresetsucces"}/>
             }}
             validationSchema={Yup.object().shape({
               currentPassword: Yup.string().required(
@@ -123,7 +122,7 @@ class PasswordReset extends React.Component {
                 handleSubmit
               } = props;
               return (
-                <form onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit}>
                   <Table>
                     <Table.Body>
                       <Table.Row>
@@ -206,9 +205,15 @@ class PasswordReset extends React.Component {
                       <Table.Cell>
                         <div style={styles.ButtonGroup}>
                           <NavLink to={"/dashboard/accountdetails"}>
-                            <Button animated="fade">
-                              <Button.Content visible>Back</Button.Content>
-                              <Button.Content hidden>Back</Button.Content>
+                            <Button animated="fade" color="red">
+                              <Button.Content visible>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
+                              <Button.Content hidden>
+                                <Icon name="cancel" />
+                                Cancel
+                              </Button.Content>
                             </Button>
                           </NavLink>
 
@@ -218,8 +223,14 @@ class PasswordReset extends React.Component {
                             type="submit"
                             disabled={isSubmitting}
                           >
-                            <Button.Content visible>Done</Button.Content>
-                            <Button.Content hidden>Done</Button.Content>
+                            <Button.Content visible>
+                              <Icon name="checkmark" />
+                              Confirm
+                            </Button.Content>
+                            <Button.Content hidden>
+                              <Icon name="checkmark" />
+                              Confirm
+                            </Button.Content>
                           </Button>
                           {showPassword}
                         </div>
