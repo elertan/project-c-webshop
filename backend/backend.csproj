@@ -24,9 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="backend-datamodel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\backend-datamodel\bin\Debug\netcoreapp2.1\backend-datamodel.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\backend-datamodel\backend-datamodel.csproj" />
   </ItemGroup>
 
 </Project>
