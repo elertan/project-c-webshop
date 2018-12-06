@@ -35,7 +35,7 @@ class DashboardMenu extends React.Component<IProps> {
             <NavLink to={"/dashboard/accountdetails/namereset"}>
               <Menu.Item name="Change name" />
             </NavLink>
-            <NavLink to={"/dashboard/accountdetails"}>
+            <NavLink to={"/dashboard/accountdetails/emailreset"}>
               <Menu.Item name="Change Email" />
             </NavLink>
             <NavLink to={"/dashboard/accountdetails/passwordreset"}>
