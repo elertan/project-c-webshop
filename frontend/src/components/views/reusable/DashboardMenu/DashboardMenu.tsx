@@ -1,6 +1,6 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
-import { Menu, Divider } from "semantic-ui-react";
+import { Menu, Divider, Header } from "semantic-ui-react";
 import styles from "./DashboardMenuStyles";
 interface IProps {}
 
@@ -10,22 +10,36 @@ class DashboardMenu extends React.Component<IProps> {
       <div style={styles.SideMenu}>
         <Menu vertical>
           <Menu.Item>
-          <Menu.Header>Overview</Menu.Header>
+            {/* User dashboard overview section */}
             <NavLink to={"/dashboard/overview"}>
-            <Menu.Item name="Overview" />
+              <Header size="small">Overview</Header>
+            </NavLink>
+            <NavLink to={"/dashboard/overview"}>
+              <Menu.Item name="Overview" />
             </NavLink>
             <Divider />
-            <Menu.Header>Orders</Menu.Header>
+
+            {/* Orders section */}
+            <NavLink to={"/dashboard/orderhistory"}>
+              <Header size="small">Orders</Header>
+            </NavLink>
             <NavLink to={"/dashboard/orderhistory"}>
               <Menu.Item name="Order History" />
             </NavLink>
             <Divider />
-            <Menu.Header>Account details</Menu.Header>
+
+            {/* Account details section */}
             <NavLink to={"/dashboard/accountdetails"}>
-              <Menu.Item name="My account details" />
+              <Header size="small">Account details</Header>
             </NavLink>
-            <NavLink to={"/dashboard/paymentmethods"}>
-              <Menu.Item name="My payment methods" />
+            <NavLink to={"/dashboard/accountdetails/namereset"}>
+              <Menu.Item name="Change name" />
+            </NavLink>
+            <NavLink to={"/dashboard/accountdetails/emailreset"}>
+              <Menu.Item name="Change Email" />
+            </NavLink>
+            <NavLink to={"/dashboard/accountdetails/passwordreset"}>
+              <Menu.Item name="Reset password" />
             </NavLink>
           </Menu.Item>
         </Menu>

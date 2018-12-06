@@ -13,11 +13,13 @@ const styles = {
   },
   SaveButtonPosition: {
     marginLeft: "3%",
-    display: "inline"
+    display: "inline-block"
   },
 
   InputSpacing: {
-    paddingLeft: "3%"
+    display: "inline-block",
+    width: "10vw",
+    paddingRight: "3%"
   },
 
   NotClicked: {
@@ -27,6 +29,16 @@ const styles = {
 
   Clicked: {
     display: "none"
+  },
+  Secoration: {
+    decoration: "none"
+  },
+  EmailInputSpacing: {
+    display: "inline-block",
+    marginLeft: "3%",
+  },
+  EmailSaveButtonPosition: {
+    display: "inline-block"
   }
 };
 
