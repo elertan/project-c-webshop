@@ -117,22 +117,28 @@ class AccountDetails extends React.Component {
                         return (
                           <form onSubmit={handleSubmit}>
                             <div style={styles.EmailInputSpacing}>
-                              <Input
-                                fluid
-                                id="email"
-                                placeholder="Modify email"
-                                type="text"
-                                value={values.email}
-                                onChange={handleChange}
-                              />
+                              <div style={styles.InputSpacing}>
+                                <Input
+                                  fluid
+                                  id="email"
+                                  placeholder="Modify email"
+                                  type="text"
+                                  value={values.email}
+                                  onChange={handleChange}
+                                />
+                              </div>
                               <div style={styles.EmailSaveButtonPosition}>
-                                <Button animated="fade" color="green" fluid disabled={isSubmitting}>
+                                <Button
+                                  animated="fade"
+                                  color="green"
+                                  fluid
+                                  disabled={isSubmitting}
+                                >
                                   <Button.Content visible>Save</Button.Content>
                                   <Button.Content hidden>Save</Button.Content>
                                 </Button>
                               </div>
                             </div>
-
                             {errors.email && touched.email && (
                               <div style={styles.DashboardPositioning}>
                                 <Label basic pointing="left" color="red">
@@ -140,7 +146,6 @@ class AccountDetails extends React.Component {
                                 </Label>
                               </div>
                             )}{" "}
-                            
                           </form>
                         );
                       }}

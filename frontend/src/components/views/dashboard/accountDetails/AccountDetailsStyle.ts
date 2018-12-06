@@ -17,8 +17,9 @@ const styles = {
   },
 
   InputSpacing: {
-    paddingLeft: "3%",
-    display: "inline-block"
+    display: "inline-block",
+    width: "10vw",
+    paddingRight: "3%"
   },
 
   NotClicked: {
@@ -34,10 +35,10 @@ const styles = {
   },
   EmailInputSpacing: {
     display: "inline-block",
-    width: "15vw"
+    marginLeft: "3%",
   },
   EmailSaveButtonPosition: {
-    display: "inline"
+    display: "inline-block"
   }
 };
 
