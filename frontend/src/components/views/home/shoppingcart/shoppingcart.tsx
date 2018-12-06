@@ -22,11 +22,9 @@ class Shoppingcart extends React.Component<IProps> {
       <AppLayout>
         <Subscribe to={[CartState]}>
           {(cartState: CartState) => (
-            <Subscribe to={[CartState]}>
-              {(carttState: CartState) => (
                 <List divided>
                   <ListHeader as="h1">Shopping cart</ListHeader>
-                  {carttState.state.products.map(
+                  {cartState.state.products.map(
                     (product: IProduct, i: number) => {
                       if (product.album !== undefined) {
                         return (
@@ -78,7 +76,7 @@ class Shoppingcart extends React.Component<IProps> {
                   )}
                   <ListItem>
                     <div style={{ marginTop: 60 }}>
-                      <Button color="green" floated="right" ><NavLink to={"/home/payment"}>Proceed to checkout</NavLink>
+                      <Button color="green" floated="right" ><NavLink to={"/shoppingcart/order"}>Proceed to checkout</NavLink>
                         
                       </Button>
                     </div>
@@ -86,8 +84,7 @@ class Shoppingcart extends React.Component<IProps> {
                 </List>
               )}
             </Subscribe>
-          )}
-        </Subscribe>
+        
       </AppLayout>
     );
   }
