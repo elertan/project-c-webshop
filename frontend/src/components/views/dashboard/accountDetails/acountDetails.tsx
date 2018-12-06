@@ -10,7 +10,7 @@ import {
   Icon
 } from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
-import DashboardMenu from "../../reusable/DashboardMenu/DashboarMenu";
+import DashboardMenu from "../../reusable/DashboardMenu/DashboardMenu";
 import { NavLink } from "react-router-dom";
 // import { Formik } from "formik";
 // import * as Yup from "yup";

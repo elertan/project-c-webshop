@@ -7,7 +7,6 @@ using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using backend.Schemas;
-using backend.Schemas.Types;
 using backend.Services;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
@@ -64,7 +63,8 @@ namespace backend
             
             services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<IAppEnv>(appEnv);
-
+            services.AddSingleton<IEmailService, EmailService>();
+           
             // Create a dependency resolver for GraphQL
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 
@@ -78,6 +78,7 @@ namespace backend
 //            services.AddSingleton<ArtistGraph>();
 //            services.AddSingleton<AlbumGraph>();
 //            services.AddSingleton<UserGraph>();
+         
             services.AddSingleton<RootQuery>();
             services.AddSingleton<ISchema, RootSchema>();
 
@@ -85,6 +86,8 @@ namespace backend
             
             // Custom Services
             services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IOrderService, OrderService>();
+
 
             // Enable access to HttpContext
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

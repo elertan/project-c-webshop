@@ -1,18 +1,14 @@
-using System.Collections.Generic;
 using System.Linq;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
-using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Schemas.Types
+namespace backend.Schemas.Graphs
 {
     public class TrackGraph : BaseGraphType<Track>
     {
         public TrackGraph(DatabaseContext db, IEfGraphQLService efGraphQlService) : base(efGraphQlService)
         {
-            Name = "Track";
-            
             Field(t => t.Name, nullable: true).Description("The name of the track.");
             Field(t => t.SpotifyId).Description("The Id that is used on Spotify's database");
             Field(t => t.Explicit).Description("Is this track an explicit release?");
