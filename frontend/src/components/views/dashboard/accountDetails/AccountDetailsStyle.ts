@@ -31,6 +31,13 @@ const styles = {
   },
   Secoration: {
     decoration: "none"
+  },
+  EmailInputSpacing: {
+    display: "inline-block",
+    width: "15vw"
+  },
+  EmailSaveButtonPosition: {
+    display: "inline"
   }
 };
 

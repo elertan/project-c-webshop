@@ -7,13 +7,14 @@ import {
   Transition,
   Input,
   Header,
-  Icon
+  Icon,
+  Label
 } from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../reusable/DashboardMenu/DashboardMenu";
 import { NavLink } from "react-router-dom";
-// import { Formik } from "formik";
-// import * as Yup from "yup";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 class AccountDetails extends React.Component {
   public state = {
@@ -93,7 +94,59 @@ class AccountDetails extends React.Component {
                     animation="scale"
                     duration={1000}
                   >
-                    <div style={styles.InputSpacing}>
+                    <Formik
+                      initialValues={{
+                        email: ""
+                      }}
+                      onSubmit={values => {
+                        console.log(values);
+                      }}
+                      validationSchema={Yup.object().shape({
+                        email: Yup.string().required("Please fill in email")
+                      })}
+                    >
+                      {props => {
+                        const {
+                          values,
+                          touched,
+                          errors,
+                          isSubmitting,
+                          handleChange,
+                          handleSubmit
+                        } = props;
+                        return (
+                          <form onSubmit={handleSubmit}>
+                            <div style={styles.EmailInputSpacing}>
+                              <Input
+                                fluid
+                                id="email"
+                                placeholder="Modify email"
+                                type="text"
+                                value={values.email}
+                                onChange={handleChange}
+                              />
+                              <div style={styles.EmailSaveButtonPosition}>
+                                <Button animated="fade" color="green" fluid disabled={isSubmitting}>
+                                  <Button.Content visible>Save</Button.Content>
+                                  <Button.Content hidden>Save</Button.Content>
+                                </Button>
+                              </div>
+                            </div>
+
+                            {errors.email && touched.email && (
+                              <div style={styles.DashboardPositioning}>
+                                <Label basic pointing="left" color="red">
+                                  {errors.email}
+                                </Label>
+                              </div>
+                            )}{" "}
+                            
+                          </form>
+                        );
+                      }}
+                    </Formik>
+
+                    {/* <div style={styles.InputSpacing}>
                       <Input placeholder="New E-mail" />
                       <div style={styles.SaveButtonPosition}>
                         <Button animated="fade" color="green" fluid>
@@ -101,7 +154,7 @@ class AccountDetails extends React.Component {
                           <Button.Content hidden>Save</Button.Content>
                         </Button>
                       </div>
-                    </div>
+                    </div> */}
                   </Transition>
                 </Table.Cell>
               </Table.Row>
