@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using backend.Inputs;
 using backend.Schemas.Graphs;
 using backend.Services;
+using backend.Utils;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
@@ -26,20 +27,28 @@ namespace backend.Schemas
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<RegisterInput>> {Name = "data"}
                 ),
-                resolve: CreateAccountResolveFn);
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(CreateAccountResolveFn));
 
             Field<ApiResultGraph<UserGraph, User>>(
                 "login",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<LoginInput>> {Name = "data"}),
-                resolve: LoginResolveFn);
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(LoginResolveFn));
+            
+            Field<ApiResultGraph<OrderGraph, Order>>(
+                "createOrder",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<CreateOrderInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(CreateOrderResolveFn)
+            );
             
             Field<ApiResultGraph<OrderGraph, Order>>(
                 "createAnonymousOrder",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<CreateAnonymousOrderInput>> {Name = "data"}
                 ),
-                resolve: CreateAnonymousOrderResolveFn
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(CreateAnonymousOrderResolveFn)
             );
         }
         
@@ -69,6 +78,14 @@ namespace backend.Schemas
             {
                 return new ApiResult<User> { Errors = new List<ApiError> {new ApiError {Message = ex.Message}} };
             }
+        }
+
+        private async Task<ApiResult<Order>> CreateOrderResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<CreateOrderData>("data");
+
+            var order = await _orderService.CreateOrder(data);
+            return new ApiResult<Order> { Data = order };
         }
         
         private async Task<ApiResult<Order>> CreateAnonymousOrderResolveFn(ResolveFieldContext<object> context)

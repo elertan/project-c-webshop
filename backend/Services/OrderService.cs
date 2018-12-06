@@ -35,6 +35,24 @@ namespace backend.Services
         public async Task<Order> CreateOrder(CreateOrderData data)
         {
             var user = await _accountService.GetUserByToken(data.AuthToken);
+            
+            // Create order
+            var order = new Order
+            {
+                User = user
+            };
+            // Create links between order and products for that order
+            var orderXProductEntries = data.ProductIds.Select(id => new OrderXProduct
+            {
+                Order = order,
+                ProductId = id
+            });
+            
+            await _db.AddAsync(order);
+            await _db.AddRangeAsync(orderXProductEntries);
+            await _db.SaveChangesAsync();
+
+            return order;
         }
 
         /// <summary>
