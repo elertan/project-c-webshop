@@ -17,21 +17,7 @@ namespace backend.Schemas.Graphs.Mutations.Order
         {
             _orderService = orderService;
             
-            Field<ApiResultGraph<OrderGraph, Models.Order>>(
-                "createAnonymous",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<CreateAnonymousOrderInput>> {Name = "data"}
-                ),
-                resolve: CreateAnonymousOrderResolveFn
-            );
         }
         
-        private async Task<ApiResult<Models.Order>> CreateAnonymousOrderResolveFn(ResolveFieldContext<object> context)
-        {
-            var data = context.GetArgument<CreateAnonymousOrderData>("order");
-            
-            var order = await _orderService.CreateAnonymousOrder(data);
-            return new ApiResult<Models.Order>{Data = order};
-        }
     }
 }
