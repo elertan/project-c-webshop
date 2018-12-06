@@ -1,7 +1,7 @@
 import * as React from "react";
 import AppLayout from "../../../layout/AppLayout/AppLayout";
 import { Table, Input, Button, Header, Icon, Label } from "semantic-ui-react";
-import DashboardMenu from "../../../reusable/DashboardMenu/DashboarMenu";
+import DashboardMenu from "../../../reusable/DashboardMenu/DashboardMenu";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { NavLink } from "react-router-dom";
