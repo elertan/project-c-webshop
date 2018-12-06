@@ -29,9 +29,9 @@ interface IFormikValues {
     dateOfBirth: moment.Moment;
 }
 
-const createAccountMutation = gql`
-mutation ($createAccount: CreateAccountInput!) {
-    createAccount(account: $createAccount) {
+const registerMutation = gql`
+mutation ($data: RegisterInput!) {
+    register(data: $data) {
         data {
             email
             firstname
@@ -86,9 +86,9 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
         formik.setSubmitting(true);
         console.log("values: ", values)
         const result = await this.props.client.mutate({
-            mutation: createAccountMutation,
+            mutation: registerMutation,
             variables: {
-                createAccount: {
+                data: {
                     email: values.email,
                     password: values.password,
                     firstname: values.firstname,
@@ -99,7 +99,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps>, IState> {
         });
         console.log("Result is: ", result);
 
-        const apiResult = result.data!.createAccount as IApiResult<IUser>;
+        const apiResult = result.data!.register as IApiResult<IUser>;
         console.log("apiResult is: ", apiResult);
         if (apiResult.errors) {
             this.setState({ errors: apiResult.errors })

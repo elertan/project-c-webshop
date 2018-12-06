@@ -40,18 +40,19 @@ namespace backend.Services
             }
 
             await _accountService.RegisterAnonymously(data.Email);
+                        var order = new Order
+            {
+                User = new User{Email = data.Email}
+            };
             
-            throw new NotImplementedException("Order creation is not yet implemented.");
+            await _db.Orders.AddAsync(order);
+            await _db.SaveChangesAsync();
+
+            return order;
             
-//            var order = new Order
-//            {
-//                User = new User{Email = data.UserEmail}
-//            };
-//            
-//            await _db.Orders.AddAsync(order);
-//            await _db.SaveChangesAsync();
-//
-//            return order;
+           // throw new NotImplementedException("Order creation is not yet implemented.");
+            
+
         }
     }
 }

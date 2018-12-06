@@ -138,7 +138,9 @@ class Menu extends React.Component<IProps, IState> {
           </Label.Group>
         </SemanticMenu.Item>
       }
-      content={<CartPopupContent/>}
+      content={
+      <CartPopupContent/>
+    }
     />
   );
 }
