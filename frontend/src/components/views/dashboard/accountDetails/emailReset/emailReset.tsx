@@ -33,6 +33,10 @@ const styles = {
   LabelWitdh: {
     maxWidth: "6vw",
     display: "inline-block"
+  },
+  modalContentPositioning: {
+    maxWidth: "40vw",
+    marginLeft: "30vw"
   }
 };
 
@@ -125,6 +129,10 @@ class EmailReset extends React.Component {
                         </Table.Cell>
                       </Table.Row>
 
+
+                      {/* Confirm and return button */}
+                      {/* Confirm and return button */}
+                      {/* Confirm and return button */}
                       <Table.Cell>
                         <div style={styles.SaveButtonPosition}>
                           <NavLink to={"/dashboard/accountdetails"}>
@@ -142,9 +150,25 @@ class EmailReset extends React.Component {
                             <Button.Content visible>Continue</Button.Content>
                             <Button.Content hidden>Continue</Button.Content>
                           </Button>
-                          <Modal open={this.state.openModal} basic size="small">
+
+
+                          {/* Modal */}
+                          {/* Modal */}
+                          {/* Modal */}
+                          <Modal
+                            style={styles.modalContentPositioning}
+                            closeOnEscape={false}
+                            closeOnDimmerClick={false}
+                            open={this.state.openModal}
+                            basic
+                            size="fullscreen"
+                          >
                             <Header icon="key" content="Confirm Email change" />
                             <Modal.Content>
+                              <p>
+                                Are you sure you want to change 
+                                {" Current email"} into {"New email"}
+                              </p>
                               <p>
                                 We need to confirm it's you to change your
                                 email!
@@ -161,17 +185,15 @@ class EmailReset extends React.Component {
                                 inverted
                               >
                                 <Button.Content>
-                                  <Icon name="remove" /> Back 
+                                  <Icon name="remove" /> Back
                                 </Button.Content>
                               </Button>
                               <Button color="green" animated="fade">
                                 <Button.Content visible>
-                                  <Icon name="checkmark" /> Confirm password
-                                  change
+                                  <Icon name="checkmark" /> Confirm email change
                                 </Button.Content>
                                 <Button.Content hidden>
-                                  <Icon name="checkmark" /> Confirm password
-                                  change
+                                  <Icon name="checkmark" /> Confirm email change
                                 </Button.Content>
                               </Button>
                             </Modal.Actions>
