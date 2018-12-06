@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using backend_filling_tool_v2.SpotifyDTOs;
 using Artist = backend_filling_tool_v2.SpotifyDTOs.Extended.Artist;
 
-namespace backend_filling_tool_v2
+namespace backend_filling_tool_v2.Fetcher
 {
     public class SpotifyDataset
     {

@@ -1,8 +1,7 @@
-using backend.Schemas.Graphs;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 
-namespace backend.Schemas
+namespace backend.Schemas.Graphs
 {
     public class OrderGraph : BaseGraphType<Order>
     {

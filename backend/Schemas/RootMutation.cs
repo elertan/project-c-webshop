@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using backend.Inputs;
 using backend.Schemas.Graphs;
-using backend.Schemas.Graphs.Mutations.Auth;
-using backend.Schemas.Graphs.Mutations.Order;
 using backend.Services;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
