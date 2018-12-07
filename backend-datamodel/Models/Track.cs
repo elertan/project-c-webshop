@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using backend_datamodel.Models.Crosstables;
 
 namespace backend_datamodel.Models
 {

@@ -50,8 +50,16 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(CreateAnonymousOrderResolveFn)
             );
+
+            Field<ApiResultGraph<BooleanGraphType, bool>>(
+                "addToWishlist",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AddToWishlistInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddToWishlistResolveFn)
+            );
         }
-        
+
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<RegisterData>("data");
@@ -82,6 +90,15 @@ namespace backend.Schemas
             
             var order = await _orderService.CreateAnonymousOrder(data);
             return new ApiResult<Order>{Data = order};
+        }
+        
+        private async Task<ApiResult<bool>> AddToWishlistResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<AddToWishlistData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.AddToWishlist(user.Id, data.ProductId);
+            return new ApiResult<bool> {Data = true};
         }
     }
 }
