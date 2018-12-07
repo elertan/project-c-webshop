@@ -36,17 +36,18 @@ const styles = {
     width: "60%"
   }
 };
-const createOrderMutation = gql`
-mutation ($createOrder: CreateOrderInput!) {
-    createOrder(order: $createOrder) {
-        data {
-            email
-          
-        }
-        errors {
-            message
-        }
-    }
+const createAnonymousOrderMutation = gql`
+mutation ($data: CreateAnonymousOrderInput!) {
+  createAnonymousOrder(data: $data) {
+       data {
+          user{
+           email
+         }
+       }
+       errors {
+           message
+       }
+   }
 }
 `;
 
@@ -208,13 +209,13 @@ private handleSubmit = async (values: IFormikValues, formik: FormikProps<IFormik
   formik.setSubmitting(true);
   console.log("values: ", values)
   const result = await this.props.client.mutate({
-      mutation: createOrderMutation,
+      mutation: createAnonymousOrderMutation,
       variables: {
-          createOrder: {
-              email: values.email,
-            
+         
+            data:{  email: values.email,
+            }
           }
-      }
+      
   });
   console.log("Result is: ", result);
 
