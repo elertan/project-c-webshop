@@ -55,7 +55,8 @@ namespace backend.Services
                 Email = data.Email,
                 Firstname = data.Firstname,
                 Lastname = data.Lastname,
-                DateOfBirth = data.DateOfBirth
+                DateOfBirth = data.DateOfBirth,
+                Token = Guid.NewGuid().ToString()
             };
 
             var hashedPassword = _passwordHasher.HashPassword(user, data.Password);
@@ -86,7 +87,8 @@ namespace backend.Services
             var user = new User
             {
                 Email = email,
-                AnonymousRegistrationToken = anonymousRegistrationToken
+                AnonymousRegistrationToken = anonymousRegistrationToken,
+                Token = Guid.NewGuid().ToString()
             };
 
             await _db.Users.AddAsync(user);
@@ -116,6 +118,7 @@ namespace backend.Services
                 {
                     var rehashedPassword = _passwordHasher.HashPassword(user, data.Password);
                     user.Password = rehashedPassword;
+                    user.Token = Guid.NewGuid().ToString();
                     await _db.SaveChangesAsync();
                     break;
                 }
@@ -136,7 +139,6 @@ namespace backend.Services
 //            };
 //            var token = tokenHandler.CreateToken(tokenDescriptor);
 //            user.Token = tokenHandler.WriteToken(token);
-            user.Token = Guid.NewGuid().ToString();
 
             // Don't emit password to client
 //            user.Password = null;
