@@ -9,7 +9,7 @@ const styles = {
 };
 
 class Admin extends React.Component {
-  public state = { activeItem: "overview" };
+  public state = { activeItem: "Overview" };
 
   public changeMenuItem(name: string) {
     this.setState({
