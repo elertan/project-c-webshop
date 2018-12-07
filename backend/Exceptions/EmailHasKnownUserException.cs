@@ -1,7 +1,8 @@
 using System;
+using backend.Schemas;
 using backend_datamodel.Models;
 
-namespace backend.Schemas.Graphs.Mutations.Order.Exceptions
+namespace backend.Exceptions
 {
     public class EmailHasKnownUserException : Exception, IApiErrorable
     {

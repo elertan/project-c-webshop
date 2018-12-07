@@ -4,7 +4,8 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using backend.Schemas.Graphs.Mutations.Auth;
+using backend.Exceptions;
+using backend.Inputs;
 using backend_datamodel.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace backend.Services
         Task<User> Register(RegisterData data);
         Task<User> RegisterAnonymously(string email);
         Task<User> Login(LoginData data);
+        Task<User> GetUserByToken(string token);
     }
 
     public class AccountService : IAccountService
@@ -117,24 +119,35 @@ namespace backend.Services
             }
 
             // http://jasonwatmore.com/post/2018/08/14/aspnet-core-21-jwt-authentication-tutorial-with-example-api
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appEnv.JwtSecret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+//            var tokenHandler = new JwtSecurityTokenHandler();
+//            var key = Encoding.ASCII.GetBytes(_appEnv.JwtSecret);
+//            var tokenDescriptor = new SecurityTokenDescriptor
+//            {
+//                Subject = new ClaimsIdentity(new[]
+//                {
+//                    new Claim(ClaimTypes.Name, user.Id.ToString())
+//                }),
+//                Expires = DateTime.UtcNow.AddDays(7),
+//                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+//                    SecurityAlgorithms.HmacSha256Signature)
+//            };
+//            var token = tokenHandler.CreateToken(tokenDescriptor);
+//            user.Token = tokenHandler.WriteToken(token);
+            user.Token = Guid.NewGuid().ToString();
 
             // Don't emit password to client
 //            user.Password = null;
 
+            return user;
+        }
+
+        public async Task<User> GetUserByToken(string token)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(e => e.Token == token);
+            if (user == null)
+            {
+                throw new UserNotFoundForAuthTokenException(token);
+            }
             return user;
         }
     }
