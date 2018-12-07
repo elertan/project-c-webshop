@@ -33,7 +33,6 @@ namespace backend.Schemas
             AddQueryConnectionField<CategoryGraph, Category>(
                 name: "categories",
                 resolve: ctx => db.Categories);
-
         }
     }
 }
