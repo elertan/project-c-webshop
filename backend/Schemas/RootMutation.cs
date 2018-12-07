@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Inputs;
 using backend.Schemas.Graphs;
+using backend.Schemas.Inputs;
 using backend.Services;
 using backend.Utils;
 using backend_datamodel.Models;
