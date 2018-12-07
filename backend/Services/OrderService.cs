@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Schemas.Exceptions;
 using backend.Schemas.Inputs;
 using backend_datamodel.Models;
+using backend_datamodel.Models.Crosstables;
 using Microsoft.EntityFrameworkCore;
 using MoreLinq;
 

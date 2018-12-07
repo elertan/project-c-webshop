@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using backend.Schemas.Exceptions;
 using backend.Schemas.Inputs;
 using backend_datamodel.Models;
+using backend_datamodel.Models.Crosstables;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,8 @@ namespace backend.Services
         Task<User> RegisterAnonymously(string email);
         Task<User> Login(LoginData data);
         Task<User> GetUserByToken(string token);
+        Task AddToWishlist(int userId, int productId);
+        Task RemoveFromWishlist(int userId, int productId);
     }
 
     public class AccountService : IAccountService
@@ -149,6 +152,36 @@ namespace backend.Services
                 throw new UserNotFoundForAuthTokenException(token);
             }
             return user;
+        }
+
+        public async Task AddToWishlist(int userId, int productId)
+        {
+            // Is product already in the users wishlist
+            if (await _db.WishlistUserXProducts.AnyAsync(x => x.UserId == userId && x.ProductId == productId))
+            {
+                throw new Exception("Product is already in the user's wishlist");
+            }
+
+            var wishlistEntry = new Wishlist_UserXProduct
+            {
+                UserId = userId,
+                ProductId = productId
+            };
+            await _db.AddAsync(wishlistEntry);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task RemoveFromWishlist(int userId, int productId)
+        {
+            var entry = await _db.WishlistUserXProducts.FirstOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId);
+            // Does the product even exist in the wishlist, can't remove what you don't have amirite?
+            if (entry == null)
+            {
+                throw new Exception("Product does not exist in the user's wishlist");
+            }
+
+            _db.Remove(entry);
+            await _db.SaveChangesAsync();
         }
     }
 }
