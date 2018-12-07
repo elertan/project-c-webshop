@@ -48,20 +48,18 @@ class EmailReset extends React.Component {
 
   public confirmModalIsAllowed = () =>
     this.setState({
-      confirm: !this.state.confirm
+      confirm: true
     });
 
   public closePasswordModal = () =>
     this.setState({
-      openModal: !this.state.openModal
+      openModal: false
     });
 
   public openPasswordModal = () => {
-    if (this.state.confirm) {
-      this.setState({
-        openModal: !this.state.openModal
-      });
-    }
+    this.setState({
+      openModal: this.state.confirm
+    });
   };
   public render() {
     return (
@@ -80,13 +78,18 @@ class EmailReset extends React.Component {
         <div style={styles.DashboardPositioning}>
           <Formik
             initialValues={{
-              email: ""
+              email: "",
+              confirmemail: ""
             }}
             onSubmit={this.confirmModalIsAllowed}
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .required("Please fill in an email")
-                .email("Email should be a valid email.")
+                .email("Email should be a valid email"),
+              confirmemail: Yup.string()
+                .oneOf([Yup.ref("email"), null], "Emails do not match")
+                .required("Please retype your new email")
+                .email("Email should be a valid email")
             })}
           >
             {props => {
@@ -123,6 +126,33 @@ class EmailReset extends React.Component {
                             <div style={styles.LabelWitdh}>
                               <Label basic pointing="left" color="red">
                                 {errors.email}
+                              </Label>
+                            </div>
+                          )}{" "}
+                        </Table.Cell>
+                      </Table.Row>
+
+                      <Table.Row>
+                        <Table.Cell>
+                          <h3>
+                            <b>Confirm email : </b>
+                          </h3>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <div style={styles.InputSpacing}>
+                            <Input
+                              fluid
+                              id="confirmemail"
+                              placeholder="Confirm new email"
+                              type="text"
+                              value={values.confirmemail}
+                              onChange={handleChange}
+                            />
+                          </div>
+                          {errors.confirmemail && touched.confirmemail && (
+                            <div style={styles.LabelWitdh}>
+                              <Label basic pointing="left" color="red">
+                                {errors.confirmemail}
                               </Label>
                             </div>
                           )}{" "}
