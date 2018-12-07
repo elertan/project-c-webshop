@@ -58,6 +58,14 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddToWishlistResolveFn)
             );
+
+            Field<ApiResultGraph<BooleanGraphType, bool>>(
+                "removeFromWishlist",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<RemoveFromWishlistInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(RemoveFromWishlistResolveFn)
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -98,6 +106,15 @@ namespace backend.Schemas
             var user = await _accountService.GetUserByToken(data.AuthToken);
 
             await _accountService.AddToWishlist(user.Id, data.ProductId);
+            return new ApiResult<bool> {Data = true};
+        }
+        
+        private async Task<ApiResult<bool>> RemoveFromWishlistResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<RemoveFromWishlistData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.RemoveFromWishlist(user.Id, data.ProductId);
             return new ApiResult<bool> {Data = true};
         }
     }

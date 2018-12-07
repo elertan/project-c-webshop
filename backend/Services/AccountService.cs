@@ -21,6 +21,7 @@ namespace backend.Services
         Task<User> Login(LoginData data);
         Task<User> GetUserByToken(string token);
         Task AddToWishlist(int userId, int productId);
+        Task RemoveFromWishlist(int userId, int productId);
     }
 
     public class AccountService : IAccountService
@@ -167,6 +168,19 @@ namespace backend.Services
                 ProductId = productId
             };
             await _db.AddAsync(wishlistEntry);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task RemoveFromWishlist(int userId, int productId)
+        {
+            var entry = await _db.WishlistUserXProducts.FirstOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId);
+            // Does the product even exist in the wishlist, can't remove what you don't have amirite?
+            if (entry == null)
+            {
+                throw new Exception("Product does not exist in the user's wishlist");
+            }
+
+            _db.Remove(entry);
             await _db.SaveChangesAsync();
         }
     }
