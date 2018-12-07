@@ -35,8 +35,17 @@ namespace backend.Schemas.Graphs.UserContext
                     return await db.Products.Where(x => productIds.Contains(x.Id)).ToListAsync();
                 }
             );
-            
-            
+
+            FieldAsync<ListGraphType<ProductGraph>, List<Product>>(
+                name: "wishlist",
+                resolve: async ctx =>
+                {
+                    var productIds = await db.WishlistUserXProducts.Where(x => x.UserId == ctx.Source.Id)
+                        .Select(x => x.ProductId)
+                        .ToListAsync();
+                    return await db.Products.Where(x => productIds.Contains(x.Id)).ToListAsync();
+                }
+            );
         }
     }
 }
