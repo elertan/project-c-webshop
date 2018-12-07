@@ -1,4 +1,4 @@
-namespace backend.Inputs
+namespace backend.Schemas.Inputs
 {
     public class CreateAnonymousOrderData
     {

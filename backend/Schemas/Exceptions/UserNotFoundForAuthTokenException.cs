@@ -1,6 +1,6 @@
 using System;
 
-namespace backend.Exceptions
+namespace backend.Schemas.Exceptions
 {
     public class UserNotFoundForAuthTokenException : Exception
     {

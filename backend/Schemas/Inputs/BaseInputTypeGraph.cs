@@ -1,6 +1,6 @@
 using GraphQL.Types;
 
-namespace backend.Inputs
+namespace backend.Schemas.Inputs
 {
     public class BaseInputTypeGraph<T> : InputObjectGraphType<T>
     {

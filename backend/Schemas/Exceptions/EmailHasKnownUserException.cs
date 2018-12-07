@@ -1,8 +1,7 @@
 using System;
-using backend.Schemas;
 using backend_datamodel.Models;
 
-namespace backend.Exceptions
+namespace backend.Schemas.Exceptions
 {
     public class EmailHasKnownUserException : Exception, IApiErrorable
     {
