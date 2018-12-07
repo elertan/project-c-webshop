@@ -55,29 +55,17 @@ namespace backend.Schemas
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<RegisterData>("data");
-            try
-            {
-                var user = await _accountService.Register(data);
-                return new ApiResult<User> { Data = user };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<User> { Errors = new List<ApiError> {new ApiError {Message = ex.Message}} };
-            }
+            
+            var user = await _accountService.Register(data);
+            return new ApiResult<User> { Data = user };
         }
 
         private async Task<ApiResult<User>> LoginResolveFn(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<LoginData>("data");
-            try
-            {
-                var user = await _accountService.Login(data);
-                return new ApiResult<User> {Data = user};
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<User> { Errors = new List<ApiError> {new ApiError {Message = ex.Message}} };
-            }
+            
+            var user = await _accountService.Login(data);
+            return new ApiResult<User> {Data = user};
         }
 
         private async Task<ApiResult<Order>> CreateOrderResolveFn(ResolveFieldContext<object> context)
