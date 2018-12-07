@@ -35,10 +35,10 @@ class Menu extends React.Component<IProps, IState> {
     WishlistButton: false
   };
 
-  public setStateShoppingCartButton =() => {
-    this.setState({WishlistButton: false ,ShoppingCartButton: true})
+  public setStateShoppingCartButton = () => {
+    this.setState({WishlistButton: false, ShoppingCartButton: true})
   }
-  public setStateWishListButton =() => {
+  public setStateWishListButton = () => {
     this.setState({ShoppingCartButton: false, WishlistButton: true})
   }
 
@@ -139,8 +139,8 @@ class Menu extends React.Component<IProps, IState> {
         </SemanticMenu.Item>
       }
       content={
-      <CartPopupContent/>
-    }
+        <CartPopupContent/>
+      }
     />
   );
 }
