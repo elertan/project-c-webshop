@@ -88,10 +88,13 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
       // Handle token
       // alert(apiResult.data!.token);
       userState.setUser(apiResult.data!);
+      
       console.log("User is now logged in." )
+      // location.reload()
     }
     formik.setSubmitting(false);
     console.log("Login submission ended.")
+
   };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
