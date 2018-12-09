@@ -71,10 +71,10 @@ class Menu extends React.Component<IProps, IState> {
     );
   }
 
-  private renderLoginAccountMenuItem = (userStateLogin: UserState) => {
+  private renderLoginAccountMenuItem = () => {
     let menuContent = null;
     let popupContent = null;
-    if (userStateLogin.state.user === null) {
+    if (userState.state.user === null) {
       menuContent = (
         <>
           Login
@@ -107,25 +107,31 @@ class Menu extends React.Component<IProps, IState> {
     );
   };
 
-  private renderWishlistMenuItem = (wishlistState: WishlistState) => (
-    <Popup
-      basic
-      hideOnScroll
-      on="click"
-      open={this.state.WishlistButton && this.state.ShoppingCartButton === false}
-      onOpen={this.toggleWishlist}
-      onClose={this.toggleWishlist}
-      trigger={
-        <SemanticMenu.Item header as="a">
-          <Label.Group circular>
-            Wishlist
-            <Label>{wishlistState.state.products.length}</Label>
-          </Label.Group>
-        </SemanticMenu.Item>
-      }
-      content={<WishlistPopupContent/>}
-    />
-  );
+  private renderWishlistMenuItem = (wishlistState: WishlistState, loggedIn: UserState) => {
+    if (loggedIn.state.user) {
+      return (
+        <Popup
+          basic
+          hideOnScroll
+          on="click"
+          open={this.state.WishlistButton && this.state.ShoppingCartButton === false}
+          onOpen={this.toggleWishlist}
+          onClose={this.toggleWishlist}
+          trigger={
+            <SemanticMenu.Item header as="a">
+              <Label.Group circular>
+                Wishlist
+                <Label>{wishlistState.state.products.length}</Label>
+              </Label.Group>
+            </SemanticMenu.Item>
+          }
+          content={<WishlistPopupContent/>}
+        />
+      )
+    } else {
+        return (<span/>)
+    }
+  };
 
   private renderShoppingCartMenuItem = (cartState: CartState) => (
     <Popup
