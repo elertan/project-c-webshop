@@ -4,7 +4,7 @@ import {
   Menu as SemanticMenu, Popup, Search
 } from 'semantic-ui-react';
 import CartState from "../../../../../states/CartState";
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 
 import LoginPopupContent from "./LoginPopupContent";
@@ -12,39 +12,46 @@ import UserState from "../../../../../states/UserState";
 import AccountPopupContent from "./AccountPopupContent";
 import WishlistPopupContent from "./WishlistPopupContent";
 import CartPopupContent from "./CartPopupContent";
-import {Subscribe} from "unstated";
+import { Subscribe } from "unstated";
+import { userState } from "src";
 
 interface IProps {
 }
 
 interface IState {
+
 }
 
 class Menu extends React.Component<IProps, IState> {
-  // public authentication(email: string, password: string) {
-  //   console.log(
-  //     "Method werkt email = " +
-  //       document.getElementById("email") +
-  //       " wachtwood = " +
-  //       document.getElementById("password")
-  //   );
-  //   return "hello";
-  // }
   public state = {
     ShoppingCartButton: false,
-    WishlistButton: false
+    WishlistButton: false,
   };
 
-  public setStateShoppingCartButton = () => {
-    this.setState({WishlistButton: false, ShoppingCartButton: true})
+  public toggleShoppingCart = () => {
+    this.setState({
+      ShoppingCartButton: !this.state.ShoppingCartButton,
+      WishlistButton: false
+    })
   }
-  public setStateWishListButton = () => {
-    this.setState({ShoppingCartButton: false, WishlistButton: true})
+
+  public toggleWishlist = () => {
+    this.setState({
+      WishlistButton: !this.state.WishlistButton,
+      ShoppingCartButton: false
+    })
   }
+
+  // public setStateShoppingCartButton =() => {
+  //   this.setState({WishlistButton: false, ShoppingCartButton: true})
+  // }
+  // public setStateWishListButton =() => {
+  //   this.setState({ShoppingCartButton: false, WishlistButton: true})
+  // }
 
   public render() {
     return (
-      <div style={{marginBottom: 65}}>
+      <div className="ui menu" style={{ marginBottom: 65 }}>
         <SemanticMenu fixed="top">
           <Container>
             <NavLink to={"/"}>
@@ -53,41 +60,37 @@ class Menu extends React.Component<IProps, IState> {
               </SemanticMenu.Item>
             </NavLink>
             <SemanticMenu.Item header>
-              <Search fluid/>
+              <Search fluid />
             </SemanticMenu.Item>
-
-            <Subscribe to={[UserState]}>{this.renderLoginAccountMenuItem}</Subscribe>
-
-            <Subscribe to={[WishlistState]}>{this.renderWishlistMenuItem}</Subscribe>
-
+            <Subscribe to={[WishlistState, UserState]}>{this.renderWishlistMenuItem}</Subscribe>
             <Subscribe to={[CartState]}>{this.renderShoppingCartMenuItem}</Subscribe>
-
+            <Subscribe to={[UserState]}>{this.renderLoginAccountMenuItem}</Subscribe>
           </Container>
         </SemanticMenu>
       </div>
     );
   }
 
-  private renderLoginAccountMenuItem = (userState: UserState) => {
+  private renderLoginAccountMenuItem = (userStateLogin: UserState) => {
     let menuContent = null;
     let popupContent = null;
-    if (userState.state.user === null) {
+    if (userStateLogin.state.user === null) {
       menuContent = (
         <>
           Login
-          <Icon name="caret down"/>
+          <Icon name="caret down" />
         </>
       );
-      popupContent = <LoginPopupContent/>;
+      popupContent = <LoginPopupContent />;
     } else {
       menuContent = (
         <>
-          <Icon name="user"/>
+          <Icon name="user" />
           {userState.state.user!.email}
-          <Icon name="caret down"/>
+          <Icon name="caret down" />
         </>
       );
-      popupContent = <AccountPopupContent/>;
+      popupContent = <AccountPopupContent />;
     }
     return (
       <Popup
@@ -109,8 +112,9 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
-      open={this.state.WishlistButton}
-      onOpen={this.setStateWishListButton}
+      open={this.state.WishlistButton && this.state.ShoppingCartButton === false}
+      onOpen={this.toggleWishlist}
+      onClose={this.toggleWishlist}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>
@@ -128,19 +132,18 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
-      open={this.state.ShoppingCartButton}
-      onOpen={this.setStateShoppingCartButton}
+      open={this.state.ShoppingCartButton && this.state.WishlistButton === false}
+      onOpen={this.toggleShoppingCart}
+      onClose={this.toggleShoppingCart}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>
-            <Icon name="cart"/>
+            <Icon name="cart" />
             <Label>{cartState.state.products.length}</Label>
           </Label.Group>
         </SemanticMenu.Item>
       }
-      content={
-        <CartPopupContent/>
-      }
+      content={<CartPopupContent />}
     />
   );
 }
