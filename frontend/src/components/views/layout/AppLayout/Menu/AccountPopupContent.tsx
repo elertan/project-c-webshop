@@ -3,11 +3,12 @@ import {Subscribe} from "unstated";
 import UserState from "../../../../../states/UserState";
 import {Button, Divider} from "semantic-ui-react";
 import {userState} from "../../../../../index";
+import {RouteComponentProps, withRouter} from "react-router";
 
 interface IProps {}
 interface IState {}
 
-class AccountPopupContent extends React.Component<IProps, IState> {
+class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{}>, IState> {
   public state = {};
 
   public render() {
@@ -21,7 +22,20 @@ class AccountPopupContent extends React.Component<IProps, IState> {
   private renderWithUserState = (state: UserState) => {
     return (
       <div>
-        Hi {state.state.user!.email}!
+        Hi {state.state.user!.firstname} {state.state.user!.lastname}!
+        <Divider/>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Button
+            onClick={this.handleMyAccountClick}
+          >
+            My Account
+          </Button>
+        </div>
         <Divider/>
         <div style={{
           display: 'flex',
@@ -43,6 +57,10 @@ class AccountPopupContent extends React.Component<IProps, IState> {
   private handleLogoutClick = () => {
     userState.logout();
   };
+
+  private handleMyAccountClick = () => {
+    this.props.history.push("/dashboard/accountdetails");
+  };
 }
 
-export default AccountPopupContent;
+export default withRouter(AccountPopupContent);
