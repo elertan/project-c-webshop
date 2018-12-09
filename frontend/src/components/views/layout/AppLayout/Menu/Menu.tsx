@@ -21,26 +21,31 @@ interface IState {
 }
 
 class Menu extends React.Component<IProps, IState> {
-  // public authentication(email: string, password: string) {
-  //   console.log(
-  //     "Method werkt email = " +
-  //       document.getElementById("email") +
-  //       " wachtwood = " +
-  //       document.getElementById("password")
-  //   );
-  //   return "hello";
-  // }
   public state = {
     ShoppingCartButton: false,
     WishlistButton: false
   };
 
-  public setStateShoppingCartButton =() => {
-    this.setState({WishlistButton: false ,ShoppingCartButton: true})
+  public toggleShoppingCart = () => {
+    this.setState({
+      ShoppingCartButton: !this.state.ShoppingCartButton,
+      WishlistButton: false
+    })
   }
-  public setStateWishListButton =() => {
-    this.setState({ShoppingCartButton: false, WishlistButton: true})
+
+  public toggleWishlist = () => {
+    this.setState({
+      WishlistButton: !this.state.WishlistButton,
+      ShoppingCartButton: false
+    })
   }
+
+  // public setStateShoppingCartButton =() => {
+  //   this.setState({WishlistButton: false ,ShoppingCartButton: true})
+  // }
+  // public setStateWishListButton =() => {
+  //   this.setState({ShoppingCartButton: false, WishlistButton: true})
+  // }
 
   public render() {
     return (
@@ -109,8 +114,9 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
-      open={this.state.WishlistButton}
-      onOpen={this.setStateWishListButton}
+      open={this.state.WishlistButton && this.state.ShoppingCartButton === false}
+      onOpen={this.toggleWishlist}
+      onClose={this.toggleWishlist}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>
@@ -128,8 +134,9 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
-      open={this.state.ShoppingCartButton}
-      onOpen={this.setStateShoppingCartButton}
+      open={this.state.ShoppingCartButton && this.state.WishlistButton === false}
+      onOpen={this.toggleShoppingCart}
+      onClose={this.toggleShoppingCart}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>
