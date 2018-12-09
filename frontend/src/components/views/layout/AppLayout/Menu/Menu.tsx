@@ -28,12 +28,26 @@ class Menu extends React.Component<IProps, IState> {
     WishlistButton: false,
   };
 
-  public setStateShoppingCartButton = () => {
-    this.setState({ WishlistButton: false, ShoppingCartButton: true })
+  public toggleShoppingCart = () => {
+    this.setState({
+      ShoppingCartButton: !this.state.ShoppingCartButton,
+      WishlistButton: false
+    })
   }
-  public setStateWishListButton = () => {
-    this.setState({ ShoppingCartButton: false, WishlistButton: true })
+
+  public toggleWishlist = () => {
+    this.setState({
+      WishlistButton: !this.state.WishlistButton,
+      ShoppingCartButton: false
+    })
   }
+
+  // public setStateShoppingCartButton =() => {
+  //   this.setState({WishlistButton: false ,ShoppingCartButton: true})
+  // }
+  // public setStateWishListButton =() => {
+  //   this.setState({ShoppingCartButton: false, WishlistButton: true})
+  // }
 
   public render() {
     return (
@@ -93,40 +107,34 @@ class Menu extends React.Component<IProps, IState> {
     );
   };
 
-  private renderWishlistMenuItem = (wishlistState: WishlistState, userStatusLoggedIn: UserState) => {
-    if (userStatusLoggedIn.state.user) {
-      return (
-        <Popup
-          basic
-          hideOnScroll
-          on="click"
-          open={this.state.WishlistButton}
-          onOpen={this.setStateWishListButton}
-          trigger={
-            <SemanticMenu.Item header as="a">
-              <Label.Group circular>
-                Wishlist
-                <Label>{wishlistState.state.products.length}</Label>
-              </Label.Group>
-            </SemanticMenu.Item>
-          }
-          content={<WishlistPopupContent />}
-        />
-      );
-    } else {
-      return (
-        <span />
-      )
-    }
-  };
+  private renderWishlistMenuItem = (wishlistState: WishlistState) => (
+    <Popup
+      basic
+      hideOnScroll
+      on="click"
+      open={this.state.WishlistButton && this.state.ShoppingCartButton === false}
+      onOpen={this.toggleWishlist}
+      onClose={this.toggleWishlist}
+      trigger={
+        <SemanticMenu.Item header as="a">
+          <Label.Group circular>
+            Wishlist
+            <Label>{wishlistState.state.products.length}</Label>
+          </Label.Group>
+        </SemanticMenu.Item>
+      }
+      content={<WishlistPopupContent/>}
+    />
+  );
 
   private renderShoppingCartMenuItem = (cartState: CartState) => (
     <Popup
       basic
       hideOnScroll
       on="click"
-      open={this.state.ShoppingCartButton}
-      onOpen={this.setStateShoppingCartButton}
+      open={this.state.ShoppingCartButton && this.state.WishlistButton === false}
+      onOpen={this.toggleShoppingCart}
+      onClose={this.toggleShoppingCart}
       trigger={
         <SemanticMenu.Item header as="a">
           <Label.Group circular>

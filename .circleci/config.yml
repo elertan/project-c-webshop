@@ -25,7 +25,7 @@ jobs:
       - run: cd frontend && npm run build
       - run: cd backend-datamodel && dotnet restore
       - run: cd backend-datamodel && dotnet build
-      - run: cd database-filling-tool && dotnet restore
-      - run: cd database-filling-tool && dotnet build
+      - run: cd backend-filling-tool-v2 && dotnet restore
+      - run: cd backend-filling-tool-v2 && dotnet build
       - run: cd backend && dotnet restore
       - run: cd backend && dotnet build

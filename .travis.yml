@@ -19,7 +19,7 @@ script:
   - cd ../backend-datamodel
   - dotnet restore
   - dotnet build
-  - cd ../database-filling-tool
+  - cd ../backend-filling-tool-v2
   - dotnet restore
   - dotnet build
   - cd ../backend
