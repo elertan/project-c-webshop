@@ -4,6 +4,7 @@ import {Query} from "react-apollo";
 import AlbumCover from "../../reusable/AlbumCover/AlbumCover";
 import {Grid} from "semantic-ui-react";
 import AppLayout from "../../layout/AppLayout/AppLayout";
+import AlbumCoverPlaceholder from "../../reusable/AlbumCover/AlbumCoverPlaceholder";
 
 interface IProps {
 }
@@ -32,7 +33,18 @@ const Explore: React.SFC<IProps> = (props: IProps) => {
       <Query query={query}>
         {(data) => {
           if (data.loading) {
-            return null;
+            return (
+              <Grid
+                columns={5}
+                doubling
+              >
+                {Array.from({length: 30}).map((_, i) => (
+                  <Grid.Column key={i}>
+                    <AlbumCoverPlaceholder/>
+                  </Grid.Column>
+                ))}
+              </Grid>
+            );
           }
           if (data.error) {
             return <p>{data.error.message}</p>;
