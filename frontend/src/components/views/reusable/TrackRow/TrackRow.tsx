@@ -7,6 +7,7 @@ import {getTrackTimeFromDurationMs} from "../../../../utils/time";
 import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
 import WishlistState from "../../../../states/WishlistState";
+import ExplicitBadge from "./ExplicitBadge";
 
 interface IProps {
   data: ITrack;
@@ -77,7 +78,16 @@ class TrackRow extends React.Component<IProps> {
             </Subscribe>
           </Button.Group>
         </td>
-        <td>{title}</td>
+        <td>
+          <span style={{ float: 'left' }}>
+            {title}
+          </span>
+          {this.props.data.explicit &&
+            <span style={{ float: 'right', marginRight: 15 }}>
+              <ExplicitBadge />
+            </span>
+          }
+        </td>
         <td>{artistNameSeparate}</td>
         <Link to={`/album/${albumId}`}>
           <td>{albumsName}</td>

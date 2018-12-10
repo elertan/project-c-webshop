@@ -39,6 +39,7 @@ class AlbumDetail extends React.Component<IProps> {
               name
               durationMs
               previewUrl
+              explicit
               artists {
                 items {
                   name
@@ -93,7 +94,8 @@ class AlbumDetail extends React.Component<IProps> {
           albumsName: album.name,
           albumId: album.id,
           previewUrl: track.previewUrl,
-          durationMs: track.durationMs
+          durationMs: track.durationMs,
+          explicit: track.explicit
         } as ITrack)
     );
 
