@@ -110,7 +110,7 @@ class ArtistDetail extends React.Component<IProps> {
                 <div className={classes.albumInnerContainerDarkenLayer}/>
                 <div className={classes.albumContainer}>
                   <div className={classes.albumInnerContainer}>
-                    <img className={classes.image} src={artistData.images.items[0].url}/>
+                    <img className={classes.image} style={{ borderRadius: '50%' }} src={artistData.images.items[0].url}/>
                     <div className={classes.title}>{artistData.name}</div>
                   </div>
                 </div>
