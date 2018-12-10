@@ -1,6 +1,9 @@
 import * as React from "react";
 import { Segment, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import Users from "./adminComponents/users";
+import Statistics from "./adminComponents/statistics";
+import Overview from "./adminComponents/overview";
 const styles = {
   size: {
     width: "15vw",
@@ -19,7 +22,14 @@ class Admin extends React.Component {
 
   public render() {
     const { activeItem } = this.state;
-
+    let PageContent = <h1>Hi</h1>;
+    if (this.state.activeItem === "Overview") {
+      PageContent = <Overview />;
+    } else if (this.state.activeItem === "Users") {
+      PageContent = <Users />;
+    } else if (this.state.activeItem === "Statistics") {
+      PageContent = <Statistics />;
+    }
     return (
       <div style={styles.size}>
         <Segment inverted>
@@ -47,6 +57,7 @@ class Admin extends React.Component {
             </NavLink>
           </Menu>
         </Segment>
+        {PageContent}
       </div>
     );
   }
