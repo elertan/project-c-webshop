@@ -56,6 +56,10 @@ class TrackRow extends React.Component<IProps> {
                   disabled={cartState.isInCart(this.props.data.id)}
                 >
                   <Icon name="shopping basket" color="black"/>
+                  &nbsp;
+                  <span style={{ fontSize: 12 }}>
+                    $ {this.props.data.price}
+                  </span>
                 </Button>
               )}
             </Subscribe>
@@ -78,7 +82,7 @@ class TrackRow extends React.Component<IProps> {
             </Subscribe>
           </Button.Group>
         </td>
-        <td>
+        <td style={{ paddingLeft: 5 }}>
           <span style={{ float: 'left' }}>
             {title}
           </span>

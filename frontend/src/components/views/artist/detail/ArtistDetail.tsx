@@ -60,16 +60,21 @@ class ArtistDetail extends React.Component<IProps> {
                                   name
                                   durationMs
                                   previewUrl
+                                  explicit
                                   artists {
                                     items {
                                       name
                                       id
                                     }
                                   }
+                                  product {
+                                    price
+                                  }
                                 }
                               }
                         product {
                             id
+                            price
                         }
                       }
                     }
@@ -132,7 +137,9 @@ class ArtistDetail extends React.Component<IProps> {
           albumId: album.id,
           artistId: track.artists.items.map((trackArtists: any) => trackArtists.id),
           previewUrl: track.previewUrl,
-          durationMs: track.durationMs
+          durationMs: track.durationMs,
+          explicit: track.explicit,
+          price: track.product.price
         } as ITrack)
       ));
 

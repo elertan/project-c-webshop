@@ -46,10 +46,14 @@ class AlbumDetail extends React.Component<IProps> {
                   id
                 }
               }
+              product {
+                price
+              }
             }
           }
           product {
             id
+            price
           }
           images(orderBy: {
               path: "height",
@@ -95,7 +99,8 @@ class AlbumDetail extends React.Component<IProps> {
           albumId: album.id,
           previewUrl: track.previewUrl,
           durationMs: track.durationMs,
-          explicit: track.explicit
+          explicit: track.explicit,
+          price: track.product.price
         } as ITrack)
     );
 
