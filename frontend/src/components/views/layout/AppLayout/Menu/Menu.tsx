@@ -89,8 +89,8 @@ class Menu extends React.Component<IProps, IState> {
       menuContent = (
         <>
           <Icon name="user"/>
-          {userState.state.user!.email}
-          <Icon name="caret down"/>
+          {userState.state.user!.firstname} {userState.state.user!.lastname}
+          <Icon name="caret down" style={{ marginLeft: 5 }} />
         </>
       );
       popupContent = <AccountPopupContent/>;
