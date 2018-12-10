@@ -31,7 +31,8 @@ const styles = {
 class PasswordReset extends React.Component {
   public state = {
     PasswordInput: "password",
-    active: true
+    active: true,
+    redirect: false
   };
 
   public togglePasswordVisibility = () =>
@@ -40,6 +41,14 @@ class PasswordReset extends React.Component {
     });
 
   public render() {
+    let ConfirmButton = <Button>Confirm</Button>;
+    if (this.state.redirect) {
+      ConfirmButton = (
+        <NavLink to={""}>
+          <Button>Confirm</Button>
+        </NavLink>
+      );
+    }
     let showPassword = (
       <Button
         color="blue"
@@ -99,6 +108,10 @@ class PasswordReset extends React.Component {
             }}
             onSubmit={values => {
               console.log(values);
+              this.setState({
+                redirect: true
+              });
+              console.log(this.state.redirect);
             }}
             validationSchema={Yup.object().shape({
               currentPassword: Yup.string().required(
@@ -232,6 +245,8 @@ class PasswordReset extends React.Component {
                               Confirm
                             </Button.Content>
                           </Button>
+                          {ConfirmButton}
+
                           {showPassword}
                         </div>
                       </Table.Cell>
