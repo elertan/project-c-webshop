@@ -21,8 +21,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     marginBottom: 30,
+    marginTop: 20,
     padding: 20,
     backgroundColor: 'rgb(243, 243, 243)'
+  },
+  itemContainer: {
+    backgroundColor: 'rgb(249, 249, 249)',
+    marginTop: 50,
+    padding: 20,
+    borderRadius: 5
   }
 };
 
@@ -110,10 +117,11 @@ class ArtistDetail extends React.Component<IProps> {
                 <div className={classes.albumInnerContainerDarkenLayer}/>
                 <div className={classes.albumContainer}>
                   <div className={classes.albumInnerContainer}>
-                    <img className={classes.image} style={{ borderRadius: '50%' }} src={artistData.images.items[0].url}/>
+                    <img className={classes.image} style={{borderRadius: '50%'}} src={artistData.images.items[0].url}/>
                     <div className={classes.title}>{artistData.name}</div>
                   </div>
                 </div>
+                <h2 style={{textAlign: 'center', marginTop: 50}}>Albums</h2>
                 {this.renderArtistDetail(artistData)}
               </div>
             )
@@ -148,7 +156,26 @@ class ArtistDetail extends React.Component<IProps> {
 
     return (
       artist.albums.items.map((album: any, i: number) =>
-        <div key={i} style={{marginTop: 35}}>
+        <div key={i} style={styles.itemContainer}>
+          <div
+            style={{
+              backgroundImage: `url(${album.images.items[0].url})`,
+              width: '100%',
+              height: 200,
+              backgroundPosition: 'center',
+              filter: 'blur(15px)',
+              marginBottom: -215,
+              backgroundSize: 'cover'
+            }}
+          />
+          {/*<div className={classes.albumInnerContainerDarkenLayer}/>*/}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginTop: 50 }}>
+            <AlbumCover
+              name={album.name}
+              imageSource={album.images.items}
+              id={album.id}/>
+          </div>
+          <TrackList trackData={AllTrackData.filter((track: any) => track.albumId === album.id)}/>
           <div style={styles.actionsContainer}>
             <Subscribe to={[CartState]}>
               {(cartState: CartState) => (
@@ -187,12 +214,6 @@ class ArtistDetail extends React.Component<IProps> {
               )}
             </Subscribe>
           </div>
-          <h2>Album {i + 1}: <h3>{album.name}</h3></h2>
-          <AlbumCover
-            name={album.name}
-            imageSource={album.images.items}
-            id={album.id}/>
-          <TrackList trackData={AllTrackData.filter((track: any) => track.albumId === album.id)}/>
         </div>
       )
     )
