@@ -14,14 +14,14 @@ class DashboardMenu extends React.Component<IProps> {
             <NavLink to={"/dashboard/overview"}>
               <Header size="small">Overview</Header>
             </NavLink>
-            <NavLink to={"/dashboard/overview"}>
-              <Menu.Item name="Overview" />
-            </NavLink>
             <Divider />
 
             {/* Orders section */}
             <NavLink to={"/dashboard/orderhistory"}>
-              <Header size="small">Orders</Header>
+              <Header size="small">Content</Header>
+            </NavLink>
+            <NavLink to={"/dashboard/purchased"}>
+              <Menu.Item name="Purchased Products" />
             </NavLink>
             <NavLink to={"/dashboard/orderhistory"}>
               <Menu.Item name="Order History" />
