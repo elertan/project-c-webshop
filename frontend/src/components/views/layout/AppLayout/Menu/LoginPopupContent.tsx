@@ -27,6 +27,8 @@ mutation ($data: LoginInput!) {
   login(data: $data) {
     data {
       email
+      firstname
+      lastname
       token
     }
     errors {

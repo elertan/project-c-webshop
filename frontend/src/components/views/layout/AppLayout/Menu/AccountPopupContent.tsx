@@ -22,7 +22,7 @@ class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{
   private renderWithUserState = (state: UserState) => {
     return (
       <div>
-        Hi {state.state.user!.firstname} {state.state.user!.lastname}!
+        <strong>Hi, {state.state.user!.firstname} {state.state.user!.lastname}!</strong>
         <Divider/>
         <div style={{
           display: 'flex',
