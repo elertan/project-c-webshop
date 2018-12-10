@@ -23,10 +23,12 @@ interface IFormikValues {
 }
 
 const loginMutation = gql`
-mutation ($login: LoginInput!) {
-  login(login: $login) {
+mutation ($data: LoginInput!) {
+  login(data: $data) {
     data {
       email
+      firstname
+      lastname
       token
     }
     errors {
@@ -63,19 +65,21 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
   }
 
   private handleSubmit = async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+    console.log("Submitting login request...");
     formik.setSubmitting(true);
-
+    console.log("Login values are: ", values);
     const result = await this.props.client.mutate({
       mutation: loginMutation,
       variables: {
-        login: {
+        data: {
           email: values.email,
           password: values.password
         }
       }
     });
-
+    console.log("Login mutation result is: ", result)
     const apiResult = result.data!.login as IApiResult<IUser>;
+    console.log("Login apiResult is: ", apiResult);
 
     if (apiResult.errors) {
       this.setState({ errors: apiResult.errors });
@@ -86,9 +90,13 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
       // Handle token
       // alert(apiResult.data!.token);
       userState.setUser(apiResult.data!);
+      
+      console.log("User is now logged in." )
+      // location.reload()
     }
-
     formik.setSubmitting(false);
+    console.log("Login submission ended.")
+
   };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend-datamodel", "backend-datamodel\backend-datamodel.csproj", "{A21D0E2F-A6CB-48FA-BBD0-1ECA9845C4A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "backend\backend.csproj", "{358BCBBA-AC1F-43BE-AC28-41802D762FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend-filling-tool-v2", "backend-filling-tool-v2\backend-filling-tool-v2.csproj", "{03E7769D-CCAC-4729-A4C9-67DCC97A47C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A21D0E2F-A6CB-48FA-BBD0-1ECA9845C4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A21D0E2F-A6CB-48FA-BBD0-1ECA9845C4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A21D0E2F-A6CB-48FA-BBD0-1ECA9845C4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A21D0E2F-A6CB-48FA-BBD0-1ECA9845C4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{358BCBBA-AC1F-43BE-AC28-41802D762FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{358BCBBA-AC1F-43BE-AC28-41802D762FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{358BCBBA-AC1F-43BE-AC28-41802D762FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{358BCBBA-AC1F-43BE-AC28-41802D762FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E7769D-CCAC-4729-A4C9-67DCC97A47C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E7769D-CCAC-4729-A4C9-67DCC97A47C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E7769D-CCAC-4729-A4C9-67DCC97A47C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E7769D-CCAC-4729-A4C9-67DCC97A47C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

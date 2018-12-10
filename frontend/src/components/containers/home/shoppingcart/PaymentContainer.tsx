@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Payment from "../../../views/home/shoppingcart/payment";
+import Payment from "../../../views/home/shoppingcart/Payment";
 
 interface IProps {}
 interface IState {}

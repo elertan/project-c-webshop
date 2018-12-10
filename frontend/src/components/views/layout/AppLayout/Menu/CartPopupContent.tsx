@@ -70,7 +70,7 @@ class CartPopupContent extends React.Component<IProps> {
             return console.error("An unexpected item has been tried to add to the shopping cart.");
           })}
         </List>
-        <Button positive floated="right"><NavLink to={"/home/shoppingcart"}>Checkout</NavLink></Button>
+        <Button positive floated="right"><NavLink to={"/shoppingcart"}>Checkout</NavLink></Button>
       </div>
     );
   };

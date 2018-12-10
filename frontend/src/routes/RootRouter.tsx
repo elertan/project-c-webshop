@@ -11,6 +11,7 @@ import AdminRouter from './AdminRouter';
 
 import {BrowserRouter} from 'react-router-dom';
 import NotFound from '../components/views/errors/NotFound/NotFound';
+import ShoppingcartRouter from './ShoppingcartRouter';
 
 const DefaultRedirect = () => <Redirect to="/home/explore"/>;
 
@@ -26,6 +27,7 @@ const RootRouter: React.SFC<{}> = () => (
       <Route path="/dashboard" component={DashboardRouter}/>
       <Route path="/admin" component={AdminRouter}/>
       <Route path="/category" component={CategoryRouter} />
+      <Route path="/shoppingcart" component={ShoppingcartRouter} />
 
       <Route component={NotFound} />
     </Switch>

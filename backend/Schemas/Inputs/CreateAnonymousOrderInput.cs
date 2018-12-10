@@ -1,6 +1,4 @@
-using GraphQL.Types;
-
-namespace backend.Schemas.Graphs.Mutations.Order
+namespace backend.Schemas.Inputs
 {
     public class CreateAnonymousOrderData
     {

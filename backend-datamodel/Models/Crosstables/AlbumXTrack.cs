@@ -1,4 +1,4 @@
-namespace backend_datamodel.Models
+namespace backend_datamodel.Models.Crosstables
 {
     public class AlbumXTrack
     {

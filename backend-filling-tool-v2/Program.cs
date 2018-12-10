@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using backend_filling_tool_v2.Fetcher;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace backend_filling_tool_v2
