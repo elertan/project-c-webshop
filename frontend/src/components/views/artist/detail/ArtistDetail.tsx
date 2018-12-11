@@ -46,6 +46,7 @@ class ArtistDetail extends React.Component<IProps> {
                         descending: true
                     }, first: 1) {
                         items {
+                          id
                             url
                         }
                     }
@@ -58,6 +59,7 @@ class ArtistDetail extends React.Component<IProps> {
                               descending: true
                             }, first: 1) {
                                 items {
+                                  id
                                     url
                                 }
                             }
@@ -75,6 +77,7 @@ class ArtistDetail extends React.Component<IProps> {
                                     }
                                   }
                                   product {
+                                    id
                                     price
                                   }
                                 }

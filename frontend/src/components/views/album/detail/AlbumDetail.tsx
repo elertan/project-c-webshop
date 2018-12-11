@@ -47,6 +47,7 @@ class AlbumDetail extends React.Component<IProps> {
                 }
               }
               product {
+                id
                 price
               }
             }
@@ -60,7 +61,8 @@ class AlbumDetail extends React.Component<IProps> {
               descending: true    
           }, first: 1) {
               items {
-                  url
+                id
+                url
               }
           }
         }

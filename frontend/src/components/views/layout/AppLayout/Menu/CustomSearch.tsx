@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Search} from "semantic-ui-react";
+import {Search, SearchResultData} from "semantic-ui-react";
 import {withApollo, WithApolloClient} from "react-apollo";
 import {useState} from "react";
 import Timeout = NodeJS.Timeout;
@@ -7,12 +7,41 @@ import {generateSearchForQuery} from "../../../../../utils/queries";
 import {searchState} from "../../../../../index";
 import {Subscribe} from "unstated";
 import SearchState from "../../../../../states/SearchState";
+import {RouteComponentProps, withRouter} from "react-router";
+import {History} from "history";
 
-interface IProps extends Partial<WithApolloClient<{}>> {
+interface IProps extends Partial<WithApolloClient<{}>>, RouteComponentProps<any> {
 }
 
 const searchDelay = 500;
 let timeoutId: Timeout | undefined;
+
+enum ResultType {
+  Track,
+  Album,
+  Artist,
+  Category
+}
+
+const handleResultSelect = (history: History) => (event: React.MouseEvent<HTMLDivElement>, data: SearchResultData) => {
+  const result = data.result;
+  switch (result._type) {
+    case ResultType.Track:
+      history.push(`/album/${result._data.albums.items[0].id}`);
+      break;
+    case ResultType.Album:
+      history.push(`/album/${result._data.id}`);
+      break;
+    case ResultType.Artist:
+      history.push(`/artist/${result._data.id}`);
+      break;
+    case ResultType.Category:
+      history.push(`/category/${result._data.id}`);
+      break;
+    default:
+      break;
+  }
+};
 
 const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
   const [isSearching, setIsSearching] = useState(false);
@@ -25,6 +54,7 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
           loading={isSearching}
           value={searchState.state.keyword}
           results={searchState.state.results}
+          onResultSelect={handleResultSelect(props.history)}
           category
           onSearchChange={(ev, data) => {
             const newKeyword = data.value || '';
@@ -46,6 +76,8 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
                 {
                   name: "Tracks",
                   results: searchFor.tracks.map((track: any) => ({
+                    _type: ResultType.Track,
+                    _data: track,
                     title: track.name,
                     image: track.albums.items[0].images.items[0].url,
                     price: `$${track.product.price}`
@@ -57,6 +89,8 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
                 {
                   name: "Albums",
                   results: searchFor.albums.map((album: any) => ({
+                    _type: ResultType.Album,
+                    _data: album,
                     title: album.name,
                     image: album.images.items[0].url,
                     price: `$${album.product.price}`
@@ -68,6 +102,8 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
                 {
                   name: "Artists",
                   results: searchFor.artists.map((artist: any) => ({
+                    _type: ResultType.Artist,
+                    _data: artist,
                     title: artist.name,
                     image: artist.images.items.length > 0 && artist.images.items[0].url
                   }))
@@ -78,6 +114,8 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
                 {
                   name: "Categories",
                   results: searchFor.categories.map((category: any) => ({
+                    _type: ResultType.Category,
+                    _data: category,
                     title: category.name,
                     image: category.images.items[0].url
                   }))
@@ -108,4 +146,4 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
   );
 };
 
-export default withApollo(CustomSearch);
+export default withRouter(withApollo(CustomSearch));

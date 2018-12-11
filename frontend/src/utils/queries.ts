@@ -11,6 +11,7 @@ export const generateSearchForQuery = (keyword: string) => {
       name
       images(orderBy: {path: "height"}, first: 1) {
         items {
+          id
           url
         }
       }
@@ -20,6 +21,7 @@ export const generateSearchForQuery = (keyword: string) => {
       name
       images(orderBy: {path: "height"}, first: 1) {
         items {
+          id
           url
         }
       }
@@ -36,6 +38,7 @@ export const generateSearchForQuery = (keyword: string) => {
           id
           images(orderBy: {path: "height"}, first: 1) {
             items {
+              id
               url
             }
           }
@@ -51,6 +54,7 @@ export const generateSearchForQuery = (keyword: string) => {
       name
       images(orderBy: {path: "height"}, first: 1) {
         items {
+          id
           url
         }
       }
