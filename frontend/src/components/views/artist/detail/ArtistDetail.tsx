@@ -46,6 +46,7 @@ class ArtistDetail extends React.Component<IProps> {
                         descending: true
                     }, first: 1) {
                         items {
+                          id
                             url
                         }
                     }
@@ -58,6 +59,7 @@ class ArtistDetail extends React.Component<IProps> {
                               descending: true
                             }, first: 1) {
                                 items {
+                                  id
                                     url
                                 }
                             }
@@ -75,6 +77,7 @@ class ArtistDetail extends React.Component<IProps> {
                                     }
                                   }
                                   product {
+                                    id
                                     price
                                   }
                                 }
@@ -169,7 +172,7 @@ class ArtistDetail extends React.Component<IProps> {
             }}
           />
           {/*<div className={classes.albumInnerContainerDarkenLayer}/>*/}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginTop: 50 }}>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginTop: 50}}>
             <AlbumCover
               name={album.name}
               imageSource={album.images.items}
@@ -177,42 +180,49 @@ class ArtistDetail extends React.Component<IProps> {
           </div>
           <TrackList trackData={AllTrackData.filter((track: any) => track.albumId === album.id)}/>
           <div style={styles.actionsContainer}>
-            <Subscribe to={[CartState]}>
-              {(cartState: CartState) => (
-                <Subscribe to={[WishlistState]}>
-                  {(wishlistState: WishlistState) => (
-                    <Button
-                      icon
-                      labelPosition="left"
-                      onClick={() => wishlistState.addToWishlist({
-                        id: album.product.id,
-                        album
-                      })}
-                      disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
-                    >
-                      <Icon name="heart" color="red"/>
-                      Add to wishlist
-                    </Button>
-                  )}
-                </Subscribe>
-              )}
-            </Subscribe>
-            <Subscribe to={[CartState]}>
-              {(cartState: CartState) => (
-                <Button
-                  icon
-                  labelPosition="left"
-                  onClick={() => cartState.addToCart({
-                    id: album.product.id,
-                    album
-                  })}
-                  disabled={cartState.isInCart(album.product.id)}
-                >
-                  <Icon name="shopping basket" color="black"/>
-                  Add to cart
-                </Button>
-              )}
-            </Subscribe>
+            <Button.Group>
+              <Subscribe to={[CartState]}>
+                {(cartState: CartState) => (
+                  <Subscribe to={[WishlistState]}>
+                    {(wishlistState: WishlistState) => (
+                      <Button
+                        icon
+                        labelPosition="left"
+                        onClick={() => wishlistState.addToWishlist({
+                          id: album.product.id,
+                          album
+                        })}
+                        disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
+                      >
+                        <Icon name="heart" color="red"/>
+                        Add to wishlist
+                      </Button>
+                    )}
+                  </Subscribe>
+                )}
+              </Subscribe>
+              <Button.Or/>
+              <Subscribe to={[CartState]}>
+                {(cartState: CartState) => (
+                  <Button
+                    icon
+                    labelPosition="right"
+                    onClick={() => cartState.addToCart({
+                      id: album.product.id,
+                      album
+                    })}
+                    disabled={cartState.isInCart(album.product.id)}
+                  >
+                    <Icon name="shopping basket" color="black"/>
+                    Add to cart
+                    <span style={{ marginLeft: 5, marginRight: 5 }} />
+                    <span style={{ fontSize: 12 }}>
+                     $ {album.product.price}
+                    </span>
+                  </Button>
+                )}
+              </Subscribe>
+            </Button.Group>
           </div>
         </div>
       )

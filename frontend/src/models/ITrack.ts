@@ -1,4 +1,5 @@
 import IBaseModel from "./IBaseModel";
+import IImage from "./IImage";
 
 interface ITrack extends IBaseModel {
     id: number;
@@ -12,6 +13,7 @@ interface ITrack extends IBaseModel {
     previewUrl: string | null;
     explicit: boolean;
     price: number;
+    images: IImage[];
 }
 
 export default ITrack;
