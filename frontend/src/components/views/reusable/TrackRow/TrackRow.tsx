@@ -25,7 +25,7 @@ class TrackRow extends React.Component<IProps> {
     const artistNameSeparate = artistName.map((aName: string, i: number) => {
       return (
         <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
-          <span key={i}>{aName}<br/></span>
+          <span>{aName}<br/></span>
         </Link>
       )
     });
@@ -93,9 +93,11 @@ class TrackRow extends React.Component<IProps> {
           }
         </td>
         <td>{artistNameSeparate}</td>
-        <Link to={`/album/${albumId}`}>
-          <td>{albumsName}</td>
-        </Link>
+        <td>
+          <Link to={`/album/${albumId}`}>
+            <span>{albumsName}</span>
+          </Link>
+        </td>
         <td>{trackTime}</td>
       </tr>
     );
