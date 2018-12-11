@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {Button, List, ListContent, ListHeader, ListItem} from "semantic-ui-react";
+import {Icon, List, Image} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import {Subscribe} from "unstated";
 import WishlistState from "../../../../../states/WishlistState";
-import {cartState, wishlistState} from "../../../../../index";
-import {Link} from "react-router-dom";
+import {wishlistState} from "../../../../../index";
 
 interface IProps {
 }
@@ -24,72 +23,61 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
   }
 
   private renderWithWishlistState = (state: WishlistState) => {
-    if (state.state.products.length === 0) {
-      return (
-        <p>Nothing has been added to the wishlist</p>
-      );
-    }
-
     return (
-      <List divided>
+      state.state.products.length === 0 ?
+        this.renderEmptyWishlist()
+        :
+        this.renderWishlistItems()
+    );
+  };
+
+  private renderEmptyWishlist = () => {
+    return (
+      <div style={{
+        width: 450,
+        padding: 20
+      }}>
+        <h3 style={{textAlign: 'center'}}>
+          You haven't added anything to the wishlist yet.
+        </h3>
+        <p style={{textAlign: 'center'}}>
+          Add products by clicking on the <Icon name="heart" color="red"/> button.
+        </p>
+      </div>
+    );
+  };
+
+  private renderWishlistItems = () => {
+    return (
+      <List>
         {wishlistState.state.products.map(
           (product: IProduct, i: number) => {
             if (product.album !== undefined) {
               return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    <Link to={`/album/${product.album!.id}`} >
-                      {" "}
-                      Album: {product.album!.name}
-                    </Link>
-                  </ListContent>
-
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => state.removeFromWishlist(product.id)}
-                    />
-                    <Button
-                      floated="right"
-                      basic
-                      icon="shopping basket"
-                      onClick={() => cartState.addToCart({ album: product.album!, id: product.id })}
-                    />
-                  </ListContent>
-                </ListItem>
+                <List.Item>
+                  <Image avatar src={product.album.images.items[0].url} />
+                  <List.Content>
+                    <List.Header>{product.album.name}</List.Header>
+                    <List.Description>
+                      Album
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
               )
             }
 
             if (product.track !== undefined) {
               return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    {" "}
-                    <ListHeader>
-                      Track: {product.track!.title}
-                    </ListHeader>
-                    <Link to={`/album/${product.track!.albumId}`} >
-                      Album: {product.track!.albumsName}
-                    </Link>
-                  </ListContent>
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => state.removeFromWishlist(product.id)}
-                    />
-                    <Button
-                      floated="right"
-                      basic
-                      icon="shopping basket"
-                      onClick={() => cartState.addToCart({ track: product.track!, id: product.track!.id })}
-                    />
-                  </ListContent>
-                </ListItem>
-              );
+                <List.Item>
+                  <Image avatar src={product.track.images[0].url}/>
+                  <List.Content>
+                    <List.Header>{product.track.title}</List.Header>
+                    <List.Description>
+                      Track
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              )
             }
             return console.error("An unexpected item has been tried to add to the Wish list.");
           }

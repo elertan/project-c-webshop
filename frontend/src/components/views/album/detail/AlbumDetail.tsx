@@ -100,7 +100,8 @@ class AlbumDetail extends React.Component<IProps> {
           previewUrl: track.previewUrl,
           durationMs: track.durationMs,
           explicit: track.explicit,
-          price: track.product.price
+          price: track.product.price,
+          images: album.images.items
         } as ITrack)
     );
 
@@ -161,7 +162,7 @@ class AlbumDetail extends React.Component<IProps> {
                   })}
                   disabled={cartState.isInCart(album.product.id)}
                 >
-                  <Icon name="shopping basket" color="black"/>
+                  <Icon name="shopping cart" color="black"/>
                   Add to cart
                   <span style={{ marginLeft: 5, marginRight: 5 }} />
                   <span style={{ fontSize: 12 }}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, List, ListContent, ListItem} from "semantic-ui-react";
+import {Button, Icon, List, ListContent, ListItem} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
@@ -20,7 +20,14 @@ class CartPopupContent extends React.Component<IProps> {
   private renderCartState = (cartState: CartState) => {
     if (cartState.state.products.length === 0) {
       return (
-        <p>Nothing has been added to the cart</p>
+        <div style={{ width: 450, padding: 20 }}>
+          <h3 style={{ textAlign: 'center' }}>
+            You haven't added anything to the cart yet.
+          </h3>
+          <p style={{ textAlign: 'center' }}>
+            Add products by clicking on the <Icon name="shopping cart" color="black" /> button.
+          </p>
+        </div>
       );
     }
 
