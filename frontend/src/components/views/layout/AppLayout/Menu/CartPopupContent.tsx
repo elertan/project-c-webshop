@@ -3,7 +3,7 @@ import {Button, Icon, List, ListContent, ListItem} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
-import {Link, NavLink} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 
 interface IProps {
 }
@@ -77,7 +77,9 @@ class CartPopupContent extends React.Component<IProps> {
             return console.error("An unexpected item has been tried to add to the shopping cart.");
           })}
         </List>
-        <Button positive floated="right"><NavLink to={"/shoppingcart"}>Checkout</NavLink></Button>
+        <Route render={({history}) => (
+          <Button fluid onClick={() => history.push("/shoppingcart")}>Checkout</Button>
+        )} />
       </div>
     );
   };
