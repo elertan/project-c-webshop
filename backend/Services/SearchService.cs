@@ -24,10 +24,10 @@ namespace backend.Services
         {
             var q = query.ToLowerInvariant();
             
-            var tracksTask = _db.Tracks.Where(x => x.Name.ToLowerInvariant().Contains(q)).ToListAsync();
-            var albumsTask = _db.Albums.Where(x => x.Name.ToLowerInvariant().Contains(q)).ToListAsync();
-            var artistsTask = _db.Artists.Where(x => x.Name.ToLowerInvariant().Contains(q)).ToListAsync();
-            var categoriesTask = _db.Categories.Where(x => x.Name.ToLowerInvariant().Contains(q)).ToListAsync();
+            var tracksTask = _db.Tracks.Where(x => x.Name.ToLowerInvariant().Contains(q)).Take(10).ToListAsync();
+            var albumsTask = _db.Albums.Where(x => x.Name.ToLowerInvariant().Contains(q)).Take(10).ToListAsync();
+            var artistsTask = _db.Artists.Where(x => x.Name.ToLowerInvariant().Contains(q)).Take(10).ToListAsync();
+            var categoriesTask = _db.Categories.Where(x => x.Name.ToLowerInvariant().Contains(q)).Take(10).ToListAsync();
 
             await Task.WhenAll(tracksTask, albumsTask, artistsTask, categoriesTask);
             

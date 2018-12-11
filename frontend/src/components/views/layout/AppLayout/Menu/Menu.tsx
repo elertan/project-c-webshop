@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   Container, Icon, Label,
-  Menu as SemanticMenu, Popup, Search
+  Menu as SemanticMenu, Popup
 } from 'semantic-ui-react';
 import CartState from "../../../../../states/CartState";
 import {Route} from "react-router-dom";
@@ -14,18 +14,20 @@ import WishlistPopupContent from "./WishlistPopupContent";
 import CartPopupContent from "./CartPopupContent";
 import {Subscribe} from "unstated";
 import {userState} from "src";
+import CustomSearch from "./CustomSearch";
 
 interface IProps {
 }
 
 interface IState {
-
+  ShoppingCartButton: boolean;
+  WishlistButton: boolean;
 }
 
 class Menu extends React.Component<IProps, IState> {
   public state = {
     ShoppingCartButton: false,
-    WishlistButton: false,
+    WishlistButton: false
   };
 
   public toggleShoppingCart = () => {
@@ -61,7 +63,7 @@ class Menu extends React.Component<IProps, IState> {
             )}/>
             <div style={{ flex: 1 }}>
               <SemanticMenu.Item header>
-                <Search />
+                <CustomSearch/>
               </SemanticMenu.Item>
             </div>
             <Subscribe to={[WishlistState, UserState]}>{this.renderWishlistMenuItem}</Subscribe>

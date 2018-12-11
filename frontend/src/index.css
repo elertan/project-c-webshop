@@ -25,3 +25,9 @@ a:hover {
 .carousel.carousel-slider .control-arrow {
   background: #000 !important;
 }
+
+.results.transition {
+  width: 500px !important;
+  max-height: 800px !important;
+  overflow-y: auto;
+}
