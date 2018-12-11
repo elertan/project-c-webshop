@@ -13,7 +13,7 @@ namespace backend.Schemas
 {
     public class RootQuery : EfObjectGraphType<object>
     {
-        public RootQuery(DatabaseContext db, IEfGraphQLService efGraphQlService, IAccountService accountService) : base(efGraphQlService)
+        public RootQuery(DatabaseContext db, IEfGraphQLService efGraphQlService, IAccountService accountService, ISearchService searchService) : base(efGraphQlService)
         {
             Name = "Query";
             
@@ -56,6 +56,18 @@ namespace backend.Schemas
                 }
             );
 
+            FieldAsync<SearchResultGraph, SearchResult>(
+                name: "searchFor",
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType> {Name="query"}
+                ),
+                resolve: async ctx =>
+                {
+                    var query = ctx.GetArgument<string>("query");
+                    var searchResult = await searchService.SearchFor(query);
+                    return searchResult;
+                }
+            );
         }
     }
 }

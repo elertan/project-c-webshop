@@ -87,6 +87,7 @@ namespace backend
             // Custom Services
             services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IOrderService, OrderService>();
+            services.AddSingleton<ISearchService, SearchService>();
 
 
             // Enable access to HttpContext

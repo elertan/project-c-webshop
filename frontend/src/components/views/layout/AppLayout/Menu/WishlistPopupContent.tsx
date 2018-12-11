@@ -61,7 +61,9 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                   <List.Item key={i}>
                     <Image size="mini" src={product.album.images.items[0].url}/>
                     <List.Content>
-                      <List.Header>{product.album.name}</List.Header>
+                      <List.Header>
+                        {product.album.name}
+                      </List.Header>
                       <List.Description>
                         Album
                       </List.Description>
