@@ -10,7 +10,8 @@ import {
   Input,
   Label,
   Button,
-  Dropdown
+  Dropdown,
+  
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
@@ -23,6 +24,7 @@ import gql from "graphql-tag";
 import IApiResult from "src/models/IApiResult";
 import IUser from "src/models/IUser";
 import IApiError from "src/models/IApiError";
+
 
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
@@ -73,6 +75,21 @@ const initialValues: IFormikValues = {
   email: "",
   status: "email"
 };
+
+const bankOptions = [
+  {
+    text: 'Ing',
+    value: 'ing'
+  },
+  {
+    text: 'Abn',
+    value: 'abn'
+  },
+  {
+    text: 'Rabobank',
+    value: 'rabobank'
+  },
+]
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -199,6 +216,11 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <Table.HeaderCell colSpan="2">
           <h3>Shipping details</h3>
         </Table.HeaderCell>
+        <Table.Body >
+          <Table.Row>
+            <Table.Cell>Emailaddress</Table.Cell>
+            <Table.Cell />
+            <Table.Cell>
         <Input
           id="email"
           iconPosition="left"
@@ -209,9 +231,14 @@ class Order extends React.Component<WithApolloClient<IProps>> {
           <Icon name="at" />
           <input {...fieldProps.field} />
         </Input>
+        </Table.Cell>
+        </Table.Row>
+        </Table.Body>
         <Button
+          floated="right"
           disabled={!fieldProps.form.isValid}
           onClick={() => this.setStatus("bank")}
+          positive
         >
           Next
         </Button>
@@ -226,14 +253,20 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Form.Field>
-        <Dropdown text="Choose your bank">
-          <Dropdown.Menu>
-            <Dropdown.Item text="ING" />
-            <Dropdown.Item text="Rabobank" />
-            <Dropdown.Item text="ABN" />
-          </Dropdown.Menu>
-        </Dropdown>
-        <Button onClick={() => this.setStatus("confirm")}>Next</Button>
+        <Table.HeaderCell colSpan="2">
+          <h3>Billing details</h3>
+        </Table.HeaderCell>
+        <Table.Body >
+          <Table.Row>
+            <Table.Cell>Bank:</Table.Cell>
+            <Table.Cell />
+            <Table.Cell>
+            <Dropdown placeholder='Choose your bank' fluid selection options={bankOptions} />
+        
+       </Table.Cell>
+        </Table.Row>
+        </Table.Body >
+        <Button positive floated="right" onClick={() => this.setStatus("confirm")}>Next</Button>
       </Form.Field>
     );
   };
@@ -283,6 +316,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     } else {
       if (this.state.errors.length > 0) {
         this.setState({errors: []})
+        
         return <Redirect to="/confirmorder"/>
       }
       return <Redirect to="./confirmorder"/>
