@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {Subscribe} from "unstated";
 import UserState from "../../../../../states/UserState";
-import {Button, Divider} from "semantic-ui-react";
 import {userState} from "../../../../../index";
+import {RouteComponentProps, withRouter} from "react-router";
+import {NavLink} from "react-router-dom";
 
 interface IProps {}
 interface IState {}
 
-class AccountPopupContent extends React.Component<IProps, IState> {
+class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{}>, IState> {
   public state = {};
 
   public render() {
@@ -20,22 +21,16 @@ class AccountPopupContent extends React.Component<IProps, IState> {
 
   private renderWithUserState = (state: UserState) => {
     return (
-      <div>
-        Hi {state.state.user!.email}!
-        <Divider/>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+      <div style={{ margin: 20 , marginRight: 30}}>
+        <h2 style={{ margin: 0 }}>Howdy!</h2>
+        <p>This is just for you.</p>
+        <ul style={{
+          listStyle: 'none',
+          padding: 0
         }}>
-          <Button
-            primary
-            onClick={this.handleLogoutClick}
-          >
-            Logout
-          </Button>
-        </div>
+          <li><NavLink to={"/dashboard/overview"}>My account</NavLink></li>
+          <li><a href="#" onClick={this.handleLogoutClick}>Logout</a></li>
+        </ul>
       </div>
     );
   };
@@ -45,4 +40,4 @@ class AccountPopupContent extends React.Component<IProps, IState> {
   };
 }
 
-export default AccountPopupContent;
+export default withRouter(AccountPopupContent);

@@ -10,6 +10,8 @@ interface ITrack extends IBaseModel {
     artistId: number[];
     albumId: number;
     previewUrl: string | null;
+    explicit: boolean;
+    price: number;
 }
 
 export default ITrack;

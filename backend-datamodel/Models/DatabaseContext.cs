@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using backend_datamodel.Models.Crosstables;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend_datamodel.Models
@@ -31,6 +32,7 @@ namespace backend_datamodel.Models
         public DbSet<AlbumXTrack> AlbumXTracks { get; set; }
         public DbSet<OrderXProduct> OrderXProducts { get; set; }
         public DbSet<AlbumXCategory> AlbumXCategories { get; set; }
+        public DbSet<Wishlist_UserXProduct> WishlistUserXProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
