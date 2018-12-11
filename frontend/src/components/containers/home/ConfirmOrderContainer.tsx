@@ -1,5 +1,6 @@
 import * as React from 'react';
-import ConfirmOrder from "../../../views/home/shoppingcart/ConfirmOrder";
+import ConfirmOrder from 'src/components/views/home/shoppingcart/ConfirmOrder';
+
 
 interface IProps {}
 interface IState {}

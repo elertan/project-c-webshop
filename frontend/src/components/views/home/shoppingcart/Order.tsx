@@ -6,19 +6,39 @@ import {
   Header,
   Form,
   Icon,
-  
   Step,
   Input,
   Label,
-  Button
+  Button,
+  Dropdown
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
 import IProduct from "src/models/IProduct";
-import { NavLink } from "react-router-dom";
+import {  Redirect } from "react-router-dom";
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { withApollo, WithApolloClient } from "react-apollo";
 import OrderState from "src/states/OrderState";
+import gql from "graphql-tag";
+import IApiResult from "src/models/IApiResult";
+import IUser from "src/models/IUser";
+import IApiError from "src/models/IApiError";
+
+const createAnonymousOrderMutation = gql`
+  mutation($data: CreateAnonymousOrderInput!) {
+    createAnonymousOrder(data: $data) {
+      data {
+        user {
+          anonymousRegistrationToken
+          email
+        }
+      }
+      errors {
+        message
+      }
+    }
+  }
+`;
 
 interface IProps {}
 const styles = {
@@ -46,10 +66,12 @@ const styles = {
 
 interface IFormikValues {
   email: string;
+  status: string;
 }
 
 const initialValues: IFormikValues = {
-  email: ""
+  email: "",
+  status: "email"
 };
 
 const validationSchema = Yup.object().shape({
@@ -62,18 +84,15 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   public state = {
     errors: [],
     email: "",
-    
-    
+    status: "email"
   };
   public render() {
     return (
       <Subscribe to={[OrderState, CartState]}>{this.orderRender}</Subscribe>
-      
     );
   }
 
   private orderRender = (orderState: OrderState, cartState: CartState) => {
-    
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
@@ -119,23 +138,31 @@ class Order extends React.Component<WithApolloClient<IProps>> {
               </Table.Body>
             </Table>
           </div>
-
           <div style={styles.PaymentXShipping}>
             <div style={styles.BankPositioning}>
               <Step.Group widths={3} size="mini">
-                <Step active>
+                <Step
+                  active={this.state.status === "email"}
+                  disabled={this.state.status !== "email"}
+                >
                   <Icon name="truck" />
                   <Step.Content>
                     <Step.Title>Shipping</Step.Title>
                   </Step.Content>
                 </Step>
-                <Step disabled>
+                <Step
+                  active={this.state.status === "bank"}
+                  disabled={this.state.status !== "bank"}
+                >
                   <Icon name="credit card" />
                   <Step.Content>
                     <Step.Title>Billing</Step.Title>
                   </Step.Content>
                 </Step>
-                <Step disabled>
+                <Step
+                  active={this.state.status === "confirm"}
+                  disabled={this.state.status !== "confirm"}
+                >
                   <Icon name="info" />
                   <Step.Content>
                     <Step.Title>Confirm Order</Step.Title>
@@ -143,21 +170,10 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                 </Step>
               </Step.Group>
             </div>
-
             <div style={styles.ShippingPositioning}>
               <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell colSpan="2">
-                      <h3>Shipping details</h3>
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell>
-                      <h3>Emailaddress</h3>
-                    </Table.Cell>
                     <Table.Cell>
                       <Formik
                         onSubmit={this.handleSubmit}
@@ -165,8 +181,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                         render={this.renderFormik}
                         validationSchema={validationSchema}
                       />
-                      
-                      <NavLink onClick={() => orderState.addEmail(this.state.email)} to={"/shoppingcart/payment"}>}>hoi</NavLink>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -181,9 +195,11 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
     const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
     return (
-      <Form.Field >
-        <Input 
-          
+      <Form.Field>
+        <Table.HeaderCell colSpan="2">
+          <h3>Shipping details</h3>
+        </Table.HeaderCell>
+        <Input
           id="email"
           iconPosition="left"
           placeholder="johndoe@example.com"
@@ -192,8 +208,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         >
           <Icon name="at" />
           <input {...fieldProps.field} />
-          
         </Input>
+        <Button
+          disabled={!fieldProps.form.isValid}
+          onClick={() => this.setStatus("bank")}
+        >
+          Next
+        </Button>
         {error && (
           <Label basic pointing="above" color="red">
             {error}
@@ -202,34 +223,103 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       </Form.Field>
     );
   };
-  
+  private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
+    return (
+      <Form.Field>
+        <Dropdown text="Choose your bank">
+          <Dropdown.Menu>
+            <Dropdown.Item text="ING" />
+            <Dropdown.Item text="Rabobank" />
+            <Dropdown.Item text="ABN" />
+          </Dropdown.Menu>
+        </Dropdown>
+        <Button onClick={() => this.setStatus("confirm")}>Next</Button>
+      </Form.Field>
+    );
+  };
+  private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
+    return (
+      <Form.Field>
+        <p>your email is: {fieldProps.form.values.email}</p>
+        {/* <NavLink to={"/confirmorder"} > */}
+          <Button
+            onClick={() => this.handleOrder(fieldProps.form.values.email)}
+          >
+            Send
+          </Button>
+        {/* </NavLink> */}
+      </Form.Field>
+    );
+  };
 
   private handleSubmit = async (
     values: IFormikValues,
-    formik: FormikProps<IFormikValues>,
-   
+    formik: FormikProps<IFormikValues>
   ) => {
     console.log("Handling submit");
     formik.setSubmitting(true);
     console.log("values: ", values);
-    this.setState({ email: values.email });
-    
     console.log("Result is: ");
   };
 
+  private handleOrder = async (newEmail: string) => {
+    console.log("Handling submit");
+
+    const result = await this.props.client.mutate({
+      mutation: createAnonymousOrderMutation,
+      variables: {
+        data: {
+          email: newEmail,
+          productIds: [1]
+        }
+      }
+    });
+
+    const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
+    if (apiResult.errors) {
+      this.setState({errors: apiResult.errors})
+      console.log(apiResult.errors)
+     
+    } else {
+      if (this.state.errors.length > 0) {
+        this.setState({errors: []})
+        return <Redirect to="/confirmorder"/>
+      }
+      return <Redirect to="./confirmorder"/>
+    }
+    return <Redirect to="./confirmorder"/>
+  };
+
+    
   
 
+  private setStatus = (newStatus: string) => {
+    this.setState({ status: newStatus });
+  };
+
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
-    
+    if (this.state.status === "email") {
+      return (
+        <Form className="ui form">
+          <Field name="email" render={this.renderEmailField} />
+        </Form>
+      );
+    }
+    if (this.state.status === "bank") {
+      return (
+        <Form className="ui form">
+          <Field name="bank" render={this.renderBankField} />
+        </Form>
+      );
+    }
     return (
-      
-      <Form  className="ui form" >
-        <Field  name="email" render={this.renderEmailField} />
-        <Button onClick={formik.submitForm}>submit</Button>
-        {/* als ik op deze knop druk moet ik navigeren submitten en de state aanpassen dit laatste lukt niet */}
-       
+      <Form className="ui form">
+        <Field name="confirm" render={this.renderConfirmationField} />
+        {this.state.errors.length > 0 &&
+          <p
+            style={{textAlign: 'center', marginTop: 15, color: 'red'}}>{(this.state.errors[0] as IApiError).message}</p>
+          }
       </Form>
-      
     );
   };
 }
