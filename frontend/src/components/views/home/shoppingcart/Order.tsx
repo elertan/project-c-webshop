@@ -101,9 +101,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   public state = {
     errors: [],
     email: "",
-    status: "email"
+    status: "email",
+
   };
+
+ 
   public render() {
+   
     return (
       <Subscribe to={[OrderState, CartState]}>{this.orderRender}</Subscribe>
     );
@@ -250,7 +254,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       </Form.Field>
     );
   };
+  
+   
+
+   
+
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
+  
     return (
       <Form.Field>
         <Table.HeaderCell colSpan="2">
@@ -261,7 +271,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Table.Cell>Bank:</Table.Cell>
             <Table.Cell />
             <Table.Cell>
-            <Dropdown placeholder='Choose your bank' fluid selection options={bankOptions} />
+            <Dropdown placeholder='Choose your bank' selection options={bankOptions} />
         
        </Table.Cell>
         </Table.Row>
@@ -274,13 +284,12 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     return (
       <Form.Field>
         <p>your email is: {fieldProps.form.values.email}</p>
-        {/* <NavLink to={"/confirmorder"} > */}
+        <p>your bank is: </p>
           <Button
             onClick={() => this.handleOrder(fieldProps.form.values.email)}
           >
             Send
           </Button>
-        {/* </NavLink> */}
       </Form.Field>
     );
   };
