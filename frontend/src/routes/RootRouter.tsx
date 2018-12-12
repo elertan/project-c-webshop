@@ -7,10 +7,12 @@ import AlbumRouter from "./AlbumRouter";
 import ArtistRouter from "./ArtistRouter";
 import DashboardRouter from "./DashboardRouter"
 import CategoryRouter from './CategoryRouter';
+import AdminRouter from './AdminRouter';
 
 import {BrowserRouter} from 'react-router-dom';
 import NotFound from '../components/views/errors/NotFound/NotFound';
 import ShoppingcartRouter from './ShoppingcartRouter';
+import ConfirmOrderRouter from './ConfirmOrderRouter';
 
 const DefaultRedirect = () => <Redirect to="/home/explore"/>;
 
@@ -24,8 +26,10 @@ const RootRouter: React.SFC<{}> = () => (
       <Route path="/album" component={AlbumRouter}/>
       <Route path="/artist" component={ArtistRouter}/>
       <Route path="/dashboard" component={DashboardRouter}/>
+      <Route path="/admin" component={AdminRouter}/>
       <Route path="/category" component={CategoryRouter} />
       <Route path="/shoppingcart" component={ShoppingcartRouter} />
+      <Route path="/confirmorder" component={ConfirmOrderRouter} />
 
       <Route component={NotFound} />
     </Switch>

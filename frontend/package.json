@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.1.0",
     "@material-ui/icons": "^3.0.1",
+    "@types/chart.js": "^2.7.41",
     "@types/query-string": "^6.1.0",
     "@types/react-infinite-scroller": "^1.2.0",
     "@types/yup": "^0.24.9",
@@ -20,7 +21,9 @@
     "react": "^16.7.0-alpha.2",
     "react-apollo": "^2.1.11",
     "react-chartjs": "^1.2.0",
+    "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.7.0-alpha.2",
+    "react-google-charts": "^3.0.10",
     "react-infinite-scroller": "^1.2.2",
     "react-progressive-image": "^0.6.0",
     "react-responsive-carousel": "^3.1.43",

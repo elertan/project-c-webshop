@@ -21,6 +21,7 @@ namespace backend.Services
     {
         private readonly DatabaseContext _db;
         private readonly IAccountService _accountService;
+        
 
         public OrderService(DatabaseContext db, IAccountService accountService)
         {
@@ -90,7 +91,7 @@ namespace backend.Services
             
             await _db.AddAsync(order);
             await _db.AddRangeAsync(orderXProductEntries);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();   
 
             return order;
         }
