@@ -1,4 +1,5 @@
 import IBaseModel from "./IBaseModel";
+import IImage from "./IImage";
 
 interface ITrack extends IBaseModel {
     id: number;
@@ -10,6 +11,9 @@ interface ITrack extends IBaseModel {
     artistId: number[];
     albumId: number;
     previewUrl: string | null;
+    explicit: boolean;
+    price: number;
+    images: IImage[];
 }
 
 export default ITrack;

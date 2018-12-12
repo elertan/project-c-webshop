@@ -22,7 +22,7 @@ class TrackList extends React.Component<IProps> {
           <td className={classes.duration}>Duration</td>
         </tr>
         {this.props.trackData.map((trackData, i) =>
-          <TrackRow key={i} data={trackData}/>
+          <TrackRow key={i} data={trackData} noFavoriteAndCart={this.props.trackData.length === 1} />
         )}
       </table>
     );

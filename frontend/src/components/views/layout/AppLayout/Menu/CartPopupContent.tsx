@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Button, List, ListContent, ListItem} from "semantic-ui-react";
+import {Button, Icon, List, ListContent, ListItem} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
-import {Link, NavLink} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 
 interface IProps {
 }
@@ -20,7 +20,14 @@ class CartPopupContent extends React.Component<IProps> {
   private renderCartState = (cartState: CartState) => {
     if (cartState.state.products.length === 0) {
       return (
-        <p>Nothing has been added to the cart</p>
+        <div style={{ width: 450, padding: 20 }}>
+          <h3 style={{ textAlign: 'center' }}>
+            You haven't added anything to the cart yet.
+          </h3>
+          <p style={{ textAlign: 'center' }}>
+            Add products by clicking on the <Icon name="shopping cart" color="black" /> button.
+          </p>
+        </div>
       );
     }
 
@@ -70,7 +77,9 @@ class CartPopupContent extends React.Component<IProps> {
             return console.error("An unexpected item has been tried to add to the shopping cart.");
           })}
         </List>
-        <Button positive floated="right"><NavLink to={"/shoppingcart"}>Checkout</NavLink></Button>
+        <Route render={({history}) => (
+          <Button fluid onClick={() => history.push("/shoppingcart")}>Checkout</Button>
+        )} />
       </div>
     );
   };

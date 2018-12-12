@@ -15,6 +15,7 @@ import UserState from "./states/UserState";
 import WishlistState from "./states/WishlistState";
 import CartState from "./states/CartState";
 import MusicPlayerState from "./states/MusicPlayerState";
+import SearchState from "./states/SearchState";
 
 const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
@@ -24,10 +25,11 @@ export const userState = new UserState();
 export const wishlistState = new WishlistState();
 export const cartState = new CartState();
 export const musicPlayerState = new MusicPlayerState();
+export const searchState = new SearchState();
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <Provider inject={[userState, wishlistState, cartState, musicPlayerState]}>
+    <Provider inject={[userState, wishlistState, cartState, musicPlayerState, searchState]}>
       <MusicPlayer/>
       <App />
     </Provider>

@@ -39,23 +39,30 @@ class AlbumDetail extends React.Component<IProps> {
               name
               durationMs
               previewUrl
+              explicit
               artists {
                 items {
                   name
                   id
                 }
               }
+              product {
+                id
+                price
+              }
             }
           }
           product {
             id
+            price
           }
           images(orderBy: {
               path: "height",
               descending: true    
           }, first: 1) {
               items {
-                  url
+                id
+                url
               }
           }
         }
@@ -93,7 +100,10 @@ class AlbumDetail extends React.Component<IProps> {
           albumsName: album.name,
           albumId: album.id,
           previewUrl: track.previewUrl,
-          durationMs: track.durationMs
+          durationMs: track.durationMs,
+          explicit: track.explicit,
+          price: track.product.price,
+          images: album.images.items
         } as ITrack)
     );
 
@@ -121,42 +131,49 @@ class AlbumDetail extends React.Component<IProps> {
         </div>
 
         <div style={styles.actionsContainer}>
-          <Subscribe to={[CartState]}>
-            {(cartState: CartState) => (
-              <Subscribe to={[WishlistState]}>
-                {(wishlistState: WishlistState) => (
-                  <Button
-                    icon
-                    labelPosition="left"
-                    onClick={() => wishlistState.addToWishlist({
-                      id: album.product.id,
-                      album
-                    })}
-                    disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
-                  >
-                    <Icon name="heart" color="red"/>
-                    Add to wishlist
-                  </Button>
-                )}
-              </Subscribe>
-            )}
-          </Subscribe>
-          <Subscribe to={[CartState]}>
-            {(cartState: CartState) => (
-              <Button
-                icon
-                labelPosition="left"
-                onClick={() => cartState.addToCart({
-                  id: album.product.id,
-                  album
-                })}
-                disabled={cartState.isInCart(album.product.id)}
-              >
-                <Icon name="shopping basket" color="black"/>
-                Add to cart
-              </Button>
-            )}
-          </Subscribe>
+          <Button.Group>
+            <Subscribe to={[CartState]}>
+              {(cartState: CartState) => (
+                <Subscribe to={[WishlistState]}>
+                  {(wishlistState: WishlistState) => (
+                    <Button
+                      icon
+                      labelPosition="left"
+                      onClick={() => wishlistState.addToWishlist({
+                        id: album.product.id,
+                        album
+                      })}
+                      disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
+                    >
+                      <Icon name="heart" color="red"/>
+                      Add to wishlist
+                    </Button>
+                  )}
+                </Subscribe>
+              )}
+            </Subscribe>
+            <Button.Or/>
+            <Subscribe to={[CartState]}>
+              {(cartState: CartState) => (
+                <Button
+                  icon
+                  labelPosition="right"
+                  onClick={() => cartState.addToCart({
+                    id: album.product.id,
+                    album
+                  })}
+                  disabled={cartState.isInCart(album.product.id)}
+                >
+                  <Icon name="shopping cart" color="black"/>
+                  Add to cart
+                  <span style={{ marginLeft: 5, marginRight: 5 }} />
+                  <span style={{ fontSize: 12 }}>
+                     $ {album.product.price}
+                    </span>
+                </Button>
+              )}
+            </Subscribe>
+          </Button.Group>
         </div>
         <TrackList trackData={data}/>
       </div>

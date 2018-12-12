@@ -7,9 +7,11 @@ import {getTrackTimeFromDurationMs} from "../../../../utils/time";
 import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
 import WishlistState from "../../../../states/WishlistState";
+import ExplicitBadge from "./ExplicitBadge";
 
 interface IProps {
   data: ITrack;
+  noFavoriteAndCart?: boolean;
 }
 
 const styles = {
@@ -24,7 +26,7 @@ class TrackRow extends React.Component<IProps> {
     const artistNameSeparate = artistName.map((aName: string, i: number) => {
       return (
         <Link to={`/artist/${artistId[i]}`} key={artistId[i]}>
-          <span key={i}>{aName}<br/></span>
+          <span>{aName}<br/></span>
         </Link>
       )
     });
@@ -45,43 +47,62 @@ class TrackRow extends React.Component<IProps> {
                 </Button>
               )}
             </Subscribe>
-            <Subscribe to={[CartState]}>
-              {(cartState: CartState) => (
-                <Button icon
-                  onClick={() => cartState.addToCart({
-                    id: this.props.data.id,
-                    track: this.props.data
-                  })}
-                  disabled={cartState.isInCart(this.props.data.id)}
-                >
-                  <Icon name="shopping basket" color="black"/>
-                </Button>
-              )}
-            </Subscribe>
-            <Subscribe to={[CartState]}>
-              {(cartState: CartState) => (
-                <Subscribe to={[WishlistState]}>
-                  {(wishlistState: WishlistState) => (
-                    <Button
-                      icon
-                      disabled={wishlistState.isInWishlist(this.props.data.id) || cartState.isInCart(this.props.data.id)}
-                      onClick={() => wishlistState.addToWishlist({
-                        track: this.props.data,
-                        id: this.props.data.id
-                      })}>
-                      <Icon name="heart" color="red"/>
+            {!this.props.noFavoriteAndCart &&
+              <>
+                <Subscribe to={[CartState]}>
+                  {(cartState: CartState) => (
+                    <Subscribe to={[WishlistState]}>
+                      {(wishlistState: WishlistState) => (
+                        <Button
+                          icon
+                          disabled={wishlistState.isInWishlist(this.props.data.id) || cartState.isInCart(this.props.data.id)}
+                          onClick={() => wishlistState.addToWishlist({
+                            track: this.props.data,
+                            id: this.props.data.id
+                          })}>
+                          <Icon name="heart" color="red"/>
+                        </Button>
+                      )}
+                    </Subscribe>
+                  )}
+                </Subscribe>
+                <Subscribe to={[CartState]}>
+                  {(cartState: CartState) => (
+                    <Button icon
+                            onClick={() => cartState.addToCart({
+                              id: this.props.data.id,
+                              track: this.props.data
+                            })}
+                            disabled={cartState.isInCart(this.props.data.id)}
+                    >
+                      <Icon name="shopping cart" color="black"/>
+                      &nbsp;
+                      <span style={{ fontSize: 12 }}>
+                    $ {this.props.data.price}
+                  </span>
                     </Button>
                   )}
                 </Subscribe>
-              )}
-            </Subscribe>
+              </>
+            }
           </Button.Group>
         </td>
-        <td>{title}</td>
+        <td style={{ paddingLeft: 5 }}>
+          <span style={{ float: 'left' }}>
+            {title}
+          </span>
+          {this.props.data.explicit &&
+            <span style={{ float: 'right', marginRight: 15 }}>
+              <ExplicitBadge />
+            </span>
+          }
+        </td>
         <td>{artistNameSeparate}</td>
-        <Link to={`/album/${albumId}`}>
-          <td>{albumsName}</td>
-        </Link>
+        <td>
+          <Link to={`/album/${albumId}`}>
+            <span>{albumsName}</span>
+          </Link>
+        </td>
         <td>{trackTime}</td>
       </tr>
     );
