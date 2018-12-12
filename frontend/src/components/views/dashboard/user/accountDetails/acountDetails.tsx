@@ -1,8 +1,8 @@
 import * as React from "react";
-import AppLayout from "../../layout/AppLayout/AppLayout";
+import AppLayout from "../../../layout/AppLayout/AppLayout";
 import { Table, Button, Header, Icon } from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
-import DashboardMenu from "../../reusable/DashboardMenu/DashboardMenu";
+import DashboardMenu from "../../../reusable/DashboardMenu/DashboardMenu";
 import { NavLink } from "react-router-dom";
 
 class AccountDetails extends React.Component {

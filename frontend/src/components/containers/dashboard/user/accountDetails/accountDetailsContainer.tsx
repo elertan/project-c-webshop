@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import AccountDetails from "../../../views/dashboard/accountDetails/acountDetails";
+import AccountDetails from "../../../../views/dashboard/user/accountDetails/acountDetails";
 
 interface IProps extends RouteProps {}
 interface IState {}

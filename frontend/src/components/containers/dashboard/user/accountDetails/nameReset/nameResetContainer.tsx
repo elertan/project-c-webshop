@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import NameReset from "../../../../views/dashboard/accountDetails/nameReset/nameReset";
+import NameReset from "../../../../../views/dashboard/user/accountDetails/nameReset/nameReset";
 
 interface IProps extends RouteProps {}
 interface IState {}

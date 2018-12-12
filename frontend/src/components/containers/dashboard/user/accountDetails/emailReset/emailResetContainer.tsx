@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import EmailReset from "../../../../views/dashboard/accountDetails/emailReset/emailReset";
-
+import EmailReset from "../../../../../views/dashboard/user/accountDetails/emailReset/emailReset";
 interface IProps extends RouteProps {}
 interface IState {}
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import OrderHistory from "../../../views/dashboard/orderHistory/orderHistory";
+import OrderHistory from "../../../../views/dashboard/user/orderHistory/orderHistory";
 
 interface IProps extends RouteProps {}
 interface IState {}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import PasswordResetSucces from "../../../../views/dashboard/accountDetails/passwordReset/passwordResetSucces";
+import PasswordResetSucces from "../../../../../views/dashboard/user/accountDetails/passwordReset/passwordResetSucces";
 
 interface IProps extends RouteProps {}
 interface IState {}

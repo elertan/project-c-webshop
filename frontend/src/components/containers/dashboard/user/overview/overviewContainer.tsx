@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import Admin from "../../views/admin/Admin";
+import Overview from "../../../../views/dashboard/user/overview/overview";
 
 interface IProps extends RouteProps {}
 interface IState {}
 
-class AdminContainer extends React.Component<IProps, IState> {
+class OverviewContainer extends React.Component<IProps, IState> {
   public state = {};
 
   public render() {
     return (
-      <Admin/>
+      <Overview/>
     );
   }
 };
 
-export default AdminContainer;
+export default OverviewContainer;
