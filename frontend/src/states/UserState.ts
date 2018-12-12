@@ -10,6 +10,7 @@ const userKey = "USER";
 const initialState: IState = {
   user: (() => {
     const storageData = localStorage.getItem(userKey);
+    console.log("FROM USERSTATE:", storageData);
     if (storageData !== null) {
       return JSON.parse(storageData) as IUser;
     }

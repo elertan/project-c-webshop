@@ -5,6 +5,10 @@ import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../../reusable/DashboardMenu/DashboardMenu";
 import { NavLink } from "react-router-dom";
 
+// import { Subscribe } from "unstated";
+// import UserState from "../../../../../states/UserState";
+import { userState } from "../../../../../index";
+
 class AccountDetails extends React.Component {
   public state = {
     visibleEmail: false,
@@ -21,6 +25,8 @@ class AccountDetails extends React.Component {
 
   public render() {
     const { visibleEmailButton } = this.state;
+    console.log("FROM ACCOUNT DETAILS: ");
+    console.log("USERSTATE IS: ", userState);
 
     return (
       <AppLayout>
@@ -45,7 +51,7 @@ class AccountDetails extends React.Component {
                   <h3>
                     <b>Name : </b>
                   </h3>
-                  {"Tim Prins"}
+                  {userState.state.user!.firstname} {userState.state.user!.lastname}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={styles.NotClicked}>
@@ -59,11 +65,29 @@ class AccountDetails extends React.Component {
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
+                <Table.Cell width={5}>
+                  <h3>
+                    <b>Birthdate : </b>
+                  </h3>
+                  {userState.state.user!.dateOfBirth}
+                </Table.Cell>
+                <Table.Cell>
+                  <div style={styles.NotClicked}>
+                    <NavLink to={"/dashboard/accountdetails/birthreset"}>
+                      <Button animated="fade" size="large" fluid>
+                        <Button.Content visible>Edit</Button.Content>
+                        <Button.Content hidden>Change birthdate</Button.Content>
+                      </Button>
+                    </NavLink>
+                  </div>
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
                 <Table.Cell>
                   <h3>
                     <b>E-mail : </b>
                   </h3>
-                  {"tim-prins@live.nl"}
+                  {userState.state.user!.email}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={this.state.EMailButtonStyle}>

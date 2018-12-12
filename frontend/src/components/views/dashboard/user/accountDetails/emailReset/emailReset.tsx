@@ -13,6 +13,7 @@ import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { NavLink } from "react-router-dom";
+import { userState } from "../../../../../..//index";
 
 const styles = {
   DashboardPositioning: {
@@ -107,9 +108,9 @@ class EmailReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Email : </b>
+                            <b>Current Email : </b>
                           </h3>
-                          {"tim-prins@live.nl"}
+                          {userState.state.user!.email}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>

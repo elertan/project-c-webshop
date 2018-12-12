@@ -44,13 +44,6 @@ class Menu extends React.Component<IProps, IState> {
     })
   };
 
-  // public setStateShoppingCartButton =() => {
-  //   this.setState({WishlistButton: false, ShoppingCartButton: true})
-  // }
-  // public setStateWishListButton =() => {
-  //   this.setState({ShoppingCartButton: false, WishlistButton: true})
-  // }
-
   public render() {
     return (
       <div className="ui menu" style={{marginBottom: 25}}>

@@ -8,11 +8,13 @@ import OverviewContainer from "../components/containers/dashboard/user/overview/
 import PasswordResetContainer from "../components/containers/dashboard/user/accountDetails/passwordReset/passwordResetContainer";
 import PasswordResetSuccesContainer from "../components/containers/dashboard/user/accountDetails/passwordReset/passwordResetSuccesContainer";
 import NameResetContainer from "../components/containers/dashboard/user/accountDetails/nameReset/nameResetContainer";
+import BirthResetContainer from 'src/components/containers/dashboard/user/accountDetails/birthReset/birthResetContainer';
 import EmailResetContainer from "../components/containers/dashboard/user/accountDetails/emailReset/emailResetContainer";
 import NotFound from "../components/views/errors/NotFound/NotFound";
 import {userState} from "../index";
 import {Subscribe} from "unstated";
 import UserState from "../states/UserState";
+
 
 interface IProps extends RouteComponentProps<{}> {}
 
@@ -34,6 +36,7 @@ const DashboardRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path={`${props.match.url}/accountdetails/passwordreset`} component={PasswordResetContainer} />
               <Route exact path={`${props.match.url}/accountdetails/passwordresetsucces`} component={PasswordResetSuccesContainer} />
               <Route exact path={`${props.match.url}/accountdetails/namereset`} component={NameResetContainer} />
+              <Route exact path={`${props.match.url}/accountdetails/birthreset`} component={BirthResetContainer} />
               <Route exact path={`${props.match.url}/accountdetails/emailreset`} component={EmailResetContainer} />
             </>
           );

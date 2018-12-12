@@ -77,7 +77,7 @@ class NameReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Name : </b>
+                            <b>Current Name : </b>
                           </h3>
                           {"Tim"}
                         </Table.Cell>
@@ -105,7 +105,7 @@ class NameReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Infix : </b>
+                            <b>Current Infix : </b>
                           </h3>
                           {""}
                         </Table.Cell>
@@ -126,7 +126,7 @@ class NameReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Surname : </b>
+                            <b>Current Surname : </b>
                           </h3>
                           {"Prins"}
                         </Table.Cell>

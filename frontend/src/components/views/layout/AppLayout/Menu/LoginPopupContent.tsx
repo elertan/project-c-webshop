@@ -29,6 +29,7 @@ mutation ($data: LoginInput!) {
       email
       firstname
       lastname
+      dateOfBirth
       token
     }
     errors {
