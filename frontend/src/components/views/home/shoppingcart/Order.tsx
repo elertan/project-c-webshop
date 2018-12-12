@@ -10,7 +10,7 @@ import {
   Input,
   Label,
   Button,
-  Dropdown,
+ Dropdown
   
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
@@ -24,6 +24,7 @@ import gql from "graphql-tag";
 import IApiResult from "src/models/IApiResult";
 import IUser from "src/models/IUser";
 import IApiError from "src/models/IApiError";
+
 
 
 const createAnonymousOrderMutation = gql`
@@ -91,6 +92,7 @@ const bankOptions = [
   },
 ]
 
+
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is a required field")
@@ -102,12 +104,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     errors: [],
     email: "",
     status: "email",
+    value: "",
 
   };
-
+ 
  
   public render() {
-   
+    
     return (
       <Subscribe to={[OrderState, CartState]}>{this.orderRender}</Subscribe>
     );
@@ -144,7 +147,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                       return (
                         <Table.Row key={i}>
                           <Table.Cell>Album: {product.album!.name}</Table.Cell>
-                          <Table.Cell>Price</Table.Cell>
+                          <Table.Cell>Price: </Table.Cell>
                         </Table.Row>
                       );
                     }
@@ -260,6 +263,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
    
 
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
+   
   
     return (
       <Form.Field>
@@ -271,15 +275,18 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Table.Cell>Bank:</Table.Cell>
             <Table.Cell />
             <Table.Cell>
-            <Dropdown placeholder='Choose your bank' selection options={bankOptions} />
-        
+             <Dropdown placeholder='Choose your bank' selection options={bankOptions}  /> 
+           
        </Table.Cell>
+       <p>{this.state.value}</p>
         </Table.Row>
         </Table.Body >
         <Button positive floated="right" onClick={() => this.setStatus("confirm")}>Next</Button>
       </Form.Field>
     );
   };
+
+  
   private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Form.Field>
