@@ -31,10 +31,14 @@ class CartPopupContent extends React.Component<IProps> {
       );
     }
 
+    const totalPrice = cartState.state.products
+      .map((x: IProduct) => x.price)
+      .reduce((prev, curr) => prev + curr);
+
     return (
       <div style={{width: 450, padding: 20}}>
         <h3 style={{ textAlign: 'center', marginBottom: 25 }}>
-          These are on the list. <Icon name="check" color="black" />
+          These are in your cart. <Icon name="check" color="black" />
         </h3>
         <List size="large" divided>
           {cartState.state.products.map(
@@ -92,6 +96,7 @@ class CartPopupContent extends React.Component<IProps> {
             }
           )}
         </List>
+        <h3>Total price: ${totalPrice}</h3>
         <Route render={({ history }) => (
           <Button
             onClick={() => history.push("/shoppingcart/order")}
