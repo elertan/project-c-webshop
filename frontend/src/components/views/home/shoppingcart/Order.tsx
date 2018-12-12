@@ -10,8 +10,6 @@ import {
   Input,
   Label,
   Button,
- Dropdown
-  
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
@@ -78,20 +76,10 @@ const initialValues: IFormikValues = {
 };
 
 const bankOptions = [
-  {
-    text: 'Ing',
-    value: 'ing'
-  },
-  {
-    text: 'Abn',
-    value: 'abn'
-  },
-  {
-    text: 'Rabobank',
-    value: 'rabobank'
-  },
-]
-
+  "ING", 
+  "ABN Amro",
+  "Rabobank"
+];
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -275,7 +263,12 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Table.Cell>Bank:</Table.Cell>
             <Table.Cell />
             <Table.Cell>
-             <Dropdown placeholder='Choose your bank' selection options={bankOptions}  /> 
+             <select>
+              <option value={String(null)} disabled>Choose your bank</option>
+              {bankOptions.map((bank, i)=> (
+                <option key={i} value={i}>{bank}</option>
+              ))}
+             </select> 
            
        </Table.Cell>
        <p>{this.state.value}</p>
