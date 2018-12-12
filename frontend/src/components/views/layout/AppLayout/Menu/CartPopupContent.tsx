@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Button, Icon, List, ListContent, ListItem} from "semantic-ui-react";
+import {Button, Icon, List, Image} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
-import {Link, Route} from "react-router-dom";
+import {Route} from "react-router";
 
 interface IProps {
 }
@@ -32,53 +32,73 @@ class CartPopupContent extends React.Component<IProps> {
     }
 
     return (
-      <div>
-        <List>
-          {cartState.state.products.map((product: IProduct, i) => {
-            if (product.album !== undefined) {
-              return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    <Link to={`/album/${product.album!.id}`}>
-                      {" "}
-                      Album: {product.album!.name}
-                    </Link>
-                  </ListContent>
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => cartState.removeFromCart(product.id)}
-                    />
-                  </ListContent>
-                </ListItem>
-              );
-            }
+      <div style={{width: 450, padding: 20}}>
+        <h3 style={{ textAlign: 'center', marginBottom: 25 }}>
+          These are on the list. <Icon name="check" color="black" />
+        </h3>
+        <List size="large" divided>
+          {cartState.state.products.map(
+            (product: IProduct, i: number) => {
+              if (product.album !== undefined) {
+                return (
+                  <List.Item key={i}>
+                    <Image size="mini" src={product.album.images.items[0].url}/>
+                    <List.Content>
+                      <List.Header>
+                        {product.album.name}
+                      </List.Header>
+                      <List.Description>
+                        Album
+                      </List.Description>
+                    </List.Content>
+                    <List.Content>
+                      <div style={{ marginTop: 5, marginBottom: 5 }} />
+                      <Button
+                        size="small"
+                        icon
+                        onClick={() => cartState.removeFromCart(product.id)}
+                      >
+                        <Icon name="trash"/>
+                      </Button>
+                    </List.Content>
+                  </List.Item>
+                )
+              }
 
-            if (product.track !== undefined) {
-              return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    {" "}
-                    Track: {product.track!.title}
-                  </ListContent>
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => cartState.removeFromCart(product.id)}
-                    />
-                  </ListContent>
-                </ListItem>
-              );
+              if (product.track !== undefined) {
+                return (
+                  <List.Item>
+                    <Image size="mini" src={product.track.images[0].url}/>
+                    <List.Content>
+                      <List.Header>{product.track.title}</List.Header>
+                      <List.Description>
+                        Track
+                      </List.Description>
+                    </List.Content>
+                    <List.Content>
+                      <div style={{ marginTop: 5, marginBottom: 5 }} />
+                      <Button
+                        size="small"
+                        icon
+                        onClick={() => cartState.removeFromCart(product.id)}
+                      >
+                        <Icon name="trash"/>
+                      </Button>
+                    </List.Content>
+                  </List.Item>
+                )
+              }
+              return console.error("An unexpected item has been tried to add to the Wish list.");
             }
-            return console.error("An unexpected item has been tried to add to the shopping cart.");
-          })}
+          )}
         </List>
-        <Route render={({history}) => (
-          <Button fluid onClick={() => history.push("/shoppingcart")}>Checkout</Button>
+        <Route render={({ history }) => (
+          <Button
+            onClick={() => history.push("/shoppingcart/order")}
+            fluid
+          >
+            Proceed to checkout
+          </Button>
         )} />
       </div>
     );
