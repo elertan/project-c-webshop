@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +23,14 @@ namespace backend.Services
         Task<User> GetUserByToken(string token);
         Task AddToWishlist(int userId, int productId);
         Task RemoveFromWishlist(int userId, int productId);
+        /// <summary>
+        /// Changes the password of a given user
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="currentPassword">The current set password for the given user</param>
+        /// <param name="newPassword">The desired password for the given user</param>
+        /// <returns></returns>
+        Task ChangePassword(int userId, string currentPassword, string newPassword);
     }
 
     public class AccountService : IAccountService
@@ -183,6 +192,21 @@ namespace backend.Services
             }
 
             _db.Remove(entry);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task ChangePassword(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword);
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                throw new Exception("The current password given for this user was incorrect, changing password failed");
+            }
+
+            var newHash = _passwordHasher.HashPassword(user, newPassword);
+            user.Password = newHash;
+
             await _db.SaveChangesAsync();
         }
     }

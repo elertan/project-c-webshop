@@ -248,7 +248,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Form.Field>

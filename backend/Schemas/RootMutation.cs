@@ -66,6 +66,14 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(RemoveFromWishlistResolveFn)
             );
+
+            Field<ApiResultGraph<BooleanGraphType, bool>>(
+                "changePassword",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<ChangePasswordInput>> {Name ="data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangePasswordResolveFn)
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -117,5 +125,15 @@ namespace backend.Schemas
             await _accountService.RemoveFromWishlist(user.Id, data.ProductId);
             return new ApiResult<bool> {Data = true};
         }
+        
+        private async Task<ApiResult<bool>> ChangePasswordResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<ChangePasswordData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.ChangePassword(user.Id, data.CurrentPassword, data.NewPassword);
+            return new ApiResult<bool> {Data = true};
+        }
+
     }
 }

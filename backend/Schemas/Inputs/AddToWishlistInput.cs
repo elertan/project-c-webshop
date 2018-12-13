@@ -1,16 +1,16 @@
+using backend.Schemas.Inputs.Template;
+
 namespace backend.Schemas.Inputs
 {
-    public class AddToWishlistData
+    public class AddToWishlistData : AuthorizedData
     {
-        public string AuthToken { get; set; }
         public int ProductId { get; set; }
     }
     
-    public class AddToWishlistInput : BaseInputTypeGraph<AddToWishlistData>
+    public class AddToWishlistInput : AuthorizedBaseInputTypeGraph<AddToWishlistData>
     {
         public AddToWishlistInput()
         {
-            Field(x => x.AuthToken);
             Field(x => x.ProductId);
         }
     }
