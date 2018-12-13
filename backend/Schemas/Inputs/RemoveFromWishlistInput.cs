@@ -1,16 +1,16 @@
+using backend.Schemas.Inputs.Template;
+
 namespace backend.Schemas.Inputs
 {
-    public class RemoveFromWishlistData
+    public class RemoveFromWishlistData : AuthorizedData
     {
-        public string AuthToken { get; set; }
         public int ProductId { get; set; }
     }
     
-    public class RemoveFromWishlistInput : BaseInputTypeGraph<RemoveFromWishlistData>
+    public class RemoveFromWishlistInput : AuthorizedBaseInputTypeGraph<RemoveFromWishlistData>
     {
         public RemoveFromWishlistInput()
         {
-            Field(x => x.AuthToken);
             Field(x => x.ProductId);
         }
     }
