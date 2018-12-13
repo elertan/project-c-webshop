@@ -102,7 +102,7 @@ class CartPopupContent extends React.Component<IProps> {
             onClick={() => history.push("/shoppingcart/order")}
             fluid
           >
-            Proceed to checkout
+            Proceed with order
           </Button>
         )} />
       </div>
