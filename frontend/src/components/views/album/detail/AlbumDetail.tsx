@@ -141,7 +141,8 @@ class AlbumDetail extends React.Component<IProps> {
                       labelPosition="left"
                       onClick={() => wishlistState.addToWishlist({
                         id: album.product.id,
-                        album
+                        album,
+                        price: album.product.price
                       })}
                       disabled={wishlistState.isInWishlist(album.product.id) || cartState.isInCart(album.product.id)}
                     >
@@ -160,7 +161,8 @@ class AlbumDetail extends React.Component<IProps> {
                   labelPosition="right"
                   onClick={() => cartState.addToCart({
                     id: album.product.id,
-                    album
+                    album,
+                    price: album.product.price
                   })}
                   disabled={cartState.isInCart(album.product.id)}
                 >
