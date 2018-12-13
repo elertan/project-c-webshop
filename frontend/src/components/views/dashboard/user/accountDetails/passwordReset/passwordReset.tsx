@@ -1,8 +1,13 @@
 import * as React from "react";
 import { Table, Button, Input, Header, Icon, Label } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
-import { Formik } from "formik";
+import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
+import gql from "graphql-tag";
+import { withApollo, WithApolloClient } from "react-apollo";
+import {userState} from "src/index";
+// import IApiResult from "src/models/IApiResult";
+import IApiError from "src/models/IApiError";
 
 const styles = {
   DashboardPositioning: {
@@ -17,7 +22,6 @@ const styles = {
   ButtonGroup: {
     display: "inline-block"
   },
-
   InputSpacing: {
     display: "inline-block",
     width: "15vw"
@@ -28,27 +32,45 @@ const styles = {
   }
 };
 
-class PasswordReset extends React.Component {
+interface IProps {
+
+}
+
+interface IState {
+  errors: IApiError[],
+  active: boolean,
+  redirect: boolean
+}
+
+interface IFormikValues {
+  currentPassword: string,
+  newPassword: string,
+  repeatNewPassword: string,
+}
+
+const editPasswordMutation = gql`
+  mutation ($data: ChangePasswordInput!) {
+    changePassword(data: $data) {
+      data
+      errors {
+        message
+      }
+    }
+  }
+  `;
+
+class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
   public state = {
+    errors: [],
     PasswordInput: "password",
     active: true,
     redirect: false
   };
 
   public togglePasswordVisibility = () =>
-    this.setState({
-      active: !this.state.active
-    });
+    this.setState({ active: !this.state.active });
 
   public render() {
-    let ConfirmButton = <Button>Confirm</Button>;
-    if (this.state.redirect) {
-      ConfirmButton = (
-        <NavLink to={""}>
-          <Button>Confirm</Button>
-        </NavLink>
-      );
-    }
     let showPassword = (
       <Button
         color="blue"
@@ -60,6 +82,7 @@ class PasswordReset extends React.Component {
         <Button.Content hidden>Show password</Button.Content>
       </Button>
     );
+
     if (!this.state.active) {
       showPassword = (
         <Button
@@ -87,6 +110,7 @@ class PasswordReset extends React.Component {
       );
       this.state.PasswordInput = "password";
     }
+
     return (
       <div>
         <div style={styles.HeaderPositioning}>
@@ -101,28 +125,46 @@ class PasswordReset extends React.Component {
 
         <div style={styles.DashboardPositioning}>
           <Formik
-            initialValues={{
+            initialValues = {{
               currentPassword: "",
               newPassword: "",
               repeatNewPassword: ""
             }}
-            onSubmit={values => {
+            onSubmit={(values: IFormikValues, formik: FormikProps<IFormikValues>) => {
               console.log(values);
-              this.setState({
-                redirect: true
+              const result = this.props.client.mutate({
+                mutation: editPasswordMutation,
+                variables: {
+                  data: {
+                    authToken: userState.state.user!.token,
+                    currentPassword: values.currentPassword,
+                    newPassword: values.newPassword,
+                  }
+                }
               });
-              console.log(this.state.redirect);
+              // 13-12/2018 
+              // Hier moeten nog gekeken worden of het is gelukt of niet.
+              // Zo nee: error melding en geen redirect. 
+              console.log("Result is: ", result);
+              formik.setSubmitting(true);
+              
+              this.setState({ redirect: true });
+              if (this.state.redirect) {
+                this.props.history.replace("/dashboard/accountdetails");
+              }
+              formik.setSubmitting(false);
             }}
             validationSchema={Yup.object().shape({
               currentPassword: Yup.string().required(
-                "Please fill in your current password"
+                "Please fill in your current password."
               ),
               newPassword: Yup.string()
-                .required("Please fill in your new password")
+                .required("Please fill in your new password.")
                 .min(5, "New password should be atleast 5 characters long"),
               repeatNewPassword: Yup.string()
-                .required("Please repeat your new password")
-                .min(5, "New password should be atleast 5 characters long")
+                .oneOf([Yup.ref("newPassword"), null], "Passwords do not match.")
+                .required("Please repeat your new password.")
+                .min(5, "New password should be atleast 5 characters long.")
             })}
           >
             {props => {
@@ -202,6 +244,7 @@ class PasswordReset extends React.Component {
                               value={values.repeatNewPassword}
                               onChange={handleChange}
                               type={this.state.PasswordInput}
+                              on
                             />
                           </div>{" "}
                           {errors.repeatNewPassword &&
@@ -245,8 +288,6 @@ class PasswordReset extends React.Component {
                               Confirm
                             </Button.Content>
                           </Button>
-                          {ConfirmButton}
-
                           {showPassword}
                         </div>
                       </Table.Cell>
@@ -262,4 +303,4 @@ class PasswordReset extends React.Component {
   }
 }
 
-export default PasswordReset;
+export default withRouter(withApollo(PasswordReset));
