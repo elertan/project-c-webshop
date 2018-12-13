@@ -52,7 +52,7 @@ class CartPopupContent extends React.Component<IProps> {
                         {product.album.name}
                       </List.Header>
                       <List.Description>
-                        Album
+                        Album - $ {product.price}
                       </List.Description>
                     </List.Content>
                     <List.Content>

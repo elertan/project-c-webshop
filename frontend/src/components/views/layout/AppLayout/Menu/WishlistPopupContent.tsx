@@ -65,7 +65,7 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                         {product.album.name}
                       </List.Header>
                       <List.Description>
-                        Album
+                        Album - $ {product.price}
                       </List.Description>
                     </List.Content>
                     <List.Content>
@@ -80,11 +80,9 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       <Button
                         size="small"
                         icon
-                        labelPosition="left"
                         onClick={() => cartState.addToCart(product)}
                       >
                         <Icon name="shopping cart"/>
-                        $ 10
                       </Button>
                     </List.Content>
                   </List.Item>
@@ -98,11 +96,12 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                     <List.Content>
                       <List.Header>{product.track.title}</List.Header>
                       <List.Description>
-                        Track
+                        Track - $ {product.price}
                       </List.Description>
                     </List.Content>
                     <List.Content>
                       <div style={{ marginTop: 5, marginBottom: 5 }} />
+
                       <Button
                         size="small"
                         icon
@@ -110,15 +109,15 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       >
                         <Icon name="trash"/>
                       </Button>
+
                       <Button
                         size="small"
                         icon
-                        labelPosition="left"
                         onClick={() => cartState.addToCart(product)}
                       >
                         <Icon name="shopping cart"/>
-                        $ {product.track.price}
                       </Button>
+
                     </List.Content>
                   </List.Item>
                 )
