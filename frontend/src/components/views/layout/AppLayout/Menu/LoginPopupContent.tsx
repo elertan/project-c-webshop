@@ -89,7 +89,7 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
       }
       // Handle token
       // alert(apiResult.data!.token);
-      userState.setUser(apiResult.data!);
+      userState.login(apiResult.data!);
       
       console.log("User is now logged in." )
       // location.reload()
