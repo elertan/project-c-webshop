@@ -10,10 +10,13 @@ import {
   Modal
 } from "semantic-ui-react";
 import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { NavLink } from "react-router-dom";
+import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
 import { userState } from "../../../../../..//index";
+import gql from "graphql-tag";
+import { withApollo, WithApolloClient } from "react-apollo";
+import IApiError from "src/models/IApiError";
 
 const styles = {
   DashboardPositioning: {
@@ -41,8 +44,35 @@ const styles = {
   }
 };
 
-class EmailReset extends React.Component {
+const editEmailMutation = gql`
+  mutation ($data: ChangeEmailInput!) {
+    changeEmail(data: $data) {
+      data
+      errors {
+        message
+      }
+    }
+  }
+  `;
+
+interface IProps {
+
+}
+
+interface IState {
+  errors: IApiError[],
+  openModal: boolean,
+  confirm: boolean
+}
+
+interface IFormikValues {
+  email: string,
+  confirmemail: string
+}
+
+class EmailReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
   public state = {
+    errors: [],
     openModal: false,
     confirm: false
   };
@@ -82,11 +112,26 @@ class EmailReset extends React.Component {
               email: "",
               confirmemail: ""
             }}
-            onSubmit={this.confirmModalIsAllowed}
+            onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+              console.log(values);
+              const result = await this.props.client.mutate({
+                mutation: editEmailMutation,
+                variables: {
+                  data: {
+                    authToken: userState.state.user!.token,
+                    newEmail: values.email
+                  }
+                }
+              });
+              console.log("From emailReset | Result is:", result);
+              formik.setSubmitting(true);
+              this.setState({ confirm: true })
+              formik.setSubmitting(false);
+            }}
             validationSchema={Yup.object().shape({
               email: Yup.string()
-                .required("Please fill in an email")
-                .email("Email should be a valid email"),
+                .required("Please fill in a new email")
+                .email("New email should be a valid email address"),
               confirmemail: Yup.string()
                 .oneOf([Yup.ref("email"), null], "Emails do not match")
                 .required("Please retype your new email")
@@ -238,4 +283,4 @@ class EmailReset extends React.Component {
   }
 }
 
-export default EmailReset;
+export default withRouter(withApollo(EmailReset));

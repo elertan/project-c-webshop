@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import gql from "graphql-tag";
 import { withApollo, WithApolloClient } from "react-apollo";
 import {userState} from "src/index";
-// import IApiResult from "src/models/IApiResult";
 import IApiError from "src/models/IApiError";
 
 const styles = {
@@ -130,9 +129,9 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
               newPassword: "",
               repeatNewPassword: ""
             }}
-            onSubmit={(values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+            onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
               console.log(values);
-              const result = this.props.client.mutate({
+              const result = await this.props.client.mutate({
                 mutation: editPasswordMutation,
                 variables: {
                   data: {

@@ -70,10 +70,19 @@ namespace backend.Schemas
             Field<ApiResultGraph<BooleanGraphType, bool>>(
                 "changePassword",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<ChangePasswordInput>> {Name ="data"}
+                    new QueryArgument<NonNullGraphType<ChangePasswordInput>> {Name = "data"}
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangePasswordResolveFn)
             );
+
+            Field<ApiResultGraph<BooleanGraphType, bool>> (
+                "changeEmail",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<ChangeEmailInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeEmailResolveFn)
+            );
+
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -133,6 +142,16 @@ namespace backend.Schemas
 
             await _accountService.ChangePassword(user.Id, data.CurrentPassword, data.NewPassword);
             return new ApiResult<bool> {Data = true};
+        }
+
+        private async Task<ApiResult<bool>> ChangeEmailResolveFn(ResolveFieldContext<object> context) 
+        {
+            var data = context.GetArgument<ChangeEmailData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.ChangeEmail(user.Id, data.NewEmail);
+            return new ApiResult<bool> {Data = true};
+
         }
 
     }

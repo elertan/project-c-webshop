@@ -31,6 +31,7 @@ namespace backend.Services
         /// <param name="newPassword">The desired password for the given user</param>
         /// <returns></returns>
         Task ChangePassword(int userId, string currentPassword, string newPassword);
+        Task ChangeEmail(int userId, string newEmail);
     }
 
     public class AccountService : IAccountService
@@ -208,6 +209,17 @@ namespace backend.Services
             user.Password = newHash;
 
             await _db.SaveChangesAsync();
+        }
+
+        public async Task ChangeEmail(int userId, string newEmail) 
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.Email = newEmail;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed",
+                $"Hi {user.Email}!\n\nYou email address has been succesfully altered.\n\nFrom now on you will receive emails from the Marshmallow Webshop at this address.\nIf you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop.");
         }
     }
 }
