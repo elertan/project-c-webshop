@@ -40,6 +40,17 @@ const FETCH_WISHLIST_QUERY = gql`
         track {
           id
           name
+          albums(first: 1) {
+            items {
+              id
+              images(orderBy: { path: "height" }) {
+                items {
+                  id
+                  url
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -85,7 +96,18 @@ class UserState extends Container<IState> {
       }
     });
     const data = result.data! as any;
-    const wishlist = data.me.wishlist as IProduct[];
+    const wishlist = data.me.wishlist.map((product: any) => {
+      if (!product.track) {
+        return product;
+      }
+      return {
+        ...product,
+        track: {
+          ...product.track,
+          images: product.track.albums.items[0].images.items
+        }
+      }
+    }) as IProduct[];
     wishlistState.setUserWishlist(wishlist, user);
   };
 }

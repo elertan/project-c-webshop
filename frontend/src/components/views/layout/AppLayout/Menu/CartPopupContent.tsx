@@ -44,7 +44,7 @@ class CartPopupContent extends React.Component<IProps> {
         <List size="large" divided>
           {cartState.state.products.map(
             (product: IProduct, i: number) => {
-              if (product.album !== undefined) {
+              if (product.album) {
                 return (
                   <List.Item key={i}>
                     <Image size="mini" src={product.album.images.items[0].url}/>
@@ -70,7 +70,7 @@ class CartPopupContent extends React.Component<IProps> {
                 )
               }
 
-              if (product.track !== undefined) {
+              if (product.track) {
                 return (
                   <List.Item>
                     <Image size="mini" src={product.track.images[0].url}/>

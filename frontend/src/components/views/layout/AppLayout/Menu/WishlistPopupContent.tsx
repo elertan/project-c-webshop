@@ -57,7 +57,7 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
         <List size="large" divided>
           {wishlistState.state.products.map(
             (product: IProduct, i: number) => {
-              if (product.album !== undefined) {
+              if (product.album) {
                 return (
                   <List.Item key={i}>
                     <Image size="mini" src={product.album.images.items[0].url}/>
@@ -95,7 +95,7 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                 )
               }
 
-              if (product.track !== undefined) {
+              if (product.track) {
                 return (
                   <List.Item>
                     <Image size="mini" src={product.track.images[0].url}/>
