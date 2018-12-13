@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Icon, List, Image, Button} from "semantic-ui-react";
+import {Button, Icon, Image, List} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import {Subscribe} from "unstated";
 import WishlistState from "../../../../../states/WishlistState";
 import {cartState, wishlistState} from "../../../../../index";
+import BedragWaarde, {Valuta} from "../../../reusable/BedragWaarde";
 
 interface IProps {
 }
@@ -65,7 +66,12 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                         {product.album.name}
                       </List.Header>
                       <List.Description>
-                        Album - $ {product.price}
+                        Album - <BedragWaarde
+                                  bedrag={product.price}
+                                  valuta={Valuta.Dollar}
+                                  geenTeken
+                                  toonMutatie={false}
+                                />
                       </List.Description>
                     </List.Content>
                     <List.Content>
@@ -96,7 +102,12 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                     <List.Content>
                       <List.Header>{product.track.title}</List.Header>
                       <List.Description>
-                        Track - $ {product.price}
+                        Track - <BedragWaarde
+                                  bedrag={product.price}
+                                  valuta={Valuta.Dollar}
+                                  geenTeken
+                                  toonMutatie={false}
+                                />
                       </List.Description>
                     </List.Content>
                     <List.Content>
