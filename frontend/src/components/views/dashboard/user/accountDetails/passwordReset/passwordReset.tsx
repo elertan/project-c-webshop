@@ -37,6 +37,7 @@ interface IProps {
 
 interface IState {
   errors: IApiError[],
+  PasswordInput: string,
   active: boolean,
   redirect: boolean
 }
@@ -131,6 +132,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
             }}
             onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
               console.log(values);
+              formik.setSubmitting(true);
               const result = await this.props.client.mutate({
                 mutation: editPasswordMutation,
                 variables: {
@@ -141,11 +143,11 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                   }
                 }
               });
-              // 13-12/2018 
-              // Hier moeten nog gekeken worden of het is gelukt of niet.
-              // Zo nee: error melding en geen redirect. 
+              //
+              // HIER NOG CONTROLEREN OF HET GELUKT IS
+              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
+              // NIET GELUKT? - ERROR WEERGEVEN
               console.log("Result is: ", result);
-              formik.setSubmitting(true);
               
               this.setState({ redirect: true });
               if (this.state.redirect) {

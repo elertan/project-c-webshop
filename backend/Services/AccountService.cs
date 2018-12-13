@@ -32,6 +32,7 @@ namespace backend.Services
         /// <returns></returns>
         Task ChangePassword(int userId, string currentPassword, string newPassword);
         Task ChangeEmail(int userId, string newEmail);
+        Task ChangeName(int userId, string newFirstName, string newLastName);
     }
 
     public class AccountService : IAccountService
@@ -221,5 +222,17 @@ namespace backend.Services
             await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed",
                 $"Hi {user.Email}!\n\nYou email address has been succesfully altered.\n\nFrom now on you will receive emails from the Marshmallow Webshop at this address.\nIf you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop.");
         }
+
+        public async Task ChangeName(int userId, string newFirstName, string newLastName)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.Firstname = newFirstName;
+            user.Lastname = newLastName;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed",
+            $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
+        } 
     }
 }

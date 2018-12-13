@@ -83,6 +83,14 @@ namespace backend.Schemas
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeEmailResolveFn)
             );
 
+            Field<ApiResultGraph<BooleanGraphType, bool>> (
+                "changeName",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<ChangeNameInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeNameResolveFn)
+            );
+
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -151,7 +159,15 @@ namespace backend.Schemas
 
             await _accountService.ChangeEmail(user.Id, data.NewEmail);
             return new ApiResult<bool> {Data = true};
+        }
 
+        private async Task<ApiResult<bool>> ChangeNameResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<ChangeNameData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.ChangeName(user.Id, data.NewFirstName, data.NewLastName);
+            return new ApiResult<bool> {Data = true};
         }
 
     }

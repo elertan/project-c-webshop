@@ -114,6 +114,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
             }}
             onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
               console.log(values);
+              formik.setSubmitting(true);
               const result = await this.props.client.mutate({
                 mutation: editEmailMutation,
                 variables: {
@@ -124,7 +125,10 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                 }
               });
               console.log("From emailReset | Result is:", result);
-              formik.setSubmitting(true);
+              //
+              // HIER NOG CONTROLEREN OF HET GELUKT IS
+              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
+              // NIET GELUKT? - ERROR WEERGEVEN
               this.setState({ confirm: true })
               formik.setSubmitting(false);
             }}

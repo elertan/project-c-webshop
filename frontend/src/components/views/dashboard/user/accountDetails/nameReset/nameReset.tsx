@@ -2,9 +2,12 @@ import * as React from "react";
 import AppLayout from "../../../../layout/AppLayout/AppLayout";
 import { Table, Input, Button, Header, Icon, Label } from "semantic-ui-react";
 import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { NavLink } from "react-router-dom";
+import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
+import { userState } from "../../../../../..//index";
+import { WithApolloClient, withApollo } from "react-apollo";
+import gql from "graphql-tag";
 
 const styles = {
   DashboardPositioning: {
@@ -28,7 +31,31 @@ const styles = {
   }
 };
 
-class NameReset extends React.Component {
+interface IProps {
+
+}
+
+interface IState {
+
+}
+
+interface IFormikValues {
+  name: string,
+  lastname: string
+}
+
+const editNameMutation = gql`
+  mutation($data: ChangeNameInput!) {
+    changeName(data: $data) {
+      data
+      errors {
+        message
+      }
+    }
+  }
+  `;
+
+class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
   public render() {
     return (
       <AppLayout>
@@ -38,7 +65,7 @@ class NameReset extends React.Component {
             <Header.Content>
               Customer Name
               <Header.Subheader>
-                Update your name, infix and/or surname
+                Update your name and/or lastname
               </Header.Subheader>
             </Header.Content>
           </Header>
@@ -49,16 +76,31 @@ class NameReset extends React.Component {
           <Formik
             initialValues={{
               name: "",
-              infix: "",
-              surname: ""
+              lastname: ""
             }}
-            onSubmit={values => {
+            onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
               console.log(values);
+              formik.setSubmitting(true);
+              const result = await this.props.client.mutate({
+                mutation: editNameMutation,
+                variables: {
+                  data: {
+                    authToken: userState.state.user!.token,
+                    newFirstName: values.name,
+                    newLastName: values.lastname
+                  }
+                }
+              });
+              console.log(result);
+              //
+              // HIER NOG CONTROLEREN OF HET GELUKT IS
+              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
+              // NIET GELUKT? - ERROR WEERGEVEN
+              formik.setSubmitting(false);
             }}
             validationSchema={Yup.object().shape({
-              name: Yup.string().required("Please fill in name"),
-              infix: Yup.string(),
-              surname: Yup.string().required("Please fill in surname")
+              name: Yup.string().required("This is a required field."),
+              lastname: Yup.string().required("This is a required field.")
             })}
           >
             {props => {
@@ -77,18 +119,18 @@ class NameReset extends React.Component {
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Current Name : </b>
+                            <b>Current First Name : </b>
                           </h3>
-                          {"Tim"}
+                          {userState.state.user!.firstname}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
                             <Input
                               fluid
                               id="name"
-                              placeholder="Modify name"
+                              placeholder="Enter a (new) first name here"
                               type="text"
-                              value={values.name}
+                              value={values.name} 
                               onChange={handleChange}
                             />
                           </div>
@@ -101,50 +143,28 @@ class NameReset extends React.Component {
                           )}{" "}
                         </Table.Cell>
                       </Table.Row>
-
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Current Infix : </b>
+                            <b>Current lastname : </b>
                           </h3>
-                          {""}
+                          {userState.state.user!.lastname}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
                             <Input
                               fluid
-                              id="infix"
-                              placeholder="Modify infix"
+                              id="lastname"
+                              placeholder="Enter a (new) last name here"
                               type="text"
-                              value={values.infix}
+                              value={values.lastname}
                               onChange={handleChange}
                             />
                           </div>
-                        </Table.Cell>
-                      </Table.Row>
-
-                      <Table.Row>
-                        <Table.Cell>
-                          <h3>
-                            <b>Current Surname : </b>
-                          </h3>
-                          {"Prins"}
-                        </Table.Cell>
-                        <Table.Cell>
-                          <div style={styles.InputSpacing}>
-                            <Input
-                              fluid
-                              id="surname"
-                              placeholder="Modify surname"
-                              type="text"
-                              value={values.surname}
-                              onChange={handleChange}
-                            />
-                          </div>
-                          {errors.surname && touched.surname && (
+                          {errors.lastname && touched.lastname && (
                             <div style={styles.LabelWitdh}>
                               <Label basic pointing="left" color="red">
-                                {errors.surname}
+                                {errors.lastname}
                               </Label>
                             </div>
                           )}{" "}
@@ -195,4 +215,4 @@ class NameReset extends React.Component {
   }
 }
 
-export default NameReset;
+export default withRouter(withApollo(NameReset));
