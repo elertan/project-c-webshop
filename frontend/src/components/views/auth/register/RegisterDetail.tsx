@@ -116,7 +116,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteCom
       if (this.state.errors.length > 0) {
         this.setState({errors: []})
       }
-      userState.setUser(apiResult.data!);
+      userState.login(apiResult.data!);
       this.props.history.replace("/home/explore");
     }
     formik.setSubmitting(false);

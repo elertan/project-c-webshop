@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Mail;
@@ -12,6 +13,7 @@ using backend_datamodel.Models.Crosstables;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MoreLinq.Extensions;
 
 namespace backend.Services
 {
@@ -33,6 +35,13 @@ namespace backend.Services
         Task ChangePassword(int userId, string currentPassword, string newPassword);
         Task ChangeEmail(int userId, string newEmail);
         Task ChangeName(int userId, string newFirstName, string newLastName);
+        /// <summary>
+        /// Merges the local and online stored wishlists for an user that logs in
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="localProductIds">The stored wishlist product ids on the given machine</param>
+        /// <returns></returns>
+        Task MergeWishlist(int userId, List<int> localProductIds);
     }
 
     public class AccountService : IAccountService
@@ -234,5 +243,23 @@ namespace backend.Services
             await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed",
             $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
         } 
+        
+        public async Task MergeWishlist(int userId, List<int> localProductIds)
+        {
+            var onlineStoredProductIds = await _db.WishlistUserXProducts.Where(x => x.UserId == userId)
+                .Select(x => x.ProductId).ToListAsync();
+            var newEntries = localProductIds.Where(x => !onlineStoredProductIds.Contains(x))
+                .Select(x => new Wishlist_UserXProduct
+                {
+                    UserId = userId,
+                    ProductId = x
+                }).ToList();
+            if (newEntries.Count == 0)
+            {
+                return;
+            }
+            await _db.AddRangeAsync(newEntries);
+            await _db.SaveChangesAsync();
+        }
     }
 }

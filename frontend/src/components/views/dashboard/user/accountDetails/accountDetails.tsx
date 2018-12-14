@@ -1,13 +1,14 @@
 import * as React from "react";
 import AppLayout from "../../../layout/AppLayout/AppLayout";
-import { Table, Button, Header, Icon } from "semantic-ui-react";
+import {Table, Button, Header, Icon} from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../../reusable/DashboardMenu/DashboardMenu";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 // import { Subscribe } from "unstated";
 // import UserState from "../../../../../states/UserState";
-import { userState } from "../../../../../index";
+import {userState} from "../../../../../index";
+import IUser from "../../../../../models/IUser";
 
 class AccountDetails extends React.Component {
   public state = {
@@ -24,15 +25,16 @@ class AccountDetails extends React.Component {
     });
 
   public render() {
-    const { visibleEmailButton } = this.state;
+    const {visibleEmailButton} = this.state;
     console.log("FROM ACCOUNT DETAILS: ");
     console.log("USERSTATE IS: ", userState);
+    const user = userState.state.user! as IUser;
 
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
           <Header as="h2">
-            <Icon name="settings" />
+            <Icon name="settings"/>
             <Header.Content>
               Account Details
               <Header.Subheader>
@@ -41,7 +43,7 @@ class AccountDetails extends React.Component {
             </Header.Content>
           </Header>
         </div>
-        <DashboardMenu />
+        <DashboardMenu/>
 
         <div style={styles.DashboardPositioning}>
           <Table>
@@ -51,7 +53,7 @@ class AccountDetails extends React.Component {
                   <h3>
                     <b>Name : </b>
                   </h3>
-                  {userState.state.user!.firstname} {userState.state.user!.lastname}
+                  {user.firstname} {user.lastname}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={styles.NotClicked}>
@@ -69,7 +71,7 @@ class AccountDetails extends React.Component {
                   <h3>
                     <b>Birthdate : </b>
                   </h3>
-                  {userState.state.user!.dateOfBirth}
+                  {user.dateOfBirth}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={styles.NotClicked}>
@@ -87,21 +89,21 @@ class AccountDetails extends React.Component {
                   <h3>
                     <b>E-mail : </b>
                   </h3>
-                  {userState.state.user!.email}
+                  {user.email}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={this.state.EMailButtonStyle}>
-                  <NavLink to={"/dashboard/accountdetails/emailreset"}>
-                    <Button
-                      animated="fade"
-                      size="large"
-                      fluid
-                      content={visibleEmailButton ? "Hide" : "Show"}
-                      onClick={this.toggleEmailVisibility}
-                    >
-                      <Button.Content visible>Edit</Button.Content>
-                      <Button.Content hidden>Change e-mail</Button.Content>
-                    </Button>
+                    <NavLink to={"/dashboard/accountdetails/emailreset"}>
+                      <Button
+                        animated="fade"
+                        size="large"
+                        fluid
+                        content={visibleEmailButton ? "Hide" : "Show"}
+                        onClick={this.toggleEmailVisibility}
+                      >
+                        <Button.Content visible>Edit</Button.Content>
+                        <Button.Content hidden>Change e-mail</Button.Content>
+                      </Button>
                     </NavLink>
                   </div>
 

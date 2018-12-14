@@ -17,6 +17,21 @@ import ScrollToTop from "../utils/scrollToTop";
 
 const DefaultRedirect = () => <Redirect to="/home/explore" />;
 
+export const routes = {
+  home: {
+    explore: "/home/explore",
+    artists: "/home/artists",
+    albums: "/home/albums",
+    categories: "/home/categories"
+  },
+  auth: {
+    register: "/auth/register"
+  },
+  album: (id: number) => `/album/${id}`,
+  artist: (id: number) => `/artist/${id}`,
+  category: (id: number) => `/category/${id}`
+};
+
 // Here we can add routes to different pages (urls)
 const RootRouter: React.SFC<{}> = () => (
   <BrowserRouter>

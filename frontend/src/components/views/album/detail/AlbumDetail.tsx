@@ -10,6 +10,7 @@ import {Subscribe} from "unstated";
 import {Button, Icon} from "semantic-ui-react";
 import WishlistState from "src/states/WishlistState";
 import ITrack from "../../../../models/ITrack";
+import BedragWaarde, {Valuta} from "../../reusable/BedragWaarde";
 
 interface IProps extends StyleProps {
   albumId: number;
@@ -169,9 +170,12 @@ class AlbumDetail extends React.Component<IProps> {
                   <Icon name="shopping cart" color="black"/>
                   Add to cart
                   <span style={{ marginLeft: 5, marginRight: 5 }} />
-                  <span style={{ fontSize: 12 }}>
-                     $ {album.product.price}
-                    </span>
+                  <BedragWaarde
+                    bedrag={album.product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  />
                 </Button>
               )}
             </Subscribe>

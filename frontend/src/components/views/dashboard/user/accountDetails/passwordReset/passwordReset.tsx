@@ -7,6 +7,7 @@ import gql from "graphql-tag";
 import { withApollo, WithApolloClient } from "react-apollo";
 import {userState} from "src/index";
 import IApiError from "src/models/IApiError";
+import IUser from "../../../../../../models/IUser";
 
 const styles = {
   DashboardPositioning: {
@@ -71,6 +72,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
     this.setState({ active: !this.state.active });
 
   public render() {
+    const user = userState.state.user! as IUser;
     let showPassword = (
       <Button
         color="blue"
@@ -137,7 +139,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                 mutation: editPasswordMutation,
                 variables: {
                   data: {
-                    authToken: userState.state.user!.token,
+                    authToken: user.token,
                     currentPassword: values.currentPassword,
                     newPassword: values.newPassword,
                   }

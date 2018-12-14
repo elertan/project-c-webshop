@@ -17,6 +17,7 @@ import { userState } from "../../../../../..//index";
 import gql from "graphql-tag";
 import { withApollo, WithApolloClient } from "react-apollo";
 import IApiError from "src/models/IApiError";
+import IUser from "../../../../../../models/IUser";
 
 const styles = {
   DashboardPositioning: {
@@ -93,6 +94,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
     });
   };
   public render() {
+    const user = userState.state.user! as IUser;
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
@@ -119,7 +121,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                 mutation: editEmailMutation,
                 variables: {
                   data: {
-                    authToken: userState.state.user!.token,
+                    authToken: user.token,
                     newEmail: values.email
                   }
                 }
@@ -159,7 +161,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                           <h3>
                             <b>Current Email : </b>
                           </h3>
-                          {userState.state.user!.email}
+                          {user.email}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>

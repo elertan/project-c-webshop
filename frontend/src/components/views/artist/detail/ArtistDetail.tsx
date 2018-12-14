@@ -11,6 +11,7 @@ import {Subscribe} from "unstated";
 import {Button, Icon} from "semantic-ui-react";
 import CartState from "src/states/CartState";
 import WishlistState from "src/states/WishlistState";
+import BedragWaarde, {Valuta} from "../../reusable/BedragWaarde";
 
 interface IProps extends StyleProps {
   artistId: number
@@ -218,9 +219,12 @@ class ArtistDetail extends React.Component<IProps> {
                     <Icon name="shopping basket" color="black"/>
                     Add to cart
                     <span style={{ marginLeft: 5, marginRight: 5 }} />
-                    <span style={{ fontSize: 12 }}>
-                     $ {album.product.price}
-                    </span>
+                    <BedragWaarde
+                      bedrag={album.product.price}
+                      valuta={Valuta.Dollar}
+                      geenTeken
+                      toonMutatie={false}
+                    />
                   </Button>
                 )}
               </Subscribe>

@@ -8,6 +8,7 @@ import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
 import { userState } from "../../../../../..//index";
 import { WithApolloClient, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import IUser from "../../../../../../models/IUser";
 
 const styles = {
   DashboardPositioning: {
@@ -57,6 +58,7 @@ const editNameMutation = gql`
 
 class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
   public render() {
+    const user = userState.state.user! as IUser;
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
@@ -85,7 +87,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                 mutation: editNameMutation,
                 variables: {
                   data: {
-                    authToken: userState.state.user!.token,
+                    authToken: user.token,
                     newFirstName: values.name,
                     newLastName: values.lastname
                   }
@@ -121,7 +123,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                           <h3>
                             <b>Current First Name : </b>
                           </h3>
-                          {userState.state.user!.firstname}
+                          {user.firstname}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
@@ -148,7 +150,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                           <h3>
                             <b>Current lastname : </b>
                           </h3>
-                          {userState.state.user!.lastname}
+                          {user.lastname}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>

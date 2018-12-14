@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Button, Icon, List, Image} from "semantic-ui-react";
+import {Button, Icon, Image, List} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
 import {Route} from "react-router";
+import BedragWaarde, {Valuta} from "../../../reusable/BedragWaarde";
 
 interface IProps {
 }
@@ -43,7 +44,7 @@ class CartPopupContent extends React.Component<IProps> {
         <List size="large" divided>
           {cartState.state.products.map(
             (product: IProduct, i: number) => {
-              if (product.album !== undefined) {
+              if (product.album) {
                 return (
                   <List.Item key={i}>
                     <Image size="mini" src={product.album.images.items[0].url}/>
@@ -52,7 +53,7 @@ class CartPopupContent extends React.Component<IProps> {
                         {product.album.name}
                       </List.Header>
                       <List.Description>
-                        Album
+                        Album - <BedragWaarde bedrag={product.price} toonMutatie={false} valuta={Valuta.Dollar} geenTeken />
                       </List.Description>
                     </List.Content>
                     <List.Content>
@@ -69,14 +70,14 @@ class CartPopupContent extends React.Component<IProps> {
                 )
               }
 
-              if (product.track !== undefined) {
+              if (product.track) {
                 return (
                   <List.Item>
                     <Image size="mini" src={product.track.images[0].url}/>
                     <List.Content>
                       <List.Header>{product.track.title}</List.Header>
                       <List.Description>
-                        Track
+                        Track - <BedragWaarde bedrag={product.price} toonMutatie={false} valuta={Valuta.Dollar} geenTeken />
                       </List.Description>
                     </List.Content>
                     <List.Content>
@@ -96,13 +97,13 @@ class CartPopupContent extends React.Component<IProps> {
             }
           )}
         </List>
-        <h3>Total price: ${totalPrice}</h3>
+        <h3>Total price: <BedragWaarde bedrag={totalPrice} valuta={Valuta.Dollar} toonMutatie={false} fontSize={21} geenTeken/></h3>
         <Route render={({ history }) => (
           <Button
             onClick={() => history.push("/shoppingcart/order")}
             fluid
           >
-            Proceed to checkout
+            Proceed with order
           </Button>
         )} />
       </div>

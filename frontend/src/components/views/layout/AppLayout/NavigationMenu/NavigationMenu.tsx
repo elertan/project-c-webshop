@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Container, Menu} from "semantic-ui-react";
 import {NavLink} from "react-router-dom";
+import {routes} from "../../../../../routes/RootRouter";
 
 interface IProps {
 }
@@ -18,31 +19,25 @@ class NavigationMenu extends React.Component<IProps, IState> {
       <div style={{padding: 10, backgroundColor: '#f2f7fc'}}>
         <Container>
           <Menu secondary>
-            <NavLink to={"/home/explore"}>
+            <NavLink to={routes.home.explore}>
               <Menu.Item
                 name='Explore'
                 active={activeItem === 'home'}
               />
             </NavLink>
-            <NavLink to={"/home/trending"}>
-              <Menu.Item
-                name='Trending'
-                active={activeItem === 'home'}
-              />
-            </NavLink>
-            <NavLink to={"/home/albums"}>
+            <NavLink to={routes.home.albums}>
               <Menu.Item
                 name='Albums'
                 active={activeItem === 'home'}
               />
             </NavLink>
-            <NavLink to={"/home/artists"}>
+            <NavLink to={routes.home.artists}>
               <Menu.Item
                 name='Artists'
                 active={activeItem === 'home'}
               />
             </NavLink>
-            <NavLink to={"/home/categories"}>
+            <NavLink to={routes.home.categories}>
               <Menu.Item
                 name='Categories'
                 active={activeItem === 'home'}
