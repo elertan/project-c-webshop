@@ -57,8 +57,10 @@ const initialValues: IFormikValues = {
 const validationSchema = Yup.object().shape({
   firstname: Yup.string().required("A first name is required"),
   lastname: Yup.string().required("A last name is required"),
-  email: Yup.string().required("Email is a required field").email("Entered email is not a valid email"),
-  password: Yup.string().required("Password is a required field").min(5, "Password should be at least 5 characters."),
+  email: Yup.string().required("Email is a required field")
+    .email("Entered email is not a valid email"),
+  password: Yup.string().required("Password is a required field")
+    .min(5, "Password should be at least 5 characters."),
   repeatpassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords do not match")
     .required("Repeated password is a required field"),
   dateOfBirth: Yup.date().notRequired()
@@ -114,7 +116,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteCom
       if (this.state.errors.length > 0) {
         this.setState({errors: []})
       }
-      userState.setUser(apiResult.data!);
+      userState.login(apiResult.data!);
       this.props.history.replace("/home/explore");
     }
     formik.setSubmitting(false);

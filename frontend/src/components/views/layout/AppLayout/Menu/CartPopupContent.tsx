@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Button, Icon, List, ListContent, ListItem} from "semantic-ui-react";
+import {Button, Icon, Image, List} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import CartState from "../../../../../states/CartState";
 import {Subscribe} from "unstated";
-import {Link, Route} from "react-router-dom";
+import {Route} from "react-router";
+import BedragWaarde, {Valuta} from "../../../reusable/BedragWaarde";
 
 interface IProps {
 }
@@ -31,54 +32,79 @@ class CartPopupContent extends React.Component<IProps> {
       );
     }
 
-    return (
-      <div>
-        <List>
-          {cartState.state.products.map((product: IProduct, i) => {
-            if (product.album !== undefined) {
-              return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    <Link to={`/album/${product.album!.id}`}>
-                      {" "}
-                      Album: {product.album!.name}
-                    </Link>
-                  </ListContent>
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => cartState.removeFromCart(product.id)}
-                    />
-                  </ListContent>
-                </ListItem>
-              );
-            }
+    const totalPrice = cartState.state.products
+      .map((x: IProduct) => x.price)
+      .reduce((prev, curr) => prev + curr);
 
-            if (product.track !== undefined) {
-              return (
-                <ListItem key={i}>
-                  <ListContent verticalAlign="middle">
-                    {" "}
-                    Track: {product.track!.title}
-                  </ListContent>
-                  <ListContent verticalAlign="middle">
-                    <Button
-                      floated="right"
-                      basic
-                      icon="trash"
-                      onClick={() => cartState.removeFromCart(product.id)}
-                    />
-                  </ListContent>
-                </ListItem>
-              );
+    return (
+      <div style={{width: 450, padding: 20}}>
+        <h3 style={{ textAlign: 'center', marginBottom: 25 }}>
+          These are in your cart. <Icon name="check" color="black" />
+        </h3>
+        <List size="large" divided>
+          {cartState.state.products.map(
+            (product: IProduct, i: number) => {
+              if (product.album) {
+                return (
+                  <List.Item key={i}>
+                    <Image size="mini" src={product.album.images.items[0].url}/>
+                    <List.Content>
+                      <List.Header>
+                        {product.album.name}
+                      </List.Header>
+                      <List.Description>
+                        Album - <BedragWaarde bedrag={product.price} toonMutatie={false} valuta={Valuta.Dollar} geenTeken />
+                      </List.Description>
+                    </List.Content>
+                    <List.Content>
+                      <div style={{ marginTop: 5, marginBottom: 5 }} />
+                      <Button
+                        size="small"
+                        icon
+                        onClick={() => cartState.removeFromCart(product.id)}
+                      >
+                        <Icon name="trash"/>
+                      </Button>
+                    </List.Content>
+                  </List.Item>
+                )
+              }
+
+              if (product.track) {
+                return (
+                  <List.Item>
+                    <Image size="mini" src={product.track.images[0].url}/>
+                    <List.Content>
+                      <List.Header>{product.track.title}</List.Header>
+                      <List.Description>
+                        Track - <BedragWaarde bedrag={product.price} toonMutatie={false} valuta={Valuta.Dollar} geenTeken />
+                      </List.Description>
+                    </List.Content>
+                    <List.Content>
+                      <div style={{ marginTop: 5, marginBottom: 5 }} />
+                      <Button
+                        size="small"
+                        icon
+                        onClick={() => cartState.removeFromCart(product.id)}
+                      >
+                        <Icon name="trash"/>
+                      </Button>
+                    </List.Content>
+                  </List.Item>
+                )
+              }
+              return console.error("An unexpected item has been tried to add to the Wish list.");
             }
-            return console.error("An unexpected item has been tried to add to the shopping cart.");
-          })}
+          )}
         </List>
-        <Route render={({history}) => (
-          <Button fluid onClick={() => history.push("/shoppingcart")}>Checkout</Button>
+        <h3>Total price: <BedragWaarde bedrag={totalPrice} valuta={Valuta.Dollar} toonMutatie={false} fontSize={21} geenTeken/></h3>
+        <Route render={({ history }) => (
+          <Button
+            onClick={() => history.push("/shoppingcart/order")}
+            fluid
+          >
+            Proceed with order
+          </Button>
         )} />
       </div>
     );

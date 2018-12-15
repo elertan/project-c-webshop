@@ -8,6 +8,7 @@ import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
 import WishlistState from "../../../../states/WishlistState";
 import ExplicitBadge from "./ExplicitBadge";
+import BedragWaarde, {Valuta} from "../BedragWaarde";
 
 interface IProps {
   data: ITrack;
@@ -58,7 +59,8 @@ class TrackRow extends React.Component<IProps> {
                           disabled={wishlistState.isInWishlist(this.props.data.id) || cartState.isInCart(this.props.data.id)}
                           onClick={() => wishlistState.addToWishlist({
                             track: this.props.data,
-                            id: this.props.data.id
+                            id: this.props.data.id,
+                            price: this.props.data.price
                           })}>
                           <Icon name="heart" color="red"/>
                         </Button>
@@ -71,15 +73,19 @@ class TrackRow extends React.Component<IProps> {
                     <Button icon
                             onClick={() => cartState.addToCart({
                               id: this.props.data.id,
-                              track: this.props.data
+                              track: this.props.data,
+                              price: this.props.data.price
                             })}
                             disabled={cartState.isInCart(this.props.data.id)}
                     >
                       <Icon name="shopping cart" color="black"/>
                       &nbsp;
-                      <span style={{ fontSize: 12 }}>
-                    $ {this.props.data.price}
-                  </span>
+                      <BedragWaarde
+                        bedrag={this.props.data.price}
+                        valuta={Valuta.Dollar}
+                        geenTeken
+                        toonMutatie={false}
+                      />
                     </Button>
                   )}
                 </Subscribe>

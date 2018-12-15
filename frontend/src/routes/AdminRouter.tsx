@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from "react-router";
 import NotFound from "../components/views/errors/NotFound/NotFound";
-import AdminContainer from '../components/containers/admin/Admin'
+import AdminContainer from '../components/containers/dashboard/admin/Admin'
 
 interface IProps extends RouteComponentProps<{}> {}
 

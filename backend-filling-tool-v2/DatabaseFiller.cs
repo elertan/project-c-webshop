@@ -130,7 +130,8 @@ namespace backend_filling_tool_v2
 
                 var albums = relationalStructure.Select(x => x.tracks.Select(t => t.album))
                     .SelectMany(x => x)
-                    .DistinctBy(x => x.SpotifyId);
+                    .DistinctBy(x => x.SpotifyId)
+                    .ToList();
                 _logger.Log("Created album entities");
                 await db.AddRangeAsync(albums);
                 await db.SaveChangesAsync();
@@ -155,6 +156,30 @@ namespace backend_filling_tool_v2
                 await db.AddRangeAsync(albumXTracks);
                 await db.SaveChangesAsync();
                 _logger.Log("Created Album X Track relationships!");
+                
+                _logger.Log("Calculating and storing prices for albums");
+                albums.ForEach((_, i) =>
+                {
+                    var album = albums[i];
+                    var tracksOfAlbum = relationalStructure
+                        .Select(x => x.tracks
+                            .Where(t =>
+                                t.album.SpotifyId == album.SpotifyId
+                            )
+                            .Select(t => tracks.FirstOrDefault(tr => tr.SpotifyId == t.track.SpotifyId))
+                        )
+                        .SelectMany(x => x)
+                        .DistinctBy(x => x.SpotifyId)
+                        .ToList();
+                    // If we have more than 1 track for this album, generate a price based on all the tracks with a 20% discount
+                    // else just keep the track's price
+                    album.Product.Price = tracksOfAlbum.Count != 1 ?
+                        tracksOfAlbum.Select(x => x.Product.Price).Aggregate((curr, next) => curr + next) * .8f
+                        :
+                        tracksOfAlbum[0].Product.Price;
+                });
+                await db.SaveChangesAsync();
+                _logger.Log("Stored!");
                 
                 _logger.Log("Creating Artist X Track relationships...");
                 var artistXTracks = artists.Select(a =>
@@ -229,11 +254,7 @@ namespace backend_filling_tool_v2
                 AlbumType = sAlbum.AlbumType,
                 SpotifyId = sAlbum.Id,
                 Images = sAlbum.Images.Select(ExtractImage).ToList(),
-                Product = new Product
-                {
-                    // TODO: Implement logic
-                    Price = 10f
-                }
+                Product = new Product()
             };
         }
 

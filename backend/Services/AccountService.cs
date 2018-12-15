@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
@@ -11,6 +13,7 @@ using backend_datamodel.Models.Crosstables;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MoreLinq.Extensions;
 
 namespace backend.Services
 {
@@ -22,6 +25,23 @@ namespace backend.Services
         Task<User> GetUserByToken(string token);
         Task AddToWishlist(int userId, int productId);
         Task RemoveFromWishlist(int userId, int productId);
+        /// <summary>
+        /// Changes the password of a given user
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="currentPassword">The current set password for the given user</param>
+        /// <param name="newPassword">The desired password for the given user</param>
+        /// <returns></returns>
+        Task ChangePassword(int userId, string currentPassword, string newPassword);
+        Task ChangeEmail(int userId, string newEmail);
+        Task ChangeName(int userId, string newFirstName, string newLastName);
+        /// <summary>
+        /// Merges the local and online stored wishlists for an user that logs in
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="localProductIds">The stored wishlist product ids on the given machine</param>
+        /// <returns></returns>
+        Task MergeWishlist(int userId, List<int> localProductIds);
     }
 
     public class AccountService : IAccountService
@@ -183,6 +203,62 @@ namespace backend.Services
             }
 
             _db.Remove(entry);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task ChangePassword(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword);
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                throw new Exception("The current password given for this user was incorrect, changing password failed");
+            }
+
+            var newHash = _passwordHasher.HashPassword(user, newPassword);
+            user.Password = newHash;
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task ChangeEmail(int userId, string newEmail) 
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.Email = newEmail;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed",
+                $"Hi {user.Email}!\n\nYou email address has been succesfully altered.\n\nFrom now on you will receive emails from the Marshmallow Webshop at this address.\nIf you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop.");
+        }
+
+        public async Task ChangeName(int userId, string newFirstName, string newLastName)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.Firstname = newFirstName;
+            user.Lastname = newLastName;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed",
+            $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
+        } 
+        
+        public async Task MergeWishlist(int userId, List<int> localProductIds)
+        {
+            var onlineStoredProductIds = await _db.WishlistUserXProducts.Where(x => x.UserId == userId)
+                .Select(x => x.ProductId).ToListAsync();
+            var newEntries = localProductIds.Where(x => !onlineStoredProductIds.Contains(x))
+                .Select(x => new Wishlist_UserXProduct
+                {
+                    UserId = userId,
+                    ProductId = x
+                }).ToList();
+            if (newEntries.Count == 0)
+            {
+                return;
+            }
+            await _db.AddRangeAsync(newEntries);
             await _db.SaveChangesAsync();
         }
     }

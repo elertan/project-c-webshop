@@ -20,6 +20,7 @@
     "query-string": "^6.2.0",
     "react": "^16.7.0-alpha.2",
     "react-apollo": "^2.1.11",
+    "react-chartjs": "^1.2.0",
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.7.0-alpha.2",
     "react-google-charts": "^3.0.10",

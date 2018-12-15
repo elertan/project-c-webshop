@@ -6,6 +6,7 @@ interface IProduct {
     id: number;
     track?: ITrack;
     album?: IAlbum;
+    price: number;
 }
 
 export default IProduct;
