@@ -1,14 +1,14 @@
 import * as React from "react";
-import { Segment, Menu } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { Menu } from "semantic-ui-react";
 import Users from "./adminComponents/users";
 import Statistics from "./adminComponents/statistics";
 import Overview from "./adminComponents/overview";
+import Products from "./adminComponents/products";
 
 const styles = {
-  size: {
-    width: "15vw",
-    margin: "1vw"
+  MenuPadding: {
+    height: "3vw",
+    display: "inline-block"
   }
 };
 
@@ -30,35 +30,36 @@ class Admin extends React.Component {
       PageContent = <Users />;
     } else if (this.state.activeItem === "Statistics") {
       PageContent = <Statistics />;
+    } else if (this.state.activeItem === "Products") {
+      PageContent = <Products />;
     }
     return (
-      <div style={styles.size}>
-        <Segment inverted>
-          <Menu inverted pointing vertical secondary fluid>
-            <NavLink to={"/admin/admin"}>
-              <Menu.Item
-                name="Overview"
-                active={activeItem === "Overview"}
-                onClick={() => this.changeMenuItem("Overview")}
-              />
-            </NavLink>
-            <NavLink to={"/admin/admin"}>
-              <Menu.Item
-                name="Users"
-                active={activeItem === "Users"}
-                onClick={() => this.changeMenuItem("Users")}
-              />
-            </NavLink>
-            <NavLink to={"/admin/admin"}>
-              <Menu.Item
-                name="Statistics"
-                active={activeItem === "Statistics"}
-                onClick={() => this.changeMenuItem("Statistics")}
-              />
-            </NavLink>
+      <div>
+        <div style={styles.MenuPadding}>
+          <Menu inverted fixed="top" fluid>
+            <Menu.Item
+              name="Overview"
+              active={activeItem === "Overview"}
+              onClick={() => this.changeMenuItem("Overview")}
+            />
+            <Menu.Item
+              name="Users"
+              active={activeItem === "Users"}
+              onClick={() => this.changeMenuItem("Users")}
+            />
+            <Menu.Item
+              name="Products"
+              active={activeItem === "Products"}
+              onClick={() => this.changeMenuItem("Products")}
+            />
+            <Menu.Item
+              name="Statistics"
+              active={activeItem === "Statistics"}
+              onClick={() => this.changeMenuItem("Statistics")}
+            />
           </Menu>
-        </Segment>
-        {PageContent}
+        </div>
+        <div>{PageContent}</div>
       </div>
     );
   }

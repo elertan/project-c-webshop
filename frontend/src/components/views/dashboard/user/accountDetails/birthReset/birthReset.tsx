@@ -37,7 +37,7 @@ class BirthReset extends React.Component {
       <AppLayout>
         <div style={styles.HeaderPositioning}>
           <Header as="h2">
-            <Icon name="address card"/>
+            <Icon name="calendar alternate"/>
             <Header.Content>
               {user.firstname} {user.lastname}
               <Header.Subheader>
