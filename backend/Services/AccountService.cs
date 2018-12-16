@@ -35,6 +35,7 @@ namespace backend.Services
         Task ChangePassword(int userId, string currentPassword, string newPassword);
         Task ChangeEmail(int userId, string newEmail);
         Task ChangeName(int userId, string newFirstName, string newLastName);
+        Task<User> ChangeBirthDate(int userId, DateTime newBirthDate);
         /// <summary>
         /// Merges the local and online stored wishlists for an user that logs in
         /// </summary>
@@ -244,7 +245,20 @@ namespace backend.Services
 
             await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed succesfully.",
             $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
-        } 
+        }
+
+        public async Task<User> ChangeBirthDate(int userId, DateTime newBirthDate)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.DateOfBirth = newBirthDate;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your date of birth on your Marshmallow Webshop account has been succesfully updated",
+            $"Hello {user.Firstname} {user.Lastname}!\n\n You have succesfully changed your date of birth on your Marshallow Webshop account to {user.DateOfBirth}.\n\nHappy listening!");
+
+            return user;
+        }
         
         public async Task MergeWishlist(int userId, List<int> localProductIds)
         {
