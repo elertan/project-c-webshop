@@ -86,10 +86,7 @@ namespace backend.Services
             await _db.SaveChangesAsync();
 
             await _emailService.SendEmail(new MailAddress(data.Email), "Welcome to the Marshmallow's Webshop",
-                $"Hi {user.Email}!\n\nWe're glad you're on board.");
-            
-            // Don't emit password to client
-//            user.Password = null;
+                $"Hi {user.Firstname} {user.Lastname}!\n\nWe're glad to have you on board. Stay awhile and listen! You can now purchase your favourite tunes and keep track of your order history.\n Be sure to check in regularly for the latest music from your favourite artists. Happy listening!");
 
             return user;
         }
@@ -219,16 +216,21 @@ namespace backend.Services
             user.Password = newHash;
 
             await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your password for your Marshmallow Webshop account has been changed succesfully.",
+            $"Greetings {user.Firstname} {user.Lastname}!\n\n You succesfully changed your password for your registered account on Marshmallow Webshop.\n You can now use this password to log in to your account. Keep this password safe.\n If you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop. ");
         }
 
         public async Task ChangeEmail(int userId, string newEmail) 
         {
             var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            System.Console.WriteLine("From changeEmail Task: User is: ");
+            System.Console.WriteLine(user);
             user.Email = newEmail;
 
             await _db.SaveChangesAsync();
 
-            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed",
+            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed succesfully.",
                 $"Hi {user.Email}!\n\nYou email address has been succesfully altered.\n\nFrom now on you will receive emails from the Marshmallow Webshop at this address.\nIf you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop.");
         }
 
@@ -240,7 +242,7 @@ namespace backend.Services
 
             await _db.SaveChangesAsync();
 
-            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed",
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed succesfully.",
             $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
         } 
         
