@@ -18,6 +18,7 @@ import gql from "graphql-tag";
 import { withApollo, WithApolloClient } from "react-apollo";
 import IApiError from "src/models/IApiError";
 import IUser from "../../../../../../models/IUser";
+// import IApiResult from "src/models/IApiResult";
 
 const styles = {
   DashboardPositioning: {
@@ -122,16 +123,26 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                 variables: {
                   data: {
                     authToken: user.token,
-                    newEmail: values.email
+                    newEmail: values.email,
                   }
                 }
               });
-              console.log("From emailReset | Result is:", result);
-              //
-              // HIER NOG CONTROLEREN OF HET GELUKT IS
-              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
-              // NIET GELUKT? - ERROR WEERGEVEN
-              this.setState({ confirm: true })
+              // console.log("From emailReset | Result is:", result);
+              // console.log("Result data! is: ", result.data!);
+              
+              const mutationErrors = result.data!.changeEmail.errors;
+
+              if (mutationErrors) {
+                this.setState({ errors: mutationErrors })
+              } else {
+                if (this.state.errors.length > 0) {
+                  this.setState({ errors: [] })
+                }
+                user.email = values.email;
+                userState.login(user);
+                this.setState({ confirm: true })
+                this.props.history.replace("/dashboard/accountdetails");
+              }
               formik.setSubmitting(false);
             }}
             validationSchema={Yup.object().shape({

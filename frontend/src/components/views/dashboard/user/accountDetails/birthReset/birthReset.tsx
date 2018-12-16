@@ -1,12 +1,16 @@
 import * as React from "react";
 import AppLayout from "../../../../layout/AppLayout/AppLayout";
-import {Table, Input, Button, Header, Icon, Label} from "semantic-ui-react";
+import {Table, Button, Header, Icon, Label} from "semantic-ui-react";
 import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
-import {Formik} from "formik";
+import {Formik, Field, FieldProps, FormikProps} from "formik";
 import * as Yup from "yup";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter, RouteComponentProps} from "react-router-dom";
 import {userState} from "../../../../../..//index";
 import IUser from "../../../../../../models/IUser";
+import BirthdatePicker from "src/components/views/reusable/BirthdatePicker/BirthdatePicker";
+import * as moment from "moment";
+import { withApollo, WithApolloClient } from "react-apollo";
+import IApiError from "src/models/IApiError";
 
 const styles = {
   DashboardPositioning: {
@@ -30,9 +34,26 @@ const styles = {
   }
 };
 
-class BirthReset extends React.Component {
+interface IProps {
+
+}
+
+interface IState {
+  errors: IApiError[]
+}
+
+interface IFormikValues {
+  dateOfBirth: moment.Moment
+}
+
+class BirthReset extends React.Component <WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
+  public state = {
+    errors: []
+  }
+  
   public render() {
     const user = userState.state.user! as IUser;
+    
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
@@ -50,27 +71,23 @@ class BirthReset extends React.Component {
         <div style={styles.DashboardPositioning}>
           <Formik
             initialValues={{
-              name: "",
-              infix: "",
-              surname: ""
+              dateOfBirth: moment().subtract(1, 'year')
             }}
             onSubmit={values => {
               console.log(values);
             }}
             validationSchema={Yup.object().shape({
-              name: Yup.string().required("Please fill in name"),
-              infix: Yup.string(),
-              surname: Yup.string().required("Please fill in surname")
+              dateOfBirth: Yup.date().required("Please fill in your date of birth.")
             })}
           >
-            {props => {
+            {(props: FormikProps<IFormikValues>) => {
               const {
-                values,
-                touched,
-                errors,
+                // values,
+                // touched,
+                // errors,
                 isSubmitting,
-                handleChange,
-                handleSubmit
+               // handleChange,
+                handleSubmit,
               } = props;
               return (
                 <form onSubmit={handleSubmit}>
@@ -85,22 +102,10 @@ class BirthReset extends React.Component {
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
-                            <Input
-                              fluid
-                              id="name"
-                              placeholder="Modify birthdate"
-                              type="text"
-                              value={values.name}
-                              onChange={handleChange}
-                            />
+                          <Field>
+                            {this.renderDateOfBirth}
+                          </Field>
                           </div>
-                          {errors.name && touched.name && (
-                            <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
-                                {errors.name}
-                              </Label>
-                            </div>
-                          )}{" "}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Cell>
@@ -144,6 +149,21 @@ class BirthReset extends React.Component {
       </AppLayout>
     );
   }
+  
+  private renderDateOfBirth = (fieldProps: FieldProps<IFormikValues>) => {
+    const error = fieldProps.form.touched.dateOfBirth && fieldProps.form.errors.dateOfBirth;
+    return (
+      <Field>
+        <BirthdatePicker
+          date={fieldProps.field.value}
+          onChange={date => fieldProps.form.setFieldValue(fieldProps.field.name, date)}
+        />
+        {error &&
+          <Label basic pointing="above" color="red">{error}</Label>
+        }
+      </Field>
+    );
+  };
 }
 
-export default BirthReset;
+export default withRouter(withApollo(BirthReset));
