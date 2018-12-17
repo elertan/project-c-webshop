@@ -131,7 +131,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
               // console.log("Result data! is: ", result.data!);
               
               const mutationErrors = result.data!.changeEmail.errors;
-
+              // console.log("emailReset Mutation error: ", mutationErrors);
               if (mutationErrors) {
                 this.setState({ errors: mutationErrors })
               } else {
@@ -248,6 +248,9 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                             <Button.Content visible>Continue</Button.Content>
                             <Button.Content hidden>Continue</Button.Content>
                           </Button>
+                          {this.state.errors.length > 0 &&
+                            <p style={{ textAlign: 'center', marginTop: 15, color: 'red' }}>{(this.state.errors[0] as IApiError).message}</p>
+                          }
                         </div>
                       </Table.Cell>
                     </Table.Body>

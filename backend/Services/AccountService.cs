@@ -97,7 +97,7 @@ namespace backend.Services
             // Does email exist?
             if (await _db.Users.AnyAsync(e => e.Email == email))
             {
-                throw new Exception("A user with that email address already exist.");
+                throw new Exception("A user with that email address already exists.");
             }
 
             var anonymousRegistrationToken = Guid.NewGuid().ToString();
@@ -210,7 +210,7 @@ namespace backend.Services
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword);
             if (verificationResult == PasswordVerificationResult.Failed)
             {
-                throw new Exception("The current password given for this user was incorrect, changing password failed");
+                throw new Exception("The current password given is incorrect.");
             }
 
             var newHash = _passwordHasher.HashPassword(user, newPassword);
@@ -224,6 +224,11 @@ namespace backend.Services
 
         public async Task ChangeEmail(int userId, string newEmail) 
         {
+            if (await _db.Users.AnyAsync(e => e.Email == newEmail))
+            {
+                throw new Exception(CreateAccountErrorMessage);
+            }
+
             var user = await _db.Users.FirstAsync(x => x.Id == userId);
             System.Console.WriteLine("From changeEmail Task: User is: ");
             System.Console.WriteLine(user);

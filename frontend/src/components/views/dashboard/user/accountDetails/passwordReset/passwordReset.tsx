@@ -147,6 +147,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
               });
               console.log("Result is: ", result);
               const mutationErrors = result.data!.changePassword.errors;
+              console.log("passwordReset Mutation errors: ", mutationErrors);
               if (mutationErrors) {
                 this.setState({ errors: mutationErrors })
               } else {
@@ -292,6 +293,9 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                             </Button.Content>
                           </Button>
                           {showPassword}
+                          {this.state.errors.length > 0 &&
+                            <p style={{ textAlign: 'center', marginTop: 15, color: 'red' }}>{(this.state.errors[0] as IApiError).message}</p>
+                          }
                         </div>
                       </Table.Cell>
                     </Table.Body>
