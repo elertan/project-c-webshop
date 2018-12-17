@@ -10,7 +10,8 @@ import {
   Label,
   Divider,
   Input,
-  Segment
+  Segment,
+  Loader
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
@@ -23,6 +24,7 @@ import IApiResult from "src/models/IApiResult";
 import IUser from "src/models/IUser";
 import IApiError from "src/models/IApiError";
 import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
+import IProduct from "src/models/IProduct";
 
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
@@ -43,22 +45,9 @@ const createAnonymousOrderMutation = gql`
 interface IProps {}
 
 const styles = {
-  BankPositioning: {
-    margin: "1.5%"
-  },
-  ShippingPositioning: {
-    margin: "1.5%"
-  },
-  HeaderPositioning: {
-    margin: "3%"
-  },
   OrderPositioning: {
-    width: "20%",
+    width: "30%",
     margin: "0.75%"
-  },
-  OrderXBankXShipping: {
-    display: "flex",
-    flexwrap: "noWrap"
   },
   PaymentXShipping: {
     width: "150%",
@@ -71,13 +60,15 @@ interface IFormikValues {
   status: string;
   bank: number | null;
   bankNumber: number | null;
+  products: IProduct[];
 }
 
 const initialValues: IFormikValues = {
   email: "",
   status: "option",
   bank: null,
-  bankNumber: null
+  bankNumber: null,
+  products: []
 };
 
 const bankOptions = ["ING", "ABN Amro", "Rabobank"];
@@ -94,7 +85,9 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     email: "",
     status: "option",
     value: "",
-    radio: true
+    radio: true,
+    time: true,
+   
   };
 
   public render() {
@@ -104,6 +97,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   }
 
   private orderRender = (orderState: OrderState, cartState: CartState) => {
+    initialValues.products = cartState.state.products;
+
     return (
       <AppLayout>
         <Formik
@@ -126,7 +121,10 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (newEmail: string) => {
+  private handleOrder = async (
+    newEmail: string,
+    boughtProducts: number[]
+  ) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
@@ -134,7 +132,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       variables: {
         data: {
           email: newEmail,
-          productIds: [1]
+          productIds: boughtProducts
         }
       }
     });
@@ -147,12 +145,23 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       if (this.state.errors.length > 0) {
         this.setState({ errors: [] });
       }
+      else{
+        this.startTimeout()
+        this.setStatus("succes");
+      }
     }
   };
 
   private setStatus = (newStatus: string) => {
     this.setState({ status: newStatus });
   };
+  private startTimeout = () => {
+    setTimeout(()=>{
+      this.setState({time: false});},
+    
+ 5000);
+   
+  }
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
     if (this.state.status === "option") {
@@ -202,6 +211,21 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         </div>
       );
     }
+    if (this.state.status === "succes") {
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row"
+          }}
+        >
+            <Form className="ui form">
+
+             <Field name="succes" render={this.RenderSuccesPage}/>
+            </Form>
+          </div>
+      );
+    }
     return (
       <div
         style={{
@@ -225,6 +249,21 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       </div>
     );
   };
+
+  private RenderSuccesPage = ()=>{
+   
+     if(this.state.time === true)
+     {
+      return ( <div style={{margin: 400}}>
+     <p>your order is in progress</p>
+      <Loader active >Loading</Loader>
+      </div>)}
+     return(
+       <div style={{margin: 400}}>
+         your order is send!!!
+       </div>
+      )
+  }
 
   private RenderOrderField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
@@ -298,7 +337,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
           </Table.Row>
         </Table.Body>
         <Button
-          positive
+          primary
           floated="right"
           onClick={() => this.setStatus("confirm")}
           disabled={fieldProps.field.value === null}
@@ -311,20 +350,23 @@ class Order extends React.Component<WithApolloClient<IProps>> {
 
   private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
-      <Subscribe to={[OrderState]}>
-        {(orderState: OrderState) => (
-          <Form.Field>
-            <p>your email is: {fieldProps.form.values.email}</p>
-            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
-            <Button
-              onClick={() => this.handleOrder(fieldProps.form.values.email)}
-            >
-              Send
-            </Button>
-          </Form.Field>
-        )}
-      </Subscribe>
+      <Form.Field>
+        <p>your email is: {fieldProps.form.values.email}</p>
+        <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+        <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+        <Button
+          primary
+          onClick={() =>
+            this.handleOrder(
+              fieldProps.form.values.email,
+              // HELPPPPPP
+             [ fieldProps.form.initialValues.products.length]
+            )
+          }
+        >
+          Send
+        </Button>
+      </Form.Field>
     );
   };
 
@@ -435,17 +477,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   private renderProducts = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <div style={styles.OrderPositioning}>
-        {/* <div style={styles.HeaderPositioning}>
-          <Header as="h2">
-            <Icon name="payment" />
-            <Header.Content>
-              Your order
-              <Header.Subheader>
-                Manage your order and make a payment
-              </Header.Subheader>
-            </Header.Content>
-          </Header>
-        </div> */}
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -455,24 +486,24 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {/* {cartState.state.products.map(
-                (product: IProduct, i: number) => {
-                  if (product.album !== undefined) {
-                    return (
-                      <Table.Row key={i}>
-                        <Table.Cell>Album: {product.album!.name}</Table.Cell>
-                        <Table.Cell>Price: ${product.price}</Table.Cell>
-                      </Table.Row>
-                    );
-                  }
+            {fieldProps.form.initialValues.products.map(
+              (product: IProduct, i: number) => {
+                if (product.album !== undefined) {
                   return (
                     <Table.Row key={i}>
-                      <Table.Cell>Track: {product.track!.title}</Table.Cell>
-                      <Table.Cell>Price</Table.Cell>
+                      <Table.Cell>Album: {product.album!.name}</Table.Cell>
+                      <Table.Cell>Price: ${product.price}</Table.Cell>
                     </Table.Row>
                   );
                 }
-              )} */}
+                return (
+                  <Table.Row key={i}>
+                    <Table.Cell>Track: {product.track!.title}</Table.Cell>
+                    <Table.Cell>Price ${product.price}</Table.Cell>
+                  </Table.Row>
+                );
+              }
+            )}
           </Table.Body>
         </Table>
       </div>
