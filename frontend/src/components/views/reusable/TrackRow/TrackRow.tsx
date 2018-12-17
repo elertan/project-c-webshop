@@ -8,6 +8,7 @@ import CartState from "src/states/CartState";
 import ITrack from 'src/models/ITrack';
 import WishlistState from "../../../../states/WishlistState";
 import ExplicitBadge from "./ExplicitBadge";
+import BedragWaarde, {Valuta} from "../BedragWaarde";
 
 interface IProps {
   data: ITrack;
@@ -79,9 +80,12 @@ class TrackRow extends React.Component<IProps> {
                     >
                       <Icon name="shopping cart" color="black"/>
                       &nbsp;
-                      <span style={{ fontSize: 12 }}>
-                    $ {this.props.data.price}
-                  </span>
+                      <BedragWaarde
+                        bedrag={this.props.data.price}
+                        valuta={Valuta.Dollar}
+                        geenTeken
+                        toonMutatie={false}
+                      />
                     </Button>
                   )}
                 </Subscribe>

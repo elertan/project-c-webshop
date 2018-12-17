@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Icon, List, Image, Button} from "semantic-ui-react";
+import {Button, Icon, Image, List} from "semantic-ui-react";
 import IProduct from "../../../../../models/IProduct";
 import {Subscribe} from "unstated";
 import WishlistState from "../../../../../states/WishlistState";
 import {cartState, wishlistState} from "../../../../../index";
+import BedragWaarde, {Valuta} from "../../../reusable/BedragWaarde";
 
 interface IProps {
 }
@@ -56,7 +57,7 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
         <List size="large" divided>
           {wishlistState.state.products.map(
             (product: IProduct, i: number) => {
-              if (product.album !== undefined) {
+              if (product.album) {
                 return (
                   <List.Item key={i}>
                     <Image size="mini" src={product.album.images.items[0].url}/>
@@ -65,7 +66,12 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                         {product.album.name}
                       </List.Header>
                       <List.Description>
-                        Album
+                        Album - <BedragWaarde
+                                  bedrag={product.price}
+                                  valuta={Valuta.Dollar}
+                                  geenTeken
+                                  toonMutatie={false}
+                                />
                       </List.Description>
                     </List.Content>
                     <List.Content>
@@ -80,29 +86,33 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       <Button
                         size="small"
                         icon
-                        labelPosition="left"
                         onClick={() => cartState.addToCart(product)}
                       >
                         <Icon name="shopping cart"/>
-                        $ 10
                       </Button>
                     </List.Content>
                   </List.Item>
                 )
               }
 
-              if (product.track !== undefined) {
+              if (product.track) {
                 return (
                   <List.Item>
                     <Image size="mini" src={product.track.images[0].url}/>
                     <List.Content>
                       <List.Header>{product.track.title}</List.Header>
                       <List.Description>
-                        Track
+                        Track - <BedragWaarde
+                                  bedrag={product.price}
+                                  valuta={Valuta.Dollar}
+                                  geenTeken
+                                  toonMutatie={false}
+                                />
                       </List.Description>
                     </List.Content>
                     <List.Content>
                       <div style={{ marginTop: 5, marginBottom: 5 }} />
+
                       <Button
                         size="small"
                         icon
@@ -110,15 +120,15 @@ class WishlistPopupContent extends React.Component<IProps, IState> {
                       >
                         <Icon name="trash"/>
                       </Button>
+
                       <Button
                         size="small"
                         icon
-                        labelPosition="left"
                         onClick={() => cartState.addToCart(product)}
                       >
                         <Icon name="shopping cart"/>
-                        $ {product.track.price}
                       </Button>
+
                     </List.Content>
                   </List.Item>
                 )

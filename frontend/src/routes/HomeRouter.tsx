@@ -8,8 +8,6 @@ import CategoriesContainer from "../components/containers/home/categories/Catego
 import NotFound from "../components/views/errors/NotFound/NotFound";
 import SearchContainer from "../components/containers/home/search/SearchContainer";
 
-
-
 interface IProps extends RouteComponentProps<{}> {}
 
 const HomeRouter: React.SFC<IProps> = (props: IProps) => {

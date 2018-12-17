@@ -28,7 +28,8 @@ class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{
           listStyle: 'none',
           padding: 0
         }}>
-          <li><NavLink to={"/dashboard/overview"}>My account</NavLink></li>
+          <li><NavLink to={"/dashboard/overview"}>My Account</NavLink></li>
+          <br />
           <li><a href="#" onClick={this.handleLogoutClick}>Logout</a></li>
         </ul>
       </div>

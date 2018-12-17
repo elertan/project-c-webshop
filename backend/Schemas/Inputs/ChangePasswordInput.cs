@@ -7,7 +7,7 @@ namespace backend.Schemas.Inputs
         public string CurrentPassword { get; set; }
         public string NewPassword { get; set; }
     }
-    
+
     public class ChangePasswordInput : AuthorizedBaseInputTypeGraph<ChangePasswordData>
     {
         public ChangePasswordInput()

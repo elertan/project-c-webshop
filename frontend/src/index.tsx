@@ -17,7 +17,7 @@ import CartState from "./states/CartState";
 import MusicPlayerState from "./states/MusicPlayerState";
 import SearchState from "./states/SearchState";
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   uri: config.GRAPHQL_URL
 });
 

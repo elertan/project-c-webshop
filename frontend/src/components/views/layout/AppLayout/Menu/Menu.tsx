@@ -15,6 +15,7 @@ import CartPopupContent from "./CartPopupContent";
 import {Subscribe} from "unstated";
 import {userState} from "src";
 import CustomSearch from "./CustomSearch";
+import IUser from "../../../../../models/IUser";
 
 interface IProps {
 }
@@ -44,13 +45,6 @@ class Menu extends React.Component<IProps, IState> {
     })
   };
 
-  // public setStateShoppingCartButton =() => {
-  //   this.setState({WishlistButton: false, ShoppingCartButton: true})
-  // }
-  // public setStateWishListButton =() => {
-  //   this.setState({ShoppingCartButton: false, WishlistButton: true})
-  // }
-
   public render() {
     return (
       <div className="ui menu" style={{marginBottom: 25}}>
@@ -78,7 +72,8 @@ class Menu extends React.Component<IProps, IState> {
   private renderLoginAccountMenuItem = () => {
     let menuContent = null;
     let popupContent = null;
-    if (userState.state.user === null) {
+    const user = userState.state.user! as IUser;
+    if (user === null) {
       menuContent = (
         <>
           <Icon name="user"/>
@@ -91,7 +86,7 @@ class Menu extends React.Component<IProps, IState> {
       menuContent = (
         <>
           <Icon name="user"/>
-          {userState.state.user!.firstname} {userState.state.user!.lastname}
+          {user!.firstname} {user!.lastname}
           <Icon name="caret down" style={{ marginLeft: 5 }} />
         </>
       );
