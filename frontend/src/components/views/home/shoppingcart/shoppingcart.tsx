@@ -99,7 +99,7 @@ class Shoppingcart extends React.Component<IProps> {
           </ListItem>
           <div>
             {" "}
-            <NavLink to={"/shoppingcart/orderauth"}>
+            <NavLink to={"/shoppingcart/order"}>
               <Button color="green" floated="right">
                 Proceed to checkout
               </Button>
