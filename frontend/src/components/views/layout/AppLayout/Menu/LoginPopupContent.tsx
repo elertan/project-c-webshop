@@ -66,7 +66,6 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
   }
 
   private handleSubmit = async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
-    console.log("Submitting login request...");
     formik.setSubmitting(true);
     console.log("Login values are: ", values);
     const result = await this.props.client.mutate({
@@ -78,26 +77,17 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
         }
       }
     });
-    console.log("Login mutation result is: ", result)
     const apiResult = result.data!.login as IApiResult<IUser>;
-    console.log("Login apiResult is: ", apiResult);
-
+    
     if (apiResult.errors) {
       this.setState({ errors: apiResult.errors });
     } else {
       if (this.state.errors.length > 0) {
         this.setState({ errors: [] });
       }
-      // Handle token
-      // alert(apiResult.data!.token);
       userState.login(apiResult.data!);
-      
-      console.log("User is now logged in." )
-      // location.reload()
     }
     formik.setSubmitting(false);
-    console.log("Login submission ended.")
-
   };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {

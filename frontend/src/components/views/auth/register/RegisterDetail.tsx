@@ -37,6 +37,7 @@ mutation ($data: RegisterInput!) {
             email
             firstname
             lastname
+            dateOfBirth
         }
         errors {
             message
@@ -231,7 +232,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteCom
     const error = fieldProps.form.touched.dateOfBirth && fieldProps.form.errors.dateOfBirth;
     return (
       <Form.Field>
-        <label>Date of birth</label>
+        <label>Date of birth *</label>
         <BirthdatePicker
           date={fieldProps.field.value}
           onChange={date => fieldProps.form.setFieldValue(fieldProps.field.name, date)}
