@@ -37,6 +37,7 @@ mutation ($data: RegisterInput!) {
             email
             firstname
             lastname
+            dateOfBirth
         }
         errors {
             message
@@ -63,7 +64,7 @@ const validationSchema = Yup.object().shape({
     .min(5, "Password should be at least 5 characters."),
   repeatpassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords do not match")
     .required("Repeated password is a required field"),
-  dateOfBirth: Yup.date().notRequired()
+  dateOfBirth: Yup.date().required("Please fill in your date of birth.")
 });
 
 class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
@@ -108,8 +109,10 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteCom
         }
       }
     });
-
+    console.log("From register detail: ");
+    console.log("result.data! is: ", result.data!);
     const apiResult = result.data!.register as IApiResult<IUser>;
+    console.log("apiResult is: ", apiResult);
     if (apiResult.errors) {
       this.setState({errors: apiResult.errors})
     } else {
@@ -229,7 +232,7 @@ class RegisterDetail extends React.Component<WithApolloClient<IProps> & RouteCom
     const error = fieldProps.form.touched.dateOfBirth && fieldProps.form.errors.dateOfBirth;
     return (
       <Form.Field>
-        <label>Date of birth</label>
+        <label>Date of birth *</label>
         <BirthdatePicker
           date={fieldProps.field.value}
           onChange={date => fieldProps.form.setFieldValue(fieldProps.field.name, date)}

@@ -9,6 +9,7 @@ import { userState } from "../../../../../..//index";
 import { WithApolloClient, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import IUser from "../../../../../../models/IUser";
+import IApiError from "src/models/IApiError";
 
 const styles = {
   DashboardPositioning: {
@@ -37,7 +38,7 @@ interface IProps {
 }
 
 interface IState {
-
+  errors: IApiError[];
 }
 
 interface IFormikValues {
@@ -57,6 +58,9 @@ const editNameMutation = gql`
   `;
 
 class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
+  public state = {
+    errors: []
+  }
   public render() {
     const user = userState.state.user! as IUser;
     return (
@@ -94,10 +98,17 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                 }
               });
               console.log(result);
-              //
-              // HIER NOG CONTROLEREN OF HET GELUKT IS
-              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
-              // NIET GELUKT? - ERROR WEERGEVEN
+              const mutationErrors = result.data!.changeName.errors;
+              if (mutationErrors) {
+                this.setState({ errors: mutationErrors })
+              } else {
+                if (this.state.errors.length > 0) {
+                  this.setState({ errors: [] })
+                }
+                user.firstname = values.name;
+                user.lastname = values.lastname;
+                this.props.history.replace("/dashboard/accountdetails");
+              }
               formik.setSubmitting(false);
             }}
             validationSchema={Yup.object().shape({

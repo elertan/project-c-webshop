@@ -100,6 +100,13 @@ namespace backend.Schemas
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeNameResolveFn)
             );
 
+            Field<ApiResultGraph<UserGraph, User>> (
+                "changeBirthDate",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<ChangeBirthDateInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeBirthDateResolveFn)
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -186,6 +193,15 @@ namespace backend.Schemas
 
             await _accountService.ChangeName(user.Id, data.NewFirstName, data.NewLastName);
             return new ApiResult<bool> {Data = true};
+        }
+
+        private async Task<ApiResult<User>> ChangeBirthDateResolveFn(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<ChangeBirthDateData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+
+            await _accountService.ChangeBirthDate(user.Id, data.NewBirthDate);
+            return new ApiResult<User> {Data = user};
         }
     }
 }

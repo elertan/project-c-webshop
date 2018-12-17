@@ -145,15 +145,16 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                   }
                 }
               });
-              //
-              // HIER NOG CONTROLEREN OF HET GELUKT IS
-              // GELUKT? - USER DOORVERWIJZEN NAAR DASHBOARD 
-              // NIET GELUKT? - ERROR WEERGEVEN
               console.log("Result is: ", result);
-              
-              this.setState({ redirect: true });
-              if (this.state.redirect) {
-                this.props.history.replace("/dashboard/accountdetails");
+              const mutationErrors = result.data!.changePassword.errors;
+              console.log("passwordReset Mutation errors: ", mutationErrors);
+              if (mutationErrors) {
+                this.setState({ errors: mutationErrors })
+              } else {
+                if (this.state.errors.length > 0) {
+                  this.setState({ errors: [] })
+                }
+                userState.logout();
               }
               formik.setSubmitting(false);
             }}
@@ -292,6 +293,9 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                             </Button.Content>
                           </Button>
                           {showPassword}
+                          {this.state.errors.length > 0 &&
+                            <p style={{ textAlign: 'center', marginTop: 15, color: 'red' }}>{(this.state.errors[0] as IApiError).message}</p>
+                          }
                         </div>
                       </Table.Cell>
                     </Table.Body>

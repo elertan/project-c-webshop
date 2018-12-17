@@ -35,6 +35,7 @@ namespace backend.Services
         Task ChangePassword(int userId, string currentPassword, string newPassword);
         Task ChangeEmail(int userId, string newEmail);
         Task ChangeName(int userId, string newFirstName, string newLastName);
+        Task<User> ChangeBirthDate(int userId, DateTime newBirthDate);
         /// <summary>
         /// Merges the local and online stored wishlists for an user that logs in
         /// </summary>
@@ -51,7 +52,7 @@ namespace backend.Services
         private readonly IAppEnv _appEnv;
         private readonly IEmailService _emailService;
         private const string LoginFailErrorMessage = "A user with that email/password combination does not exist.";
-        private const string CreateAccountErrorMessage = "A user with that email address already exist.";
+        private const string CreateAccountErrorMessage = "A user with that email address already exists.";
         
         public AccountService(DatabaseContext db, IPasswordHasher<User> passwordHasher, IAppEnv appEnv,
             IEmailService emailService)
@@ -86,10 +87,7 @@ namespace backend.Services
             await _db.SaveChangesAsync();
 
             await _emailService.SendEmail(new MailAddress(data.Email), "Welcome to the Marshmallow's Webshop",
-                $"Hi {user.Email}!\n\nWe're glad you're on board.");
-            
-            // Don't emit password to client
-//            user.Password = null;
+                $"Hi {user.Firstname} {user.Lastname}!\n\nWe're glad to have you on board. Stay awhile and listen! You can now purchase your favourite tunes and keep track of your order history.\n Be sure to check in regularly for the latest music from your favourite artists. Happy listening!");
 
             return user;
         }
@@ -99,7 +97,7 @@ namespace backend.Services
             // Does email exist?
             if (await _db.Users.AnyAsync(e => e.Email == email))
             {
-                throw new Exception("A user with that email address already exist.");
+                throw new Exception(CreateAccountErrorMessage);
             }
 
             var anonymousRegistrationToken = Guid.NewGuid().ToString();
@@ -115,7 +113,7 @@ namespace backend.Services
             await _db.SaveChangesAsync();
 
             await _emailService.SendEmail(new MailAddress(email), "Active your Marshmallow's Webshop Account",
-                $"Hi {user.Email}!\n\nWe're glad you're on board.\n\nHowever, your account is not yet fully set up.\nTo finish the process, you must set a password, please visit: https://localhost:3000/auth/register/{anonymousRegistrationToken}");
+                $"Hi {user.Firstname} {user.Lastname}!\n\nWe're glad you're on board.\nHowever, your account is not yet fully set up.\nTo finish the process, you must set a password; please visit: https://localhost:3000/auth/register/{anonymousRegistrationToken}");
             // Don't emit password to client
 //            user.Password = null;
 
@@ -212,23 +210,33 @@ namespace backend.Services
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword);
             if (verificationResult == PasswordVerificationResult.Failed)
             {
-                throw new Exception("The current password given for this user was incorrect, changing password failed");
+                throw new Exception("The current password given is incorrect.");
             }
 
             var newHash = _passwordHasher.HashPassword(user, newPassword);
             user.Password = newHash;
 
             await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your password for your Marshmallow Webshop account has been changed succesfully.",
+            $"Greetings {user.Firstname} {user.Lastname}!\n\n You succesfully changed your password for your registered account on Marshmallow Webshop.\n You can now use this password to log in to your account. Keep this password safe.\n If you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop. ");
         }
 
         public async Task ChangeEmail(int userId, string newEmail) 
         {
+            if (await _db.Users.AnyAsync(e => e.Email == newEmail))
+            {
+                throw new Exception(CreateAccountErrorMessage);
+            }
+
             var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            System.Console.WriteLine("From changeEmail Task: User is: ");
+            System.Console.WriteLine(user);
             user.Email = newEmail;
 
             await _db.SaveChangesAsync();
 
-            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed",
+            await _emailService.SendEmail(new MailAddress(newEmail), "Your email address for Marshmallow's Webshop has been changed succesfully.",
                 $"Hi {user.Email}!\n\nYou email address has been succesfully altered.\n\nFrom now on you will receive emails from the Marshmallow Webshop at this address.\nIf you did not permit this change, please contact us using the contact information displayed on the Marshmallow Webshop.");
         }
 
@@ -240,9 +248,22 @@ namespace backend.Services
 
             await _db.SaveChangesAsync();
 
-            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed",
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your name on your Marshmallow Webshop account has been changed succesfully.",
             $"Hey {user.Firstname} {user.Lastname}!\n\n You succesfully changed your name for your registered account on Marshallow Webshop.\n\nWe will have to get used to calling you {user.Firstname} {user.Lastname} from now on!");
-        } 
+        }
+
+        public async Task<User> ChangeBirthDate(int userId, DateTime newBirthDate)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Id == userId);
+            user.DateOfBirth = newBirthDate;
+
+            await _db.SaveChangesAsync();
+
+            await _emailService.SendEmail(new MailAddress(user.Email), "Your date of birth on your Marshmallow Webshop account has been succesfully updated",
+            $"Hello {user.Firstname} {user.Lastname}!\n\n You have succesfully changed your date of birth on your Marshallow Webshop account to {user.DateOfBirth.ToShortDateString()}.\n\nHappy listening!");
+
+            return user;
+        }
         
         public async Task MergeWishlist(int userId, List<int> localProductIds)
         {

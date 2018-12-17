@@ -6,7 +6,8 @@ import {
   ListHeader,
   ListItem,
   ListContent,
-  Button
+  Button,
+  Image
 } from "semantic-ui-react";
 import IProduct from "src/models/IProduct";
 
@@ -14,80 +15,101 @@ import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
 import { NavLink } from "react-router-dom";
 
+// const styles = {
+//   item: {
+//     display: "flex",
+//     flexdirection: "row"
+
+//   }
+// };
+
 interface IProps {}
 
 class Shoppingcart extends React.Component<IProps> {
   public render() {
+    return <Subscribe to={[CartState]}>{this.renderShoppingCart}</Subscribe>;
+  }
+
+  private renderShoppingCart = (cartState: CartState) => {
+    const totalPrice = cartState.state.products
+      .map((x: IProduct) => x.price)
+      .reduce((prev, curr) => prev + curr);
+
+    const totalProducts = cartState.state.products.length;
+
     return (
       <AppLayout>
-        <Subscribe to={[CartState]}>
-          {(cartState: CartState) => (
-                <List divided>
-                  <ListHeader as="h1">Shopping cart</ListHeader>
-                  {cartState.state.products.map(
-                    (product: IProduct, i: number) => {
-                      if (product.album !== undefined) {
-                        return (
-                          <ListItem key={i}>
-                            <ListContent verticalAlign="middle">
-                              {" "}
-                              <ListHeader>
-                                Album: {product.album!.name}
-                              </ListHeader>
-                              <ListContent verticalAlign="middle">
-                                <Button
-                                  floated="right"
-                                  basic
-                                  icon="trash"
-                                  onClick={this.handleCartDeleteItem(
-                                    cartState,
-                                    product
-                                  )}
-                                />
-                              </ListContent>
-                            </ListContent>
-                          </ListItem>
-                        );
-                      }
+        <List divided>
+          <ListHeader as="h1">Shopping cart</ListHeader>
+          {cartState.state.products.map((product: IProduct, i: number) => {
+            if (product.album !== undefined) {
+              return (
+                <ListItem key={i}>
+                  <Image size="tiny" src={product.album.images.items[0].url} />
+                  <ListContent verticalAlign="middle">
+                    {" "}
+                    <ListHeader>{product.album!.name}</ListHeader>
+                    <ListContent>Album- ${product.price}</ListContent>
+                  </ListContent>
+                  <ListContent floated="right" verticalAlign="bottom">
+                    <Button
+                      floated="right"
+                      basic
+                      icon="trash"
+                      onClick={this.handleCartDeleteItem(cartState, product)}
+                    />
+                  </ListContent>
+                </ListItem>
+              );
+            }
 
-                      return (
-                        <ListItem key={i}>
-                          <ListContent verticalAlign="middle">
-                            {" "}
-                            <ListHeader>
-                              Track: {product.track!.title}
-                            </ListHeader>
-                            Album: {product.track!.albumsName}
-                          </ListContent>
-                          <ListContent verticalAlign="middle">
-                            <Button
-                              floated="right"
-                              basic
-                              icon="trash"
-                              onClick={this.handleCartDeleteItem(
-                                cartState,
-                                product
-                              )}
-                            />
-                          </ListContent>
-                        </ListItem>
-                      );
-                    }
-                  )}
-                  <ListItem>
-                    <div style={{ marginTop: 60 }}>
-                      <Button color="green" floated="right" ><NavLink to={"/shoppingcart/order"}>Proceed to checkout</NavLink>
-                        
-                      </Button>
-                    </div>
-                  </ListItem>
-                </List>
-              )}
-            </Subscribe>
-        
+            return (
+              <ListItem key={i}>
+                <Image size="tiny" src={product.track!.images[0].url} />
+                <ListContent verticalAlign="middle">
+                  {" "}
+                  <ListHeader>Track: {product.track!.title}</ListHeader>
+                  <ListContent>track- ${product.price}</ListContent>
+                </ListContent>
+                <ListContent floated="right" verticalAlign="bottom">
+                  <Button
+                    floated="right"
+                    basic
+                    icon="trash"
+                    onClick={this.handleCartDeleteItem(cartState, product)}
+                  />
+                </ListContent>
+              </ListItem>
+            );
+          })}
+          <ListItem>
+            <div style={{ marginTop: 40 }}>
+              <ListContent floated="right">
+                <div style={{ width: 300, height: 80 }}>
+                  <div>
+                    Total products
+                    <ListContent floated="right">{totalProducts}</ListContent>
+                    <hr />
+                  </div>
+                  Total
+                  <ListContent floated="right">${totalPrice}</ListContent>
+                </div>
+              </ListContent>
+            </div>
+          </ListItem>
+          <div>
+            {" "}
+            <NavLink to={"/shoppingcart/order"}>
+              <Button color="green" floated="right">
+                Proceed to checkout
+              </Button>
+            </NavLink>{" "}
+          </div>
+        </List>
       </AppLayout>
     );
-  }
+  };
+
   private handleCartDeleteItem = (
     cartState: CartState,
     product: IProduct

@@ -1,12 +1,17 @@
 import * as React from "react";
 import AppLayout from "../../../../layout/AppLayout/AppLayout";
-import {Table, Input, Button, Header, Icon, Label} from "semantic-ui-react";
+import {Table, Button, Header, Icon, Label} from "semantic-ui-react";
 import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
-import {Formik} from "formik";
+import {Formik, FormikProps} from "formik";
 import * as Yup from "yup";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter, RouteComponentProps} from "react-router-dom";
 import {userState} from "../../../../../..//index";
 import IUser from "../../../../../../models/IUser";
+import BirthdatePicker from "src/components/views/reusable/BirthdatePicker/BirthdatePicker";
+import * as moment from "moment";
+import { withApollo, WithApolloClient } from "react-apollo";
+import IApiError from "src/models/IApiError";
+import gql from "graphql-tag";
 
 const styles = {
   DashboardPositioning: {
@@ -30,9 +35,39 @@ const styles = {
   }
 };
 
-class BirthReset extends React.Component {
+const editBirthDateMutation = gql`
+  mutation ($data: ChangeBirthDateInput!) {
+    changeBirthDate(data: $data) {
+      data {
+        dateOfBirth
+      }
+      errors {
+        message
+      }
+    }
+  }
+  `;
+
+interface IProps {
+
+}
+
+interface IState {
+  errors: IApiError[];
+}
+
+interface IFormikValues {
+  dateOfBirth: moment.Moment;
+}
+
+class BirthReset extends React.Component <WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
+  public state = {
+    errors: []
+  }
+  
   public render() {
     const user = userState.state.user! as IUser;
+    
     return (
       <AppLayout>
         <div style={styles.HeaderPositioning}>
@@ -50,27 +85,49 @@ class BirthReset extends React.Component {
         <div style={styles.DashboardPositioning}>
           <Formik
             initialValues={{
-              name: "",
-              infix: "",
-              surname: ""
+              dateOfBirth: moment().subtract(1, 'year')
             }}
-            onSubmit={values => {
-              console.log(values);
+            onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+              console.log("values: ", values);
+              formik.setSubmitting(true);
+              const result = await this.props.client.mutate({
+                mutation: editBirthDateMutation,
+                variables: {
+                  data: {
+                    authToken: user.token,
+                    newBirthDate: values.dateOfBirth
+                  }
+                }
+              });
+              console.log("From birthdate mutation:")
+              console.log(result.data!);
+              const mutationBirthDate = result.data!.changeBirthDate.data.dateOfBirth;
+              
+              const mutationErrors = result.data!.changeBirthDate.errors;
+              if (mutationErrors) {
+                this.setState({ errors: mutationErrors })
+              } else {
+                if (this.state.errors.length > 0) {
+                  this.setState({ errors: [] })
+                }
+                user.dateOfBirth = mutationBirthDate;
+                userState.login(user)
+                this.props.history.replace("/dashboard/accountdetails");
+              }
+              formik.setSubmitting(false);
             }}
             validationSchema={Yup.object().shape({
-              name: Yup.string().required("Please fill in name"),
-              infix: Yup.string(),
-              surname: Yup.string().required("Please fill in surname")
+              dateOfBirth: Yup.date().required("Please fill in your date of birth.")
             })}
           >
             {props => {
               const {
-                values,
+                // values,
                 touched,
                 errors,
                 isSubmitting,
-                handleChange,
-                handleSubmit
+                // handleChange,
+                handleSubmit,
               } = props;
               return (
                 <form onSubmit={handleSubmit}>
@@ -85,19 +142,15 @@ class BirthReset extends React.Component {
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
-                            <Input
-                              fluid
-                              id="name"
-                              placeholder="Modify birthdate"
-                              type="text"
-                              value={values.name}
-                              onChange={handleChange}
-                            />
+                              <BirthdatePicker
+                                date={props.values.dateOfBirth}
+                                onChange={date => props.setFieldValue(name, date)}
+                              />
                           </div>
-                          {errors.name && touched.name && (
+                          {errors.dateOfBirth && touched.dateOfBirth && (
                             <div style={styles.LabelWitdh}>
                               <Label basic pointing="left" color="red">
-                                {errors.name}
+                                {errors.dateOfBirth}
                               </Label>
                             </div>
                           )}{" "}
@@ -146,4 +199,4 @@ class BirthReset extends React.Component {
   }
 }
 
-export default BirthReset;
+export default withRouter(withApollo(BirthReset));
