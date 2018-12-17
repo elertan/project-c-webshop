@@ -7,12 +7,14 @@ import OrderContainer from 'src/components/containers/home/shoppingcart/OrderCon
 
 
 
+
 interface IProps extends RouteComponentProps<{}> {}
 
 const ShoppingcartRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
       <Route exact path={`${props.match.url}`} component={ShoppingcartContainer} />
+      
       <Route exact path={`${props.match.url}/order`} component={OrderContainer} />
       
       <Route component={NotFound} />
