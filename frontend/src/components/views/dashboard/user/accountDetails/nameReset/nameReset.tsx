@@ -138,6 +138,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>New name:</strong></label>
                             <Input
                               fluid
                               id="name"
@@ -149,7 +150,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                           </div>
                           {errors.name && touched.name && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.name}
                               </Label>
                             </div>
@@ -159,12 +160,13 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                       <Table.Row>
                         <Table.Cell>
                           <h3>
-                            <b>Current lastname : </b>
+                            <b>Current Last Name : </b>
                           </h3>
                           {user.lastname}
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>New last name:</strong></label>
                             <Input
                               fluid
                               id="lastname"
@@ -176,7 +178,7 @@ class NameReset extends React.Component<WithApolloClient<IProps> & RouteComponen
                           </div>
                           {errors.lastname && touched.lastname && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.lastname}
                               </Label>
                             </div>

@@ -6,8 +6,7 @@ import {
   Button,
   Header,
   Icon,
-  Label,
-  Modal
+  Label
 } from "semantic-ui-react";
 import DashboardMenu from "../../../../reusable/DashboardMenu/DashboardMenu";
 import { Formik, FormikProps } from "formik";
@@ -18,7 +17,6 @@ import gql from "graphql-tag";
 import { withApollo, WithApolloClient } from "react-apollo";
 import IApiError from "src/models/IApiError";
 import IUser from "../../../../../../models/IUser";
-// import IApiResult from "src/models/IApiResult";
 
 const styles = {
   DashboardPositioning: {
@@ -42,7 +40,7 @@ const styles = {
   },
   modalContentPositioning: {
     maxWidth: "40vw",
-    marginLeft: "30vw"
+    marginabove: "30vw"
   }
 };
 
@@ -63,8 +61,6 @@ interface IProps {
 
 interface IState {
   errors: IApiError[],
-  openModal: boolean,
-  confirm: boolean
 }
 
 interface IFormikValues {
@@ -75,25 +71,8 @@ interface IFormikValues {
 class EmailReset extends React.Component<WithApolloClient<IProps> & RouteComponentProps<{}>, IState> {
   public state = {
     errors: [],
-    openModal: false,
-    confirm: false
   };
 
-  public confirmModalIsAllowed = () =>
-    this.setState({
-      confirm: true
-    });
-
-  public closePasswordModal = () =>
-    this.setState({
-      openModal: false
-    });
-
-  public openPasswordModal = () => {
-    this.setState({
-      openModal: this.state.confirm
-    });
-  };
   public render() {
     const user = userState.state.user! as IUser;
     return (
@@ -140,7 +119,6 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                 }
                 user.email = values.email;
                 userState.login(user);
-                this.setState({ confirm: true })
                 this.props.history.replace("/dashboard/accountdetails");
               }
               formik.setSubmitting(false);
@@ -176,6 +154,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>New email address:</strong></label>
                             <Input
                               fluid
                               id="email"
@@ -187,7 +166,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                           </div>
                           {errors.email && touched.email && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.email}
                               </Label>
                             </div>
@@ -203,6 +182,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>Confirm your new email address:</strong></label>
                             <Input
                               fluid
                               id="confirmemail"
@@ -214,7 +194,7 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                           </div>
                           {errors.confirmemail && touched.confirmemail && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.confirmemail}
                               </Label>
                             </div>
@@ -222,8 +202,6 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                         </Table.Cell>
                       </Table.Row>
 
-                      {/* Confirm and return button */}
-                      {/* Confirm and return button */}
                       {/* Confirm and return button */}
                       <Table.Cell>
                         <div style={styles.SaveButtonPosition}>
@@ -243,7 +221,6 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
                             animated="fade"
                             color="green"
                             type="submit"
-                            onClick={this.openPasswordModal}
                           >
                             <Button.Content visible>Continue</Button.Content>
                             <Button.Content hidden>Continue</Button.Content>
@@ -259,44 +236,6 @@ class EmailReset extends React.Component<WithApolloClient<IProps> & RouteCompone
               );
             }}
           </Formik>
-
-          {/* Modal */}
-          {/* Modal */}
-          {/* Modal */}
-          <Modal
-            style={styles.modalContentPositioning}
-            closeOnEscape={false}
-            closeOnDimmerClick={false}
-            open={this.state.openModal}
-            basic
-            size="fullscreen"
-          >
-            <Header icon="key" content="Confirm Email change" />
-            <Modal.Content>
-              <p>
-                Are you sure you want to change
-                {" Current email"} into {"New email"}
-              </p>
-              <br />
-              <p>Fill in your password to confirm it's you!</p>
-              <Input placeholder="Fill in password" type="password" />
-            </Modal.Content>
-            <Modal.Actions>
-              <Button color="red" onClick={this.closePasswordModal} inverted>
-                <Button.Content>
-                  <Icon name="remove" /> Back
-                </Button.Content>
-              </Button>
-              <Button color="green" animated="fade">
-                <Button.Content visible>
-                  <Icon name="checkmark" /> Confirm email change
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="checkmark" /> Confirm email change
-                </Button.Content>
-              </Button>
-            </Modal.Actions>
-          </Modal>
         </div>
       </AppLayout>
     );

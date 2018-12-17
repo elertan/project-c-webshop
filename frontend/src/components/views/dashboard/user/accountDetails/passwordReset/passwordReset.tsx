@@ -190,6 +190,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>Enter your current password:</strong></label>
                             <Input
                               fluid
                               placeholder="Current password"
@@ -202,7 +203,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                           {errors.currentPassword &&
                             touched.currentPassword && (
                               <div style={styles.LabelWitdh}>
-                                <Label basic pointing="left" color="red">
+                                <Label basic pointing="above" color="red">
                                   {errors.currentPassword}
                                 </Label>
                               </div>
@@ -216,6 +217,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>Enter a new password:</strong></label>
                             <Input
                               fluid
                               placeholder="New password"
@@ -227,7 +229,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                           </div>
                           {errors.newPassword && touched.newPassword && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.newPassword}
                               </Label>
                             </div>
@@ -241,6 +243,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                            <label><strong>Confirm your new password:</strong></label>
                             <Input
                               fluid
                               placeholder="Confirm new password"
@@ -254,7 +257,7 @@ class PasswordReset extends React.Component<WithApolloClient<IProps> & RouteComp
                           {errors.repeatNewPassword &&
                             touched.repeatNewPassword && (
                               <div style={styles.LabelWitdh}>
-                                <Label basic pointing="left" color="red">
+                                <Label basic pointing="above" color="red">
                                   {errors.repeatNewPassword}
                                 </Label>
                               </div>

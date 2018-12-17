@@ -4,9 +4,6 @@ import {Table, Button, Header, Icon} from "semantic-ui-react";
 import styles from "./AccountDetailsStyle";
 import DashboardMenu from "../../../reusable/DashboardMenu/DashboardMenu";
 import {NavLink} from "react-router-dom";
-
-// import { Subscribe } from "unstated";
-// import UserState from "../../../../../states/UserState";
 import {userState} from "../../../../../index";
 import IUser from "../../../../../models/IUser";
 
@@ -106,16 +103,6 @@ class AccountDetails extends React.Component {
                       </Button>
                     </NavLink>
                   </div>
-
-                  {/* <div style={styles.InputSpacing}>
-                      <Input placeholder="New E-mail" />
-                      <div style={styles.SaveButtonPosition}>
-                        <Button animated="fade" color="green" fluid>
-                          <Button.Content visible>Save</Button.Content>
-                          <Button.Content hidden>Save</Button.Content>
-                        </Button>
-                      </div>
-                    </div> */}
                 </Table.Cell>
               </Table.Row>
 
@@ -124,7 +111,6 @@ class AccountDetails extends React.Component {
                   <h3>
                     <b>Password : </b>
                   </h3>
-                  {"*******"}
                 </Table.Cell>
                 <Table.Cell>
                   <div style={styles.NotClicked}>

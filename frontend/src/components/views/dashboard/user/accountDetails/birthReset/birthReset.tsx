@@ -142,6 +142,7 @@ class BirthReset extends React.Component <WithApolloClient<IProps> & RouteCompon
                         </Table.Cell>
                         <Table.Cell>
                           <div style={styles.InputSpacing}>
+                              <label><strong>Pick a new birth date:</strong></label>
                               <BirthdatePicker
                                 date={props.values.dateOfBirth}
                                 onChange={date => props.setFieldValue(name, date)}
@@ -149,7 +150,7 @@ class BirthReset extends React.Component <WithApolloClient<IProps> & RouteCompon
                           </div>
                           {errors.dateOfBirth && touched.dateOfBirth && (
                             <div style={styles.LabelWitdh}>
-                              <Label basic pointing="left" color="red">
+                              <Label basic pointing="above" color="red">
                                 {errors.dateOfBirth}
                               </Label>
                             </div>
