@@ -8,7 +8,7 @@ interface IProps extends RouteComponentProps<{}> {}
 const AdminRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
-      <Route exact path={`${props.match.url}/admin`} component={AdminContainer} />
+      <Route exact path={`/admin`} component={AdminContainer} />
       <Route component={NotFound} />
     </Switch>
   );

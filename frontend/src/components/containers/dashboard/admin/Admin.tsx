@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import Admin from "../../dashboard/admin/Admin";
+import Admin from "../../../views/dashboard/admin/Admin";
 
 interface IProps extends RouteProps {}
 interface IState {}
