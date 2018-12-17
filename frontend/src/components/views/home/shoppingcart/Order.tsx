@@ -7,14 +7,11 @@ import {
   Form,
   Icon,
   Step,
-  Input,
-  Label,
   Button,
 } from "semantic-ui-react";
 import {Subscribe} from "unstated";
 import CartState from "src/states/CartState";
 import IProduct from "src/models/IProduct";
-import {Redirect} from "react-router-dom";
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import {withApollo, WithApolloClient} from "react-apollo";
 import OrderState from "src/states/OrderState";
@@ -93,7 +90,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   public state = {
     errors: [],
     email: "",
-    status: "email",
+    status: "bank",
     value: "",
 
   };
@@ -137,7 +134,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                       return (
                         <Table.Row key={i}>
                           <Table.Cell>Album: {product.album!.name}</Table.Cell>
-                          <Table.Cell>Price: </Table.Cell>
+                          <Table.Cell>Price: ${product.price}</Table.Cell>
                         </Table.Row>
                       );
                     }
@@ -161,7 +158,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                 >
                   <Icon name="truck"/>
                   <Step.Content>
-                    <Step.Title>Shipping</Step.Title>
+                   <Step.Title>Shipping</Step.Title>
                   </Step.Content>
                 </Step>
                 <Step
@@ -206,47 +203,47 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
-    const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
-    return (
-      <Form.Field>
-        <Table.HeaderCell colSpan="2">
-          <h3>Shipping details</h3>
-        </Table.HeaderCell>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>Emailaddress</Table.Cell>
-            <Table.Cell/>
-            <Table.Cell>
-              <Input
-                id="email"
-                iconPosition="left"
-                placeholder="johndoe@example.com"
-                size="large"
-                error={Boolean(error)}
-              >
-                <Icon name="at"/>
-                <input {...fieldProps.field} />
-              </Input>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-        <Button
-          floated="right"
-          disabled={!fieldProps.form.isValid}
-          onClick={() => this.setStatus("bank")}
-          positive
-        >
-          Next
-        </Button>
-        {error && (
-          <Label basic pointing="above" color="red">
-            {error}
-          </Label>
-        )}
-      </Form.Field>
-    );
-  };
+  // private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
+  //   const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
+  //   return (
+  //     <Form.Field>
+  //       <Table.HeaderCell colSpan="2">
+  //         <h3>Shipping details</h3>
+  //       </Table.HeaderCell>
+  //       <Table.Body>
+  //         <Table.Row>
+  //           <Table.Cell>Emailaddress</Table.Cell>
+  //           <Table.Cell/>
+  //           <Table.Cell>
+  //             <Input
+  //               id="email"
+  //               iconPosition="left"
+  //               placeholder="johndoe@example.com"
+  //               size="large"
+  //               error={Boolean(error)}
+  //             >
+  //               <Icon name="at"/>
+  //               <input {...fieldProps.field} />
+  //             </Input>
+  //           </Table.Cell>
+  //         </Table.Row>
+  //       </Table.Body>
+  //       <Button
+  //         floated="right"
+  //         disabled={!fieldProps.form.isValid}
+  //         onClick={() => this.setStatus("bank")}
+  //         positive
+  //       >
+  //         Next
+  //       </Button>
+  //       {error && (
+  //         <Label basic pointing="above" color="red">
+  //           {error}
+  //         </Label>
+  //       )}
+  //     </Form.Field>
+  //   );
+  // };
 
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
@@ -323,12 +320,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     } else {
       if (this.state.errors.length > 0) {
         this.setState({errors: []})
-
-        return <Redirect to="/confirmorder"/>
       }
-      return <Redirect to="./confirmorder"/>
     }
-    return <Redirect to="./confirmorder"/>
   };
 
 
@@ -337,13 +330,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
-    if (this.state.status === "email") {
-      return (
-        <Form className="ui form">
-          <Field name="email" render={this.renderEmailField}/>
-        </Form>
-      );
-    }
     if (this.state.status === "bank") {
       return (
         <Form className="ui form">

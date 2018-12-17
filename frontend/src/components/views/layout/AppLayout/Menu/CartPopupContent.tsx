@@ -99,7 +99,7 @@ class CartPopupContent extends React.Component<IProps> {
         <h3>Total price: ${totalPrice}</h3>
         <Route render={({ history }) => (
           <Button
-            onClick={() => history.push("/shoppingcart/order")}
+            onClick={() => history.push("/shoppingcart")}
             fluid
           >
             Proceed to checkout
