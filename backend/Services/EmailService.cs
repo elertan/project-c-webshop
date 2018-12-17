@@ -15,7 +15,7 @@ namespace backend.Services
         const string _password = "Dildos69";
 
         private readonly MailAddress _fromAddress =
-            new MailAddress("noreply.flyingmarshmallows@gmail.com", "Team flying marshmallows");
+            new MailAddress("noreply.flyingmarshmallows@gmail.com", "Team Flying Marshmallows");
 
         public EmailService()
         {

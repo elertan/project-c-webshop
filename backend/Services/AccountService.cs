@@ -52,7 +52,7 @@ namespace backend.Services
         private readonly IAppEnv _appEnv;
         private readonly IEmailService _emailService;
         private const string LoginFailErrorMessage = "A user with that email/password combination does not exist.";
-        private const string CreateAccountErrorMessage = "A user with that email address already exist.";
+        private const string CreateAccountErrorMessage = "A user with that email address already exists.";
         
         public AccountService(DatabaseContext db, IPasswordHasher<User> passwordHasher, IAppEnv appEnv,
             IEmailService emailService)
@@ -97,7 +97,7 @@ namespace backend.Services
             // Does email exist?
             if (await _db.Users.AnyAsync(e => e.Email == email))
             {
-                throw new Exception("A user with that email address already exists.");
+                throw new Exception(CreateAccountErrorMessage);
             }
 
             var anonymousRegistrationToken = Guid.NewGuid().ToString();
@@ -113,7 +113,7 @@ namespace backend.Services
             await _db.SaveChangesAsync();
 
             await _emailService.SendEmail(new MailAddress(email), "Active your Marshmallow's Webshop Account",
-                $"Hi {user.Email}!\n\nWe're glad you're on board.\n\nHowever, your account is not yet fully set up.\nTo finish the process, you must set a password, please visit: https://localhost:3000/auth/register/{anonymousRegistrationToken}");
+                $"Hi {user.Firstname} {user.Lastname}!\n\nWe're glad you're on board.\nHowever, your account is not yet fully set up.\nTo finish the process, you must set a password; please visit: https://localhost:3000/auth/register/{anonymousRegistrationToken}");
             // Don't emit password to client
 //            user.Password = null;
 
@@ -260,7 +260,7 @@ namespace backend.Services
             await _db.SaveChangesAsync();
 
             await _emailService.SendEmail(new MailAddress(user.Email), "Your date of birth on your Marshmallow Webshop account has been succesfully updated",
-            $"Hello {user.Firstname} {user.Lastname}!\n\n You have succesfully changed your date of birth on your Marshallow Webshop account to {user.DateOfBirth}.\n\nHappy listening!");
+            $"Hello {user.Firstname} {user.Lastname}!\n\n You have succesfully changed your date of birth on your Marshallow Webshop account to {user.DateOfBirth.ToShortDateString()}.\n\nHappy listening!");
 
             return user;
         }
