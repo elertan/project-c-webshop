@@ -1,60 +1,123 @@
 import * as React from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Button, Icon } from "semantic-ui-react";
 import Users from "./adminComponents/users";
 import Statistics from "./adminComponents/statistics";
-import Overview from "./adminComponents/overview";
 import Products from "./adminComponents/products";
 
 const styles = {
   MenuPadding: {
     height: "3vw",
     display: "inline-block"
+  },
+  CenterItems: {
+    display: "flex",
+    justifyContent: "center"
   }
 };
 
 class Admin extends React.Component {
-  public state = { activeItem: "Overview" };
+  public state = { ActiveItem: "Overview" };
 
   public changeMenuItem(name: string) {
     this.setState({
-      activeItem: name
+      ActiveItem: name
     });
   }
 
   public render() {
-    const { activeItem } = this.state;
-    let PageContent = <h1>Hi</h1>;
-    if (this.state.activeItem === "Overview") {
-      PageContent = <Overview />;
-    } else if (this.state.activeItem === "Users") {
+    const { ActiveItem } = this.state;
+    let PageContent;
+    if (this.state.ActiveItem === "Overview") {
+      PageContent = (
+        <div style={styles.CenterItems}>
+          <Button.Group basic size="massive">
+            <Button
+              animated="fade"
+              size="massive"
+              onClick={() => this.changeMenuItem("Users")}
+            >
+              <Button.Content visible>
+                {" "}
+                <Icon name="users" />
+                Users
+              </Button.Content>
+              <Button.Content hidden>
+                {" "}
+                <Icon name="users" />
+                Users
+              </Button.Content>
+            </Button>
+
+            <Button.Or />
+
+            <Button
+              animated="fade"
+              size="massive"
+              onClick={() => this.changeMenuItem("Products")}
+            >
+              <Button.Content visible>
+                {" "}
+                <Icon name="sound" />
+                Products
+              </Button.Content>
+              <Button.Content hidden>
+                {" "}
+                <Icon name="sound" />
+                Products
+              </Button.Content>
+            </Button>
+
+            <Button.Or />
+
+            <Button
+              animated="fade"
+              size="massive"
+              onClick={() => this.changeMenuItem("Statistics")}
+            >
+              <Button.Content visible>
+                {" "}
+                <Icon name="line graph" />
+                Statistics
+              </Button.Content>
+              <Button.Content hidden>
+                {" "}
+                <Icon name="line graph" />
+                Statistics
+              </Button.Content>
+            </Button>
+          </Button.Group>
+        </div>
+      );
+    } else if (this.state.ActiveItem === "Users") {
       PageContent = <Users />;
-    } else if (this.state.activeItem === "Statistics") {
+    } else if (this.state.ActiveItem === "Statistics") {
       PageContent = <Statistics />;
-    } else if (this.state.activeItem === "Products") {
+    } else if (this.state.ActiveItem === "Products") {
       PageContent = <Products />;
     }
+
     return (
       <div>
         <div style={styles.MenuPadding}>
           <Menu inverted fixed="top" fluid>
             <Menu.Item
               name="Overview"
-              active={activeItem === "Overview"}
+              header={ActiveItem === "Overview"}
               onClick={() => this.changeMenuItem("Overview")}
             />
             <Menu.Item
               name="Users"
-              active={activeItem === "Users"}
+              header={ActiveItem === "Users"}
               onClick={() => this.changeMenuItem("Users")}
             />
             <Menu.Item
               name="Products"
-              active={activeItem === "Products"}
+              header={ActiveItem === "Products"}
               onClick={() => this.changeMenuItem("Products")}
             />
             <Menu.Item
               name="Statistics"
-              active={activeItem === "Statistics"}
+              header={ActiveItem === "Statistics"}
               onClick={() => this.changeMenuItem("Statistics")}
             />
           </Menu>

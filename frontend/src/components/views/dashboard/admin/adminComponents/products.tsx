@@ -1,67 +1,73 @@
 import * as React from "react";
-import { Header, Menu, Divider } from "semantic-ui-react";
+import { Icon, Header, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
 const styles = {
   MenuPadding: {
     padding: "2vw"
   },
-  HeaderPositioning: {
+  CenterItems: {
+    paddingTop: "10vh",
     display: "flex",
     justifyContent: "center"
   }
 };
 
 class Products extends React.Component {
+  public state = { ActiveItem: "Home" };
+
+  public changeMenuItem(name: string) {
+    this.setState({
+      ActiveItem: name
+    });
+  }
+
   public render() {
     return (
       <div>
-        <div style={styles.HeaderPositioning}>
+        <div style={styles.CenterItems}>
           <Header as="h2">
             <Header.Content>
-              <div style={styles.HeaderPositioning}>Products</div>
+              <div style={styles.CenterItems}>Products</div>
               <Header.Subheader>
-                In this tab you can add new songs or albums, delete old songs or
-                albums and update information regarding the music
+                In this tab you can add new songs or albums to the webshop,
+                delete old songs or albums from the webshop and update
+                information regarding the music avaliable in the webshop
               </Header.Subheader>
             </Header.Content>
           </Header>
         </div>
-        <div style={styles.MenuPadding}>
-          <Menu vertical>
-            <Menu.Item>
-              <NavLink to={""}>
-                <Header size="small">Products</Header>
-              </NavLink>
-              <NavLink to={""}>
-                <Menu.Item name="All products" />
-              </NavLink>
-              <Divider />
+        <br />
+        <div style={styles.CenterItems}>
+          <Button.Group basic size="massive">
+            <NavLink to={"admin/products"}>
+              <Button animated="fade" size="massive">
+                <Button.Content visible>
+                  <Icon name="search" />
+                  Find product
+                </Button.Content>
+                <Button.Content hidden>
+                  <Icon name="search" />
+                  Find product
+                </Button.Content>
+              </Button>
+            </NavLink>
 
-              {/* Songs */}
-              <NavLink to={""}>
-                <Header size="small">Songs</Header>
-              </NavLink>
-              <NavLink to={""}>
-                <Menu.Item name="All songs" />
-              </NavLink>
-              <NavLink to={""}>
-                <Menu.Item name="Add new song" />
-              </NavLink>
-              <Divider />
+            <Button.Or />
 
-              {/* Albums */}
-              <NavLink to={""}>
-                <Header size="small">Albums</Header>
-              </NavLink>
-              <NavLink to={""}>
-                <Menu.Item name="All albums" />
-              </NavLink>
-              <NavLink to={""}>
-                <Menu.Item name="Add new album" />
-              </NavLink>
-            </Menu.Item>
-          </Menu>
+            <NavLink to={"/admin/addproduct"}>
+              <Button animated="fade" size="massive">
+                <Button.Content visible>
+                  <Icon name="add" />
+                  Add product
+                </Button.Content>
+                <Button.Content hidden>
+                  <Icon name="add" />
+                  Add product
+                </Button.Content>
+              </Button>
+            </NavLink>
+          </Button.Group>
         </div>
       </div>
     );
