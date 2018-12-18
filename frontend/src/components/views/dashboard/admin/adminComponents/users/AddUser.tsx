@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Header } from "semantic-ui-react";
-import AdminBackButton from "../../../../reusable/Admin/AdminBackButton"
+import AdminMenu from "../../../../reusable/Admin/AdminMenu";
 
 const styles = {
   MenuPadding: {
     padding: "2vw"
   },
-  HeaderPositioning: {
+  CenterItems: {
+    paddingTop: "10vh",
     display: "flex",
     justifyContent: "center"
   }
@@ -16,14 +17,12 @@ class AddUser extends React.Component {
   public render() {
     return (
       <div>
-        <AdminBackButton />
-        <div style={styles.HeaderPositioning}>
+        <AdminMenu />
+        <div style={styles.CenterItems}>
           <Header as="h2">
             <Header.Content>
-              <div style={styles.HeaderPositioning}>Add user</div>
-              <Header.Subheader>
-                Add user
-              </Header.Subheader>
+              <div style={styles.CenterItems}>Add user</div>
+              <Header.Subheader>Add user</Header.Subheader>
             </Header.Content>
           </Header>
         </div>

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Header, Button, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import AdminMenu from "../../../../reusable/Admin/AdminMenu"
 
 const styles = {
   MenuPadding: {
@@ -17,6 +18,7 @@ class Users extends React.Component {
   public render() {
     return (
       <div>
+        <AdminMenu />
         <div style={styles.CenterItems}>
           <Header as="h2">
             <Header.Content>
@@ -31,7 +33,7 @@ class Users extends React.Component {
         <br />
         <div style={styles.CenterItems}>
           <Button.Group basic size="massive">
-            <NavLink to={"admin/users"}>
+            <NavLink to={"users/all"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="search" />
@@ -46,7 +48,7 @@ class Users extends React.Component {
 
             <Button.Or />
 
-            <NavLink to={"admin/adduser"}>
+            <NavLink to={"users/adduser"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="add" />
