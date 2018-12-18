@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Header } from "semantic-ui-react";
-import AdminBackButton from "../../../../reusable/AdminBackButton";
+import AdminMenu from "../../../../reusable/Admin/AdminMenu"
 
 const styles = {
   MenuPadding: {
     padding: "2vw"
   },
-  HeaderPositioning: {
+  CenterItems: {
+    paddingTop: "10vh",
     display: "flex",
     justifyContent: "center"
   }
@@ -16,11 +17,11 @@ class AllProducts extends React.Component {
   public render() {
     return (
       <div>
-        <AdminBackButton />
-        <div style={styles.HeaderPositioning}>
+        <AdminMenu />
+        <div style={styles.CenterItems}>
           <Header as="h2">
             <Header.Content>
-              <div style={styles.HeaderPositioning}>All products</div>
+              <div style={styles.CenterItems}>All products</div>
               <Header.Subheader>
                 An overview of all products currently in the webshop
               </Header.Subheader>
