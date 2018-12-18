@@ -11,7 +11,8 @@ import {
   Divider,
   Input,
   Segment,
-  Loader
+  Loader,
+  Card
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
@@ -87,7 +88,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     value: "",
     radio: true,
     time: true,
-   
+    cartError: ""
   };
 
   public render() {
@@ -121,10 +122,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (
-    newEmail: string,
-    boughtProducts: number[]
-  ) => {
+  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
@@ -144,10 +142,35 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     } else {
       if (this.state.errors.length > 0) {
         this.setState({ errors: [] });
-      }
-      else{
-        this.startTimeout()
+      } else {
+        this.startTimeout();
         this.setStatus("succes");
+      }
+    }
+  };
+
+  private DoesUserExist = async (newEmail: string) => {
+    console.log("Handling submit");
+
+    const result = await this.props.client.mutate({
+      mutation: createAnonymousOrderMutation,
+      variables: {
+        data: {
+          email: newEmail,
+          productIds: [1]
+        }
+      }
+    });
+
+    const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
+    if (apiResult.errors) {
+      this.setState({ errors: apiResult.errors });
+      console.log(apiResult.errors);
+    } else {
+      if (this.state.errors.length > 0) {
+        this.setState({ errors: [] });
+      } else {
+        this.setStatus("order");
       }
     }
   };
@@ -156,18 +179,30 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     this.setState({ status: newStatus });
   };
   private startTimeout = () => {
-    setTimeout(()=>{
-      this.setState({time: false});},
-    
- 5000);
-   
-  }
+    setTimeout(
+      () => {
+        this.setState({ time: false });
+      },
+
+      5000
+    );
+  };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
     if (this.state.status === "option") {
       return (
         <Form className="ui form">
           <Field name="option" render={this.renderOptionMenu} />
+          {this.state.errors.length > 0 && (
+            <p style={{ textAlign: "center", marginTop: 15, color: "red" }}>
+              {(this.state.errors[0] as IApiError).message}
+            </p>
+          )}
+          {this.state.cartError.length > 3 && (
+            <p style={{ textAlign: "center", marginTop: 15, color: "red" }}>
+              {this.state.cartError}
+            </p>
+          )}
         </Form>
       );
     }
@@ -219,11 +254,10 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             flexDirection: "row"
           }}
         >
-            <Form className="ui form">
-
-             <Field name="succes" render={this.RenderSuccesPage}/>
-            </Form>
-          </div>
+          <Form className="ui form">
+            <Field name="succes" render={this.RenderSuccesPage} />
+          </Form>
+        </div>
       );
     }
     return (
@@ -250,57 +284,63 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private RenderSuccesPage = ()=>{
-   
-     if(this.state.time === true)
-     {
-      return ( <div style={{margin: 400}}>
-     <p>your order is in progress</p>
-      <Loader active >Loading</Loader>
-      </div>)}
-     return(
-       <div style={{margin: 400}}>
-         your order is send!!!
-       </div>
-      )
-  }
+  private RenderSuccesPage = () => {
+    if (this.state.time === true) {
+      return (
+        <div style={{ margin: 400 }}>
+          <p>your order is in progress</p>
+          <Loader active>Loading</Loader>
+        </div>
+      );
+    }
+    return <div style={{ margin: 400 }}>your order is send!!!</div>;
+  };
 
   private RenderOrderField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
-        <h3>These are your order details </h3>
+        <Card fluid>
+          <Card.Content>
+            <Card.Header>These are your order details </Card.Header>
 
-        <h5>your emailaddress: {fieldProps.form.values.email}</h5>
-        <Button
-          primary
-          floated="right"
-          onClick={() => this.setStatus("option")}
-        >
-          Back
-        </Button>
-        <Button
-          primary
-          floated="right"
-          onClick={() => this.setStatus("bank")}
-          disabled={fieldProps.field.value === null}
-        >
-          Next
-        </Button>
+            <Card.Description>
+              your emailaddress: {fieldProps.form.values.email}
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              primary
+              floated="right"
+              onClick={() => this.setStatus("option")}
+            >
+              Back
+            </Button>
+            <Button
+              primary
+              floated="right"
+              onClick={() => this.setStatus("bank")}
+              disabled={fieldProps.field.value === null}
+            >
+              Next
+            </Button>
+          </Card.Content>
+        </Card>
       </div>
     );
   };
 
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
-      <Form.Field>
-        <Table.HeaderCell colSpan="2">
-          <h3>Billing details</h3>
-        </Table.HeaderCell>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>Bank:</Table.Cell>
-
-            <Table.Cell>
+      <div style={{ marginLeft: "1.5%", width: "150%" }}>
+        <Card fluid>
+          <Card.Content>
+            <Card.Header>
+              <h3>Billing details</h3>
+            </Card.Header>
+          </Card.Content>
+          <Card.Content>
+            <Card.Description>
+              Bank:
               <select
                 value={String(fieldProps.field.value)}
                 onChange={ev =>
@@ -319,11 +359,11 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                   </option>
                 ))}
               </select>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>Account number: </Table.Cell>
-            <Table.Cell>
+            </Card.Description>
+          </Card.Content>
+          <Card.Content>
+            <Card.Description>
+              Account number:{"  "}
               <Input
                 id="bankNumber"
                 iconPosition="left"
@@ -333,40 +373,53 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                 <Icon name="btc" />
                 <input {...fieldProps.field} />
               </Input>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-        <Button
-          primary
-          floated="right"
-          onClick={() => this.setStatus("confirm")}
-          disabled={fieldProps.field.value === null}
-        >
-          Next
-        </Button>
-      </Form.Field>
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              primary
+              floated="right"
+              onClick={() => this.setStatus("confirm")}
+              disabled={fieldProps.field.value === null}
+            >
+              Next
+            </Button>
+          </Card.Content>
+        </Card>
+      </div>
     );
   };
 
   private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
-      <Form.Field>
-        <p>your email is: {fieldProps.form.values.email}</p>
-        <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-        <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
-        <Button
-          primary
-          onClick={() =>
-            this.handleOrder(
-              fieldProps.form.values.email,
-              // HELPPPPPP
-             [ fieldProps.form.initialValues.products.length]
-            )
-          }
-        >
-          Send
-        </Button>
-      </Form.Field>
+      <div style={{ marginLeft: "1.5%", width: "150%" }}>
+        <Card fluid>
+          <Card.Content>
+            <p>your email is: {fieldProps.form.values.email}</p>
+          </Card.Content>
+          <Card.Content>
+            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+          </Card.Content>
+          <Card.Content>
+            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              primary
+              floated="right"
+              onClick={() =>
+                this.handleOrder(
+                  fieldProps.form.values.email,
+                  // HELPPPPPP
+                  [fieldProps.form.initialValues.products.length]
+                )
+              }
+            >
+              Buy
+            </Button>
+          </Card.Content>
+        </Card>
+      </div>
     );
   };
 
@@ -393,7 +446,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <Divider />
 
         <Button
-          onClick={() => this.setStatus("order")}
+          onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
           floated="left"
           disabled={!fieldProps.form.isValid}
           primary
