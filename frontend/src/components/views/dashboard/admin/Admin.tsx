@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Button, Icon } from "semantic-ui-react";
-import Users from "./adminComponents/users";
+import Users from "./adminComponents/users/Users";
 import Statistics from "./adminComponents/statistics";
-import Products from "./adminComponents/products";
+import Products from "./adminComponents/products/Products";
 
 const styles = {
   MenuPadding: {
