@@ -9,7 +9,8 @@ const styles = {
     height: "3vw",
     display: "inline-block"
   },
-  CenterItems: {
+  MenuPositioning: {
+    marginTop: "1vw",
     display: "flex",
     justifyContent: "center"
   }
@@ -37,12 +38,12 @@ class Admin extends React.Component {
 
     return (
       <div>
-        <div style={styles.CenterItems}>
+        <div style={styles.MenuPositioning}>
           <Button.Group basic size="huge">
             <Button
               animated="fade"
               size="massive"
-              positive={(this.state.ActiveItem === "Users")}
+              positive={this.state.ActiveItem === "Users"}
               onClick={() => this.changeMenuItem("Users")}
             >
               <Button.Content visible>
@@ -62,7 +63,7 @@ class Admin extends React.Component {
             <Button
               animated="fade"
               size="massive"
-              positive={(this.state.ActiveItem === "Products")}
+              positive={this.state.ActiveItem === "Products"}
               onClick={() => this.changeMenuItem("Products")}
             >
               <Button.Content visible>
@@ -82,7 +83,7 @@ class Admin extends React.Component {
             <Button
               animated="fade"
               size="massive"
-              header={(this.state.ActiveItem === "Statistics")}
+              header={this.state.ActiveItem === "Statistics"}
               onClick={() => this.changeMenuItem("Statistics")}
             >
               <Button.Content visible>
