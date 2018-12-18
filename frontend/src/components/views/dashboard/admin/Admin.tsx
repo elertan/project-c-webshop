@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Menu, Button, Icon } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
 import Users from "./adminComponents/users";
 import Statistics from "./adminComponents/statistics";
 import Products from "./adminComponents/products";
@@ -25,15 +25,24 @@ class Admin extends React.Component {
   }
 
   public render() {
-    const { ActiveItem } = this.state;
+    // const { ActiveItem } = this.state;
     let PageContent;
-    if (this.state.ActiveItem === "Overview") {
-      PageContent = (
+    if (this.state.ActiveItem === "Users") {
+      PageContent = <Users />;
+    } else if (this.state.ActiveItem === "Statistics") {
+      PageContent = <Statistics />;
+    } else if (this.state.ActiveItem === "Products") {
+      PageContent = <Products />;
+    }
+
+    return (
+      <div>
         <div style={styles.CenterItems}>
-          <Button.Group basic size="massive">
+          <Button.Group basic size="huge">
             <Button
               animated="fade"
               size="massive"
+              positive={(this.state.ActiveItem === "Users")}
               onClick={() => this.changeMenuItem("Users")}
             >
               <Button.Content visible>
@@ -53,6 +62,7 @@ class Admin extends React.Component {
             <Button
               animated="fade"
               size="massive"
+              positive={(this.state.ActiveItem === "Products")}
               onClick={() => this.changeMenuItem("Products")}
             >
               <Button.Content visible>
@@ -72,6 +82,7 @@ class Admin extends React.Component {
             <Button
               animated="fade"
               size="massive"
+              header={(this.state.ActiveItem === "Statistics")}
               onClick={() => this.changeMenuItem("Statistics")}
             >
               <Button.Content visible>
@@ -86,41 +97,6 @@ class Admin extends React.Component {
               </Button.Content>
             </Button>
           </Button.Group>
-        </div>
-      );
-    } else if (this.state.ActiveItem === "Users") {
-      PageContent = <Users />;
-    } else if (this.state.ActiveItem === "Statistics") {
-      PageContent = <Statistics />;
-    } else if (this.state.ActiveItem === "Products") {
-      PageContent = <Products />;
-    }
-
-    return (
-      <div>
-        <div style={styles.MenuPadding}>
-          <Menu inverted fixed="top" fluid>
-            <Menu.Item
-              name="Overview"
-              header={ActiveItem === "Overview"}
-              onClick={() => this.changeMenuItem("Overview")}
-            />
-            <Menu.Item
-              name="Users"
-              header={ActiveItem === "Users"}
-              onClick={() => this.changeMenuItem("Users")}
-            />
-            <Menu.Item
-              name="Products"
-              header={ActiveItem === "Products"}
-              onClick={() => this.changeMenuItem("Products")}
-            />
-            <Menu.Item
-              name="Statistics"
-              header={ActiveItem === "Statistics"}
-              onClick={() => this.changeMenuItem("Statistics")}
-            />
-          </Menu>
         </div>
         <div>{PageContent}</div>
       </div>

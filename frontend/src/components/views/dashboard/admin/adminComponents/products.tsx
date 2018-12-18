@@ -55,7 +55,7 @@ class Products extends React.Component {
 
             <Button.Or />
 
-            <NavLink to={"/admin/addproduct"}>
+            <NavLink to={"admin/addproduct"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="add" />

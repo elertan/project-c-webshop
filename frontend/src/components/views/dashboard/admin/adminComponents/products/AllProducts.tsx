@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Header } from "semantic-ui-react";
+import AdminBackButton from "../../../../reusable/AdminBackButton";
 
 const styles = {
   MenuPadding: {
@@ -14,15 +15,18 @@ const styles = {
 class AllProducts extends React.Component {
   public render() {
     return (
-      <div style={styles.HeaderPositioning}>
-        <Header as="h2">
-          <Header.Content>
-            <div style={styles.HeaderPositioning}>All products</div>
-            <Header.Subheader>
-              An overview of all products currently in the webshop
-            </Header.Subheader>
-          </Header.Content>
-        </Header>
+      <div>
+        <AdminBackButton />
+        <div style={styles.HeaderPositioning}>
+          <Header as="h2">
+            <Header.Content>
+              <div style={styles.HeaderPositioning}>All products</div>
+              <Header.Subheader>
+                An overview of all products currently in the webshop
+              </Header.Subheader>
+            </Header.Content>
+          </Header>
+        </div>
       </div>
     );
   }
