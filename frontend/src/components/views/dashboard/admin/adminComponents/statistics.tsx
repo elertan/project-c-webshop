@@ -1,10 +1,12 @@
 import * as React from "react";
 import { Chart } from "react-google-charts";
+import AdminMenu from "../../../reusable/Admin/AdminMenu";
 
 class Statistics extends React.Component {
   public render() {
     return (
       <div>
+        <AdminMenu />
         <Chart
           width={"50vw"}
           height={"50vh"}
@@ -12,11 +14,12 @@ class Statistics extends React.Component {
           loader={<div>Loading Chart</div>}
           data={[
             ["Name", "Amount"],
-            ["Dennis", 12],
-            ["Tim", 20],
-            ["Robrecht", 7],
-            ["Joris", 54]
-            ]}
+            ["Dennis", 102],
+            ["Tim", 46],
+            ["Robrecht", 32],
+            ["Joris", 54],
+            ["Sidney", 5]
+          ]}
           rootProps={{ "data-testid": "6" }}
           chartPackages={["corechart", "controls"]}
           render={({ renderControl, renderChart }) => {

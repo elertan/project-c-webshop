@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Dropdown } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
 const styles = {
   MenuPositioning: {
-    marginTop: "1vw",
-    display: "flex",
     justifyContent: "center"
   }
 };
@@ -16,51 +14,75 @@ class AdminBackButton extends React.Component {
       <div style={styles.MenuPositioning}>
         <Button.Group basic size="huge">
           <NavLink to={"/admin/users"}>
-            <Button animated="fade" size="massive">
-              <Button.Content visible>
-                {" "}
-                <Icon name="users" />
-                Users
-              </Button.Content>
-              <Button.Content hidden>
-                {" "}
-                <Icon name="users" />
-                Users
-              </Button.Content>
-            </Button>
+            <Dropdown
+              icon="users"
+              text="Users"
+              button
+              simple
+              labeled
+              className="icon"
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  icon="search"
+                  text="Find user"
+                  as={NavLink}
+                  exact
+                  to={`/admin/users/all`}
+                />
+                <Dropdown.Item
+                  icon="add"
+                  text="Add user"
+                  as={NavLink}
+                  exact
+                  to={`/admin/users/adduser`}
+                />
+              </Dropdown.Menu>
+            </Dropdown>
           </NavLink>
-          <Button.Or />
-
+        </Button.Group>
+        <Button.Group basic size="huge">
           <NavLink to={"/admin/products"}>
-            <Button animated="fade" size="massive">
-              <Button.Content visible>
-                {" "}
-                <Icon name="sound" />
-                Products
-              </Button.Content>
-              <Button.Content hidden>
-                {" "}
-                <Icon name="sound" />
-                Products
-              </Button.Content>
-            </Button>
+            <Dropdown
+              icon="sound"
+              text="Products"
+              button
+              simple
+              labeled
+              className="icon"
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  icon="search"
+                  text="Find product"
+                  as={NavLink}
+                  exact
+                  to={`/admin/products/all`}
+                />
+                <Dropdown.Item
+                  icon="add"
+                  text="Add product"
+                  as={NavLink}
+                  exact
+                  to={`/admin/products/addproduct`}
+                />
+              </Dropdown.Menu>
+            </Dropdown>
           </NavLink>
-
-          <Button.Or />
 
           <NavLink to={"/admin/statistics"}>
-            <Button animated="fade" size="massive">
-              <Button.Content visible>
-                {" "}
-                <Icon name="line graph" />
-                Statistics
-              </Button.Content>
-              <Button.Content hidden>
-                {" "}
-                <Icon name="line graph" />
-                Statistics
-              </Button.Content>
-            </Button>
+            <Dropdown
+              icon="line graph"
+              text="Statistics"
+              button
+              simple
+              labeled
+              className="icon"
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item text="Fuck yeaaaaah" />
+              </Dropdown.Menu>
+            </Dropdown>
           </NavLink>
         </Button.Group>
       </div>

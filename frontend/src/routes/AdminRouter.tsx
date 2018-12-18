@@ -11,6 +11,8 @@ import UserContainer from "../components/containers/dashboard/admin/Users/UserCo
 import AllUsersContainer from "../components/containers/dashboard/admin/Users/AllUsersContainer";
 import AddUserContainer from "../components/containers/dashboard/admin/Users/AddUserContainer";
 
+import StatisticsContainer from "../components/containers/dashboard/admin/Statistics/StatisticsContainer";
+
 interface IProps extends RouteComponentProps<{}> {}
 
 const AdminRouter: React.SFC<IProps> = (props: IProps) => {
@@ -25,6 +27,9 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
       <Route exact path={`/admin/users`} component={UserContainer} />
       <Route exact path={`/admin/users/all`} component={AllUsersContainer} />
       <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
+
+      <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
+      
       <Route component={NotFound} />
     </Switch>
   );
