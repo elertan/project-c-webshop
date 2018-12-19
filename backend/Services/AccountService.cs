@@ -20,7 +20,8 @@ namespace backend.Services
     public interface IAccountService
     {
         Task<User> Register(RegisterData data);
-        Task<User> RegisterAnonymously(string email);
+        Task<bool> IsEmailInDb(string email);       
+         Task<User> RegisterAnonymously(string email);
         Task<User> Login(LoginData data);
         Task<User> GetUserByToken(string token);
         Task AddToWishlist(int userId, int productId);
@@ -61,6 +62,13 @@ namespace backend.Services
             _passwordHasher = passwordHasher;
             _appEnv = appEnv;
             _emailService = emailService;
+        }
+        public async Task<bool> IsEmailInDb(string email){
+            if (await _db.Users.AnyAsync(e => e.Email.ToLowerInvariant() == email.ToLowerInvariant()))
+            {
+                return(true);
+            }
+            return(false);
         }
 
         public async Task<User> Register(RegisterData data)
