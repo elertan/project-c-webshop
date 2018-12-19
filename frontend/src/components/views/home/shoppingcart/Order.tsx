@@ -26,6 +26,7 @@ import IUser from "src/models/IUser";
 import IApiError from "src/models/IApiError";
 import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
 import IProduct from "src/models/IProduct";
+import { NavLink } from "react-router-dom";
 
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
@@ -47,8 +48,8 @@ interface IProps {}
 
 const styles = {
   OrderPositioning: {
-    width: "30%",
-    margin: "0.75%"
+    width: "35%",
+    margin: "0.6%"
   },
   PaymentXShipping: {
     width: "150%",
@@ -122,7 +123,11 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
+  private handleOrder = async (
+    newEmail: string,
+    boughtProducts: number[],
+    cartState: CartState
+  ) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
@@ -149,31 +154,31 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     }
   };
 
-  private DoesUserExist = async (newEmail: string) => {
-    console.log("Handling submit");
+  // private DoesUserExist = async (newEmail: string) => {
+  //   console.log("Handling submit");
 
-    const result = await this.props.client.mutate({
-      mutation: createAnonymousOrderMutation,
-      variables: {
-        data: {
-          email: newEmail,
-          productIds: [1]
-        }
-      }
-    });
+  //   const result = await this.props.client.mutate({
+  //     mutation: createAnonymousOrderMutation,
+  //     variables: {
+  //       data: {
+  //         email: newEmail,
+  //         productIds: [1]
+  //       }
+  //     }
+  //   });
 
-    const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
-    if (apiResult.errors) {
-      this.setState({ errors: apiResult.errors });
-      console.log(apiResult.errors);
-    } else {
-      if (this.state.errors.length > 0) {
-        this.setState({ errors: [] });
-      } else {
-        this.setStatus("order");
-      }
-    }
-  };
+  //   const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
+  //   if (apiResult.errors) {
+  //     this.setState({ errors: apiResult.errors });
+  //     console.log(apiResult.errors);
+  //   } else {
+  //     if (this.state.errors.length > 0) {
+  //       this.setState({ errors: [] });
+  //     } else {
+  //       this.setStatus("order");
+  //     }
+  //   }
+  // };
 
   private setStatus = (newStatus: string) => {
     this.setState({ status: newStatus });
@@ -251,7 +256,9 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <div
           style={{
             display: "flex",
-            flexDirection: "row"
+            flexDirection: "row",
+            justifyContent: "center",
+            margin: "5%"
           }}
         >
           <Form className="ui form">
@@ -284,16 +291,25 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private RenderSuccesPage = () => {
+  private RenderSuccesPage = (cartState: CartState) => {
     if (this.state.time === true) {
       return (
-        <div style={{ margin: 400 }}>
-          <p>your order is in progress</p>
+        <div>
+          <div>
+            <p>your order is in progress</p>
+          </div>
           <Loader active>Loading</Loader>
         </div>
       );
     }
-    return <div style={{ margin: 400 }}>your order is send!!!</div>;
+    return (
+      <div>
+        your order is send!!!{" "}
+        <NavLink to="/" onClick={() => cartState.setState({ products: [] })}>
+          Home
+        </NavLink>
+      </div>
+    );
   };
 
   private RenderOrderField = (fieldProps: FieldProps<IFormikValues>) => {
@@ -392,34 +408,39 @@ class Order extends React.Component<WithApolloClient<IProps>> {
 
   private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
-      <div style={{ marginLeft: "1.5%", width: "150%" }}>
-        <Card fluid>
-          <Card.Content>
-            <p>your email is: {fieldProps.form.values.email}</p>
-          </Card.Content>
-          <Card.Content>
-            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-          </Card.Content>
-          <Card.Content>
-            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
-          </Card.Content>
-          <Card.Content extra>
-            <Button
-              primary
-              floated="right"
-              onClick={() =>
-                this.handleOrder(
-                  fieldProps.form.values.email,
-                  // HELPPPPPP
-                  [fieldProps.form.initialValues.products.length]
-                )
-              }
-            >
-              Buy
-            </Button>
-          </Card.Content>
-        </Card>
-      </div>
+      <Subscribe to={[CartState]}>
+        {(cartState: CartState) => (
+          <div style={{ marginLeft: "1.5%", width: "150%" }}>
+            <Card fluid>
+              <Card.Content>
+                <p>your email is: {fieldProps.form.values.email}</p>
+              </Card.Content>
+              <Card.Content>
+                <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+              </Card.Content>
+              <Card.Content>
+                <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+              </Card.Content>
+              <Card.Content extra>
+                <Button
+                  primary
+                  floated="right"
+                  onClick={() =>
+                    this.handleOrder(
+                      fieldProps.form.values.email,
+                      // HELPPPPPP
+                      fieldProps.form.initialValues.products.map(x => x.id),
+                      cartState
+                    )
+                  }
+                >
+                  Buy
+                </Button>
+              </Card.Content>
+            </Card>
+          </div>
+        )}
+      </Subscribe>
     );
   };
 
@@ -446,7 +467,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <Divider />
 
         <Button
-          onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
+          // onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
+          onClick={() => this.setStatus("order")}
           floated="left"
           disabled={!fieldProps.form.isValid}
           primary
@@ -494,7 +516,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   private renderStatusBar = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <div style={styles.PaymentXShipping}>
-        <Step.Group widths={3} size="mini">
+        <Step.Group widths={3} size="small" fluid>
           <Step
             active={this.state.status === "order"}
             onClick={() => this.setStatus("order")}
