@@ -28,8 +28,6 @@ import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
 
-
-
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
     createAnonymousOrder(data: $data) {
@@ -125,7 +123,11 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (newEmail: string, boughtProducts: number[], cartState:CartState) => {
+  private handleOrder = async (
+    newEmail: string,
+    boughtProducts: number[],
+    cartState: CartState
+  ) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
@@ -148,7 +150,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       } else {
         this.startTimeout();
         this.setStatus("succes");
-        
       }
     }
   };
@@ -216,7 +217,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <div
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "row"
           }}
         >
           <Field name="submenu" render={this.renderProducts} />
@@ -256,9 +257,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent:"center",
+            justifyContent: "center",
             margin: "5%"
-            
           }}
         >
           <Form className="ui form">
@@ -296,13 +296,20 @@ class Order extends React.Component<WithApolloClient<IProps>> {
       return (
         <div>
           <div>
-          <p>your order is in progress</p>
+            <p>your order is in progress</p>
           </div>
           <Loader active>Loading</Loader>
         </div>
       );
     }
-    return <div >your order is send!!! <NavLink to="/" onClick={() => cartState.setState({products: []})}>Home</NavLink></div>;
+    return (
+      <div>
+        your order is send!!!{" "}
+        <NavLink to="/" onClick={() => cartState.setState({ products: [] })}>
+          Home
+        </NavLink>
+      </div>
+    );
   };
 
   private RenderOrderField = (fieldProps: FieldProps<IFormikValues>) => {
@@ -399,40 +406,41 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>, ) => {
+  private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <Subscribe to={[CartState]}>
         {(cartState: CartState) => (
-      <div style={{ marginLeft: "1.5%", width: "150%" }}>
-        <Card fluid>
-          <Card.Content>
-            <p>your email is: {fieldProps.form.values.email}</p>
-          </Card.Content>
-          <Card.Content>
-            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-          </Card.Content>
-          <Card.Content>
-            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
-          </Card.Content>
-          <Card.Content extra>
-            <Button
-              primary
-              floated="right"
-              onClick={() =>
-                this.handleOrder(
-                  fieldProps.form.values.email,
-                  // HELPPPPPP
-                  [fieldProps.form.initialValues.products.length],
-                  cartState
-                )
-              }
-            >
-              Buy
-            </Button>
-          </Card.Content>
-        </Card>
-      </div>
-        )}</Subscribe>
+          <div style={{ marginLeft: "1.5%", width: "150%" }}>
+            <Card fluid>
+              <Card.Content>
+                <p>your email is: {fieldProps.form.values.email}</p>
+              </Card.Content>
+              <Card.Content>
+                <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+              </Card.Content>
+              <Card.Content>
+                <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+              </Card.Content>
+              <Card.Content extra>
+                <Button
+                  primary
+                  floated="right"
+                  onClick={() =>
+                    this.handleOrder(
+                      fieldProps.form.values.email,
+                      // HELPPPPPP
+                      fieldProps.form.initialValues.products.map(x => x.id),
+                      cartState
+                    )
+                  }
+                >
+                  Buy
+                </Button>
+              </Card.Content>
+            </Card>
+          </div>
+        )}
+      </Subscribe>
     );
   };
 
