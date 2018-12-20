@@ -124,7 +124,6 @@ namespace backend.Schemas
             var user = await _accountService.Login(data);
             return new ApiResult<User> {Data = user};
         }
-
         private async Task<ApiResult<Order>> CreateOrderResolveFn(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<CreateOrderData>("data");

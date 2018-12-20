@@ -7,7 +7,6 @@ import {
   Icon,
   Step,
   Button,
-  Label,
   Divider,
   Input,
   Segment,
@@ -41,6 +40,11 @@ const createAnonymousOrderMutation = gql`
         message
       }
     }
+  }
+`;
+const isEmailInDbQuery = gql`
+  query isEmailInDb($email: String) {
+    isEmailInDb(data: $email)
   }
 `;
 
@@ -123,11 +127,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (
-    newEmail: string,
-    boughtProducts: number[],
-    cartState: CartState
-  ) => {
+  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
@@ -154,31 +154,23 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     }
   };
 
-  // private DoesUserExist = async (newEmail: string) => {
-  //   console.log("Handling submit");
+  private DoesUserExist = async (newEmail: string) => {
+    console.log("Handling submit");
 
-  //   const result = await this.props.client.mutate({
-  //     mutation: createAnonymousOrderMutation,
-  //     variables: {
-  //       data: {
-  //         email: newEmail,
-  //         productIds: [1]
-  //       }
-  //     }
-  //   });
-
-  //   const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
-  //   if (apiResult.errors) {
-  //     this.setState({ errors: apiResult.errors });
-  //     console.log(apiResult.errors);
-  //   } else {
-  //     if (this.state.errors.length > 0) {
-  //       this.setState({ errors: [] });
-  //     } else {
-  //       this.setStatus("order");
-  //     }
-  //   }
-  // };
+    const result = await this.props.client.query({
+      query: isEmailInDbQuery,
+      variables: {
+        email: newEmail
+      }
+    });
+    const hoi = "isEmailInDb";
+    const apiResult = result.data[hoi];
+    if (apiResult === false) {
+      this.setStatus("order");
+    }
+    this.setState({ errors: "This emailaddress is already used login instead" });
+    console.log(this.state.errors);
+  };
 
   private setStatus = (newStatus: string) => {
     this.setState({ status: newStatus });
@@ -428,9 +420,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                   onClick={() =>
                     this.handleOrder(
                       fieldProps.form.values.email,
-                      // HELPPPPPP
-                      fieldProps.form.initialValues.products.map(x => x.id),
-                      cartState
+                      fieldProps.form.initialValues.products.map(x => x.id)
                     )
                   }
                 >
@@ -447,7 +437,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
     const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
     return (
-      <Form.Field>
+      <Form.Field >
         <Table.Body>
           <Table.Row>
             <Table.Cell>
@@ -467,8 +457,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         <Divider />
 
         <Button
-          // onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
-          onClick={() => this.setStatus("order")}
+          onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
           floated="left"
           disabled={!fieldProps.form.isValid}
           primary
@@ -476,11 +465,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
           Continue with order
         </Button>
 
-        {error && (
-          <Label basic pointing="above" color="red">
-            {error}
-          </Label>
-        )}
+        <p style={{color:"red", width:"80%"}}>{this.state.errors}</p>
       </Form.Field>
     );
   };

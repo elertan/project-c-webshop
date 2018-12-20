@@ -16,7 +16,7 @@ namespace backend.Schemas
         public RootQuery(DatabaseContext db, IEfGraphQLService efGraphQlService, IAccountService accountService, ISearchService searchService) : base(efGraphQlService)
         {
             Name = "Query";
-            
+
             AddQueryConnectionField<ProductGraph, Product>(
                 name: "products",
                 resolve: ctx => db.Products);
@@ -39,7 +39,7 @@ namespace backend.Schemas
             FieldAsync<UserContextGraph, User>(
                 name: "me",
                 arguments: new QueryArguments(
-                    new QueryArgument(typeof(StringGraphType)) {Name = "token"}
+                    new QueryArgument(typeof(StringGraphType)) { Name = "token" }
                 ),
                 resolve: async ctx =>
                 {
@@ -59,12 +59,24 @@ namespace backend.Schemas
             FieldAsync<SearchResultGraph, SearchResult>(
                 name: "searchFor",
                 arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType> {Name="query"}
+                    new QueryArgument<StringGraphType> { Name = "query" }
                 ),
                 resolve: async ctx =>
                 {
                     var query = ctx.GetArgument<string>("query");
                     var searchResult = await searchService.SearchFor(query);
+                    return searchResult;
+                }
+            );
+            FieldAsync<StringGraphType, bool>(
+                name: "IsEmailInDb",
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType> { Name = "data" }
+                ),
+                resolve: async ctx =>
+                {
+                    var query = ctx.GetArgument<string>("data");
+                    var searchResult = await accountService.IsEmailInDb(query);
                     return searchResult;
                 }
             );
