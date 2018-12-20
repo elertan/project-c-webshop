@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
 import * as ReactDataGrid from 'react-data-grid';
 import Column = AdazzleReactDataGrid.Column;
-import {Query} from "react-apollo";
+import { withApollo, WithApolloClient} from "react-apollo";
 import {userState} from "../../../../../../index";
 import IUser from "../../../../../../models/IUser";
 import gql from "graphql-tag";
@@ -48,9 +48,46 @@ query x($token: String!){
 }
 `;
 
-class Users extends React.Component {
-  public render() {
+const UPDATE_USER_MUTATION = gql`
+mutation q($data: UpdateUserDataInput!) {
+  updateUserData(data: $data) {
+    data {
+      id
+      email
+      dateOfBirth
+      firstname
+      lastname
+      password
+      token 
+    }
+  }
+}
+`;
+
+interface IProps {}
+interface IState {
+  users: any[] | null;
+}
+
+class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
+  public state = {
+    users: null
+  };
+
+  public async componentDidMount() {
     const user = userState.state.user! as IUser;
+
+    const result = await this.props.client.query<any>({
+      query: GET_USERS_QUERY,
+      variables: {
+        token: user.token
+      }
+    });
+
+    this.setState({ users: result.data.admin.users });
+  }
+
+  public render() {
     return (
       <div>
         <AdminMenu />
@@ -66,29 +103,17 @@ class Users extends React.Component {
         <div style={{
           margin: 20
         }}>
-          <Query
-            query={GET_USERS_QUERY}
-            variables={{ token: user.token }}
-          >
-            {(qData) => {
-              if (qData.loading) {
-                return <p>Loading...</p>;
-              }
-              if (qData.error) {
-                return <p>{qData.error}</p>;
-              }
-
-              return (
-                <ReactDataGrid
-                  columns={columns}
-                  rowGetter={i => qData.data.admin.users[i]}
-                  rowsCount={qData.data.admin.users.length}
-                  onGridRowsUpdated={this.handleGridRowsUpdated}
-                  enableCellSelect
-                />
-              );
-            }}
-          </Query>
+          {this.state.users === null ?
+            <p>Loading...</p>
+            :
+            <ReactDataGrid
+              columns={columns}
+              rowGetter={i => this.state.users![i]}
+              rowsCount={(this.state.users! as any[]).length}
+              onGridRowsUpdated={this.handleGridRowsUpdated}
+              enableCellSelect
+            />
+          }
         </div>
         <div style={styles.centerItems}>
           <Button.Group basic size="massive">
@@ -126,9 +151,25 @@ class Users extends React.Component {
   }
 
   private handleGridRowsUpdated = async (e: GridRowsUpdatedEvent<any>) => {
+    const user = userState.state.user! as IUser;
 
-    alert(e.fromRow + " => " + JSON.stringify(e.updated));
+    const userId = (this.state.users![e.fromRow] as any).id;
+    const result = await this.props.client.mutate<any>({
+      mutation: UPDATE_USER_MUTATION,
+      variables: {
+        data: {
+          authToken: user.token,
+          ...e.updated,
+          userId
+        }
+      }
+    });
+
+    const newUsers = [...(this.state.users! as any[])];
+    newUsers[e.fromRow] = result.data!.updateUserData.data;
+
+    this.setState({ users: newUsers });
   };
 }
 
-export default Users;
+export default withApollo(Users);
