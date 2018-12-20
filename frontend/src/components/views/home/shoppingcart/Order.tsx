@@ -163,13 +163,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
         email: newEmail
       }
     });
-    const hoi = "isEmailInDb";
-    const apiResult = result.data[hoi];
+    const dataResult = "isEmailInDb";
+    const apiResult = result.data[dataResult];
     if (apiResult === false) {
       this.setStatus("order");
-    }
+    }else{
     this.setState({ errors: "This emailaddress is already used login instead" });
-    console.log(this.state.errors);
+    console.log(this.state.errors);}
   };
 
   private setStatus = (newStatus: string) => {

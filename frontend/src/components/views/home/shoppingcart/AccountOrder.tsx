@@ -23,12 +23,15 @@ import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
 import { userState } from "src";
 
-const createAnonymousOrderMutation = gql`
-  mutation($data: CreateAnonymousOrderInput!) {
-    createAnonymousOrder(data: $data) {
+const createOrderMutation = gql`
+  mutation($data: CreateOrderInput!) {
+    createOrder(data: $data) {
       data {
+        products{
+          id
+        }
         user {
-          anonymousRegistrationToken
+          token
           email
         }
       }
@@ -116,20 +119,20 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
+  private handleOrder = async (boughtProducts: number[], token: string) => {
     console.log("Handling submit");
 
     const result = await this.props.client.mutate({
-      mutation: createAnonymousOrderMutation,
+      mutation: createOrderMutation,
       variables: {
         data: {
-          email: newEmail,
+          authToken: token,
           productIds: boughtProducts
         }
       }
     });
 
-    const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
+    const apiResult = result.data!.createOrder as IApiResult<IUser>;
     if (apiResult.errors) {
       this.setState({ errors: apiResult.errors });
       console.log(apiResult.errors);
@@ -371,8 +374,9 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
               floated="right"
               onClick={() =>
                 this.handleOrder(
-                  user!.email,
-                  fieldProps.form.initialValues.products.map(x => x.id)
+                  
+                  fieldProps.form.initialValues.products.map(x => x.id),
+                  user!.token!
                 )
               }
             >
@@ -384,7 +388,7 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private renderStatusBar = (fieldProps: FieldProps<IFormikValues>) => {
+  private renderStatusBar = () => {
     return (
       <div style={styles.PaymentXShipping}>
         <Step.Group widths={3} size="small" fluid>
