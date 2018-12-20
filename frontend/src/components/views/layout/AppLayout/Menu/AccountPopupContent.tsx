@@ -4,6 +4,7 @@ import UserState from "../../../../../states/UserState";
 import {userState} from "../../../../../index";
 import {RouteComponentProps, withRouter} from "react-router";
 import {NavLink} from "react-router-dom";
+import IUser from "../../../../../models/IUser";
 
 interface IProps {}
 interface IState {}
@@ -20,6 +21,8 @@ class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{
   }
 
   private renderWithUserState = (state: UserState) => {
+    const user = state.state.user! as IUser;
+
     return (
       <div style={{ margin: 20 , marginRight: 30}}>
         <h2 style={{ margin: 0 }}>Howdy!</h2>
@@ -30,6 +33,12 @@ class AccountPopupContent extends React.Component<IProps & RouteComponentProps<{
         }}>
           <li><NavLink to={"/dashboard/overview"}>My Account</NavLink></li>
           <br />
+          {user.isAdmin &&
+            <>
+              <li><NavLink to={"/admin"}>Admin Panel</NavLink></li>
+              <br />
+            </>
+          }
           <li><a href="#" onClick={this.handleLogoutClick}>Logout</a></li>
         </ul>
       </div>

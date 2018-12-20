@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Button, Divider, Icon, Input, Form, Label} from "semantic-ui-react";
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import * as Yup from 'yup';
-import {Link} from "react-router-dom";
+import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import {withApollo, WithApolloClient} from "react-apollo";
 import gql from "graphql-tag";
 import IApiError from "../../../../../models/IApiError";
@@ -31,6 +31,7 @@ mutation ($data: LoginInput!) {
       lastname
       dateOfBirth
       token
+      isAdmin
     }
     errors {
       message
@@ -49,10 +50,20 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(5, 'Password should be at least 5 characters.')
 });
 
-class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState> {
+type Props = WithApolloClient<IProps> & RouteComponentProps<{}>;
+
+class LoginPopupContent extends React.Component<Props, IState> {
   public state = {
     errors: []
   };
+  private redirectTo: string | null;
+
+  constructor(props: Props) {
+    super(props);
+
+    const params = new URLSearchParams(props.location.search);
+    this.redirectTo = params.get("redirectTo");
+  }
 
   public render() {
     return (
@@ -85,7 +96,10 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
       if (this.state.errors.length > 0) {
         this.setState({ errors: [] });
       }
-      userState.login(apiResult.data!);
+      await userState.login(apiResult.data!);
+      if (this.redirectTo !== null) {
+        this.props.history.push(this.redirectTo);
+      }
     }
     formik.setSubmitting(false);
   };
@@ -174,4 +188,4 @@ class LoginPopupContent extends React.Component<WithApolloClient<IProps>, IState
   };
 }
 
-export default withApollo(LoginPopupContent);
+export default withRouter(withApollo(LoginPopupContent));

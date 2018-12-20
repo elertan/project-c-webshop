@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, RouteComponentProps, Switch } from "react-router";
+import {Redirect, Route, RouteComponentProps, Switch} from "react-router";
 import NotFound from "../components/views/errors/NotFound/NotFound";
 import AdminContainer from "../components/containers/dashboard/admin/Admin";
 
@@ -12,24 +12,43 @@ import AllUsersContainer from "../components/containers/dashboard/admin/Users/Al
 import AddUserContainer from "../components/containers/dashboard/admin/Users/AddUserContainer";
 
 import StatisticsContainer from "../components/containers/dashboard/admin/Statistics/StatisticsContainer";
+import {Subscribe} from "unstated";
+import UserState from "../states/UserState";
+import {userState} from "../index";
+import IUser from "../models/IUser";
 
 interface IProps extends RouteComponentProps<{}> {}
 
 const AdminRouter: React.SFC<IProps> = (props: IProps) => {
   return (
     <Switch>
-      <Route exact path={`/admin`} component={AdminContainer} />
-      
-      <Route exact path={`/admin/products`} component={ProductsContainer} />
-      <Route exact path={`/admin/products/all`} component={AllProductsContainer} />
-      <Route exact path={`/admin/products/addproduct`} component={AddProductsContainer} />
+      <Subscribe to={[UserState]}>
+        {() => {
+          if (userState.state.user === null) {
+            return <Redirect to={"/home/explore?authorize=admin&redirectTo=" + encodeURI(props.location.pathname)}/>;
+          }
+          const user = userState.state.user! as IUser;
+          if (!user.isAdmin) {
+            return <Redirect to={"/home/explore?authorize=admin&redirectTo=" + encodeURI(props.location.pathname)}/>;
+          }
 
-      <Route exact path={`/admin/users`} component={UserContainer} />
-      <Route exact path={`/admin/users/all`} component={AllUsersContainer} />
-      <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
+          return (
+            <>
+              <Route exact path={`/admin`} component={AdminContainer} />
 
-      <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
-      
+              <Route exact path={`/admin/products`} component={ProductsContainer} />
+              <Route exact path={`/admin/products/all`} component={AllProductsContainer} />
+              <Route exact path={`/admin/products/addproduct`} component={AddProductsContainer} />
+
+              <Route exact path={`/admin/users`} component={UserContainer} />
+              <Route exact path={`/admin/users/all`} component={AllUsersContainer} />
+              <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
+
+              <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
+            </>
+          );
+        }}
+      </Subscribe>
       <Route component={NotFound} />
     </Switch>
   );

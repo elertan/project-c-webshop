@@ -55,6 +55,30 @@ namespace backend.Schemas
                     }
                 }
             );
+            
+            FieldAsync<AdminContextGraph, User>(
+                name: "admin",
+                arguments: new QueryArguments(
+                    new QueryArgument(typeof(StringGraphType)) {Name = "token"}
+                ),
+                resolve: async ctx =>
+                {
+                    var token = ctx.GetArgument<string>("token");
+                    try
+                    {
+                        var user = await accountService.GetUserByToken(token);
+                        if (!await accountService.IsUserAdmin(user.Id))
+                        {
+                            return null;
+                        }
+                        return user;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            );
 
             FieldAsync<SearchResultGraph, SearchResult>(
                 name: "searchFor",

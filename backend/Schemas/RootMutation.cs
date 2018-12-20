@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using backend.Schemas.Exceptions;
 using backend.Schemas.Graphs;
 using backend.Schemas.Inputs;
 using backend.Services;
@@ -8,6 +10,7 @@ using backend.Utils;
 using backend_datamodel.Models;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Schemas
 {
@@ -15,12 +18,14 @@ namespace backend.Schemas
     {
         private readonly IAccountService _accountService;
         private readonly IOrderService _orderService;
+        private readonly DatabaseContext _db;
 
-        public RootMutation(IEfGraphQLService service, IAccountService accountService, IOrderService orderService) :
+        public RootMutation(IEfGraphQLService service, IAccountService accountService, IOrderService orderService, DatabaseContext db) :
             base(service)
         {
             _accountService = accountService;
             _orderService = orderService;
+            _db = db;
             Name = "Mutation";
 
             Field<ApiResultGraph<UserGraph, User>>(
@@ -106,6 +111,14 @@ namespace backend.Schemas
                     new QueryArgument<NonNullGraphType<ChangeBirthDateInput>> {Name = "data"}
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(ChangeBirthDateResolveFn)
+            );
+
+            Field<ApiResultGraph<UserGraph, User>>(
+                "updateUserData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateUserDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateUserData)
             );
         }
 
@@ -202,6 +215,52 @@ namespace backend.Schemas
 
             await _accountService.ChangeBirthDate(user.Id, data.NewBirthDate);
             return new ApiResult<User> {Data = user};
+        }
+        
+        private async Task<ApiResult<User>> UpdateUserData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateUserData>("data");
+            var user = await _accountService.GetUserByToken(data.AuthToken);
+            if (!await _accountService.IsUserAdmin(user.Id))
+            {
+                throw new NotAdminException(user);
+            }
+
+            var u = await _db.Users.FirstAsync(x => x.Id == data.UserId);
+            
+            if (data.Password != null)
+            {
+                u.Password = _accountService.HashNewPassword(u, data.Password);
+            }
+            
+            if (data.Email != null)
+            {
+                u.Email = data.Email;
+            }
+
+            if (data.Firstname != null)
+            {
+                u.Firstname = data.Firstname;
+            }
+
+            if (data.Lastname != null)
+            {
+                u.Lastname = data.Lastname;
+            }
+
+            if (data.Token != null)
+            {
+                u.Token = data.Token;
+            }
+
+            if (data.DateOfBirth != null)
+            {
+                u.DateOfBirth = DateTime.Parse(data.DateOfBirth);
+            }
+
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<User> {Data = u};
         }
     }
 }

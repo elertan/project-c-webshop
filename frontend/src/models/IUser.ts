@@ -6,6 +6,7 @@ interface IUser extends IBaseModel {
   dateOfBirth?: Date;
   firstname?: string;
   lastname?: string;
+  isAdmin: boolean;
 }
 
 export default IUser;
