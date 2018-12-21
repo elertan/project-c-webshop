@@ -87,7 +87,8 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
     value: "",
     radio: true,
     time: true,
-    cartError: ""
+    cartError: "",
+    process: false,
   };
 
   public render() {
@@ -121,7 +122,7 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
 
   private handleOrder = async (boughtProducts: number[], token: string) => {
     console.log("Handling submit");
-
+    this.setState({process: true})
     const result = await this.props.client.mutate({
       mutation: createOrderMutation,
       variables: {
@@ -139,6 +140,7 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
     } else {
       if (this.state.errors.length > 0) {
         this.setState({ errors: [] });
+        this.setState({proces: false})
       } else {
         this.startTimeout();
         this.setStatus("succes");
@@ -379,6 +381,7 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
                   user!.token!
                 )
               }
+              disabled={this.state.process}
             >
               Buy
             </Button>
