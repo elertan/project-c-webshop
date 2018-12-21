@@ -74,7 +74,7 @@ const initialValues: IFormikValues = {
   status: "option",
   bank: null,
   bankNumber: null,
-  products: []
+  products: [],
 };
 
 const bankOptions = ["ING", "ABN Amro", "Rabobank"];
@@ -93,7 +93,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     value: "",
     radio: true,
     time: true,
-    cartError: ""
+    cartError: "",
+    bankNumber: 0,
   };
 
   public render() {
@@ -338,6 +339,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
+  
     return (
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
         <Card fluid>
@@ -373,13 +375,15 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Card.Description>
               Account number:{"  "}
               <Input
-                id="bankNumber"
+                id="bankNumberUser"
                 iconPosition="left"
                 placeholder="IBAN"
                 size="large"
+
+                
               >
                 <Icon name="btc" />
-                <input {...fieldProps.field} />
+                <input {...fieldProps.field.value}/>
               </Input>
             </Card.Description>
           </Card.Content>
@@ -387,8 +391,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Button
               primary
               floated="right"
-              onClick={() => this.setStatus("confirm")}
-              disabled={fieldProps.field.value === null}
+              onClick={() =>  this.setStatus("confirm")}
+              disabled={fieldProps.field.value === null }
             >
               Next
             </Button>
@@ -411,7 +415,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                 <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
               </Card.Content>
               <Card.Content>
-                <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+                <p>your bankNumber is : {this.state.bankNumber}</p>
               </Card.Content>
               <Card.Content extra>
                 <Button
