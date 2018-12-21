@@ -21,14 +21,28 @@ const styles = {
   }
 };
 
-const columns: Array<Column<any>> = [
+const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (deleteRow) => [
+  {
+    key: "$actions",
+    name: "Actions",
+    getRowMetaData: row => row,
+    formatter: props => (
+      <Button
+        icon
+        onClick={() => deleteRow(props.dependentValues.id)}
+        circular
+      >
+        <Icon name="trash" />
+      </Button>
+    )
+  },
   { key: "id", name: "Id" },
   { key: "email", name: "Email", editable: true },
   { key: "password", name: "Password", editable: true },
   { key: "firstname", name: "Firstname", editable: true },
   { key: "lastname", name: "Lastname", editable: true },
   { key: "dateOfBirth", name: "Date of birth", editable: true },
-  { key: "token", name: "Token", editable: true }
+  { key: "token", name: "Token", editable: true },
 ];
 
 const GET_USERS_QUERY = gql`
@@ -59,6 +73,16 @@ mutation q($data: UpdateUserDataInput!) {
       lastname
       password
       token 
+    }
+  }
+}
+`;
+
+const DELETE_USER_MUTATION = gql`
+mutation q($data: DeleteUserDataInput!) {
+  deleteUser(data: $data) {
+    errors {
+      message
     }
   }
 }
@@ -107,7 +131,7 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
             <p>Loading...</p>
             :
             <ReactDataGrid
-              columns={columns}
+              columns={columns(this.handleDelete)}
               rowGetter={i => this.state.users![i]}
               rowsCount={(this.state.users! as any[]).length}
               onGridRowsUpdated={this.handleGridRowsUpdated}
@@ -168,6 +192,23 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
     const newUsers = [...(this.state.users! as any[])];
     newUsers[e.fromRow] = result.data!.updateUserData.data;
 
+    this.setState({ users: newUsers });
+  };
+
+  private handleDelete = async (id: number) => {
+    const user = userState.state.user! as IUser;
+
+    await this.props.client.mutate<any>({
+      mutation: DELETE_USER_MUTATION,
+      variables: {
+        data: {
+          authToken: user.token,
+          userId: id
+        }
+      }
+    });
+
+    const newUsers = (this.state.users! as any[]).filter(x => x.id !== id);
     this.setState({ users: newUsers });
   };
 }

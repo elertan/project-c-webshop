@@ -71,7 +71,6 @@ class UserState extends Container<IState> {
     this.login(this.state.user);
   }
 
-
   public login = async (user: IUser) => {
     await this.setState({user});
     localStorage.setItem(userKey, JSON.stringify(user));

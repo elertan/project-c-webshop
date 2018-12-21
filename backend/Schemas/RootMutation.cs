@@ -120,6 +120,17 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateUserData)
             );
+
+            Field<ApiResultGraph<UserGraph, User>>(
+                "deleteUser",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteUserDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteUser),
+                    accountService
+                )
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -257,6 +268,17 @@ namespace backend.Schemas
                 u.DateOfBirth = DateTime.Parse(data.DateOfBirth);
             }
 
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<User> {Data = u};
+        }
+        
+        private async Task<ApiResult<User>> DeleteUser(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteUserData>("data");
+            
+            var u = await _db.Users.FirstAsync(x => x.Id == data.UserId);
+            _db.Users.Remove(u);
             await _db.SaveChangesAsync();
 
             return new ApiResult<User> {Data = u};
