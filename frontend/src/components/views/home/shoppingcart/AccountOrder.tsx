@@ -7,32 +7,31 @@ import {
   Icon,
   Step,
   Button,
-  Divider,
   Input,
-  Segment,
   Loader,
   Card
 } from "semantic-ui-react";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
-
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { withApollo, WithApolloClient } from "react-apollo";
-import OrderState from "src/states/OrderState";
 import gql from "graphql-tag";
 import IApiResult from "src/models/IApiResult";
 import IUser from "src/models/IUser";
 import IApiError from "src/models/IApiError";
-import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
+import { userState } from "src";
 
-const createAnonymousOrderMutation = gql`
-  mutation($data: CreateAnonymousOrderInput!) {
-    createAnonymousOrder(data: $data) {
+const createOrderMutation = gql`
+  mutation($data: CreateOrderInput!) {
+    createOrder(data: $data) {
       data {
+        products{
+          id
+        }
         user {
-          anonymousRegistrationToken
+          token
           email
         }
       }
@@ -40,11 +39,6 @@ const createAnonymousOrderMutation = gql`
         message
       }
     }
-  }
-`;
-const isEmailInDbQuery = gql`
-  query isEmailInDb($email: String) {
-    isEmailInDb(data: $email)
   }
 `;
 
@@ -71,10 +65,10 @@ interface IFormikValues {
 
 const initialValues: IFormikValues = {
   email: "",
-  status: "option",
+  status: "order",
   bank: null,
   bankNumber: null,
-  products: [],
+  products: []
 };
 
 const bankOptions = ["ING", "ABN Amro", "Rabobank"];
@@ -85,26 +79,23 @@ const validationSchema = Yup.object().shape({
     .email("Entered email is not a valid email")
 });
 
-class Order extends React.Component<WithApolloClient<IProps>> {
+class AccountOrder extends React.Component<WithApolloClient<IProps>> {
   public state = {
     errors: [],
     email: "",
-    status: "option",
+    status: "order",
     value: "",
     radio: true,
     time: true,
     cartError: "",
-    bankNumber: 0,
     process: false,
   };
 
   public render() {
-    return (
-      <Subscribe to={[OrderState, CartState]}>{this.orderRender}</Subscribe>
-    );
+    return <Subscribe to={[CartState]}>{this.orderRender}</Subscribe>;
   }
 
-  private orderRender = (orderState: OrderState, cartState: CartState) => {
+  private orderRender = (cartState: CartState) => {
     initialValues.products = cartState.state.products;
 
     return (
@@ -129,51 +120,32 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     console.log("Result is: ");
   };
 
-  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
+  private handleOrder = async (boughtProducts: number[], token: string) => {
     console.log("Handling submit");
     this.setState({process: true})
-
     const result = await this.props.client.mutate({
-      mutation: createAnonymousOrderMutation,
+      mutation: createOrderMutation,
       variables: {
         data: {
-          email: newEmail,
+          authToken: token,
           productIds: boughtProducts
         }
       }
     });
 
-    const apiResult = result.data!.createAnonymousOrder as IApiResult<IUser>;
+    const apiResult = result.data!.createOrder as IApiResult<IUser>;
     if (apiResult.errors) {
       this.setState({ errors: apiResult.errors });
       console.log(apiResult.errors);
     } else {
       if (this.state.errors.length > 0) {
-        this.setState({ errors: [] , process: false});
-        
+        this.setState({ errors: [] });
+        this.setState({proces: false})
       } else {
         this.startTimeout();
         this.setStatus("succes");
       }
     }
-  };
-
-  private DoesUserExist = async (newEmail: string) => {
-    console.log("Handling submit");
-
-    const result = await this.props.client.query({
-      query: isEmailInDbQuery,
-      variables: {
-        email: newEmail
-      }
-    });
-    const dataResult = "isEmailInDb";
-    const apiResult = result.data[dataResult];
-    if (apiResult === false) {
-      this.setStatus("order");
-    }else{
-    this.setState({ errors: "This emailaddress is already used login instead" });
-    console.log(this.state.errors);}
   };
 
   private setStatus = (newStatus: string) => {
@@ -190,24 +162,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private renderFormik = (formik: FormikProps<IFormikValues>) => {
-    if (this.state.status === "option") {
-      return (
-        <Form className="ui form">
-          <Field name="option" render={this.renderOptionMenu} />
-          {this.state.errors.length > 0 && (
-            <p style={{ textAlign: "center", marginTop: 15, color: "red" }}>
-              {(this.state.errors[0] as IApiError).message}
-            </p>
-          )}
-          {this.state.cartError.length > 3 && (
-            <p style={{ textAlign: "center", marginTop: 15, color: "red" }}>
-              {this.state.cartError}
-            </p>
-          )}
-        </Form>
-      );
-    }
-
     if (this.state.status === "order") {
       return (
         <div
@@ -309,6 +263,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private RenderOrderField = (fieldProps: FieldProps<IFormikValues>) => {
+    const user = userState.state.user! as IUser;
     return (
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
         <Card fluid>
@@ -316,17 +271,16 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Card.Header>These are your order details </Card.Header>
 
             <Card.Description>
-              your emailaddress: {fieldProps.form.values.email}
+              your emailaddress: {user!.email}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
-            <Button
-              primary
-              floated="right"
-              onClick={() => this.setStatus("option")}
-            >
-              Back
-            </Button>
+            <NavLink to={"/shoppingcart"}>
+              {" "}
+              <Button primary floated="right">
+                Back
+              </Button>
+            </NavLink>
             <Button
               primary
               floated="right"
@@ -342,7 +296,6 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
-  
     return (
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
         <Card fluid>
@@ -378,15 +331,13 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Card.Description>
               Account number:{"  "}
               <Input
-                id="bankNumberUser"
+                id="bankNumber"
                 iconPosition="left"
                 placeholder="IBAN"
                 size="large"
-
-                
               >
                 <Icon name="btc" />
-                <input {...fieldProps.field.value}/>
+                <input {...fieldProps.field} />
               </Input>
             </Card.Description>
           </Card.Content>
@@ -394,8 +345,8 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             <Button
               primary
               floated="right"
-              onClick={() =>  this.setStatus("confirm")}
-              disabled={fieldProps.field.value === null }
+              onClick={() => this.setStatus("confirm")}
+              disabled={fieldProps.field.value === null}
             >
               Next
             </Button>
@@ -406,107 +357,41 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 
   private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
+    const user = userState.state.user! as IUser;
     return (
-      <Subscribe to={[CartState]}>
-        {(cartState: CartState) => (
-          <div style={{ marginLeft: "1.5%", width: "150%" }}>
-            <Card fluid>
-              <Card.Content>
-                <p>your email is: {fieldProps.form.values.email}</p>
-              </Card.Content>
-              <Card.Content>
-                <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-              </Card.Content>
-              <Card.Content>
-                <p>your bankNumber is : {this.state.bankNumber}</p>
-              </Card.Content>
-              <Card.Content extra>
-                <Button
-                  primary
-                  floated="right"
-                  onClick={() =>
-                    this.handleOrder(
-                      fieldProps.form.values.email,
-                      fieldProps.form.initialValues.products.map(x => x.id)
-                    )
-                  }
-                  disabled={this.state.process}
-                >
-                  Buy
-                </Button>
-              </Card.Content>
-            </Card>
-          </div>
-        )}
-      </Subscribe>
-    );
-  };
-
-  private renderEmailField = (fieldProps: FieldProps<IFormikValues>) => {
-    const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
-    return (
-      <Form.Field >
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
-              <Input
-                id="email"
-                iconPosition="left"
-                placeholder="johndoe@example.com"
-                size="large"
-                error={Boolean(error)}
-              >
-                <Icon name="at" />
-                <input {...fieldProps.field} />
-              </Input>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-        <Divider />
-
-        <Button
-          onClick={() => this.DoesUserExist(fieldProps.form.values.email)}
-          floated="left"
-          disabled={!fieldProps.form.isValid}
-          primary
-        >
-          Continue with order
-        </Button>
-
-        <p style={{color:"red", width:"80%"}}>{this.state.errors}</p>
-      </Form.Field>
-    );
-  };
-
-  private renderOptionMenu = (fieldProps: FieldProps<IFormikValues>) => {
-    return (
-      <div style={{ marginTop: 100 }}>
-        <Segment>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center"
-            }}
-          >
-            {" "}
-            <div style={{ width: 240, marginRight: 50 }}>
-              <h4>Existing customers</h4>
-              <LoginPopupContent />
-            </div>
-            <div style={{ width: 240, marginLeft: 50 }}>
-              <h4>Order without account?</h4>
-              <h5>Enter your email</h5>
-              <Field name="email" render={this.renderEmailField} />
-            </div>
-            <Divider vertical>OR</Divider>
-          </div>
-        </Segment>
+      <div style={{ marginLeft: "1.5%", width: "150%" }}>
+        <Card fluid>
+          <Card.Content>
+            <p>your email is: {user!.email}</p>
+          </Card.Content>
+          <Card.Content>
+            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+          </Card.Content>
+          <Card.Content>
+            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              primary
+              floated="right"
+              onClick={() =>
+                this.handleOrder(
+                  
+                  fieldProps.form.initialValues.products.map(x => x.id),
+                  user!.token!
+                )
+              }
+              disabled={this.state.process}
+            >
+              Buy
+            </Button>
+          </Card.Content>
+        </Card>
       </div>
     );
   };
 
-  private renderStatusBar = (fieldProps: FieldProps<IFormikValues>) => {
+  private renderStatusBar = () => {
     return (
       <div style={styles.PaymentXShipping}>
         <Step.Group widths={3} size="small" fluid>
@@ -579,4 +464,4 @@ class Order extends React.Component<WithApolloClient<IProps>> {
   };
 }
 
-export default withApollo(Order);
+export default withApollo(AccountOrder);
