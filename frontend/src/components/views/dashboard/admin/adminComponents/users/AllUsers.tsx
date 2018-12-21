@@ -3,10 +3,10 @@ import { Header } from "semantic-ui-react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
 
 const styles = {
-  MenuPadding: {
+  menuPadding: {
     padding: "2vw"
   },
-  CenterItems: {
+  centerItems: {
     paddingTop: "10vh",
     display: "flex",
     justifyContent: "center"
@@ -18,10 +18,10 @@ class AllUsers extends React.Component {
     return (
       <div>
         <AdminMenu />
-        <div style={styles.CenterItems}>
+        <div style={styles.centerItems}>
           <Header as="h2">
             <Header.Content>
-              <div style={styles.CenterItems}>All users</div>
+              <div style={styles.centerItems}>All users</div>
               <Header.Subheader>All users</Header.Subheader>
             </Header.Content>
           </Header>

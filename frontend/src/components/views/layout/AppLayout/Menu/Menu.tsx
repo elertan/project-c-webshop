@@ -4,7 +4,7 @@ import {
   Menu as SemanticMenu, Popup
 } from 'semantic-ui-react';
 import CartState from "../../../../../states/CartState";
-import {Route} from "react-router-dom";
+import {Route, RouteComponentProps, withRouter} from "react-router-dom";
 import WishlistState from "../../../../../states/WishlistState";
 
 import LoginPopupContent from "./LoginPopupContent";
@@ -21,28 +21,57 @@ interface IProps {
 }
 
 interface IState {
-  ShoppingCartButton: boolean;
-  WishlistButton: boolean;
+  shoppingCartOpen: boolean;
+  wishlistOpen: boolean;
+  loginAccountOpen: boolean;
+  authorize: string | null;
 }
 
-class Menu extends React.Component<IProps, IState> {
-  public state = {
-    ShoppingCartButton: false,
-    WishlistButton: false
-  };
+type Props = IProps & RouteComponentProps<{}>;
+
+class Menu extends React.Component<Props, IState> {
+  constructor(props: Props) {
+    super(props);
+
+    const params = new URLSearchParams(props.location.search);
+    const authorize = params.get('authorize');
+
+    this.state = {
+      shoppingCartOpen: false,
+      wishlistOpen: false,
+      loginAccountOpen: false,
+      authorize
+    };
+  }
+
+  public componentDidMount(): void {
+    if (this.state.authorize !== null) {
+      setTimeout(() => this.setState({loginAccountOpen: true}), 300);
+    }
+  }
 
   public toggleShoppingCart = () => {
     this.setState({
-      ShoppingCartButton: !this.state.ShoppingCartButton,
-      WishlistButton: false
-    })
+      shoppingCartOpen: !this.state.shoppingCartOpen,
+      wishlistOpen: false,
+      loginAccountOpen: false
+    });
   };
 
   public toggleWishlist = () => {
     this.setState({
-      WishlistButton: !this.state.WishlistButton,
-      ShoppingCartButton: false
-    })
+      wishlistOpen: !this.state.wishlistOpen,
+      shoppingCartOpen: false,
+      loginAccountOpen: false
+    });
+  };
+
+  private toggleLoginAccount = () => {
+    this.setState({
+      wishlistOpen: false,
+      shoppingCartOpen: false,
+      loginAccountOpen: !this.state.loginAccountOpen
+    });
   };
 
   public render() {
@@ -55,7 +84,7 @@ class Menu extends React.Component<IProps, IState> {
                 Marshmallow's Webshop
               </SemanticMenu.Item>
             )}/>
-            <div style={{ flex: 1 }}>
+            <div style={{flex: 1}}>
               <SemanticMenu.Item header>
                 <CustomSearch/>
               </SemanticMenu.Item>
@@ -87,7 +116,7 @@ class Menu extends React.Component<IProps, IState> {
         <>
           <Icon name="user"/>
           {user!.firstname} {user!.lastname}
-          <Icon name="caret down" style={{ marginLeft: 5 }} />
+          <Icon name="caret down" style={{marginLeft: 5}}/>
         </>
       );
       popupContent = <AccountPopupContent/>;
@@ -97,12 +126,25 @@ class Menu extends React.Component<IProps, IState> {
         basic
         hideOnScroll
         on="click"
+        open={this.state.loginAccountOpen}
+        onOpen={this.toggleLoginAccount}
+        onClose={this.toggleLoginAccount}
         trigger={
           <SemanticMenu.Item header as="a">
             {menuContent}
           </SemanticMenu.Item>
         }
-        content={popupContent}
+        content={
+          <div>
+            {popupContent}
+            {user === null && this.state.authorize !== null &&
+            <p style={{ margin: 10, color: 'red', textAlign: 'center' }}>Please authorize to continue...</p>
+            }
+            {user !== null && this.state.authorize === "admin" && !user.isAdmin &&
+            <p style={{ margin: 10, color: 'red', textAlign: 'center' }}>You need administrative priveleges to access that area.</p>
+            }
+          </div>
+        }
       />
     );
   };
@@ -113,7 +155,7 @@ class Menu extends React.Component<IProps, IState> {
         basic
         hideOnScroll
         on="click"
-        open={this.state.WishlistButton && !this.state.ShoppingCartButton}
+        open={this.state.wishlistOpen}
         onOpen={this.toggleWishlist}
         onClose={this.toggleWishlist}
         trigger={
@@ -137,7 +179,7 @@ class Menu extends React.Component<IProps, IState> {
       basic
       hideOnScroll
       on="click"
-      open={this.state.ShoppingCartButton && !this.state.WishlistButton}
+      open={this.state.shoppingCartOpen}
       onOpen={this.toggleShoppingCart}
       onClose={this.toggleShoppingCart}
       trigger={
@@ -156,4 +198,4 @@ class Menu extends React.Component<IProps, IState> {
   );
 }
 
-export default Menu;
+export default withRouter(Menu);

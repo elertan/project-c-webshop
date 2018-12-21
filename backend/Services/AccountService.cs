@@ -44,6 +44,10 @@ namespace backend.Services
         /// <param name="localProductIds">The stored wishlist product ids on the given machine</param>
         /// <returns></returns>
         Task MergeWishlist(int userId, List<int> localProductIds);
+
+        string HashNewPassword(User user, string newPassword);
+
+        Task<bool> IsUserAdmin(int userId);
     }
 
     public class AccountService : IAccountService
@@ -289,6 +293,16 @@ namespace backend.Services
             }
             await _db.AddRangeAsync(newEntries);
             await _db.SaveChangesAsync();
+        }
+
+        public string HashNewPassword(User user, string newPassword)
+        {
+            return _passwordHasher.HashPassword(user, newPassword);
+        }
+
+        public async Task<bool> IsUserAdmin(int userId)
+        {
+            return await _db.Admins.FirstOrDefaultAsync(x => x.UserId == userId) != null;
         }
     }
 }

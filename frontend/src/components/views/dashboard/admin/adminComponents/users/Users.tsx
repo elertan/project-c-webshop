@@ -1,37 +1,121 @@
 import * as React from "react";
 import { Header, Button, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import AdminMenu from "../../../../reusable/Admin/AdminMenu"
+import AdminMenu from "../../../../reusable/Admin/AdminMenu";
+import * as ReactDataGrid from 'react-data-grid';
+import Column = AdazzleReactDataGrid.Column;
+import { withApollo, WithApolloClient} from "react-apollo";
+import {userState} from "../../../../../../index";
+import IUser from "../../../../../../models/IUser";
+import gql from "graphql-tag";
+import GridRowsUpdatedEvent = AdazzleReactDataGrid.GridRowsUpdatedEvent;
 
 const styles = {
-  MenuPadding: {
+  menuPadding: {
     padding: "2vw"
   },
-  CenterItems: {
-    paddingTop: "10vh",
+  centerItems: {
+    marginTop: 50,
     display: "flex",
     justifyContent: "center"
   }
 };
 
-class Users extends React.Component {
+const columns: Array<Column<any>> = [
+  { key: "id", name: "Id" },
+  { key: "email", name: "Email", editable: true },
+  { key: "password", name: "Password", editable: true },
+  { key: "firstname", name: "Firstname", editable: true },
+  { key: "lastname", name: "Lastname", editable: true },
+  { key: "dateOfBirth", name: "Date of birth", editable: true },
+  { key: "token", name: "Token", editable: true }
+];
+
+const GET_USERS_QUERY = gql`
+query x($token: String!){
+  admin(token: $token) {
+    users {
+      id
+      email
+      password
+      firstname
+      lastname
+      dateOfBirth
+      token
+      anonymousRegistrationToken
+    }
+  }
+}
+`;
+
+const UPDATE_USER_MUTATION = gql`
+mutation q($data: UpdateUserDataInput!) {
+  updateUserData(data: $data) {
+    data {
+      id
+      email
+      dateOfBirth
+      firstname
+      lastname
+      password
+      token 
+    }
+  }
+}
+`;
+
+interface IProps {}
+interface IState {
+  users: any[] | null;
+}
+
+class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
+  public state = {
+    users: null
+  };
+
+  public async componentDidMount() {
+    const user = userState.state.user! as IUser;
+
+    const result = await this.props.client.query<any>({
+      query: GET_USERS_QUERY,
+      variables: {
+        token: user.token
+      }
+    });
+
+    this.setState({ users: result.data.admin.users });
+  }
+
   public render() {
     return (
       <div>
         <AdminMenu />
-        <div style={styles.CenterItems}>
+        <div style={styles.centerItems}>
           <Header as="h2">
-            <Header.Content>
-              <div style={styles.CenterItems}>User accounts</div>
-              <Header.Subheader>
-                In this tab you can create, read, update and delete information
-                regarding the users
-              </Header.Subheader>
-            </Header.Content>
+            <div style={styles.centerItems}>User accounts</div>
+            <Header.Subheader>
+              In this tab you can create, read, update and delete information
+              regarding the users
+            </Header.Subheader>
           </Header>
         </div>
-        <br />
-        <div style={styles.CenterItems}>
+        <div style={{
+          margin: 20
+        }}>
+          {this.state.users === null ?
+            <p>Loading...</p>
+            :
+            <ReactDataGrid
+              columns={columns}
+              rowGetter={i => this.state.users![i]}
+              rowsCount={(this.state.users! as any[]).length}
+              onGridRowsUpdated={this.handleGridRowsUpdated}
+              enableCellSelect
+            />
+          }
+        </div>
+        <div style={styles.centerItems}>
           <Button.Group basic size="massive">
             <NavLink to={"users/all"}>
               <Button animated="fade" size="massive">
@@ -65,6 +149,27 @@ class Users extends React.Component {
       </div>
     );
   }
+
+  private handleGridRowsUpdated = async (e: GridRowsUpdatedEvent<any>) => {
+    const user = userState.state.user! as IUser;
+
+    const userId = (this.state.users![e.fromRow] as any).id;
+    const result = await this.props.client.mutate<any>({
+      mutation: UPDATE_USER_MUTATION,
+      variables: {
+        data: {
+          authToken: user.token,
+          ...e.updated,
+          userId
+        }
+      }
+    });
+
+    const newUsers = [...(this.state.users! as any[])];
+    newUsers[e.fromRow] = result.data!.updateUserData.data;
+
+    this.setState({ users: newUsers });
+  };
 }
 
-export default Users;
+export default withApollo(Users);

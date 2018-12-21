@@ -25,7 +25,7 @@ const DashboardRouter: React.SFC<IProps> = (props: IProps) => {
         {() => {
           // Don't make routes visible to guest users
           if (userState.state.user === null) {
-            return <Redirect to="/home/explore"/>;
+            return <Redirect to={"/home/explore?authorize=user&redirectTo=" + encodeURI(props.location.pathname)}/>;
           }
           return (
             <>

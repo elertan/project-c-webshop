@@ -3,10 +3,10 @@ import { Header } from "semantic-ui-react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu"
 
 const styles = {
-  MenuPadding: {
+  menuPadding: {
     padding: "2vw"
   },
-  CenterItems: {
+  centerItems: {
     paddingTop: "10vh",
     display: "flex",
     justifyContent: "center"
@@ -18,10 +18,10 @@ class AllProducts extends React.Component {
     return (
       <div>
         <AdminMenu />
-        <div style={styles.CenterItems}>
+        <div style={styles.centerItems}>
           <Header as="h2">
             <Header.Content>
-              <div style={styles.CenterItems}>All products</div>
+              <div style={styles.centerItems}>All products</div>
               <Header.Subheader>
                 An overview of all products currently in the webshop
               </Header.Subheader>

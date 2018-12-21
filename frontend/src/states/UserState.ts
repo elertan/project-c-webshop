@@ -59,17 +59,16 @@ const FETCH_WISHLIST_QUERY = gql`
 
 class UserState extends Container<IState> {
   public state = {
-    user: null
+    user: getStoredUser()
   };
 
   constructor() {
     super();
 
-    const user = getStoredUser();
-    if (user === null) {
+    if (this.state.user === null) {
       return;
     }
-    this.login(user);
+    this.login(this.state.user);
   }
 
 
