@@ -131,6 +131,28 @@ namespace backend.Schemas
                     accountService
                 )
             );
+
+            Field<ApiResultGraph<AlbumGraph, Album>>(
+                "updateAlbumData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateAlbumDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateAlbumData),
+                    accountService
+                )
+            );
+
+            Field<ApiResultGraph<AlbumGraph, Album>>(
+                "deleteAlbum",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteAlbumInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteAlbum),
+                    accountService
+                )
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -282,6 +304,45 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<User> {Data = u};
+        }
+
+        private async Task<ApiResult<Album>> UpdateAlbumData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateAlbumData>("data");
+            
+            var album = await _db.Albums.FirstAsync(x => x.Id == data.AlbumId);
+
+            if (data.AlbumId != null) {
+                album.AlbumId = data.AlbumId; 
+            }
+
+            if (data.AlbumName != null) {
+                album.Name = data.Name;
+            }
+
+            if (data.Label != null) {
+                album.Label = data.Label;
+            }
+
+            if (data.Popularity != null) {
+                album.Popularity = data.Popularity.Value;
+            }
+
+            if (data.AlbumType != null) {
+                album.AlbumType = data.AlbumType;
+            }
+        }
+
+        private async Task<ApiResult<Album>> DeleteAlbum(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteAlbumData>("data");
+
+            var album = await _db.Albums.FirstAsync(x => x.Id == data.AlbumId);
+            
+            _db.Albums.Remove(album);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Album> {Data = album};
         }
     }
 }
