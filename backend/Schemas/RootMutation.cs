@@ -146,7 +146,7 @@ namespace backend.Schemas
             Field<ApiResultGraph<AlbumGraph, Album>>(
                 "deleteAlbum",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<DeleteAlbumInput>> { Name = "data" }
+                    new QueryArgument<NonNullGraphType<DeleteAlbumDataInput>> { Name = "data" }
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
                     GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteAlbum),
@@ -312,11 +312,7 @@ namespace backend.Schemas
             
             var album = await _db.Albums.FirstAsync(x => x.Id == data.AlbumId);
 
-            if (data.AlbumId != null) {
-                album.AlbumId = data.AlbumId; 
-            }
-
-            if (data.AlbumName != null) {
+            if (data.Name != null) {
                 album.Name = data.Name;
             }
 
@@ -331,6 +327,10 @@ namespace backend.Schemas
             if (data.AlbumType != null) {
                 album.AlbumType = data.AlbumType;
             }
+
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Album> { Data = album };
         }
 
         private async Task<ApiResult<Album>> DeleteAlbum(ResolveFieldContext<object> context)
