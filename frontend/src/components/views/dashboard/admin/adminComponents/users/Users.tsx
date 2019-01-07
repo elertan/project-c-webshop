@@ -189,6 +189,10 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
       }
     });
 
+    if (result.errors) {
+      alert("There was an error trying to mutate the user.\nThis has occurred due to an invalid requested mutation.");
+    }
+
     const newUsers = [...(this.state.users! as any[])];
     newUsers[e.fromRow] = result.data!.updateUserData.data;
 

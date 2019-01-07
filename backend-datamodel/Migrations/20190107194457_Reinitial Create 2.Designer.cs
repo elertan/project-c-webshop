@@ -10,8 +10,8 @@ using backend_datamodel.Models;
 namespace backend_datamodel.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181201103428_Added user anonymous registration access token")]
-    partial class Addeduseranonymousregistrationaccesstoken
+    [Migration("20190107194457_Reinitial Create 2")]
+    partial class ReinitialCreate2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime?>("UpdatedAt");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -67,38 +67,6 @@ namespace backend_datamodel.Migrations
                     b.ToTable("Albums");
                 });
 
-            modelBuilder.Entity("backend_datamodel.Models.AlbumXCategory", b =>
-                {
-                    b.Property<int>("CategoryId");
-
-                    b.Property<int>("AlbumId");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int>("Id");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
-                    b.HasKey("CategoryId", "AlbumId");
-
-                    b.HasIndex("AlbumId");
-
-                    b.ToTable("AlbumXCategories");
-                });
-
-            modelBuilder.Entity("backend_datamodel.Models.AlbumXTrack", b =>
-                {
-                    b.Property<int>("AlbumId");
-
-                    b.Property<int>("TrackId");
-
-                    b.HasKey("AlbumId", "TrackId");
-
-                    b.HasIndex("TrackId");
-
-                    b.ToTable("AlbumXTracks");
-                });
-
             modelBuilder.Entity("backend_datamodel.Models.Artist", b =>
                 {
                     b.Property<int>("Id")
@@ -117,19 +85,6 @@ namespace backend_datamodel.Migrations
                     b.ToTable("Artists");
                 });
 
-            modelBuilder.Entity("backend_datamodel.Models.ArtistXTrack", b =>
-                {
-                    b.Property<int>("ArtistId");
-
-                    b.Property<int>("TrackId");
-
-                    b.HasKey("ArtistId", "TrackId");
-
-                    b.HasIndex("TrackId");
-
-                    b.ToTable("ArtistXTracks");
-                });
-
             modelBuilder.Entity("backend_datamodel.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -146,6 +101,98 @@ namespace backend_datamodel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.AlbumXCategory", b =>
+                {
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("AlbumId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Id");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.HasKey("CategoryId", "AlbumId");
+
+                    b.HasIndex("AlbumId");
+
+                    b.ToTable("AlbumXCategories");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.AlbumXTrack", b =>
+                {
+                    b.Property<int>("AlbumId");
+
+                    b.Property<int>("TrackId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Id");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.HasKey("AlbumId", "TrackId");
+
+                    b.HasIndex("TrackId");
+
+                    b.ToTable("AlbumXTracks");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.ArtistXTrack", b =>
+                {
+                    b.Property<int>("ArtistId");
+
+                    b.Property<int>("TrackId");
+
+                    b.HasKey("ArtistId", "TrackId");
+
+                    b.HasIndex("TrackId");
+
+                    b.ToTable("ArtistXTracks");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.OrderXProduct", b =>
+                {
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Id");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderXProducts");
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.Wishlist_UserXProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WishlistUserXProducts");
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Genre", b =>
@@ -221,7 +268,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime?>("UpdatedAt");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -230,25 +277,6 @@ namespace backend_datamodel.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("backend_datamodel.Models.OrderXProduct", b =>
-                {
-                    b.Property<int>("OrderId");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int>("Id");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderXProducts");
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Payment", b =>
@@ -324,7 +352,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<DateTime?>("DateOfBirth");
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Email");
 
@@ -347,7 +375,8 @@ namespace backend_datamodel.Migrations
                 {
                     b.HasOne("backend_datamodel.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Album", b =>
@@ -358,7 +387,7 @@ namespace backend_datamodel.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("backend_datamodel.Models.AlbumXCategory", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.AlbumXCategory", b =>
                 {
                     b.HasOne("backend_datamodel.Models.Album", "Album")
                         .WithMany("AlbumXCategories")
@@ -371,7 +400,7 @@ namespace backend_datamodel.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("backend_datamodel.Models.AlbumXTrack", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.AlbumXTrack", b =>
                 {
                     b.HasOne("backend_datamodel.Models.Album", "Album")
                         .WithMany("AlbumXTracks")
@@ -384,7 +413,7 @@ namespace backend_datamodel.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("backend_datamodel.Models.ArtistXTrack", b =>
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.ArtistXTrack", b =>
                 {
                     b.HasOne("backend_datamodel.Models.Artist", "Artist")
                         .WithMany("ArtistXTracks")
@@ -394,6 +423,32 @@ namespace backend_datamodel.Migrations
                     b.HasOne("backend_datamodel.Models.Track", "Track")
                         .WithMany("ArtistXTracks")
                         .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.OrderXProduct", b =>
+                {
+                    b.HasOne("backend_datamodel.Models.Order", "Order")
+                        .WithMany("OrderXProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("backend_datamodel.Models.Product", "Product")
+                        .WithMany("OrderXProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("backend_datamodel.Models.Crosstables.Wishlist_UserXProduct", b =>
+                {
+                    b.HasOne("backend_datamodel.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("backend_datamodel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -420,19 +475,7 @@ namespace backend_datamodel.Migrations
 
                     b.HasOne("backend_datamodel.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("backend_datamodel.Models.OrderXProduct", b =>
-                {
-                    b.HasOne("backend_datamodel.Models.Order", "Order")
-                        .WithMany("OrderXProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("backend_datamodel.Models.Product", "Product")
-                        .WithMany("OrderXProducts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

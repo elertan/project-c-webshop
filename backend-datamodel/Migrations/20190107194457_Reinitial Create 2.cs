@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace backend_datamodel.Migrations
 {
-    public partial class Reintialcreate : Migration
+    public partial class ReinitialCreate2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -92,10 +92,13 @@ namespace backend_datamodel.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
                     Firstname = table.Column<string>(nullable: true),
                     Lastname = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true)
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    Token = table.Column<string>(nullable: true),
+                    AnonymousRegistrationToken = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,7 +187,7 @@ namespace backend_datamodel.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,7 +197,7 @@ namespace backend_datamodel.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,7 +208,7 @@ namespace backend_datamodel.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
                     InvoiceId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -222,7 +225,62 @@ namespace backend_datamodel.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WishlistUserXProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WishlistUserXProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WishlistUserXProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WishlistUserXProducts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AlbumXCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    AlbumId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumXCategories", x => new { x.CategoryId, x.AlbumId });
+                    table.ForeignKey(
+                        name: "FK_AlbumXCategories_Albums_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Albums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlbumXCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +325,9 @@ namespace backend_datamodel.Migrations
                 name: "AlbumXTracks",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
                     AlbumId = table.Column<int>(nullable: false),
                     TrackId = table.Column<int>(nullable: false)
                 },
@@ -349,6 +410,11 @@ namespace backend_datamodel.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AlbumXCategories_AlbumId",
+                table: "AlbumXCategories",
+                column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AlbumXTracks_TrackId",
                 table: "AlbumXTracks",
                 column: "TrackId");
@@ -397,12 +463,25 @@ namespace backend_datamodel.Migrations
                 name: "IX_Tracks_ProductId",
                 table: "Tracks",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishlistUserXProducts_ProductId",
+                table: "WishlistUserXProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishlistUserXProducts_UserId",
+                table: "WishlistUserXProducts",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "AlbumXCategories");
 
             migrationBuilder.DropTable(
                 name: "AlbumXTracks");
@@ -421,6 +500,9 @@ namespace backend_datamodel.Migrations
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "WishlistUserXProducts");
 
             migrationBuilder.DropTable(
                 name: "Tracks");

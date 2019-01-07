@@ -14,6 +14,7 @@ class AdminBackButton extends React.Component<RouteComponentProps<{}>> {
       <div style={styles.MenuPositioning}>
         <Button onClick={() => this.props.history.push("/home/explore")} color="red">Exit admin panel</Button>
         <Button onClick={() => this.props.history.push("/admin/users")}>Users</Button>
+        <Button onClick={() => this.props.history.push("/admin/albumxtrack")}>Album X Track</Button>
       </div>
     );
   }

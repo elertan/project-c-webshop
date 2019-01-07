@@ -8,6 +8,7 @@ using backend.Schemas.Inputs;
 using backend.Services;
 using backend.Utils;
 using backend_datamodel.Models;
+using backend_datamodel.Models.Crosstables;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -128,6 +129,17 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
                     GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteUser),
+                    accountService
+                )
+            );
+
+            Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
+                "updateAlbumXTrackData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateAlbumXTrackDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateAlbumXTrackData),
                     accountService
                 )
             );
@@ -282,6 +294,28 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<User> {Data = u};
+        }
+        
+        
+        private async Task<ApiResult<AlbumXTrack>> UpdateAlbumXTrackData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateAlbumXTrackData>("data");
+
+            var e = await _db.AlbumXTracks.FirstAsync(x => x.Id == data.AlbumXTrackId);
+            
+            if (data.TrackId != null)
+            {
+                e.TrackId = data.TrackId.Value;
+            }
+            
+            if (data.AlbumId != null)
+            {
+                e.AlbumId = data.AlbumId.Value;
+            }
+
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<AlbumXTrack> {Data = e};
         }
     }
 }

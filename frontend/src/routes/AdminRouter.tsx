@@ -16,6 +16,7 @@ import {Subscribe} from "unstated";
 import UserState from "../states/UserState";
 import {userState} from "../index";
 import IUser from "../models/IUser";
+import AlbumXTrack from "../components/views/dashboard/admin/adminComponents/AlbumXTrack";
 
 interface IProps extends RouteComponentProps<{}> {}
 
@@ -43,6 +44,8 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path={`/admin/users`} component={UserContainer} />
               <Route exact path={`/admin/users/all`} component={AllUsersContainer} />
               <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
+
+              <Route exact path="/admin/albumxtrack" component={AlbumXTrack} />
 
               <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
             </>
