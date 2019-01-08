@@ -176,27 +176,26 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
 
   private handleGridRowsUpdated = async (e: GridRowsUpdatedEvent<any>) => {
     const user = userState.state.user! as IUser;
-
     const userId = (this.state.users![e.fromRow] as any).id;
-    const result = await this.props.client.mutate<any>({
-      mutation: UPDATE_USER_MUTATION,
-      variables: {
-        data: {
-          authToken: user.token,
-          ...e.updated,
-          userId
+    try {
+      const result = await this.props.client.mutate<any>({
+        mutation: UPDATE_USER_MUTATION,
+        variables: {
+          data: {
+            authToken: user.token,
+            ...e.updated,
+            userId
+          }
         }
-      }
-    });
+      });
 
-    if (result.errors) {
+      const newUsers = [...(this.state.users! as any[])];
+      newUsers[e.fromRow] = result.data!.updateUserData.data;
+
+      this.setState({ users: newUsers });
+    } catch {
       alert("There was an error trying to mutate the user.\nThis has occurred due to an invalid requested mutation.");
     }
-
-    const newUsers = [...(this.state.users! as any[])];
-    newUsers[e.fromRow] = result.data!.updateUserData.data;
-
-    this.setState({ users: newUsers });
   };
 
   private handleDelete = async (id: number) => {

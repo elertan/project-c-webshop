@@ -10,9 +10,8 @@ namespace backend.Schemas.Graphs
         public AlbumGraph(DatabaseContext db, IEfGraphQLService service) : base(service)
         {
             Field(a => a.Name, nullable: true).Description("The name of the track.");
-//            Field(a => a.ImageUrl, nullable: true).Description("An image that represents the artist");
             Field(a => a.SpotifyId).Description("The Id that is used on Spotify's database");
-            Field(a => a.Label).Description("The label that released this album");
+            Field(a => a.Label, nullable: true).Description("The label that released this album");
             Field(a => a.Popularity).Description("The popularity of the song on a scale from 1-100");
             Field(a => a.AlbumType).Description("The type of album, either 'single' or 'album'");
 
