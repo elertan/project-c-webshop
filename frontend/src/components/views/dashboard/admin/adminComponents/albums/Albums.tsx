@@ -45,7 +45,7 @@ const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (delete
 
 const GET_ALBUMS_QUERY = gql`
 {
-    albums(first: 999999) {
+    albums(first: 999999, orderBy: {path: "id"}) {
         items {
             id
             name
@@ -168,25 +168,25 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
         const user = userState.state.user! as IUser;
 
         const albumId = (this.state.albums![e.fromRow] as any).id;
-        const result = await this.props.client.mutate<any>({
-            mutation: UPDATE_ALBUM_MUTATION,
-            variables: {
-                data: {
-                    authToken: user.token,
-                    ...e.updated,
-                    albumId
+        try {
+            const result = await this.props.client.mutate<any>({
+                mutation: UPDATE_ALBUM_MUTATION,
+                variables: {
+                    data: {
+                        authToken: user.token,
+                        ...e.updated,
+                        albumId
+                    }
                 }
-            }
-        });
+            });
 
-        if (result.errors) {
-            alert("There was an error trying to mutate the album.\nThis has occurred due to an invalid requested mutation.");
+            const newAlbums = [...(this.state.albums! as any[])];
+            newAlbums[e.fromRow] = result.data!.updateAlbumData.data;
+
+            this.setState({ albums: newAlbums });
+        } catch {
+            alert("There was an error trying to mutate the album.\nThis has occurred due to an invalid requested mutation."); 
         }
-
-        const newAlbums = [...(this.state.albums! as any[])];
-        newAlbums[e.fromRow] = result.data!.updateAlbumData.data;
-
-        this.setState({ albums: newAlbums });
     };
 
     private handleDelete = async (id: number) => {
