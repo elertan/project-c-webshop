@@ -1,6 +1,6 @@
 namespace backend_datamodel.Models.Crosstables
 {
-    public class AlbumXTrack
+    public class AlbumXTrack : BaseEntity
     {
         public int AlbumId { get; set; }
         public Album Album { get; set; }

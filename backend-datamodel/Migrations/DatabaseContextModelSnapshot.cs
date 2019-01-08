@@ -28,7 +28,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime?>("UpdatedAt");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -125,6 +125,12 @@ namespace backend_datamodel.Migrations
                     b.Property<int>("AlbumId");
 
                     b.Property<int>("TrackId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Id");
+
+                    b.Property<DateTime?>("UpdatedAt");
 
                     b.HasKey("AlbumId", "TrackId");
 
@@ -344,7 +350,7 @@ namespace backend_datamodel.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<DateTime?>("DateOfBirth");
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Email");
 
@@ -367,7 +373,8 @@ namespace backend_datamodel.Migrations
                 {
                     b.HasOne("backend_datamodel.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("backend_datamodel.Models.Album", b =>

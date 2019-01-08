@@ -5,6 +5,7 @@ using backend.Schemas.Graphs;
 using backend.Schemas.Graphs.UserContext;
 using backend.Services;
 using backend_datamodel.Models;
+using backend_datamodel.Models.Crosstables;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,9 @@ namespace backend.Schemas
             AddQueryConnectionField<CategoryGraph, Category>(
                 name: "categories",
                 resolve: ctx => db.Categories);
+            AddQueryConnectionField<AlbumXTrackGraph, AlbumXTrack>(
+                name: "albumXTracks",
+                resolve: ctx => db.AlbumXTracks);
 
             FieldAsync<UserContextGraph, User>(
                 name: "me",
