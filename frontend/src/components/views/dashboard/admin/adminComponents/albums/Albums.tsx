@@ -44,16 +44,16 @@ const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (delete
 ];
 
 const GET_ALBUMS_QUERY = gql`
-query x($token: String!){
-  admin(token: $token) {
+{
     albums {
-      id
-      name
-      label
-      popularity
-      albumtype
+        items {
+            id
+            name
+            label
+            popularity
+            albumType
+        }
     }
-  }
 }
 `;
 
@@ -92,19 +92,20 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
     };
 
     public async componentDidMount() {
-        const user = userState.state.user! as IUser;
+        // const user = userState.state.user! as IUser;
+        console.log("Going in...");
+                const data = GET_ALBUMS_QUERY;
+                console.log(data);
+                const albums = data.albums.items[0];
+                console.log(albums);
 
-        const result = await this.props.client.query<any>({
-            query: GET_ALBUMS_QUERY,
-            variables: {
-                token: user.token
-            }
-        });
-
-        this.setState({ albums: result.data.admin.albums });
+                this.setState({ albums });
+                return true;
     }
 
     public render() {
+        console.log(this.state);
+        console.log("Rendering...")
         return (
             <div>
                 <AdminMenu />
