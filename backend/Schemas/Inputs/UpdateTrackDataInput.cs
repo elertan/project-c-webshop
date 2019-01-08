@@ -4,14 +4,14 @@ namespace backend.Schemas.Inputs
 {
     public class UpdateTrackData : AuthorizedData
     {
-        public int Id { get; set; }
+        public int TrackId { get; set; }
     }
     
     public class UpdateTrackDataInput : AuthorizedBaseInputTypeGraph<UpdateTrackData>
     {
         public UpdateTrackDataInput()
         {
-            Field(e => e.Id, nullable: true);
+            Field(e => e.TrackId, nullable: true);
 
         }
     }

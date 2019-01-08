@@ -155,6 +155,28 @@ namespace backend.Schemas
                 )
             );
 
+             Field<ApiResultGraph<TrackGraph, Track>>(
+                "updateTrackData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateTrackDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
+                    accountService
+                )
+            );
+
+             Field<ApiResultGraph<TrackGraph, Track>>(
+                "deleteTrack",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteTrackDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteTrack),
+                    accountService
+                )
+            );
+
             Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
                 "updateAlbumXTrackData",
                 arguments: new QueryArguments(
@@ -162,17 +184,6 @@ namespace backend.Schemas
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
                     GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateAlbumXTrackData),
-                    accountService
-                )
-            );
-
-            Field<ApiResultGraph<TrackGraph, AlbumXTrack>>(
-                "updateTrackData",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<UpdateAlbumXTrackDataInput>> {Name = "data"}
-                ),
-                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
                     accountService
                 )
             );
@@ -395,13 +406,28 @@ namespace backend.Schemas
         {
             var data = context.GetArgument<UpdateTrackData>("data");
 
-            var e = await _db.Tracks.FirstAsync(x => x.Id == data.Id);
-            
-           
+            var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
 
+            
+               // track.Name = data.Name;
+            
+
+           
             await _db.SaveChangesAsync();
 
-            return new ApiResult<Track> {Data = e};
+            return new ApiResult<Track> { Data =  track };
+        }
+
+         private async Task<ApiResult<Track>> DeleteTrack(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteTrackData>("data");
+
+            var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
+
+            _db.Tracks.Remove(track);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Track> { Data = track };
         }
     }
 }
