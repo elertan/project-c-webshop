@@ -143,6 +143,17 @@ namespace backend.Schemas
                     accountService
                 )
             );
+
+            Field<ApiResultGraph<TrackGraph, AlbumXTrack>>(
+                "updateTrackData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateAlbumXTrackDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
+                    accountService
+                )
+            );
         }
 
         private async Task<ApiResult<User>> CreateAccountResolveFn(ResolveFieldContext<object> context)
@@ -316,6 +327,19 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<AlbumXTrack> {Data = e};
+        }
+
+         private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateTrackData>("data");
+
+            var e = await _db.Tracks.FirstAsync(x => x.Id == data.Id);
+            
+           
+
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Track> {Data = e};
         }
     }
 }
