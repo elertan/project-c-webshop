@@ -40,12 +40,12 @@ const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (delete
     { key: "name", name: "Name", editable: true },
     { key: "label", name: "Label", editable: true },
     { key: "popularity", name: "Popularity", editable: true },
-    { key: "albumtype", name: "AlbumType", editable: true },
+    { key: "albumType", name: "AlbumType", editable: true },
 ];
 
 const GET_ALBUMS_QUERY = gql`
 {
-    albums {
+    albums(first: 999999) {
         items {
             id
             name
@@ -65,7 +65,7 @@ mutation q($data: UpdateAlbumDataInput!) {
       name
       label
       popularity
-      albumtype
+      albumType
     }
   }
 }
@@ -93,14 +93,10 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
 
     public async componentDidMount() {
         // const user = userState.state.user! as IUser;
-        console.log("Going in...");
-                const data = GET_ALBUMS_QUERY;
-                console.log(data);
-                const albums = data.albums.items[0];
-                console.log(albums);
-
-                this.setState({ albums });
-                return true;
+        const result = await this.props.client.query<any>({
+            query: GET_ALBUMS_QUERY,
+        });
+        this.setState({ albums: result.data.albums.items });
     }
 
     public render() {
