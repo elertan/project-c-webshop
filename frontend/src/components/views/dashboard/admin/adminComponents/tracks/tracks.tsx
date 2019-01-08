@@ -1,7 +1,6 @@
 import * as React from "react";
 import Column = AdazzleReactDataGrid.Column;
 import { Header, Button, Icon } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
 import * as ReactDataGrid from 'react-data-grid';
 import { withApollo, WithApolloClient } from "react-apollo";
@@ -121,37 +120,7 @@ class Tracks extends React.Component<IProps & WithApolloClient<{}>, IState> {
                         />
                     }
                 </div>
-                <div style={styles.centerItems}>
-                    <Button.Group basic size="massive">
-                        <NavLink to={"users/all"}>
-                            <Button animated="fade" size="massive">
-                                <Button.Content visible>
-                                    <Icon name="search" />
-                                    Find track
-                </Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name="search" />
-                                    Find track
-                </Button.Content>
-                            </Button>
-                        </NavLink>
-
-                        <Button.Or />
-
-                        <NavLink to={"tracks/addtrack"}>
-                            <Button animated="fade" size="massive">
-                                <Button.Content visible>
-                                    <Icon name="add" />
-                                    Add track
-                </Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name="add" />
-                                    Add track
-                </Button.Content>
-                            </Button>
-                        </NavLink>
-                    </Button.Group>
-                </div>
+                
             </div>
         );
     }
