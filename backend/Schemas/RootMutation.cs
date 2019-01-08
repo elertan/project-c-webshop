@@ -346,7 +346,6 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<Album> { Data = album };
-
         }
 
         private async Task<ApiResult<AlbumXTrack>> UpdateAlbumXTrackData(ResolveFieldContext<object> context)
