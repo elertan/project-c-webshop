@@ -96,6 +96,7 @@ namespace backend.Schemas
                     return searchResult;
                 }
             );
+            
             FieldAsync<StringGraphType, bool>(
                 name: "IsEmailInDb",
                 arguments: new QueryArguments(
