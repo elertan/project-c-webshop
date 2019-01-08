@@ -52,8 +52,8 @@ const GET_TRACKS_QUERY = gql`
 `;
 
 const UPDATE_TRACK_MUTATION = gql`
-mutation q($data: UpdatetrackDataInput!) {
-  updatetrackData(data: $data) {
+mutation q($data: UpdateTrackDataInput!) {
+  updateTrackData(data: $data) {
     data {
       id
       name
@@ -64,8 +64,8 @@ mutation q($data: UpdatetrackDataInput!) {
 `;
 
 const DELETE_TRACK_MUTATION = gql`
-mutation q($data: DeletetrackDataInput!) {
-  deletetrack(data: $data) {
+mutation q($data: DeleteTrackDataInput!) {
+  deleteTrack(data: $data) {
     errors {
       message
     }
@@ -172,10 +172,10 @@ class Tracks extends React.Component<IProps & WithApolloClient<{}>, IState> {
                 }
             });
 
-            const newtracks = [...(this.state.tracks! as any[])];
-            newtracks[e.fromRow] = result.data!.updatetrackData.data;
+            const newTracks = [...(this.state.tracks! as any[])];
+            newTracks[e.fromRow] = result.data!.updateTrackData.data;
 
-            this.setState({ tracks: newtracks });
+            this.setState({ tracks: newTracks });
         } catch {
             alert("There was an error trying to mutate the track.\nThis has occurred due to an invalid requested mutation."); 
         }
@@ -194,8 +194,8 @@ class Tracks extends React.Component<IProps & WithApolloClient<{}>, IState> {
             }
         });
 
-        const newtracks = (this.state.tracks! as any[]).filter(x => x.id !== id);
-        this.setState({ tracks: newtracks });
+        const newTracks = (this.state.tracks! as any[]).filter(x => x.id !== id);
+        this.setState({ tracks: newTracks });
     };
 }
 

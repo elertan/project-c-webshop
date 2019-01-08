@@ -406,11 +406,13 @@ namespace backend.Schemas
         {
             var data = context.GetArgument<UpdateTrackData>("data");
 
-            var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
+            var track = await _db.Tracks.FirstAsync(x => x.Id == data.trackId);
 
-            
-               // track.Name = data.Name;
-            
+             
+             if (data.name != null)
+            {
+               track.Name = data.name;
+            }
 
            
             await _db.SaveChangesAsync();
