@@ -17,6 +17,7 @@ class AdminBackButton extends React.Component<RouteComponentProps<{}>> {
         <Button onClick={() => this.props.history.push("/admin/albumxtrack")}>Album X Track</Button>
         <Button onClick={() => this.props.history.push("/admin/tracks")}>Tracks</Button>
         <Button  onClick={() => this.props.history.push("/admin/albums")}>Albums</Button>
+        <Button  onClick={() => this.props.history.push("/admin/artists")}>Artists</Button>
       </div>
     );
   }

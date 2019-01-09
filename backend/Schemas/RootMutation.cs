@@ -176,6 +176,27 @@ namespace backend.Schemas
                     accountService
                 )
             );
+             Field<ApiResultGraph<ArtistGraph, Artist>>(
+                "updateArtistData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateArtistDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateArtistData),
+                    accountService
+                )
+            );
+
+             Field<ApiResultGraph<ArtistGraph, Artist>>(
+                "deleteArtist",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteArtistDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteArtist),
+                    accountService
+                )
+            );
 
             Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
                 "updateAlbumXTrackData",
@@ -430,6 +451,36 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<Track> { Data = track };
+        }
+
+          private async Task<ApiResult<Artist>> UpdateArtistData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateArtistData>("data");
+
+            var artist = await _db.Artists.FirstAsync(x => x.Id == data.ArtistId);
+
+             
+             if (data.Name != null)
+            {
+               artist.Name = data.Name;
+            }
+
+           
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Artist> { Data =  artist };
+        }
+
+         private async Task<ApiResult<Artist>> DeleteArtist(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteArtistData>("data");
+
+            var artist = await _db.Artists.FirstAsync(x => x.Id == data.ArtistId);
+
+            _db.Artists.Remove(artist);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Artist> { Data = artist };
         }
     }
 }
