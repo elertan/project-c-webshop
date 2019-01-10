@@ -141,31 +141,10 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
         </div>
         <div style={styles.centerItems}>
           <Button.Group basic size="massive">
-            <NavLink to={"users/all"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="search" />
-                  Find user
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="search" />
-                  Find user
-                </Button.Content>
-              </Button>
-            </NavLink>
-
-            <Button.Or />
-
             <NavLink to={"users/adduser"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
+              <Button size="massive">
                   <Icon name="add" />
                   Add user
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="add" />
-                  Add user
-                </Button.Content>
               </Button>
             </NavLink>
           </Button.Group>
@@ -176,27 +155,26 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
 
   private handleGridRowsUpdated = async (e: GridRowsUpdatedEvent<any>) => {
     const user = userState.state.user! as IUser;
-
     const userId = (this.state.users![e.fromRow] as any).id;
-    const result = await this.props.client.mutate<any>({
-      mutation: UPDATE_USER_MUTATION,
-      variables: {
-        data: {
-          authToken: user.token,
-          ...e.updated,
-          userId
+    try {
+      const result = await this.props.client.mutate<any>({
+        mutation: UPDATE_USER_MUTATION,
+        variables: {
+          data: {
+            authToken: user.token,
+            ...e.updated,
+            userId
+          }
         }
-      }
-    });
+      });
 
-    if (result.errors) {
+      const newUsers = [...(this.state.users! as any[])];
+      newUsers[e.fromRow] = result.data!.updateUserData.data;
+
+      this.setState({ users: newUsers });
+    } catch {
       alert("There was an error trying to mutate the user.\nThis has occurred due to an invalid requested mutation.");
     }
-
-    const newUsers = [...(this.state.users! as any[])];
-    newUsers[e.fromRow] = result.data!.updateUserData.data;
-
-    this.setState({ users: newUsers });
   };
 
   private handleDelete = async (id: number) => {
