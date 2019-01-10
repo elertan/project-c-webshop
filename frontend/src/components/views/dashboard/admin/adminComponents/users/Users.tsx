@@ -141,31 +141,10 @@ class Users extends React.Component<IProps & WithApolloClient<{}>, IState> {
         </div>
         <div style={styles.centerItems}>
           <Button.Group basic size="massive">
-            <NavLink to={"users/all"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="search" />
-                  Find user
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="search" />
-                  Find user
-                </Button.Content>
-              </Button>
-            </NavLink>
-
-            <Button.Or />
-
             <NavLink to={"users/adduser"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
+              <Button size="massive">
                   <Icon name="add" />
                   Add user
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="add" />
-                  Add user
-                </Button.Content>
               </Button>
             </NavLink>
           </Button.Group>

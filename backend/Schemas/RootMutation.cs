@@ -133,6 +133,17 @@ namespace backend.Schemas
                 )
             );
 
+            Field<ApiResultGraph<UserGraph, User>>(
+                "addUser",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AddUserDataInput>> {Name = "data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddUser),
+                    accountService
+                )
+            );
+
             Field<ApiResultGraph<AlbumGraph, Album>>(
                 "updateAlbumData",
                 arguments: new QueryArguments(
@@ -316,6 +327,31 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<User> { Data = u };
+        }
+
+        private async Task<ApiResult<User>> AddUser(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddUserData>("data");
+
+            if (await _db.Users.FirstOrDefaultAsync(x => x.Email == data.Email) != null)
+            {
+                throw new Exception("A user with that email already exists.");
+            }
+
+            var user = new User
+            {
+                Email = data.Email,
+                Token = data.Token,
+                Firstname = data.Firstname,
+                Lastname = data.Lastname,
+                DateOfBirth = data.DateOfBirth
+            };
+            user.Password = _accountService.HashNewPassword(user, data.Password);
+
+            await _db.Users.AddAsync(user);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<User> {Data = user};
         }
 
         private async Task<ApiResult<Album>> UpdateAlbumData(ResolveFieldContext<object> context)
