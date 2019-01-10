@@ -19,7 +19,7 @@ interface IFormikValues {
 interface IProps {}
 
 const ADD_ARTIST_MUTATION = gql`
-  {
+  mutation a($data: AddArtistDataInput!) {
     addArtist(data: $data) {
       data {
         name
@@ -67,8 +67,8 @@ const AddArtist: React.FunctionComponent<
           variables: {
             data: {
               authToken: user.token,
-              Name: values.AritstName,
-              SpotifyId: values.ID
+              name: values.AritstName,
+              spotifyId: values.ID
             }
           }
         });
