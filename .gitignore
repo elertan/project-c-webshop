@@ -6,3 +6,4 @@ node_modules/
 .idea/
 build/
 dist/
+frontend/src/components/views/dashboard/admin/adminComponents/Artists/Artists.tsx
