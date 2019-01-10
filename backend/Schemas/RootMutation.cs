@@ -166,6 +166,49 @@ namespace backend.Schemas
                 )
             );
 
+             Field<ApiResultGraph<TrackGraph, Track>>(
+                "updateTrackData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateTrackDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
+                    accountService
+                )
+            );
+
+             Field<ApiResultGraph<TrackGraph, Track>>(
+                "deleteTrack",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteTrackDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteTrack),
+                    accountService
+                )
+            );
+             Field<ApiResultGraph<ArtistGraph, Artist>>(
+                "updateArtistData",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UpdateArtistDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateArtistData),
+                    accountService
+                )
+            );
+
+             Field<ApiResultGraph<ArtistGraph, Artist>>(
+                "deleteArtist",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<DeleteArtistDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteArtist),
+                    accountService
+                )
+            );
+
             Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
                 "updateAlbumXTrackData",
                 arguments: new QueryArguments(
@@ -414,6 +457,66 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<Album> { Data = album };
+        }
+
+         private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateTrackData>("data");
+
+            var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
+
+             
+             if (data.Name != null)
+            {
+               track.Name = data.Name;
+            }
+
+           
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Track> { Data =  track };
+        }
+
+         private async Task<ApiResult<Track>> DeleteTrack(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteTrackData>("data");
+
+            var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
+
+            _db.Tracks.Remove(track);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Track> { Data = track };
+        }
+
+          private async Task<ApiResult<Artist>> UpdateArtistData(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<UpdateArtistData>("data");
+
+            var artist = await _db.Artists.FirstAsync(x => x.Id == data.ArtistId);
+
+             
+             if (data.Name != null)
+            {
+               artist.Name = data.Name;
+            }
+
+           
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Artist> { Data =  artist };
+        }
+
+         private async Task<ApiResult<Artist>> DeleteArtist(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteArtistData>("data");
+
+            var artist = await _db.Artists.FirstAsync(x => x.Id == data.ArtistId);
+
+            _db.Artists.Remove(artist);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Artist> { Data = artist };
         }
     }
 }
