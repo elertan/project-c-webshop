@@ -136,13 +136,24 @@ namespace backend.Schemas
             Field<ApiResultGraph<UserGraph, User>>(
                 "addUser",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<AddUserDataInput>> {Name = "data"}
+                    new QueryArgument<NonNullGraphType<AddUserDataInput>> { Name = "data" }
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
                     GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddUser),
                     accountService
                 )
             );
+        
+            Field<ApiResultGraph<ArtistGraph, Artist>>(
+    "addArtist",
+    arguments: new QueryArguments(
+        new QueryArgument<NonNullGraphType<AddArtistDataInput>> { Name = "data" }
+    ),
+    resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+        GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddArtist),
+        accountService
+    )
+);
 
             Field<ApiResultGraph<AlbumGraph, Album>>(
                 "updateAlbumData",
@@ -166,48 +177,48 @@ namespace backend.Schemas
                 )
             );
 
-             Field<ApiResultGraph<TrackGraph, Track>>(
-                "updateTrackData",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<UpdateTrackDataInput>> { Name = "data" }
-                ),
-                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
-                    accountService
-                )
-            );
+            Field<ApiResultGraph<TrackGraph, Track>>(
+               "updateTrackData",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<UpdateTrackDataInput>> { Name = "data" }
+               ),
+               resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                   GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateTrackData),
+                   accountService
+               )
+           );
 
-             Field<ApiResultGraph<TrackGraph, Track>>(
-                "deleteTrack",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<DeleteTrackDataInput>> { Name = "data" }
-                ),
-                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteTrack),
-                    accountService
-                )
-            );
-             Field<ApiResultGraph<ArtistGraph, Artist>>(
-                "updateArtistData",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<UpdateArtistDataInput>> { Name = "data" }
-                ),
-                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateArtistData),
-                    accountService
-                )
-            );
+            Field<ApiResultGraph<TrackGraph, Track>>(
+               "deleteTrack",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<DeleteTrackDataInput>> { Name = "data" }
+               ),
+               resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                   GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteTrack),
+                   accountService
+               )
+           );
+            Field<ApiResultGraph<ArtistGraph, Artist>>(
+               "updateArtistData",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<UpdateArtistDataInput>> { Name = "data" }
+               ),
+               resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                   GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateArtistData),
+                   accountService
+               )
+           );
 
-             Field<ApiResultGraph<ArtistGraph, Artist>>(
-                "deleteArtist",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<DeleteArtistDataInput>> { Name = "data" }
-                ),
-                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteArtist),
-                    accountService
-                )
-            );
+            Field<ApiResultGraph<ArtistGraph, Artist>>(
+               "deleteArtist",
+               arguments: new QueryArguments(
+                   new QueryArgument<NonNullGraphType<DeleteArtistDataInput>> { Name = "data" }
+               ),
+               resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                   GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteArtist),
+                   accountService
+               )
+           );
 
             Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
                 "updateAlbumXTrackData",
@@ -394,7 +405,28 @@ namespace backend.Schemas
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
 
-            return new ApiResult<User> {Data = user};
+            return new ApiResult<User> { Data = user };
+        }
+
+        private async Task<ApiResult<Artist>> AddArtist(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddArtistData>("data");
+
+            if (await _db.Artists.FirstOrDefaultAsync(x => x.Name == data.Name) != null)
+            {
+                throw new Exception("A artist with that name already exists.");
+            }
+
+            var artist = new Artist
+            {
+                Name = data.Name,
+                SpotifyId = data.SpotifyId
+            };
+
+            await _db.Artists.AddAsync(artist);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Artist> { Data = artist };
         }
 
         private async Task<ApiResult<Album>> UpdateAlbumData(ResolveFieldContext<object> context)
@@ -459,25 +491,25 @@ namespace backend.Schemas
             return new ApiResult<Album> { Data = album };
         }
 
-         private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
+        private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateTrackData>("data");
 
             var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
 
-             
-             if (data.Name != null)
+
+            if (data.Name != null)
             {
-               track.Name = data.Name;
+                track.Name = data.Name;
             }
 
-           
+
             await _db.SaveChangesAsync();
 
-            return new ApiResult<Track> { Data =  track };
+            return new ApiResult<Track> { Data = track };
         }
 
-         private async Task<ApiResult<Track>> DeleteTrack(ResolveFieldContext<object> context)
+        private async Task<ApiResult<Track>> DeleteTrack(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<DeleteTrackData>("data");
 
@@ -489,25 +521,25 @@ namespace backend.Schemas
             return new ApiResult<Track> { Data = track };
         }
 
-          private async Task<ApiResult<Artist>> UpdateArtistData(ResolveFieldContext<object> context)
+        private async Task<ApiResult<Artist>> UpdateArtistData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateArtistData>("data");
 
             var artist = await _db.Artists.FirstAsync(x => x.Id == data.ArtistId);
 
-             
-             if (data.Name != null)
+
+            if (data.Name != null)
             {
-               artist.Name = data.Name;
+                artist.Name = data.Name;
             }
 
-           
+
             await _db.SaveChangesAsync();
 
-            return new ApiResult<Artist> { Data =  artist };
+            return new ApiResult<Artist> { Data = artist };
         }
 
-         private async Task<ApiResult<Artist>> DeleteArtist(ResolveFieldContext<object> context)
+        private async Task<ApiResult<Artist>> DeleteArtist(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<DeleteArtistData>("data");
 
