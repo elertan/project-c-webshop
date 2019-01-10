@@ -420,7 +420,7 @@ namespace backend.Schemas
             var artist = new Artist
             {
                 Name = data.Name,
-                SpotifyId = data.ID
+                SpotifyId = data.SpotifyId
             };
 
             await _db.Artists.AddAsync(artist);

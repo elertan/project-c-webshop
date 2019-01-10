@@ -1,36 +1,35 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import {Button, Form} from "semantic-ui-react";
-import {Field, FieldProps, Formik, FormikProps} from "formik";
-import {useRef} from "react";
+import { Button, Form } from "semantic-ui-react";
+import { Field, FieldProps, Formik, FormikProps } from "formik";
+import { useRef } from "react";
 import * as Yup from "yup";
-import {withApollo, WithApolloClient} from "react-apollo";
+import { withApollo, WithApolloClient } from "react-apollo";
 import gql from "graphql-tag";
-import {userState} from "../../../../../../index";
+import { userState } from "../../../../../../index";
 import IUser from "../../../../../../models/IUser";
 import IApiResult from "../../../../../../models/IApiResult";
-import {RouteComponentProps, withRouter} from "react-router";
-
+import { RouteComponentProps, withRouter } from "react-router";
 
 interface IFormikValues {
   AritstName: string;
   ID: string;
 }
 
-interface IProps {
-}
+interface IProps {}
 
 const ADD_ARTIST_MUTATION = gql`
-mutation x($data: AddArtistDataInput!) {
-  addArtist(data: $data) {
-    data {
-      id
-    }
-    errors {
-      message
+  {
+    addArtist(data: $data) {
+      data {
+        name
+        spotifyId
+      }
+      errors {
+        message
+      }
     }
   }
-}
 `;
 
 const styles = {
@@ -40,47 +39,55 @@ const styles = {
 };
 
 const initialFormikValues: IFormikValues = {
-  AritstName: '',
-  ID: ''
+  AritstName: "",
+  ID: ""
 };
 
 const validationSchema = Yup.object().shape({
-  AritstName: Yup.string().min(1).required(),
-  ID: Yup.string().min(1).required()
+  AritstName: Yup.string()
+    .min(1)
+    .required(),
+  ID: Yup.string()
+    .min(1)
+    .required()
 });
 
-const AddArtist: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteComponentProps<{}>> = (props) => {
-  const handleFormikSubmit = useRef(async (values: IFormikValues, formikProps: FormikProps<IFormikValues>) => {
-    formikProps.setSubmitting(true);
+const AddArtist: React.FunctionComponent<
+  IProps & WithApolloClient<{}> & RouteComponentProps<{}>
+> = props => {
+  const handleFormikSubmit = useRef(
+    async (values: IFormikValues, formikProps: FormikProps<IFormikValues>) => {
+      formikProps.setSubmitting(true);
 
-    const user = userState.state.user! as IUser;
+      const user = userState.state.user! as IUser;
 
-    try {
-      const result = await props.client.mutate<any>({
-        mutation: ADD_ARTIST_MUTATION,
-        variables: {
-          "data": {
-            "authToken": user.token,
-            "Name": values.AritstName,
-            "ID": values.ID
+      try {
+        const result = await props.client.mutate<any>({
+          mutation: ADD_ARTIST_MUTATION,
+          variables: {
+            data: {
+              authToken: user.token,
+              Name: values.AritstName,
+              SpotifyId: values.ID
+            }
           }
+        });
+
+        const apiResult = result.data!.addArtist as IApiResult<IUser>;
+        if (apiResult.errors) {
+          apiResult.errors.map(x => "Error: " + x.message).forEach(alert);
+          return;
         }
-      });
-
-      const apiResult = result.data!.addArtist as IApiResult<IUser>;
-      if (apiResult.errors) {
-        apiResult.errors.map(x => "Error: " + x.message).forEach(alert);
+      } catch {
+        alert("Something went wrong trying to create this artist");
         return;
+      } finally {
+        formikProps.setSubmitting(false);
       }
-    } catch {
-      alert("Something went wrong trying to create this artist");
-      return;
-    } finally {
-      formikProps.setSubmitting(false);
-    }
 
-    props.history.push("/admin/artists");
-  }).current;
+      props.history.push("/admin/artists");
+    }
+  ).current;
 
   const renderFormik = useRef((formikProps: FormikProps<IFormikValues>) => {
     return (
@@ -88,25 +95,33 @@ const AddArtist: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCo
         <Field
           name="AritstName"
           render={(fieldProps: FieldProps<IFormikValues>) => {
-            const error = Boolean(formikProps.touched.AritstName && formikProps.errors.AritstName);
+            const error = Boolean(
+              formikProps.touched.AritstName && formikProps.errors.AritstName
+            );
             return (
               <Form.Field required error={error}>
                 <label>Aritst Name</label>
-                <input {...fieldProps.field} placeholder="Aritst Name" required/>
+                <input
+                  {...fieldProps.field}
+                  placeholder="Aritst Name"
+                  required
+                />
               </Form.Field>
-            )
+            );
           }}
         />
         <Field
           name="ID"
           render={(fieldProps: FieldProps<IFormikValues>) => {
-            const error = Boolean(formikProps.touched.ID && formikProps.errors.ID);
+            const error = Boolean(
+              formikProps.touched.ID && formikProps.errors.ID
+            );
             return (
               <Form.Field required error={error}>
                 <label>Artist ID</label>
-                <input {...fieldProps.field} placeholder="Artist ID" required/>
+                <input {...fieldProps.field} placeholder="Artist ID" required />
               </Form.Field>
-            )
+            );
           }}
         />
         <Button
@@ -114,14 +129,16 @@ const AddArtist: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCo
           primary
           disabled={formikProps.isSubmitting || !formikProps.isValid}
           size="large"
-        >Add</Button>
+        >
+          Add
+        </Button>
       </>
-    )
+    );
   }).current;
 
   return (
     <div>
-      <AdminMenu/>
+      <AdminMenu />
       <div style={styles.root}>
         <Form>
           <h1>Add new artist</h1>
