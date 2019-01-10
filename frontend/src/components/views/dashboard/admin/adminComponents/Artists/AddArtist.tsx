@@ -10,7 +10,7 @@ import {userState} from "../../../../../../index";
 import IUser from "../../../../../../models/IUser";
 import IApiResult from "../../../../../../models/IApiResult";
 import {RouteComponentProps, withRouter} from "react-router";
-import IArtist from "src/models/IArtist";
+
 
 interface IFormikValues {
   AritstName: string;
@@ -67,7 +67,7 @@ const AddArtist: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCo
         }
       });
 
-      const apiResult = result.data!.addArtist as IApiResult<IArtist>;
+      const apiResult = result.data!.addArtist as IApiResult<IUser>;
       if (apiResult.errors) {
         apiResult.errors.map(x => "Error: " + x.message).forEach(alert);
         return;

@@ -143,6 +143,17 @@ namespace backend.Schemas
                     accountService
                 )
             );
+        
+            Field<ApiResultGraph<ArtistGraph, Artist>>(
+    "addArtist",
+    arguments: new QueryArguments(
+        new QueryArgument<NonNullGraphType<AddArtistDataInput>> { Name = "data" }
+    ),
+    resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+        GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddArtist),
+        accountService
+    )
+);
 
             Field<ApiResultGraph<AlbumGraph, Album>>(
                 "updateAlbumData",
@@ -409,7 +420,7 @@ namespace backend.Schemas
             var artist = new Artist
             {
                 Name = data.Name,
-                SpotifyId = data.SpotifyId
+                SpotifyId = data.ID
             };
 
             await _db.Artists.AddAsync(artist);
