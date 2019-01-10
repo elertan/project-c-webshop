@@ -1,6 +1,6 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import {Button, Form, Message} from "semantic-ui-react";
+import {Button, Form} from "semantic-ui-react";
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import {useRef} from "react";
 import * as Yup from "yup";
@@ -20,7 +20,8 @@ interface IFormikValues {
   dateOfBirth: string;
 }
 
-interface IProps {}
+interface IProps {
+}
 
 const ADD_USER_MUTATION = gql`
 mutation x($data: AddUserDataInput!) {
@@ -37,7 +38,7 @@ mutation x($data: AddUserDataInput!) {
 
 const styles = {
   root: {
-    padding: 50
+    padding: 100
   } as React.CSSProperties
 };
 
@@ -52,10 +53,10 @@ const initialFormikValues: IFormikValues = {
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
-  password: Yup.string().min(5).required(),
-  token: Yup.string().min(5).required(),
-  firstname: Yup.string().required(),
-  lastname: Yup.string().required()
+  password: Yup.string().min(1).required(),
+  token: Yup.string().min(1).required(),
+  firstname: Yup.string().min(1).required(),
+  lastname: Yup.string().min(1).required()
 });
 
 const AddUser: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteComponentProps<{}>> = (props) => {
@@ -95,82 +96,97 @@ const AddUser: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteComp
     props.history.push("/admin/users");
   }).current;
 
-  const renderFormik = useRef((formikProps: FormikProps<IFormikValues>) => (
-    <>
-      <Field
-        name="email"
-        render={(fieldProps: FieldProps<IFormikValues>) => {
-          const error = fieldProps.form.touched.email && fieldProps.form.errors.email;
-
-          return (
-            <Form.Field required error={Boolean(error)}>
-              <label>Email</label>
-              <input
-                {...fieldProps.field}
-                placeholder="Email"
-                type="email"
-                required
-              />
-              {error &&
-              <Message error content={error}/>
-              }
-            </Form.Field>
-          )
-        }}
-      />
-      <Form.Field required>
-        <label>Password</label>
+  const renderFormik = useRef((formikProps: FormikProps<IFormikValues>) => {
+    return (
+      <>
+        <Field
+          name="email"
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.email && formikProps.errors.email);
+            return (
+              <>
+                <Form.Field required error={error}>
+                  <label>Email</label>
+                  <input
+                    {...fieldProps.field}
+                    placeholder="Email"
+                    type="email"
+                    required
+                  />
+                </Form.Field>
+              </>
+            )
+          }}
+        />
         <Field
           name="password"
-          render={(fieldProps: FieldProps<IFormikValues>) => (
-            <input {...fieldProps.field} placeholder="Password" required/>
-          )}
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.password && formikProps.errors.password);
+            return (
+              <Form.Field required error={error}>
+                <label>Password</label>
+                <input {...fieldProps.field} placeholder="Password" required/>
+              </Form.Field>
+            )
+          }}
         />
-      </Form.Field>
-      <Form.Field required>
-        <label>Token</label>
         <Field
           name="token"
-          render={(fieldProps: FieldProps<IFormikValues>) => (
-            <input {...fieldProps.field} placeholder="Token" required/>
-          )}
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.token && formikProps.errors.token);
+            return (
+              <Form.Field required error={error}>
+                <label>Token</label>
+                <input {...fieldProps.field} placeholder="Token" required/>
+              </Form.Field>
+            )
+          }}
         />
-      </Form.Field>
-      <Form.Field required>
-        <label>First Name</label>
         <Field
           name="firstname"
-          render={(fieldProps: FieldProps<IFormikValues>) => (
-            <input {...fieldProps.field} placeholder="First Name" required/>
-          )}
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.firstname && formikProps.errors.firstname);
+            return (
+              <Form.Field required error={error}>
+                <label>First Name</label>
+                <input {...fieldProps.field} placeholder="First Name" required/>
+              </Form.Field>
+            )
+          }}
         />
-      </Form.Field>
-      <Form.Field required>
-        <label>Last Name</label>
         <Field
           name="lastname"
-          render={(fieldProps: FieldProps<IFormikValues>) => (
-            <input {...fieldProps.field} placeholder="Last Name" required/>
-          )}
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.lastname && formikProps.errors.lastname);
+            return (
+              <Form.Field required error={error}>
+                <label>Last Name</label>
+                <input {...fieldProps.field} placeholder="Last Name" required/>
+              </Form.Field>
+            )
+          }}
         />
-      </Form.Field>
-      <Form.Field required>
-        <label>Date of Birth</label>
         <Field
           name="dateOfBirth"
-          render={(fieldProps: FieldProps<IFormikValues>) => (
-            <input {...fieldProps.field} placeholder="Date of Birth" type="date" required/>
-          )}
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.dateOfBirth && formikProps.errors.dateOfBirth);
+            return (
+              <Form.Field required error={error}>
+                <label>Date of Birth</label>
+                <input {...fieldProps.field} placeholder="Date of Birth" type="date" required/>
+              </Form.Field>
+            )
+          }}
         />
-      </Form.Field>
-      <Button
-        onClick={formikProps.submitForm}
-        primary
-        disabled={formikProps.isSubmitting || !formikProps.isValid}
-      >Add</Button>
-      <code>{JSON.stringify(formikProps.values)}</code>
-    </>
-  )).current;
+        <Button
+          onClick={formikProps.submitForm}
+          primary
+          disabled={formikProps.isSubmitting || !formikProps.isValid}
+          size="large"
+        >Add</Button>
+      </>
+    )
+  }).current;
 
   return (
     <div>
