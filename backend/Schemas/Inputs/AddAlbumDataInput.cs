@@ -8,7 +8,7 @@ namespace backend.Schemas.Inputs
         public int AlbumId { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }
-        public int? Popularity { get; set; }
+        public int Popularity { get; set; }
         public string AlbumType { get; set; }
     }
 

@@ -477,14 +477,14 @@ namespace backend.Schemas
         {
             var data = ctx.GetArgument<AddAlbumData>("data");
 
-            if (await _db.Albums.FirstOrDefaultAsync(x => x.AlbumId == data.AlbumId) != null)
+            if (await _db.Albums.FirstOrDefaultAsync(x => x.Id == data.AlbumId) != null)
             {
                 throw new Exception("An album with that ID already exists.");
             }
 
             var album = new Album
             {
-                AlbumId = data.AlbumId,
+                Id = data.AlbumId,
                 Name = data.Name,
                 Label = data.Label,
                 Popularity = data.Popularity,
@@ -548,14 +548,14 @@ namespace backend.Schemas
         {
             var data = ctx.GetArgument<AddTrackData>("data");
 
-            if (await _db.Tracks.FirstOrDefaultAsync(x => x.TrackId == data.TrackId) != null)
+            if (await _db.Tracks.FirstOrDefaultAsync(x => x.Id == data.TrackId) != null)
             {
                 throw new Exception("A track with that ID already exists.");
             }
 
             var track = new Track
             {
-                TrackId = data.TrackId,
+                Id = data.TrackId,
                 Name = data.Name,
             };
 
