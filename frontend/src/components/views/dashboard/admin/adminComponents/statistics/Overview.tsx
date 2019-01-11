@@ -1,6 +1,6 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Button, Icon, Header } from "semantic-ui-react";
+import { Button, Icon, Header, Label } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import {
   Tooltip,
@@ -55,14 +55,14 @@ class Statistics extends React.Component {
         "Account registrations": 26,
         Profit: 4800,
         Albums: 2100,
-        Singles: 1200
+        Singles: 7900
       },
       {
         Month: "June",
         "Account registrations": 9,
         Profit: 3800,
         Albums: 2500,
-        Singles: 7900
+        Singles: 1200
       }
     ];
     return (
@@ -76,6 +76,9 @@ class Statistics extends React.Component {
                 <Header.Subheader>
                   The total amount of registrations for each month
                 </Header.Subheader>
+                <Label color="red">
+                  You had less registrations than last month
+                </Label>
               </Header>
               <AreaChart
                 width={400}
@@ -110,6 +113,7 @@ class Statistics extends React.Component {
                 <Header.Subheader>
                   The total amount of profit for each month
                 </Header.Subheader>
+                <Label color="red">You made less profit than last month</Label>
               </Header>
               <AreaChart
                 width={450}
@@ -145,6 +149,11 @@ class Statistics extends React.Component {
                 <Header.Subheader>
                   The amount of albums and singles sold each month
                 </Header.Subheader>
+                <Label color="green">
+                  You sold more albums than last month
+                </Label>
+
+                <Label color="red">You sold less singles than last month</Label>
               </Header>
               <AreaChart
                 width={400}
@@ -235,7 +244,6 @@ class Statistics extends React.Component {
             </NavLink>
           </Button.Group>
         </div>
-
       </div>
     );
   }
