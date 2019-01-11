@@ -71,7 +71,7 @@ class Statistics extends React.Component {
         <div style={styles.centerItems}>
           <div style={styles.centerItems}>
             <div>
-              <Header as="h3" textAlign="center">
+              <Header as="h2" textAlign="center">
                 <Header.Content>Account registrations</Header.Content>
                 <Header.Subheader>
                   The total amount of registrations for each month
@@ -89,7 +89,7 @@ class Statistics extends React.Component {
                     <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" />
+                <XAxis dataKey="Month" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="5 5" />
                 <Tooltip />
@@ -105,7 +105,7 @@ class Statistics extends React.Component {
           </div>
           <div style={styles.centerItems}>
             <div>
-              <Header as="h3" textAlign="center">
+              <Header as="h2" textAlign="center">
                 <Header.Content>Profit</Header.Content>
                 <Header.Subheader>
                   The total amount of profit for each month
@@ -140,7 +140,7 @@ class Statistics extends React.Component {
 
           <div style={styles.centerItems}>
             <div>
-              <Header as="h3" textAlign="center">
+              <Header as="h2" textAlign="center">
                 <Header.Content>Albums and singles</Header.Content>
                 <Header.Subheader>
                   The amount of albums and singles sold each month
@@ -187,7 +187,7 @@ class Statistics extends React.Component {
 
         <div style={styles.centerItems}>
           <Header as="h2" textAlign="center">
-            <Header.Content>Statistics</Header.Content>
+            <Header.Content>More statistics</Header.Content>
             <Header.Subheader>
               Choose a category to see more stats
             </Header.Subheader>
@@ -195,7 +195,7 @@ class Statistics extends React.Component {
         </div>
         <div style={styles.centerItems}>
           <Button.Group basic size="massive">
-            <NavLink to={"users/all"}>
+            <NavLink to={"/admin/statistics/user"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="users" />
@@ -208,9 +208,7 @@ class Statistics extends React.Component {
               </Button>
             </NavLink>
 
-            <Button.Or />
-
-            <NavLink to={"albums/addalbum"}>
+            <NavLink to={"/admin/statistics/music"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="music" />
@@ -223,9 +221,7 @@ class Statistics extends React.Component {
               </Button>
             </NavLink>
 
-            <Button.Or />
-
-            <NavLink to={"albums/addalbum"}>
+            <NavLink to={"/admin/statistics/finance"}>
               <Button animated="fade" size="massive">
                 <Button.Content visible>
                   <Icon name="euro sign" />
@@ -239,6 +235,7 @@ class Statistics extends React.Component {
             </NavLink>
           </Button.Group>
         </div>
+
       </div>
     );
   }
