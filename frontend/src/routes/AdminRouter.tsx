@@ -11,7 +11,8 @@ import UserContainer from "../components/containers/dashboard/admin/Users/UserCo
 import AllUsersContainer from "../components/containers/dashboard/admin/Users/AllUsersContainer";
 import AddUserContainer from "../components/containers/dashboard/admin/Users/AddUserContainer";
 
-import StatisticsContainer from "../components/containers/dashboard/admin/Statistics/StatisticsContainer";
+import StatisticsOverviewContainer from "../components/containers/dashboard/admin/Statistics/StatisticsOverviewContainer";
+
 import {Subscribe} from "unstated";
 import UserState from "../states/UserState";
 import {userState} from "../index";
@@ -58,7 +59,7 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path="/admin/artists" component={ArtistContainer} />
               <Route exact path="/admin/artists/addartists" component={AddArtistsContainer} />
 
-              <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
+              <Route exact path={`/admin/statistics`} component={StatisticsOverviewContainer} />
             </>
           );
         }}

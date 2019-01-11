@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteProps } from "react-router";
-import Statistics from "../../../../views/dashboard/admin/adminComponents/statistics";
+import Statistics from "../../../../views/dashboard/admin/adminComponents/statistics/statistics";
 
 interface IProps extends RouteProps {}
 interface IState {}
