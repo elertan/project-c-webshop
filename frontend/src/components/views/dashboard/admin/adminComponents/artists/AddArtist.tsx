@@ -1,15 +1,15 @@
 import * as React from "react";
-import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Button, Form } from "semantic-ui-react";
-import { Field, FieldProps, Formik, FormikProps } from "formik";
-import { useRef } from "react";
-import * as Yup from "yup";
-import { withApollo, WithApolloClient } from "react-apollo";
 import gql from "graphql-tag";
-import { userState } from "../../../../../../index";
-import IUser from "../../../../../../models/IUser";
+import {withApollo, WithApolloClient} from "react-apollo";
+import {Field, FieldProps, Formik, FormikProps} from "formik";
+import {useRef} from "react";
+import {RouteComponentProps, withRouter} from "react-router";
+import AdminMenu from "../../../../reusable/Admin/AdminMenu";
+import {userState} from "../../../../../../index";
 import IApiResult from "../../../../../../models/IApiResult";
-import { RouteComponentProps, withRouter } from "react-router";
+import IUser from "../../../../../../models/IUser";
+import {Button, Form} from "semantic-ui-react";
+import * as Yup from "yup";
 
 interface IFormikValues {
   AritstName: string;
@@ -103,7 +103,7 @@ const AddArtist: React.FunctionComponent<
                 <label>Aritst Name</label>
                 <input
                   {...fieldProps.field}
-                  placeholder="Aritst Name"
+                  placeholder="Artist Name"
                   required
                 />
               </Form.Field>

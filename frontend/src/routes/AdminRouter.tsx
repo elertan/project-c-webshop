@@ -20,8 +20,8 @@ import AlbumXTrack from "../components/views/dashboard/admin/adminComponents/Alb
 import AlbumContainer from "src/components/containers/dashboard/admin/Albums/AlbumContainer";
 import TrackContainer from "src/components/containers/dashboard/admin/Tracks/TrackContainer";
 
-import ArtistContainer from "src/components/containers/dashboard/admin/artists/ArtistContainer";
-import AddArtistsContainer from "src/components/containers/dashboard/admin/artists/AddArtistContainer";
+import ArtistContainer from "src/components/containers/dashboard/admin/Artists/ArtistContainer";
+import AddArtistsContainer from "src/components/containers/dashboard/admin/Artists/AddArtistContainer";
 
 interface IProps extends RouteComponentProps<{}> {}
 
