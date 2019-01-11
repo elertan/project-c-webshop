@@ -189,7 +189,7 @@ class Statistics extends React.Component {
           <Header as="h2" textAlign="center">
             <Header.Content>More statistics</Header.Content>
             <Header.Subheader>
-              Choose a category to see more stats
+              Choose a category to see more statistics
             </Header.Subheader>
           </Header>
         </div>
