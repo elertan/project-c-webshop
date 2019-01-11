@@ -484,7 +484,6 @@ namespace backend.Schemas
 
             var album = new Album
             {
-                Id = data.AlbumId,
                 Name = data.Name,
                 Label = data.Label,
                 Popularity = data.Popularity,
@@ -555,7 +554,6 @@ namespace backend.Schemas
 
             var track = new Track
             {
-                Id = data.TrackId,
                 Name = data.Name,
             };
 
@@ -587,7 +585,7 @@ namespace backend.Schemas
 
             if (await _db.Artists.FirstOrDefaultAsync(x => x.Name == data.Name) != null)
             {
-                throw new Exception("A artist with that name already exists.");
+                throw new Exception("An artist with that name already exists.");
             }
 
             var artist = new Artist
