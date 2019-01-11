@@ -23,42 +23,42 @@ class Statistics extends React.Component {
   public render() {
     const data = [
       {
-        name: "January",
+        Month: "January",
         "Account registrations": 12,
         Profit: 2400,
         Albums: 1400,
         Singles: 5400
       },
       {
-        name: "February",
+        Month: "February",
         "Account registrations": 17,
         Profit: 1400,
         Albums: 2200,
         Singles: 3200
       },
       {
-        name: "March",
+        Month: "March",
         "Account registrations": 14,
         Profit: 9800,
         Albums: 2900,
         Singles: 4100
       },
       {
-        name: "April",
+        Month: "April",
         "Account registrations": 19,
         Profit: 3900,
         Albums: 2000,
         Singles: 6700
       },
       {
-        name: "May",
+        Month: "May",
         "Account registrations": 26,
         Profit: 4800,
         Albums: 2100,
         Singles: 1200
       },
       {
-        name: "June",
+        Month: "June",
         "Account registrations": 9,
         Profit: 3800,
         Albums: 2500,
@@ -118,7 +118,7 @@ class Statistics extends React.Component {
                 data={data}
                 margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
               >
-                <XAxis dataKey="name" />
+                <XAxis dataKey="Month" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="5 5" />
                 <defs>
@@ -163,7 +163,7 @@ class Statistics extends React.Component {
                     <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" />
+                <XAxis dataKey="Month" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="5 5" />
                 <Tooltip />
