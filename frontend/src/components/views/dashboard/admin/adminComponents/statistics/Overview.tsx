@@ -1,6 +1,6 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Button, Icon, Header, Divider } from "semantic-ui-react";
+import { Button, Icon, Header } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import {
   Tooltip,
@@ -13,7 +13,7 @@ import {
 
 const styles = {
   centerItems: {
-    marginTop: 50,
+    marginTop: 30,
     display: "flex",
     justifyContent: "center"
   }
@@ -68,7 +68,6 @@ class Statistics extends React.Component {
     return (
       <div>
         <AdminMenu />
-        <Divider horizontal>QUICK STATS</Divider>
         <div style={styles.centerItems}>
           <div style={styles.centerItems}>
             <div>
