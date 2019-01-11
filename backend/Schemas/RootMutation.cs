@@ -143,17 +143,17 @@ namespace backend.Schemas
                     accountService
                 )
             );
-        
-            Field<ApiResultGraph<ArtistGraph, Artist>>(
-    "addArtist",
-    arguments: new QueryArguments(
-        new QueryArgument<NonNullGraphType<AddArtistDataInput>> { Name = "data" }
-    ),
-    resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-        GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddArtist),
-        accountService
-    )
-);
+
+            Field<ApiResultGraph<AlbumGraph, Album>>(
+                "addAlbum",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AddAlbumDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddAlbum),
+                    accountService
+                )
+            );
 
             Field<ApiResultGraph<AlbumGraph, Album>>(
                 "updateAlbumData",
@@ -178,6 +178,17 @@ namespace backend.Schemas
             );
 
             Field<ApiResultGraph<TrackGraph, Track>>(
+                "addTrack",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AddTrackDataInput>> { Name = "data" }
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddTrack),
+                    accountService
+                )
+            );
+
+            Field<ApiResultGraph<TrackGraph, Track>>(
                "updateTrackData",
                arguments: new QueryArguments(
                    new QueryArgument<NonNullGraphType<UpdateTrackDataInput>> { Name = "data" }
@@ -197,7 +208,19 @@ namespace backend.Schemas
                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteTrack),
                    accountService
                )
-           );
+            );
+
+            Field<ApiResultGraph<ArtistGraph, Artist>>(
+                 "addArtist",
+                 arguments: new QueryArguments(
+                     new QueryArgument<NonNullGraphType<AddArtistDataInput>> { Name = "data" }
+                 ),
+                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                     GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddArtist),
+                     accountService
+                 )
+             );
+
             Field<ApiResultGraph<ArtistGraph, Artist>>(
                "updateArtistData",
                arguments: new QueryArguments(
@@ -408,27 +431,6 @@ namespace backend.Schemas
             return new ApiResult<User> { Data = user };
         }
 
-        private async Task<ApiResult<Artist>> AddArtist(ResolveFieldContext<object> ctx)
-        {
-            var data = ctx.GetArgument<AddArtistData>("data");
-
-            if (await _db.Artists.FirstOrDefaultAsync(x => x.Name == data.Name) != null)
-            {
-                throw new Exception("A artist with that name already exists.");
-            }
-
-            var artist = new Artist
-            {
-                Name = data.Name,
-                SpotifyId = data.SpotifyId
-            };
-
-            await _db.Artists.AddAsync(artist);
-            await _db.SaveChangesAsync();
-
-            return new ApiResult<Artist> { Data = artist };
-        }
-
         private async Task<ApiResult<Album>> UpdateAlbumData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateAlbumData>("data");
@@ -459,6 +461,42 @@ namespace backend.Schemas
             return new ApiResult<Album> { Data = album };
         }
 
+        private async Task<ApiResult<Album>> DeleteAlbum(ResolveFieldContext<object> context)
+        {
+            var data = context.GetArgument<DeleteAlbumData>("data");
+
+            var album = await _db.Albums.FirstAsync(x => x.Id == data.AlbumId);
+
+            _db.Albums.Remove(album);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Album> { Data = album };
+        }
+
+        private async Task<ApiResult<Album>> AddAlbum(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddAlbumData>("data");
+
+            if (await _db.Albums.FirstOrDefaultAsync(x => x.AlbumId == data.AlbumId) != null)
+            {
+                throw new Exception("An album with that ID already exists.");
+            }
+
+            var album = new Album
+            {
+                AlbumId = data.AlbumId,
+                Name = data.Name,
+                Label = data.Label,
+                Popularity = data.Popularity,
+                AlbumType = data.AlbumType
+            };
+
+            await _db.Albums.AddAsync(album);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Album> { Data = album };
+        }
+
         private async Task<ApiResult<AlbumXTrack>> UpdateAlbumXTrackData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateAlbumXTrackData>("data");
@@ -479,30 +517,15 @@ namespace backend.Schemas
             return new ApiResult<AlbumXTrack> { Data = e };
         }
 
-        private async Task<ApiResult<Album>> DeleteAlbum(ResolveFieldContext<object> context)
-        {
-            var data = context.GetArgument<DeleteAlbumData>("data");
-
-            var album = await _db.Albums.FirstAsync(x => x.Id == data.AlbumId);
-
-            _db.Albums.Remove(album);
-            await _db.SaveChangesAsync();
-
-            return new ApiResult<Album> { Data = album };
-        }
-
         private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateTrackData>("data");
 
             var track = await _db.Tracks.FirstAsync(x => x.Id == data.TrackId);
-
-
             if (data.Name != null)
             {
                 track.Name = data.Name;
             }
-
 
             await _db.SaveChangesAsync();
 
@@ -521,6 +544,27 @@ namespace backend.Schemas
             return new ApiResult<Track> { Data = track };
         }
 
+        private async Task<ApiResult<Track>> AddTrack(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddTrackData>("data");
+
+            if (await _db.Tracks.FirstOrDefaultAsync(x => x.TrackId == data.TrackId) != null)
+            {
+                throw new Exception("A track with that ID already exists.");
+            }
+
+            var track = new Track
+            {
+                TrackId = data.TrackId,
+                Name = data.Name,
+            };
+
+            await _db.Tracks.AddAsync(track);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<Track> { Data = track };
+        }
+
         private async Task<ApiResult<Artist>> UpdateArtistData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateArtistData>("data");
@@ -533,7 +577,26 @@ namespace backend.Schemas
                 artist.Name = data.Name;
             }
 
+            await _db.SaveChangesAsync();
 
+            return new ApiResult<Artist> { Data = artist };
+        }
+        private async Task<ApiResult<Artist>> AddArtist(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddArtistData>("data");
+
+            if (await _db.Artists.FirstOrDefaultAsync(x => x.Name == data.Name) != null)
+            {
+                throw new Exception("A artist with that name already exists.");
+            }
+
+            var artist = new Artist
+            {
+                Name = data.Name,
+                SpotifyId = data.SpotifyId
+            };
+
+            await _db.Artists.AddAsync(artist);
             await _db.SaveChangesAsync();
 
             return new ApiResult<Artist> { Data = artist };
