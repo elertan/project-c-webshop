@@ -70,92 +70,122 @@ class Statistics extends React.Component {
         <AdminMenu />
         <Divider horizontal>QUICK STATS</Divider>
         <div style={styles.centerItems}>
-          <AreaChart
-            width={400}
-            height={150}
-            data={data}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="5 5" />
-            <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="Account registrations"
-              stroke="#82ca9d"
-              fillOpacity={1}
-              fill="url(#colorAC)"
-            />
-          </AreaChart>
+          <div style={styles.centerItems}>
+            <div>
+              <Header as="h3" textAlign="center">
+                <Header.Content>Account registrations</Header.Content>
+                <Header.Subheader>
+                  The total amount of registrations for each month
+                </Header.Subheader>
+              </Header>
+              <AreaChart
+                width={400}
+                height={150}
+                data={data}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="5 5" />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="Account registrations"
+                  stroke="#82ca9d"
+                  fillOpacity={1}
+                  fill="url(#colorAC)"
+                />
+              </AreaChart>
+            </div>
+          </div>
+          <div style={styles.centerItems}>
+            <div>
+              <Header as="h3" textAlign="center">
+                <Header.Content>Profit</Header.Content>
+                <Header.Subheader>
+                  The total amount of profit for each month
+                </Header.Subheader>
+              </Header>
+              <AreaChart
+                width={450}
+                height={150}
+                data={data}
+                margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="5 5" />
+                <defs>
+                  <linearGradient id="colorP" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="Profit"
+                  stroke="#82ca9d"
+                  fillOpacity={1}
+                  fill="url(#colorP)"
+                />
+              </AreaChart>
+            </div>
+          </div>
 
-          <AreaChart
-            width={450}
-            height={150}
-            data={data}
-            margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
-          >
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="5 5" />
-            <defs>
-              <linearGradient id="colorP" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="Profit"
-              stroke="#82ca9d"
-              fillOpacity={1}
-              fill="url(#colorP)"
-            />
-          </AreaChart>
-
-          <AreaChart
-            width={400}
-            height={150}
-            data={data}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorA" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="5 5" />
-            <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="Albums"
-              stroke="#8884d8"
-              fillOpacity={1}
-              fill="url(#colorA)"
-            />
-            <Area
-              type="monotone"
-              dataKey="Singles"
-              stroke="#82ca9d"
-              fillOpacity={1}
-              fill="url(#colorS)"
-            />
-          </AreaChart>
+          <div style={styles.centerItems}>
+            <div>
+              <Header as="h3" textAlign="center">
+                <Header.Content>Albums and singles</Header.Content>
+                <Header.Subheader>
+                  The amount of albums and singles sold each month
+                </Header.Subheader>
+              </Header>
+              <AreaChart
+                width={400}
+                height={150}
+                data={data}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorA" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="5 5" />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="Albums"
+                  stroke="#8884d8"
+                  fillOpacity={1}
+                  fill="url(#colorA)"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="Singles"
+                  stroke="#82ca9d"
+                  fillOpacity={1}
+                  fill="url(#colorS)"
+                />
+              </AreaChart>
+            </div>
+          </div>
         </div>
+
         <div style={styles.centerItems}>
           <Header as="h2" textAlign="center">
             <Header.Content>Statistics</Header.Content>
