@@ -244,12 +244,23 @@ namespace backend.Schemas
            );
 
             Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
-                "updateAlbumXTrackData",
+                "deleteAlbumXTrack",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<UpdateAlbumXTrackDataInput>> { Name = "data" }
+                    new QueryArgument<NonNullGraphType<DeleteAlbumXTrackDataInput>> { Name = "data" }
                 ),
                 resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
-                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(UpdateAlbumXTrackData),
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(DeleteAlbumXTrack),
+                    accountService
+                )
+            );
+
+            Field<ApiResultGraph<AlbumXTrackGraph, AlbumXTrack>>(
+                "addAlbumXTrack",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AddAlbumXTrackDataInput>> {Name="data"}
+                ),
+                resolve: GraphQLFieldResolveUtils.WrapAdminAuth(
+                    GraphQLFieldResolveUtils.WrapApiResultTryCatch(AddAlbumXTrack),
                     accountService
                 )
             );
@@ -492,26 +503,6 @@ namespace backend.Schemas
             return new ApiResult<Album> { Data = album };
         }
 
-        private async Task<ApiResult<AlbumXTrack>> UpdateAlbumXTrackData(ResolveFieldContext<object> context)
-        {
-            var data = context.GetArgument<UpdateAlbumXTrackData>("data");
-
-            var e = await _db.AlbumXTracks.FirstAsync(x => x.Id == data.AlbumXTrackId);
-
-            if (data.TrackId != null)
-            {
-                e.TrackId = data.TrackId.Value;
-            }
-
-            if (data.AlbumId != null)
-            {
-                e.AlbumId = data.AlbumId.Value;
-            }
-            await _db.SaveChangesAsync();
-
-            return new ApiResult<AlbumXTrack> { Data = e };
-        }
-
         private async Task<ApiResult<Track>> UpdateTrackData(ResolveFieldContext<object> context)
         {
             var data = context.GetArgument<UpdateTrackData>("data");
@@ -614,6 +605,47 @@ namespace backend.Schemas
             await _db.SaveChangesAsync();
 
             return new ApiResult<Artist> { Data = artist };
+        }
+
+        private async Task<ApiResult<AlbumXTrack>> DeleteAlbumXTrack(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<DeleteAlbumXTrackData>("data");
+
+            var entry = await _db.AlbumXTracks.FirstAsync(x => x.AlbumId == data.AlbumId && x.TrackId == data.TrackId);
+            _db.AlbumXTracks.Remove(entry);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<AlbumXTrack> {Data = entry};
+        }
+        
+        private async Task<ApiResult<AlbumXTrack>> AddAlbumXTrack(ResolveFieldContext<object> ctx)
+        {
+            var data = ctx.GetArgument<AddAlbumXTrackData>("data");
+
+            if (await _db.Albums.FirstOrDefaultAsync(x => x.Id == data.AlbumId) == null)
+            {
+                throw new Exception("Given album id does not exist");
+            }
+            if (await _db.Tracks.FirstOrDefaultAsync(x => x.Id == data.TrackId) == null)
+            {
+                throw new Exception("Given track id does not exist");
+            }
+            
+            if (await _db.AlbumXTracks.FirstOrDefaultAsync(x =>
+                    x.AlbumId == data.AlbumId && x.TrackId == data.TrackId) != null)
+            {
+                throw new Exception("Given relation between album and track already exists");
+            }
+
+            var entry = new AlbumXTrack
+            {
+                AlbumId = data.AlbumId,
+                TrackId = data.TrackId
+            };
+            await _db.AddAsync(entry);
+            await _db.SaveChangesAsync();
+
+            return new ApiResult<AlbumXTrack> {Data = entry};
         }
     }
 }
