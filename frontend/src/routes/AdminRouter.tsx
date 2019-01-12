@@ -11,17 +11,26 @@ import UserContainer from "../components/containers/dashboard/admin/Users/UserCo
 import AllUsersContainer from "../components/containers/dashboard/admin/Users/AllUsersContainer";
 import AddUserContainer from "../components/containers/dashboard/admin/Users/AddUserContainer";
 
-import StatisticsContainer from "../components/containers/dashboard/admin/Statistics/StatisticsContainer";
+import StatisticsOverviewContainer from "../components/containers/dashboard/admin/Statistics/StatisticsOverviewContainer";
+import FinanceStatsContainer from "../components/containers/dashboard/admin/Statistics/FinanceContainer";
+import AlbumSongStatsContainer from "../components/containers/dashboard/admin/Statistics/AlbumSongContainer";
+import UserStatsContainer from "../components/containers/dashboard/admin/Statistics/UserContainer";
+
 import {Subscribe} from "unstated";
 import UserState from "../states/UserState";
 import {userState} from "../index";
 import IUser from "../models/IUser";
 import AlbumXTrack from "../components/views/dashboard/admin/adminComponents/AlbumXTrack";
+
 import AlbumContainer from "src/components/containers/dashboard/admin/Albums/AlbumContainer";
+import AddAlbumContainer from "src/components/containers/dashboard/admin/Albums/AddAlbumContainer";
+
 import TrackContainer from "src/components/containers/dashboard/admin/Tracks/TrackContainer";
 
 import ArtistContainer from "src/components/containers/dashboard/admin/Artists/ArtistContainer";
 import AddArtistsContainer from "src/components/containers/dashboard/admin/Artists/AddArtistContainer";
+import AddAlbumXTrack from "../components/views/dashboard/admin/adminComponents/AddAlbumXTrack";
+
 
 interface IProps extends RouteComponentProps<{}> {}
 
@@ -51,14 +60,20 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
 
               <Route exact path="/admin/albumxtrack" component={AlbumXTrack} />
+              <Route exact path="/admin/albumxtrack/add" component={AddAlbumXTrack} />
+
               <Route exact path="/admin/tracks" component={TrackContainer} />
 
               <Route exact path="/admin/albums" component={AlbumContainer} />
+              <Route exact path={`/admin/albums/addalbum`} component={AddAlbumContainer} />
 
               <Route exact path="/admin/artists" component={ArtistContainer} />
               <Route exact path="/admin/artists/addartists" component={AddArtistsContainer} />
 
-              <Route exact path={`/admin/statistics`} component={StatisticsContainer} />
+              <Route exact path={`/admin/statistics`} component={StatisticsOverviewContainer} />
+              <Route exact path={`/admin/statistics/finance`} component={FinanceStatsContainer} />
+              <Route exact path={`/admin/statistics/music`} component={AlbumSongStatsContainer} />
+              <Route exact path={`/admin/statistics/user`} component={UserStatsContainer} />
             </>
           );
         }}
