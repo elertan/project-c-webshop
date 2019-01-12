@@ -29,8 +29,10 @@ import TrackContainer from "src/components/containers/dashboard/admin/Tracks/Tra
 import AddTrackContainer from "src/components/containers/dashboard/admin/Tracks/AddTrackContainer";
 
 import ArtistContainer from "src/components/containers/dashboard/admin/Artists/ArtistContainer";
-import AddArtistsContainer from "src/components/containers/dashboard/admin/Artists/AddArtistContainer";
+import AddArtistContainer from "src/components/containers/dashboard/admin/Artists/AddArtistContainer";
+
 import AddAlbumXTrack from "../components/views/dashboard/admin/adminComponents/AddAlbumXTrack";
+
 
 
 
@@ -71,7 +73,7 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path={`/admin/albums/addalbum`} component={AddAlbumContainer} />
 
               <Route exact path="/admin/artists" component={ArtistContainer} />
-              <Route exact path="/admin/artists/addartists" component={AddArtistsContainer} />
+              <Route exact path="/admin/artists/addartist" component={AddArtistContainer} />
 
               <Route exact path={`/admin/statistics`} component={StatisticsOverviewContainer} />
               <Route exact path={`/admin/statistics/finance`} component={FinanceStatsContainer} />

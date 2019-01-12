@@ -2,8 +2,9 @@ import * as React from "react";
 import * as ReactDataGrid from "react-data-grid";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
 import gql from "graphql-tag";
-import { Header} from "semantic-ui-react";
+import { Header, Button, Icon} from "semantic-ui-react";
 import { withApollo, WithApolloClient } from "react-apollo";
+import { NavLink } from "react-router-dom";
 
 const GET_ARTISTS_QUERY = gql`
   {
@@ -62,6 +63,9 @@ class Artists extends React.Component<IProps & WithApolloClient<{}>, IState> {
             </Header.Subheader>
           </Header>
         </div>
+        <div style={{
+          margin: 20
+        }}>
         {this.state.artists === null ?
           <p>Loading...</p>
           :
@@ -72,6 +76,17 @@ class Artists extends React.Component<IProps & WithApolloClient<{}>, IState> {
             enableCellSelect
           />
         }
+      </div>
+      <div style={styles.centerItems}>
+        <NavLink to={"artists/addartist"}>
+          <Button size="massive">
+            <Button.Content>
+              <Icon name="add" />
+              Add artist
+              </Button.Content>
+          </Button>
+        </NavLink>
+      </div>
       </div>
     );
   }

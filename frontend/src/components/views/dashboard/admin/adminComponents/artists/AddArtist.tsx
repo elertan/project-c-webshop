@@ -12,7 +12,7 @@ import {Button, Form} from "semantic-ui-react";
 import * as Yup from "yup";
 
 interface IFormikValues {
-  AritstName: string;
+  ArtistName: string;
   ID: string;
 }
 
@@ -39,12 +39,12 @@ const styles = {
 };
 
 const initialFormikValues: IFormikValues = {
-  AritstName: "",
+  ArtistName: "",
   ID: ""
 };
 
 const validationSchema = Yup.object().shape({
-  AritstName: Yup.string()
+  ArtistName: Yup.string()
     .min(1)
     .required(),
   ID: Yup.string()
@@ -67,7 +67,7 @@ const AddArtist: React.FunctionComponent<
           variables: {
             data: {
               authToken: user.token,
-              name: values.AritstName,
+              name: values.ArtistName,
               spotifyId: values.ID
             }
           }
@@ -93,10 +93,10 @@ const AddArtist: React.FunctionComponent<
     return (
       <>
         <Field
-          name="AritstName"
+          name="ArtistName"
           render={(fieldProps: FieldProps<IFormikValues>) => {
             const error = Boolean(
-              formikProps.touched.AritstName && formikProps.errors.AritstName
+              formikProps.touched.ArtistName && formikProps.errors.ArtistName
             );
             return (
               <Form.Field required error={error}>
@@ -113,15 +113,13 @@ const AddArtist: React.FunctionComponent<
         <Field
           name="ID"
           render={(fieldProps: FieldProps<IFormikValues>) => {
-            const error = Boolean(
-              formikProps.touched.ID && formikProps.errors.ID
-            );
+            const error = Boolean(formikProps.touched.ID && formikProps.errors.ID);
             return (
               <Form.Field required error={error}>
                 <label>Artist ID</label>
                 <input {...fieldProps.field} placeholder="Artist ID" required />
               </Form.Field>
-            );
+            )
           }}
         />
         <Button
@@ -129,11 +127,9 @@ const AddArtist: React.FunctionComponent<
           primary
           disabled={formikProps.isSubmitting || !formikProps.isValid}
           size="large"
-        >
-          Add
-        </Button>
+          >Add</Button>
       </>
-    );
+    )
   }).current;
 
   return (
