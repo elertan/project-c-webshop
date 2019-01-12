@@ -16,7 +16,7 @@ interface IFormikValues {
   albumname: string;
   label: string;
   popularity: number;
-  albumtype: string;
+  albumtype: number;
 }
 
 interface IProps {
@@ -44,16 +44,22 @@ const styles = {
 const initialFormikValues: IFormikValues = {
   albumname: '',
   label: '',
-  popularity: 0,
-  albumtype: '',
+  popularity: '' as any,
+  albumtype: -1,
 };
 
 const validationSchema = Yup.object().shape({
   albumname: Yup.string().required(),
   label: Yup.string().min(1).required(),
   popularity: Yup.number().min(0).max(100).required(),
-  albumtype: Yup.string().min(0).required(),
+  albumtype: Yup.number().min(0).required(),
 });
+
+const albumTypes = [
+  "single",
+  "album",
+  "compilation"
+];
 
 const AddAlbum: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteComponentProps<{}>> = (props) => {
   const handleFormikSubmit = useRef(async (values: IFormikValues, formikProps: FormikProps<IFormikValues>) => {
@@ -70,7 +76,7 @@ const AddAlbum: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCom
             "name": values.albumname,
             "label": values.label,
             "popularity": values.popularity,
-            "albumType": values.albumtype,
+            "albumType": albumTypes[values.albumtype],
           }
         }
       });
@@ -130,7 +136,26 @@ const AddAlbum: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCom
             return (
               <Form.Field required error={error}>
                 <label>Popularity</label>
-                <input {...fieldProps.field} placeholder="0-100" required/>
+                <input
+                  {...fieldProps.field}
+                  placeholder="0-100"
+                  type="number"
+                  required
+                  onChange={ev => {
+                    if (ev.target.value.trim() === "") {
+                      fieldProps.form.setFieldValue(fieldProps.field.name, ev.target.value.trim());
+                      return;
+                    }
+
+                    let value = Number(ev.target.value);
+                    if (value < 0) {
+                      value = 0;
+                    } else if (value > 100) {
+                      value = 100;
+                    }
+                    fieldProps.form.setFieldValue(fieldProps.field.name, value);
+                  }}
+                />
               </Form.Field>
             )
           }}
@@ -142,7 +167,13 @@ const AddAlbum: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteCom
             return (
               <Form.Field required error={error}>
                 <label>Album type</label>
-                <input {...fieldProps.field} placeholder="Single/album/compilation" required/>
+                <select {...fieldProps.field} required>
+                  <option value={-1} disabled>Make a selection...</option>
+                  {albumTypes.map((albumType, i) => (
+                    <option value={i}>{albumType}</option>
+                  ))}
+                </select>
+                {/*<input {...fieldProps.field} placeholder="Single/album/compilation" required/>*/}
               </Form.Field>
             )
           }}

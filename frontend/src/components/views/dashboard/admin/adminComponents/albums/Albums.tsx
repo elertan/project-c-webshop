@@ -132,35 +132,14 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
           }
         </div>
         <div style={styles.centerItems}>
-          <Button.Group basic size="massive">
-            <NavLink to={"users/all"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="search"/>
-                  Find album
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="search"/>
-                  Find album
-                </Button.Content>
-              </Button>
-            </NavLink>
-
-            <Button.Or/>
-
-            <NavLink to={"albums/addalbum"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="add"/>
-                  Add album
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="add"/>
-                  Add album
-                </Button.Content>
-              </Button>
-            </NavLink>
-          </Button.Group>
+          <NavLink to={"albums/addalbum"}>
+            <Button size="massive">
+              <Button.Content>
+                <Icon name="add"/>
+                Add album
+              </Button.Content>
+            </Button>
+          </NavLink>
         </div>
       </div>
     );
