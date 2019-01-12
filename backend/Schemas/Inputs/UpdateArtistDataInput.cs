@@ -14,8 +14,6 @@ namespace backend.Schemas.Inputs
         {
             Field(e => e.ArtistId, nullable: false);
             Field(e => e.Name, nullable: true);
-
-
         }
     }
 }
