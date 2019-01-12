@@ -1,6 +1,6 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Header, Label } from "semantic-ui-react";
+import { Header, Label, Message, Icon, Transition, Image } from "semantic-ui-react";
 import {
   AreaChart,
   XAxis,
@@ -67,11 +67,36 @@ class UserStats extends React.Component {
         <AdminMenu />
         <div style={styles.centerItems}>
           <div>
+            <Transition
+              animation="flash" visible={false}
+            >
+              <Image
+                centered
+                size="small"
+                src="https://react.semantic-ui.com/images/leaves/5.png"
+              />
+            </Transition>
+            <Message
+              icon
+              error
+              // header="There was some errors with your submission"
+              // list={[
+              //   "You must include both a upper and lower case letters in your password.",
+              //   "You need to select your home country."
+              // ]}
+            >
+              <Icon name="circle notched" loading />
+              <Message.Content>
+                <Message.Header>Just one second</Message.Header>
+                We are fetching that content for you.
+              </Message.Content>
+            </Message>
             <Header as="h2" textAlign="center">
               <Header.Content>Account registrations</Header.Content>
               <Header.Subheader>
                 The total amount of registrations for each month
               </Header.Subheader>
+
               <Label color="red">
                 You had 17 less registrations than last month
               </Label>
