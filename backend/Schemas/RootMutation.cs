@@ -479,6 +479,7 @@ namespace backend.Schemas
 
             var album = new Album
             {
+                Product = new Product(),
                 Name = data.Name,
                 Label = data.Label,
                 Popularity = data.Popularity,
