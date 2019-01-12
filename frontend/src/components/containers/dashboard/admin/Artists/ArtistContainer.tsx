@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {RouteProps} from "react-router";
-import Artist from "../../../../views/dashboard/admin/adminComponents/artists/artists2";
+import Artist from "../../../../views/dashboard/admin/adminComponents/artists/Artists";
 interface IProps extends RouteProps {}
 interface IState {}
 
