@@ -92,7 +92,6 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
     };
 
     public async componentDidMount() {
-        // const user = userState.state.user! as IUser;
         const result = await this.props.client.query<any>({
             query: GET_ALBUMS_QUERY,
         });
@@ -131,31 +130,16 @@ class Albums extends React.Component<IProps & WithApolloClient<{}>, IState> {
                 </div>
                 <div style={styles.centerItems}>
                     <Button.Group basic size="massive">
-                        <NavLink to={"users/all"}>
-                            <Button animated="fade" size="massive">
-                                <Button.Content visible>
-                                    <Icon name="search" />
-                                    Find album
-                </Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name="search" />
-                                    Find album
-                </Button.Content>
-                            </Button>
-                        </NavLink>
-
-                        <Button.Or />
-
                         <NavLink to={"albums/addalbum"}>
                             <Button animated="fade" size="massive">
                                 <Button.Content visible>
                                     <Icon name="add" />
                                     Add album
-                </Button.Content>
+                                </Button.Content>
                                 <Button.Content hidden>
                                     <Icon name="add" />
                                     Add album
-                </Button.Content>
+                                </Button.Content>
                             </Button>
                         </NavLink>
                     </Button.Group>

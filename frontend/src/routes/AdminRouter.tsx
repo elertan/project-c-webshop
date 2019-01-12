@@ -22,9 +22,11 @@ import AlbumContainer from "src/components/containers/dashboard/admin/Albums/Alb
 import AddAlbumContainer from "src/components/containers/dashboard/admin/Albums/AddAlbumContainer";
 
 import TrackContainer from "src/components/containers/dashboard/admin/Tracks/TrackContainer";
+import AddTrackContainer from "src/components/containers/dashboard/admin/Tracks/AddTrackContainer";
 
 import ArtistContainer from "src/components/containers/dashboard/admin/Artists/ArtistContainer";
 import AddArtistsContainer from "src/components/containers/dashboard/admin/Artists/AddArtistContainer";
+
 
 
 interface IProps extends RouteComponentProps<{}> {}
@@ -55,7 +57,9 @@ const AdminRouter: React.SFC<IProps> = (props: IProps) => {
               <Route exact path={`/admin/users/adduser`} component={AddUserContainer} />
 
               <Route exact path="/admin/albumxtrack" component={AlbumXTrack} />
+              
               <Route exact path="/admin/tracks" component={TrackContainer} />
+              <Route exact path={`/admin/tracks/addtrack`} component={AddTrackContainer} />
 
               <Route exact path="/admin/albums" component={AlbumContainer} />
               <Route exact path={`/admin/albums/addalbum`} component={AddAlbumContainer} />

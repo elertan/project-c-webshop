@@ -477,11 +477,6 @@ namespace backend.Schemas
         {
             var data = ctx.GetArgument<AddAlbumData>("data");
 
-            if (await _db.Albums.FirstOrDefaultAsync(x => x.Id == data.AlbumId) != null)
-            {
-                throw new Exception("An album with that ID already exists.");
-            }
-
             var album = new Album
             {
                 Name = data.Name,
@@ -525,6 +520,15 @@ namespace backend.Schemas
             {
                 track.Name = data.Name;
             }
+            if (data.DurationMs != null) {
+                track.DurationMs = data.DurationMs.Value;
+            }
+            if (data.Explicit != null) {
+                track.Explicit = data.Explicit.Value;
+            }
+            if (data.PreviewUrl != null) {
+                track.PreviewUrl = data.PreviewUrl;
+            }
 
             await _db.SaveChangesAsync();
 
@@ -547,14 +551,13 @@ namespace backend.Schemas
         {
             var data = ctx.GetArgument<AddTrackData>("data");
 
-            if (await _db.Tracks.FirstOrDefaultAsync(x => x.Id == data.TrackId) != null)
-            {
-                throw new Exception("A track with that ID already exists.");
-            }
-
             var track = new Track
             {
+                Product = new Product(),
                 Name = data.Name,
+                DurationMs = data.DurationMs,
+                Explicit = data.Explicit,
+                PreviewUrl = data.PreviewUrl,
             };
 
             await _db.Tracks.AddAsync(track);

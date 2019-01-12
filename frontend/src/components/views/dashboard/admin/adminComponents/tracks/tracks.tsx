@@ -8,6 +8,7 @@ import { userState } from "../../../../../../index";
 import gql from "graphql-tag";
 import GridRowsUpdatedEvent = AdazzleReactDataGrid.GridRowsUpdatedEvent;
 import IUser from "src/models/IUser";
+import { NavLink } from "react-router-dom";
 
 const styles = {
     menuPadding: {
@@ -37,6 +38,8 @@ const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (delete
     },
     { key: "id", name: "Id" },
     { key: "name", name: "Name", editable: true },
+    { key: "durationMs", name: "Duration (ms)", editable: true },
+    { key: "previewUrl", name: "PreviewURL", editable: true },
 ];
 
 const GET_TRACKS_QUERY = gql`
@@ -45,6 +48,8 @@ const GET_TRACKS_QUERY = gql`
         items {
             id
             name
+            durationMs
+            previewUrl
         }
     }
 }
@@ -56,7 +61,9 @@ mutation q($data: UpdateTrackDataInput!) {
     data {
       id
       name
-      
+      durationMs
+      explicit
+      previewUrl
     }
   }
 }
@@ -83,7 +90,6 @@ class Tracks extends React.Component<IProps & WithApolloClient<{}>, IState> {
     };
 
     public async componentDidMount() {
-        // const user = userState.state.user! as IUser;
         const result = await this.props.client.query<any>({
             query: GET_TRACKS_QUERY,
         });
@@ -120,7 +126,16 @@ class Tracks extends React.Component<IProps & WithApolloClient<{}>, IState> {
                         />
                     }
                 </div>
-                
+                <div style={styles.centerItems}>
+                    <Button.Group basic size="massive">
+                        <NavLink to={"tracks/addtrack"}>
+                            <Button size="massive">
+                                <Icon name="add" />
+                                Add track
+                            </Button>
+                        </NavLink>
+                    </Button.Group>
+                </div>
             </div>
         );
     }
