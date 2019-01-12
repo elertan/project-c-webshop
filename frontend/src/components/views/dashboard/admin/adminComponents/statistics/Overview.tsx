@@ -53,18 +53,19 @@ class Statistics extends React.Component {
       {
         Month: "May",
         "Account registrations": 26,
-        Profit: 4800,
+        Profit: 5000,
         Albums: 2100,
         Singles: 7900
       },
       {
         Month: "June",
         "Account registrations": 9,
-        Profit: 3800,
+        Profit: 4000,
         Albums: 2500,
         Singles: 1200
       }
     ];
+
     return (
       <div>
         <AdminMenu />
@@ -77,7 +78,7 @@ class Statistics extends React.Component {
                   The total amount of registrations for each month
                 </Header.Subheader>
                 <Label color="red">
-                  You had less registrations than last month
+                  You had 17 less registrations than last month
                 </Label>
               </Header>
               <AreaChart
@@ -113,7 +114,9 @@ class Statistics extends React.Component {
                 <Header.Subheader>
                   The total amount of profit for each month
                 </Header.Subheader>
-                <Label color="red">You made less profit than last month</Label>
+                <Label color="red">
+                  You made 20% less profit than last month
+                </Label>
               </Header>
               <AreaChart
                 width={450}
@@ -150,10 +153,12 @@ class Statistics extends React.Component {
                   The amount of albums and singles sold each month
                 </Header.Subheader>
                 <Label color="green">
-                  You sold more albums than last month
+                  You sold 400 more albums than last month
                 </Label>
 
-                <Label color="red">You sold less singles than last month</Label>
+                <Label color="red">
+                  You sold 6700 less singles than last month
+                </Label>
               </Header>
               <AreaChart
                 width={400}

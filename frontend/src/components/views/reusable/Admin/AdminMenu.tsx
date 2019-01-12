@@ -4,8 +4,8 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 const styles = {
   BackButton: {
-    display:"absolute",
-    margin: "1vh 1vh 1vh 1vh "
+    display: "absolute",
+    margin: "1vh 1vh 1vh 1vh"
   },
   MenuPositioning: {
     display: "flex",
@@ -60,6 +60,16 @@ class AdminMenu extends React.Component<RouteComponentProps<{}>> {
               basic
               size="medium"
               animated="fade"
+              onClick={() => this.props.history.push("/admin/albums")}
+            >
+              <Button.Content visible>Albums</Button.Content>
+              <Button.Content hidden>Albums</Button.Content>
+            </Button>
+
+            <Button
+              basic
+              size="medium"
+              animated="fade"
               onClick={() => this.props.history.push("/admin/albumxtrack")}
             >
               <Button.Content visible>Album X Track</Button.Content>
@@ -80,20 +90,10 @@ class AdminMenu extends React.Component<RouteComponentProps<{}>> {
               basic
               size="medium"
               animated="fade"
-              onClick={() => this.props.history.push("/admin/albums")}
-            >
-              <Button.Content visible>Albums</Button.Content>
-              <Button.Content hidden>Albums</Button.Content>
-            </Button>
-
-            <Button
-              basic
-              size="medium"
-              animated="fade"
               onClick={() => this.props.history.push("/admin/statistics")}
             >
               <Button.Content visible>Statistics</Button.Content>
-              <Button.Content hidden>Statistics</Button.Content>
+              <Button.Content hidden> Statistics</Button.Content>
             </Button>
           </Button.Group>
         </div>
