@@ -37,6 +37,7 @@ const columns: (deleteRow: (id: number) => void) => Array<Column<any>> = (delete
   },
   {key: "id", name: "Id"},
   {key: "name", name: "Name", editable: true},
+  {key: "spotifyId", name: "Spotify Id"}
 ];
 
 const GET_ARTISTS_QUERY = gql`
@@ -45,6 +46,7 @@ const GET_ARTISTS_QUERY = gql`
       items {
         id
         name
+        spotifyId
       }
     }
   }

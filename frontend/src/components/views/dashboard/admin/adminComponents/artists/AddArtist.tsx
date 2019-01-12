@@ -12,8 +12,8 @@ import {Button, Form} from "semantic-ui-react";
 import * as Yup from "yup";
 
 interface IFormikValues {
-  AritstName: string;
-  ID: string;
+  name: string;
+  spotifyId?: string;
 }
 
 interface IProps {}
@@ -39,17 +39,17 @@ const styles = {
 };
 
 const initialFormikValues: IFormikValues = {
-  AritstName: "",
-  ID: ""
+  name: "",
+  spotifyId: undefined
 };
 
 const validationSchema = Yup.object().shape({
-  AritstName: Yup.string()
+  name: Yup.string()
     .min(1)
     .required(),
-  ID: Yup.string()
-    .min(1)
-    .required()
+  spotifyId: Yup.string()
+    .min(22)
+    .max(22)
 });
 
 const AddArtist: React.FunctionComponent<
@@ -67,8 +67,8 @@ const AddArtist: React.FunctionComponent<
           variables: {
             data: {
               authToken: user.token,
-              name: values.AritstName,
-              spotifyId: values.ID
+              name: values.name,
+              spotifyId: values.spotifyId
             }
           }
         });
@@ -93,17 +93,17 @@ const AddArtist: React.FunctionComponent<
     return (
       <>
         <Field
-          name="AritstName"
+          name="name"
           render={(fieldProps: FieldProps<IFormikValues>) => {
             const error = Boolean(
-              formikProps.touched.AritstName && formikProps.errors.AritstName
+              formikProps.touched.name && formikProps.errors.name
             );
             return (
               <Form.Field required error={error}>
-                <label>Aritst Name</label>
+                <label>Name</label>
                 <input
                   {...fieldProps.field}
-                  placeholder="Artist Name"
+                  placeholder="John Doe"
                   required
                 />
               </Form.Field>
@@ -111,13 +111,13 @@ const AddArtist: React.FunctionComponent<
           }}
         />
         <Field
-          name="ID"
+          name="spotifyId"
           render={(fieldProps: FieldProps<IFormikValues>) => {
-            const error = Boolean(formikProps.touched.ID && formikProps.errors.ID);
+            const error = Boolean(formikProps.touched.spotifyId && formikProps.errors.spotifyId);
             return (
-              <Form.Field required error={error}>
-                <label>Artist ID</label>
-                <input {...fieldProps.field} placeholder="Artist ID" required />
+              <Form.Field error={error}>
+                <label>Spotify Id</label>
+                <input {...fieldProps.field} placeholder="3zunDAtRDg7kflREzWAhxl" required />
               </Form.Field>
             )
           }}
