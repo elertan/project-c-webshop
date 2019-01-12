@@ -7,15 +7,19 @@ import { withApollo, WithApolloClient } from "react-apollo";
 
 const GET_ARTISTS_QUERY = gql`
   {
-    artists {
+    artists(first: 9999999) {
       items {
+        id
         name
       }
     }
   }
 `;
 
-const columns = [{ key: "name", name: "Name", editable: true }];
+const columns = [
+  { key: "id", name: "Id"},
+  { key: "name", name: "Name", editable: true }
+];
 const styles = {
   menuPadding: {
     padding: "2vw"
@@ -42,7 +46,7 @@ class Artists extends React.Component<IProps & WithApolloClient<{}>, IState> {
       query: GET_ARTISTS_QUERY
     });
 
-    this.setState({ artists: result.data });
+    this.setState({ artists: result.data.artists.items });
   }
 
   public render() {
@@ -51,19 +55,23 @@ class Artists extends React.Component<IProps & WithApolloClient<{}>, IState> {
         <AdminMenu />
         <div style={styles.centerItems}>
           <Header as="h2">
-            <div style={styles.centerItems}>User accounts</div>
+            <div style={styles.centerItems}>Artists</div>
             <Header.Subheader>
               In this tab you can create, read, update and delete information
-              regarding the users
+              regarding the artists
             </Header.Subheader>
           </Header>
         </div>
-        <ReactDataGrid
-          columns={columns}
-          rowGetter={i => this.state.artists![i]}
-          rowsCount={(this.state.artists! as any[]).length}
-          enableCellSelect
-        />
+        {this.state.artists === null ?
+          <p>Loading...</p>
+          :
+          <ReactDataGrid
+            columns={columns}
+            rowGetter={i => this.state.artists![i]}
+            rowsCount={(this.state.artists! as any[]).length}
+            enableCellSelect
+          />
+        }
       </div>
     );
   }
