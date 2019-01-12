@@ -1,56 +1,37 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Header, Label, Message, Icon, Transition, Image } from "semantic-ui-react";
-import {
-  AreaChart,
-  XAxis,
-  Area,
-  Tooltip,
-  CartesianGrid,
-  YAxis
-} from "recharts";
+import { Header, Label } from "semantic-ui-react";
+import { XAxis, Tooltip, CartesianGrid, YAxis, BarChart, Bar } from "recharts";
 const data = [
   {
     Month: "January",
     "Account registrations": 12,
-    Profit: 2400,
-    Albums: 1400,
-    Singles: 5400
+    Total: 12
   },
   {
     Month: "February",
     "Account registrations": 17,
-    Profit: 1400,
-    Albums: 2200,
-    Singles: 3200
+    Total: 29
   },
   {
     Month: "March",
     "Account registrations": 14,
-    Profit: 9800,
-    Albums: 2900,
-    Singles: 4100
+    Total: 43
   },
   {
     Month: "April",
     "Account registrations": 19,
-    Profit: 3900,
-    Albums: 2000,
-    Singles: 6700
+    Total: 52
   },
   {
     Month: "May",
     "Account registrations": 26,
-    Profit: 5000,
-    Albums: 2100,
-    Singles: 7900
+    Total: 78
   },
   {
     Month: "June",
     "Account registrations": 9,
-    Profit: 4000,
-    Albums: 2500,
-    Singles: 1200
+    Total: 87
   }
 ];
 const styles = {
@@ -67,64 +48,30 @@ class UserStats extends React.Component {
         <AdminMenu />
         <div style={styles.centerItems}>
           <div>
-            <Transition
-              animation="flash" visible={false}
-            >
-              <Image
-                centered
-                size="small"
-                src="https://react.semantic-ui.com/images/leaves/5.png"
-              />
-            </Transition>
-            <Message
-              icon
-              error
-              // header="There was some errors with your submission"
-              // list={[
-              //   "You must include both a upper and lower case letters in your password.",
-              //   "You need to select your home country."
-              // ]}
-            >
-              <Icon name="circle notched" loading />
-              <Message.Content>
-                <Message.Header>Just one second</Message.Header>
-                We are fetching that content for you.
-              </Message.Content>
-            </Message>
+            <Label size="big" basic color="teal">
+              Total amount of users = 87
+            </Label>
+            <Label size="big" basic color="teal">
+              Amount of new users = 9
+            </Label>
+          </div>
+        </div>
+        <div style={styles.centerItems}>
+          <div>
             <Header as="h2" textAlign="center">
               <Header.Content>Account registrations</Header.Content>
               <Header.Subheader>
                 The total amount of registrations for each month
               </Header.Subheader>
-
-              <Label color="red">
-                You had 17 less registrations than last month
-              </Label>
             </Header>
-            <AreaChart
-              width={800}
-              height={200}
-              data={data}
-              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-            >
-              <defs>
-                <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                </linearGradient>
-              </defs>
+            <BarChart width={1000} height={300} data={data}>
+              <CartesianGrid strokeDasharray="5 5" />
               <XAxis dataKey="Month" />
               <YAxis />
-              <CartesianGrid strokeDasharray="5 5" />
               <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="Account registrations"
-                stroke="#82ca9d"
-                fillOpacity={1}
-                fill="url(#colorAC)"
-              />
-            </AreaChart>
+              <Bar stackId="a" fill="#8884d8" dataKey="Total" />
+              <Bar stackId="a" fill="#82ca9d" dataKey="Account registrations" />
+            </BarChart>
           </div>
         </div>
       </div>

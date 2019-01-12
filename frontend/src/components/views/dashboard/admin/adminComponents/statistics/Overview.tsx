@@ -1,19 +1,27 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Button, Icon, Header, Label } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { Header, Label, Grid, Divider } from "semantic-ui-react";
 import {
   Tooltip,
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  CartesianGrid
+  CartesianGrid,
+  BarChart,
+  Bar
 } from "recharts";
 
 const styles = {
   centerItems: {
     marginTop: 30,
+    display: "flex",
+    justifyContent: "center"
+  },
+
+  centerItemsGrid: {
+    marginTop: 30,
+    width: "70vw",
     display: "flex",
     justifyContent: "center"
   }
@@ -65,7 +73,38 @@ class Statistics extends React.Component {
         Singles: 1200
       }
     ];
-
+    const dataAccountRegistrations = [
+      {
+        Month: "January",
+        "Account registrations": 12,
+        Total: 12
+      },
+      {
+        Month: "February",
+        "Account registrations": 17,
+        Total: 29
+      },
+      {
+        Month: "March",
+        "Account registrations": 14,
+        Total: 43
+      },
+      {
+        Month: "April",
+        "Account registrations": 19,
+        Total: 52
+      },
+      {
+        Month: "May",
+        "Account registrations": 26,
+        Total: 78
+      },
+      {
+        Month: "June",
+        "Account registrations": 9,
+        Total: 87
+      }
+    ];
     return (
       <div>
         <AdminMenu />
@@ -75,18 +114,13 @@ class Statistics extends React.Component {
               <Header as="h2" textAlign="center">
                 <Header.Content>Account registrations</Header.Content>
                 <Header.Subheader>
-                  The total amount of registrations for each month
+                  The amount of registrations for each month
                 </Header.Subheader>
                 <Label color="red">
                   You had 17 less registrations than last month
                 </Label>
               </Header>
-              <AreaChart
-                width={400}
-                height={150}
-                data={data}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-              >
+              <AreaChart width={400} height={175} data={data}>
                 <defs>
                   <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -118,12 +152,7 @@ class Statistics extends React.Component {
                   You made 20% less profit than last month
                 </Label>
               </Header>
-              <AreaChart
-                width={450}
-                height={150}
-                data={data}
-                margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
-              >
+              <AreaChart width={450} height={175} data={data}>
                 <XAxis dataKey="Month" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="5 5" />
@@ -160,12 +189,7 @@ class Statistics extends React.Component {
                   You sold 6700 less singles than last month
                 </Label>
               </Header>
-              <AreaChart
-                width={400}
-                height={150}
-                data={data}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-              >
+              <AreaChart width={400} height={175} data={data}>
                 <defs>
                   <linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -198,56 +222,54 @@ class Statistics extends React.Component {
             </div>
           </div>
         </div>
-
+        <Divider style={{ paddingTop: "3vw" }} horizontal>
+          scroll for more statistics
+        </Divider>
         <div style={styles.centerItems}>
-          <Header as="h2" textAlign="center">
-            <Header.Content>More statistics</Header.Content>
-            <Header.Subheader>
-              Choose a category to see more statistics
-            </Header.Subheader>
-          </Header>
-        </div>
-        <div style={styles.centerItems}>
-          <Button.Group basic size="massive">
-            <NavLink to={"/admin/statistics/user"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="users" />
-                  Users
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="users" />
-                  Users
-                </Button.Content>
-              </Button>
-            </NavLink>
-
-            <NavLink to={"/admin/statistics/music"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="music" />
-                  Music
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="music" />
-                  Music
-                </Button.Content>
-              </Button>
-            </NavLink>
-
-            <NavLink to={"/admin/statistics/finance"}>
-              <Button animated="fade" size="massive">
-                <Button.Content visible>
-                  <Icon name="euro sign" />
-                  Finance
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="euro sign" />
-                  Finance
-                </Button.Content>
-              </Button>
-            </NavLink>
-          </Button.Group>
+          <div style={styles.centerItemsGrid}>
+            <Grid columns="equal" padded>
+              <Grid.Row>
+                <Grid.Column>
+                  <BarChart
+                    width={600}
+                    height={300}
+                    data={dataAccountRegistrations}
+                  >
+                    <CartesianGrid strokeDasharray="5 5" />
+                    <XAxis dataKey="Month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar stackId="a" fill="#8884d8" dataKey="Total" />
+                    <Bar
+                      stackId="a"
+                      fill="#82ca9d"
+                      dataKey="Account registrations"
+                    />
+                  </BarChart>
+                </Grid.Column>
+                <Grid.Column>
+                  <div style={styles.centerItems}>
+                    <Header as="h2" textAlign="center">
+                      <Header.Content>User registrations</Header.Content>
+                    </Header>
+                  </div>
+                  <div style={styles.centerItems}>
+                    <Label size="big" basic color="teal">
+                      Total amount of users = 87
+                    </Label>
+                  </div>
+                  <div style={styles.centerItems}>
+                    <Label size="big" basic color="teal">
+                      Amount of new users = 9
+                    </Label>
+                  </div>
+                </Grid.Column>
+              </Grid.Row>
+              <Divider style={{ paddingTop: "3vw" }} horizontal>
+                scroll for more statistics
+              </Divider>
+            </Grid>
+          </div>
         </div>
       </div>
     );
