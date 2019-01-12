@@ -1,22 +1,22 @@
 import * as React from "react";
 import AdminMenu from "../../../../reusable/Admin/AdminMenu";
-import { Button, Form } from "semantic-ui-react";
-import { Field, FieldProps, Formik, FormikProps } from "formik";
-import { useRef } from "react";
+import {Button, Form} from "semantic-ui-react";
+import {Field, FieldProps, Formik, FormikProps} from "formik";
+import {useRef} from "react";
 import * as Yup from "yup";
-import { withApollo, WithApolloClient } from "react-apollo";
+import {withApollo, WithApolloClient} from "react-apollo";
 import gql from "graphql-tag";
-import { userState } from "../../../../../../index";
+import {userState} from "../../../../../../index";
 import IUser from "../../../../../../models/IUser";
 import IApiResult from "../../../../../../models/IApiResult";
-import { RouteComponentProps, withRouter } from "react-router";
+import {RouteComponentProps, withRouter} from "react-router";
 import IAlbum from "src/models/IAlbum";
 
 interface IFormikValues {
-    albumname: string;
-    label: string;
-    popularity: number;
-    albumtype: string;
+  albumname: string;
+  label: string;
+  popularity: number;
+  albumtype: string;
 }
 
 interface IProps {
@@ -36,143 +36,143 @@ mutation x($data: AddAlbumDataInput!) {
 `;
 
 const styles = {
-    root: {
-        padding: 100
-    } as React.CSSProperties
+  root: {
+    padding: 100
+  } as React.CSSProperties
 };
 
 const initialFormikValues: IFormikValues = {
-    albumname: '',
-    label: '',
-    popularity: 0,
-    albumtype: '',
+  albumname: '',
+  label: '',
+  popularity: 0,
+  albumtype: '',
 };
 
 const validationSchema = Yup.object().shape({
-    albumname: Yup.string().required(),
-    label: Yup.string().min(1).required(),
-    popularity: Yup.number().min(0).max(100).required(),
-    albumtype: Yup.string().min(0).required(),
+  albumname: Yup.string().required(),
+  label: Yup.string().min(1).required(),
+  popularity: Yup.number().min(0).max(100).required(),
+  albumtype: Yup.string().min(0).required(),
 });
 
 const AddAlbum: React.FunctionComponent<IProps & WithApolloClient<{}> & RouteComponentProps<{}>> = (props) => {
-    const handleFormikSubmit = useRef(async (values: IFormikValues, formikProps: FormikProps<IFormikValues>) => {
-        formikProps.setSubmitting(true);
+  const handleFormikSubmit = useRef(async (values: IFormikValues, formikProps: FormikProps<IFormikValues>) => {
+    formikProps.setSubmitting(true);
 
-        const user = userState.state.user! as IUser;
+    const user = userState.state.user! as IUser;
 
-        try {
-            const result = await props.client.mutate<any>({
-                mutation: ADD_ALBUM_MUTATION,
-                variables: {
-                    "data": {
-                        "authToken": user.token,
-                        "albumname": values.albumname,
-                        "label": values.label,
-                        "popularity": values.popularity,
-                        "albumtype": values.albumtype,
-                    }
-                }
-            });
-
-            const apiResult = result.data!.addAlbum as IApiResult<IAlbum>;
-            if (apiResult.errors) {
-                apiResult.errors.map(x => "Error: " + x.message).forEach(alert);
-                return;
-            }
-        } catch {
-            alert("Something went wrong trying to create this album");
-            return;
-        } finally {
-            formikProps.setSubmitting(false);
+    try {
+      const result = await props.client.mutate<any>({
+        mutation: ADD_ALBUM_MUTATION,
+        variables: {
+          "data": {
+            "authToken": user.token,
+            "name": values.albumname,
+            "label": values.label,
+            "popularity": values.popularity,
+            "albumType": values.albumtype,
+          }
         }
+      });
 
-        props.history.push("/admin/albums");
-    }).current;
+      const apiResult = result.data!.addAlbum as IApiResult<IAlbum>;
+      if (apiResult.errors) {
+        apiResult.errors.map(x => "Error: " + x.message).forEach(alert);
+        return;
+      }
+    } catch {
+      alert("Something went wrong trying to create this album");
+      return;
+    } finally {
+      formikProps.setSubmitting(false);
+    }
 
-    const renderFormik = useRef((formikProps: FormikProps<IFormikValues>) => {
-        return (
-            <>
-                <Field
-                    name="albumname"
-                    render={(fieldProps: FieldProps<IFormikValues>) => {
-                        const error = Boolean(formikProps.touched.albumname && formikProps.errors.albumname);
-                        return (
-                            <>
-                                <Form.Field required error={error}>
-                                    <label>Name</label>
-                                    <input
-                                        {...fieldProps.field}
-                                        placeholder="Album name"
-                                        required
-                                    />
-                                </Form.Field>
-                            </>
-                        )
-                    }}
-                />
-                <Field
-                    name="label"
-                    render={(fieldProps: FieldProps<IFormikValues>) => {
-                        const error = Boolean(formikProps.touched.label && formikProps.errors.label);
-                        return (
-                            <Form.Field required error={error}>
-                                <label>Label</label>
-                                <input {...fieldProps.field} placeholder="Album label" required />
-                            </Form.Field>
-                        )
-                    }}
-                />
-                <Field
-                    name="popularity"
-                    render={(fieldProps: FieldProps<IFormikValues>) => {
-                        const error = Boolean(formikProps.touched.popularity && formikProps.errors.popularity);
-                        return (
-                            <Form.Field required error={error}>
-                                <label>Popularity</label>
-                                <input {...fieldProps.field} placeholder="0-100" required />
-                            </Form.Field>
-                        )
-                    }}
-                />
-                <Field
-                    name="albumtype"
-                    render={(fieldProps: FieldProps<IFormikValues>) => {
-                        const error = Boolean(formikProps.touched.albumtype && formikProps.errors.albumtype);
-                        return (
-                            <Form.Field required error={error}>
-                                <label>Album type</label>
-                                <input {...fieldProps.field} placeholder="Single/album/compilation" required />
-                            </Form.Field>
-                        )
-                    }}
-                />
-                <Button
-                    onClick={formikProps.submitForm}
-                    primary
-                    disabled={formikProps.isSubmitting || !formikProps.isValid}
-                    size="large"
-                >Add</Button>
-            </>
-        )
-    }).current;
+    props.history.push("/admin/albums");
+  }).current;
 
+  const renderFormik = useRef((formikProps: FormikProps<IFormikValues>) => {
     return (
-        <div>
-            <AdminMenu />
-            <div style={styles.root}>
-                <Form>
-                    <h1>Add a new album</h1>
-                    <Formik
-                        initialValues={initialFormikValues}
-                        onSubmit={handleFormikSubmit}
-                        render={renderFormik}
-                        validationSchema={validationSchema}
-                    />
-                </Form>
-            </div>
-        </div>
-    );
+      <>
+        <Field
+          name="albumname"
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.albumname && formikProps.errors.albumname);
+            return (
+              <>
+                <Form.Field required error={error}>
+                  <label>Name</label>
+                  <input
+                    {...fieldProps.field}
+                    placeholder="Album name"
+                    required
+                  />
+                </Form.Field>
+              </>
+            )
+          }}
+        />
+        <Field
+          name="label"
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.label && formikProps.errors.label);
+            return (
+              <Form.Field required error={error}>
+                <label>Label</label>
+                <input {...fieldProps.field} placeholder="Album label" required/>
+              </Form.Field>
+            )
+          }}
+        />
+        <Field
+          name="popularity"
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.popularity && formikProps.errors.popularity);
+            return (
+              <Form.Field required error={error}>
+                <label>Popularity</label>
+                <input {...fieldProps.field} placeholder="0-100" required/>
+              </Form.Field>
+            )
+          }}
+        />
+        <Field
+          name="albumtype"
+          render={(fieldProps: FieldProps<IFormikValues>) => {
+            const error = Boolean(formikProps.touched.albumtype && formikProps.errors.albumtype);
+            return (
+              <Form.Field required error={error}>
+                <label>Album type</label>
+                <input {...fieldProps.field} placeholder="Single/album/compilation" required/>
+              </Form.Field>
+            )
+          }}
+        />
+        <Button
+          onClick={formikProps.submitForm}
+          primary
+          disabled={formikProps.isSubmitting || !formikProps.isValid}
+          size="large"
+        >Add</Button>
+      </>
+    )
+  }).current;
+
+  return (
+    <div>
+      <AdminMenu/>
+      <div style={styles.root}>
+        <Form>
+          <h1>Add a new album</h1>
+          <Formik
+            initialValues={initialFormikValues}
+            onSubmit={handleFormikSubmit}
+            render={renderFormik}
+            validationSchema={validationSchema}
+          />
+        </Form>
+      </div>
+    </div>
+  );
 };
 
 export default withRouter(withApollo(AddAlbum));

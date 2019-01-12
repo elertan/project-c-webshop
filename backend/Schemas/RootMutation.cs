@@ -477,13 +477,9 @@ namespace backend.Schemas
         {
             var data = ctx.GetArgument<AddAlbumData>("data");
 
-            if (await _db.Albums.FirstOrDefaultAsync(x => x.Id == data.AlbumId) != null)
-            {
-                throw new Exception("An album with that ID already exists.");
-            }
-
             var album = new Album
             {
+                Product = new Product(),
                 Name = data.Name,
                 Label = data.Label,
                 Popularity = data.Popularity,
