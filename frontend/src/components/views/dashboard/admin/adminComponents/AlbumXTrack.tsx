@@ -8,12 +8,13 @@ import AdminMenu from "../../../reusable/Admin/AdminMenu";
 import * as ReactDataGrid from 'react-data-grid';
 import {userState} from "../../../../../index";
 import IUser from "../../../../../models/IUser";
+import {NavLink} from "react-router-dom";
 
 interface IProps {}
 
 const GET_ALBUM_X_TRACKS_QUERY = gql`
 {
-  albumXTracks(first: 99999) {
+  albumXTracks(first: 99999, orderBy: { path: "albumId" }) {
     items {
       albumId
       trackId
@@ -58,7 +59,6 @@ const columns: (deleteRow: (id1: number, id2: number) => void) => Array<Column<a
       </Button>
     )
   },
-  { key: "id", name: "Id" },
   { key: "albumId", name: "Album Id" },
   { key: "trackId", name: "Track Id" }
 ];
@@ -126,7 +126,16 @@ const AlbumXTrack: React.FunctionComponent<IProps & WithApolloClient<{}>> = (pro
           />
         }
       </div>
-
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw' }}>
+        <Button basic size="massive">
+          <NavLink to={"albumxtrack/add"}>
+            <Button size="massive">
+              <Icon name="add" />
+              Add new
+            </Button>
+          </NavLink>
+        </Button>
+      </div>
     </div>
   );
 };
