@@ -12,7 +12,7 @@ import {Button, Form} from "semantic-ui-react";
 import * as Yup from "yup";
 
 interface IFormikValues {
-  ArtistName: string;
+  AritstName: string;
   ID: string;
 }
 
@@ -39,12 +39,12 @@ const styles = {
 };
 
 const initialFormikValues: IFormikValues = {
-  ArtistName: "",
+  AritstName: "",
   ID: ""
 };
 
 const validationSchema = Yup.object().shape({
-  ArtistName: Yup.string()
+  AritstName: Yup.string()
     .min(1)
     .required(),
   ID: Yup.string()
@@ -67,7 +67,7 @@ const AddArtist: React.FunctionComponent<
           variables: {
             data: {
               authToken: user.token,
-              name: values.ArtistName,
+              name: values.AritstName,
               spotifyId: values.ID
             }
           }
@@ -93,10 +93,10 @@ const AddArtist: React.FunctionComponent<
     return (
       <>
         <Field
-          name="ArtistName"
+          name="AritstName"
           render={(fieldProps: FieldProps<IFormikValues>) => {
             const error = Boolean(
-              formikProps.touched.ArtistName && formikProps.errors.ArtistName
+              formikProps.touched.AritstName && formikProps.errors.AritstName
             );
             return (
               <Form.Field required error={error}>

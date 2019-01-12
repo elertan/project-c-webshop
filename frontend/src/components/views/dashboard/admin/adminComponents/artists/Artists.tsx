@@ -149,7 +149,7 @@ class Artists extends React.Component<IProps & WithApolloClient<{}>, IState> {
       });
 
       const newArtists = [...(this.state.artists! as any[])];
-      newArtists[e.fromRow] = result.data!.updateartistData.data;
+      newArtists[e.fromRow] = result.data!.updateArtistData.data;
 
       this.setState({ artists: newArtists });
     } catch {
