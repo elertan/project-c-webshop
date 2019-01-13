@@ -9,6 +9,7 @@ import {Subscribe} from "unstated";
 import SearchState from "../../../../../states/SearchState";
 import {RouteComponentProps, withRouter} from "react-router";
 import {History} from "history";
+import BedragWaarde, { Valuta } from 'src/components/views/reusable/BedragWaarde';
 
 interface IProps extends Partial<WithApolloClient<{}>>, RouteComponentProps<any> {
 }
@@ -93,7 +94,12 @@ const CustomSearch: React.FunctionComponent<IProps> = (props: IProps) => {
                     _data: album,
                     title: album.name,
                     image: album.images.items[0].url,
-                    price: `$${album.product.price}`
+                    price:  <BedragWaarde
+                    bedrag={album.product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  />
                   }))
                 }
                 :
