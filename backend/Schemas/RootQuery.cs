@@ -18,6 +18,10 @@ namespace backend.Schemas
         {
             Name = "Query";
 
+            AddQueryConnectionField<UserGraph, User>(
+    name: "users",
+    resolve: ctx => db.Users);
+
             AddQueryConnectionField<ProductGraph, Product>(
                 name: "products",
                 resolve: ctx => db.Products);
@@ -59,11 +63,11 @@ namespace backend.Schemas
                     }
                 }
             );
-            
+
             FieldAsync<AdminContextGraph, User>(
                 name: "admin",
                 arguments: new QueryArguments(
-                    new QueryArgument(typeof(StringGraphType)) {Name = "token"}
+                    new QueryArgument(typeof(StringGraphType)) { Name = "token" }
                 ),
                 resolve: async ctx =>
                 {
@@ -96,7 +100,7 @@ namespace backend.Schemas
                     return searchResult;
                 }
             );
-            
+
             FieldAsync<StringGraphType, bool>(
                 name: "IsEmailInDb",
                 arguments: new QueryArguments(

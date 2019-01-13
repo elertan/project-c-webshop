@@ -11,6 +11,15 @@ import {
   BarChart,
   Bar
 } from "recharts";
+import gql from "graphql-tag";
+
+const AmountOfUsersQuery = gql`
+  {
+    users {
+      totalCount
+    }
+  }
+`;
 
 const styles = {
   centerItems: {
@@ -27,9 +36,9 @@ const styles = {
   }
 };
 
-class Statistics extends React.Component {
+class Statistics extends React.Component{
   public render() {
-    const data = [
+    const dataGeneral = [
       {
         Month: "January",
         "Account registrations": 12,
@@ -120,7 +129,7 @@ class Statistics extends React.Component {
                   You had 17 less registrations than last month
                 </Label>
               </Header>
-              <AreaChart width={400} height={175} data={data}>
+              <AreaChart width={400} height={175} data={dataGeneral}>
                 <defs>
                   <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -152,7 +161,7 @@ class Statistics extends React.Component {
                   You made 20% less profit than last month
                 </Label>
               </Header>
-              <AreaChart width={450} height={175} data={data}>
+              <AreaChart width={450} height={175} data={dataGeneral}>
                 <XAxis dataKey="Month" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="5 5" />
@@ -189,7 +198,7 @@ class Statistics extends React.Component {
                   You sold 6700 less singles than last month
                 </Label>
               </Header>
-              <AreaChart width={400} height={175} data={data}>
+              <AreaChart width={400} height={175} data={dataGeneral}>
                 <defs>
                   <linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -255,12 +264,12 @@ class Statistics extends React.Component {
                   </div>
                   <div style={styles.centerItems}>
                     <Label size="big" basic color="teal">
-                      Total amount of users = 87
+                      Total amount of users = {AmountOfUsersQuery.result.data.users.totalCount}
                     </Label>
                   </div>
                   <div style={styles.centerItems}>
                     <Label size="big" basic color="teal">
-                      Amount of new users = 9
+                      Amount of new users = {AmountOfUsersQuery.result.data.users.totalCount}
                     </Label>
                   </div>
                 </Grid.Column>
