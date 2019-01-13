@@ -54,9 +54,9 @@ const renderValuta = (valuta: Valuta) => {
 const BedragWaarde: React.SFC<IProps> = (props: IProps) => {
   const p = { ...defaultProps, ...props };
 
-  const zonderDecimalen = Math.abs(p.bedrag).toFixed();
+  const zonderDecimalen = Math.floor(p.bedrag);
   // const decimalen = ((Math.abs(bedrag) - Math.abs(Math.floor(bedrag))) * 100);
-  const decimalen = ((Math.abs(p.bedrag) - Math.floor(Math.abs(p.bedrag))) * 100).toFixed();
+    const decimalen = ((Math.abs(p.bedrag) - Math.floor(Math.abs(p.bedrag))) * 100).toFixed();
 
   const isNegatief = p.bedrag < 0;
   const positiefStyle = {
