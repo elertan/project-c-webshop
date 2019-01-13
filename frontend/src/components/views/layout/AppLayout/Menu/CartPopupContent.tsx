@@ -73,7 +73,7 @@ class CartPopupContent extends React.Component<IProps> {
               if (product.track) {
                 return (
                   <List.Item>
-                    <Image size="mini" src={product.track.images[0].url}/>
+                    <Image size="mini" src={product.track.images}/>
                     <List.Content>
                       <List.Header>{product.track.title}</List.Header>
                       <List.Description>
