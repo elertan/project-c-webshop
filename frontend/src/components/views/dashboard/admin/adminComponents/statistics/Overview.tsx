@@ -28,12 +28,17 @@ const styles = {
     display: "flex",
     justifyContent: "center"
   },
+  centerItemsQuery: {
+    marginTop: 30,
+    display: "flex",
+    paddingLeft: "10vw"
+  },
 
   centerItemsGrid: {
     marginTop: 30,
     width: "70vw",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "left"
   }
 };
 
@@ -77,7 +82,7 @@ class Statistics extends React.Component {
       },
       {
         Month: "June",
-        "Account registrations": 9,
+        "Account registrations": 2,
         Profit: 4000,
         Albums: 2500,
         Singles: 1200
@@ -111,8 +116,8 @@ class Statistics extends React.Component {
       },
       {
         Month: "June",
-        "Account registrations": 9,
-        Total: 87
+        "Account registrations": 2,
+        Total: 0
       }
     ];
     return (
@@ -258,31 +263,46 @@ class Statistics extends React.Component {
                   </BarChart>
                 </Grid.Column>
                 <Grid.Column>
-                  <div style={styles.centerItems}>
-                    <Header as="h2" textAlign="center">
-                      <Header.Content>User registrations</Header.Content>
-                    </Header>
-                  </div>
-                  <div style={styles.centerItems}>
-                    <Label size="big" basic color="teal">
-                      Total amount of users ={" "}
-                      <Query query={AmountOfUsersQuery}>
-                        {data => {
-                          return <h1>{data.data.users.totalCount}</h1>;
-                        }}
-                      </Query>
-                    </Label>
-                  </div>
-                  <div style={styles.centerItems}>
-                    <Label size="big" basic color="teal">
-                      Amount of new users =
-                    </Label>
-                  </div>
+                  <Header as="h2" textAlign="center">
+                    <Header.Content>User registrations</Header.Content>
+                  </Header>
+
+                  <Query query={AmountOfUsersQuery}>
+                    {data => {
+                      if (data.loading) {
+                        return null;
+                      }
+                      if (data.error) {
+                        return <p>{data.error.message}</p>;
+                      }
+                      return (
+                        <div style={styles.centerItemsQuery}>
+                          <Label size="big" basic color="teal">
+                            Total amount of users = {data.data.users.totalCount}
+                          </Label>
+                        </div>
+                      );
+                    }}
+                  </Query>
+                  <Query query={AmountOfUsersQuery}>
+                    {data => {
+                      if (data.loading) {
+                        return null;
+                      }
+                      if (data.error) {
+                        return <p>{data.error.message}</p>;
+                      }
+                      return (
+                        <div style={styles.centerItemsQuery}>
+                          <Label size="big" basic color="teal">
+                            Amount of new users = {data.data.users.totalCount}
+                          </Label>
+                        </div>
+                      );
+                    }}
+                  </Query>
                 </Grid.Column>
               </Grid.Row>
-              <Divider style={{ paddingTop: "3vw" }} horizontal>
-                scroll for more statistics
-              </Divider>
             </Grid>
           </div>
         </div>
