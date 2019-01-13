@@ -26,6 +26,7 @@ import IApiError from "src/models/IApiError";
 import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
+import BedragWaarde, { Valuta } from "../../reusable/BedragWaarde";
 
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
@@ -560,14 +561,24 @@ class Order extends React.Component<WithApolloClient<IProps>> {
                   return (
                     <Table.Row key={i}>
                       <Table.Cell>Album: {product.album!.name}</Table.Cell>
-                      <Table.Cell>Price: ${product.price}</Table.Cell>
+                      <Table.Cell>Price:  <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></Table.Cell>
                     </Table.Row>
                   );
                 }
                 return (
                   <Table.Row key={i}>
                     <Table.Cell>Track: {product.track!.title}</Table.Cell>
-                    <Table.Cell>Price ${product.price}</Table.Cell>
+                    <Table.Cell>Price  <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></Table.Cell>
                   </Table.Row>
                 );
               }
