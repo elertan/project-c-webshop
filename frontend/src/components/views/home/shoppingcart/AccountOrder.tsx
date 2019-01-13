@@ -22,6 +22,7 @@ import IApiError from "src/models/IApiError";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
 import { userState } from "src";
+import BedragWaarde, { Valuta } from "../../reusable/BedragWaarde";
 
 const createOrderMutation = gql`
   mutation($data: CreateOrderInput!) {
@@ -445,14 +446,24 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
                   return (
                     <Table.Row key={i}>
                       <Table.Cell>Album: {product.album!.name}</Table.Cell>
-                      <Table.Cell>Price: ${product.price}</Table.Cell>
+                      <Table.Cell>Price:  <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></Table.Cell>
                     </Table.Row>
                   );
                 }
                 return (
                   <Table.Row key={i}>
                     <Table.Cell>Track: {product.track!.title}</Table.Cell>
-                    <Table.Cell>Price ${product.price}</Table.Cell>
+                    <Table.Cell>Price  <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></Table.Cell>
                   </Table.Row>
                 );
               }
