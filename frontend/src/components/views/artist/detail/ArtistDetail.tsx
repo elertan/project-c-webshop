@@ -151,7 +151,8 @@ class ArtistDetail extends React.Component<IProps> {
           previewUrl: track.previewUrl,
           durationMs: track.durationMs,
           explicit: track.explicit,
-          price: track.product.price
+          price: track.product.price,
+          images: album.images.items[0].url
         } as ITrack)
       ));
 
