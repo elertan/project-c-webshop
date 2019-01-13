@@ -15,7 +15,11 @@ class ConfirmOrder extends React.Component<IProps> {
       <Subscribe to={[CartState]}>
         {(cartState: CartState) => (
           <AppLayout>
-          <p>your order is send</p>
+            <br />
+            <br />
+            <br />
+            <br />
+            <p>Your order has been sent</p>
           </AppLayout>
         )}
       </Subscribe>
