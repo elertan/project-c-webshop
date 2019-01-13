@@ -12,6 +12,7 @@ import {
   Bar
 } from "recharts";
 import gql from "graphql-tag";
+import { Query } from "react-apollo";
 
 const AmountOfUsersQuery = gql`
   {
@@ -36,7 +37,7 @@ const styles = {
   }
 };
 
-class Statistics extends React.Component{
+class Statistics extends React.Component {
   public render() {
     const dataGeneral = [
       {
@@ -264,12 +265,17 @@ class Statistics extends React.Component{
                   </div>
                   <div style={styles.centerItems}>
                     <Label size="big" basic color="teal">
-                      Total amount of users = {AmountOfUsersQuery.result.data.users.totalCount}
+                      Total amount of users ={" "}
+                      <Query query={AmountOfUsersQuery}>
+                        {data => {
+                          return <h1>{data.data.users.totalCount}</h1>;
+                        }}
+                      </Query>
                     </Label>
                   </div>
                   <div style={styles.centerItems}>
                     <Label size="big" basic color="teal">
-                      Amount of new users = {AmountOfUsersQuery.result.data.users.totalCount}
+                      Amount of new users =
                     </Label>
                   </div>
                 </Grid.Column>
