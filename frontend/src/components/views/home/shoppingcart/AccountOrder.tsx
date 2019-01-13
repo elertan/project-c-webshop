@@ -247,7 +247,8 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
       return (
         <div>
           <div>
-            <p>your order is in progress</p>
+            <p>Your order is being processed...</p>
+            <br /><br /><br /><br />< br/>
           </div>
           <Loader active>Loading</Loader>
         </div>
@@ -255,7 +256,8 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
     }
     return (
       <div>
-        your order is send!!!{" "}
+        Your order has been sent!{" "}Thank you for choosing Marshmallow. <br />
+        Click on the link below to return to the main page. <br /><br />
         <NavLink to="/" onClick={() => cartState.setState({ products: [] })}>
           Home
         </NavLink>
@@ -269,10 +271,9 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
         <Card fluid>
           <Card.Content>
-            <Card.Header>These are your order details </Card.Header>
-
+            <Card.Header>Personal order detail</Card.Header>
             <Card.Description>
-              your emailaddress: {user!.email}
+              Your email address: {user!.email}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
@@ -363,13 +364,13 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
       <div style={{ marginLeft: "1.5%", width: "150%" }}>
         <Card fluid>
           <Card.Content>
-            <p>your email is: {user!.email}</p>
+            <p>Your email address is: {user!.email}</p>
           </Card.Content>
           <Card.Content>
-            <p>your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
+            <p>Your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
           </Card.Content>
           <Card.Content>
-            <p>your bankNumber is : {fieldProps.form.values.bankNumber}</p>
+            <p>Your bank account is: {fieldProps.form.values.bankNumber}</p>
           </Card.Content>
           <Card.Content extra>
             <Button
@@ -377,7 +378,6 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
               floated="right"
               onClick={() =>
                 this.handleOrder(
-                  
                   fieldProps.form.initialValues.products.map(x => x.id),
                   user!.token!
                 )
@@ -428,6 +428,7 @@ class AccountOrder extends React.Component<WithApolloClient<IProps>> {
       </div>
     );
   };
+
   private renderProducts = (fieldProps: FieldProps<IFormikValues>) => {
     return (
       <div style={styles.OrderPositioning}>
