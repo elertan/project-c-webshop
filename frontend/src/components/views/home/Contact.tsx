@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Formik, Form } from "formik";
+import { Formik, FormikProps, Form } from "formik";
 import * as Yup from "yup";
 import AppLayout from "../layout/AppLayout/AppLayout";
 import {
@@ -11,6 +11,12 @@ import {
   TextArea
 } from "semantic-ui-react";
 
+interface IFormikValues {
+  name: string,
+  email: string,
+  message: string;
+}
+
 class Contact extends React.Component {
   public render() {
     return (
@@ -21,7 +27,7 @@ class Contact extends React.Component {
           <Header.Content>
             Contact
             <Header.Subheader>
-              You have any coments or complaints?
+              You have any comments or complaints? Please let us know below.
             </Header.Subheader>
           </Header.Content>
         </Header>
@@ -31,8 +37,14 @@ class Contact extends React.Component {
             email: "",
             message: ""
           }}
-          onSubmit={() => {
-            console.log("hi");
+          onSubmit={async (values: IFormikValues, formik: FormikProps<IFormikValues>) => {
+            console.log(values);
+            formik.setSubmitting(true);
+            
+            // ... Email client
+
+
+
           }}
           validationSchema={Yup.object().shape({
             name: Yup.string().required("Please fill in your name"),
@@ -80,7 +92,7 @@ class Contact extends React.Component {
                   placeholder="Tell us more"
                 />
                 {errors.message && touched.message && (
-                  <Label basic pointing="above" color="red">
+                  <Label basic pointing="left" color="red">
                     {errors.message}
                   </Label>
                 )}
