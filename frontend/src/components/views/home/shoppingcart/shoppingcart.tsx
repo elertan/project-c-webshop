@@ -14,6 +14,7 @@ import IProduct from "src/models/IProduct";
 import { Subscribe } from "unstated";
 import CartState from "src/states/CartState";
 import { NavLink } from "react-router-dom";
+import BedragWaarde, { Valuta } from "../../reusable/BedragWaarde";
 
 // const styles = {
 //   item: {
@@ -49,7 +50,12 @@ class Shoppingcart extends React.Component<IProps> {
                   <ListContent verticalAlign="middle">
                     {" "}
                     <ListHeader>{product.album!.name}</ListHeader>
-                    <ListContent>Album- ${product.price}</ListContent>
+                    <ListContent>Album- <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></ListContent>
                   </ListContent>
                   <ListContent floated="right" verticalAlign="bottom">
                     <Button
@@ -69,7 +75,12 @@ class Shoppingcart extends React.Component<IProps> {
                 <ListContent verticalAlign="middle">
                   {" "}
                   <ListHeader>Track: {product.track!.title}</ListHeader>
-                  <ListContent>track- ${product.price}</ListContent>
+                  <ListContent>track-  <BedragWaarde
+                    bedrag={product.price}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></ListContent>
                 </ListContent>
                 <ListContent floated="right" verticalAlign="bottom">
                   <Button
@@ -92,7 +103,12 @@ class Shoppingcart extends React.Component<IProps> {
                     <hr />
                   </div>
                   Total
-                  <ListContent floated="right">${totalPrice}</ListContent>
+                  <ListContent floated="right"> <BedragWaarde
+                    bedrag={totalPrice}
+                    valuta={Valuta.Dollar}
+                    geenTeken
+                    toonMutatie={false}
+                  /></ListContent>
                 </div>
               </ListContent>
             </div>
