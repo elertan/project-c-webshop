@@ -43,6 +43,12 @@ class NavigationMenu extends React.Component<IProps, IState> {
                 active={activeItem === 'home'}
               />
             </NavLink>
+            <NavLink to={"/home/contact"}>
+              <Menu.Item
+                name='Contact'
+                active={activeItem === 'home'}
+              />
+            </NavLink>
           </Menu>
         </Container>
       </div>
