@@ -32,7 +32,7 @@ const useApolloQuery = (client: ApolloClient<any>, query: DocumentNode, variable
         loading: false,
         data: result.data
       });
-  }) as any, [variables]);
+  }) as any, []);
 
   return state;
 };

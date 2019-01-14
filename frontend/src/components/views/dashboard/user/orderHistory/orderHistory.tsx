@@ -11,8 +11,10 @@ const styles = {
   DashboardPositioning: {
     display: "inline-block",
     width: "60%",
-    padding: "3%"
-  },
+    padding: "3%",
+    maxHeight: 400,
+    overflowY: "auto"
+  } as React.CSSProperties,
   HeaderPositioning: {
     margin: "3% 0 0 0"
   }
