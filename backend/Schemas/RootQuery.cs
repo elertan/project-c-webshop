@@ -21,6 +21,9 @@ namespace backend.Schemas
             AddQueryConnectionField<UserGraph, User>(
     name: "users",
     resolve: ctx => db.Users);
+     AddQueryConnectionField<OrderGraph, Order>(
+    name: "orders",
+    resolve: ctx => db.Orders);
 
             AddQueryConnectionField<ProductGraph, Product>(
                 name: "products",

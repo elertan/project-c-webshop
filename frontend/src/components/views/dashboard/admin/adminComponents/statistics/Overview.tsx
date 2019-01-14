@@ -9,7 +9,8 @@ import {
   YAxis,
   CartesianGrid,
   BarChart,
-  Bar
+  Bar,
+ 
 } from "recharts";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
@@ -17,6 +18,13 @@ import { Query } from "react-apollo";
 const AmountOfUsersQuery = gql`
   {
     users {
+      totalCount
+    }
+  }
+`;
+const AmountOfOrdersQuery = gql`
+  {
+    orders {
       totalCount
     }
   }
@@ -264,7 +272,7 @@ class Statistics extends React.Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h2" textAlign="center">
-                    <Header.Content>User registrations</Header.Content>
+                    <Header.Content>User registrations and orders</Header.Content>
                   </Header>
 
                   <Query query={AmountOfUsersQuery}>
@@ -301,8 +309,24 @@ class Statistics extends React.Component {
                       );
                     }}
                   </Query>
-                </Grid.Column>
-              </Grid.Row>
+           
+        <Query query={AmountOfOrdersQuery}>
+                    {data => {
+                      if (data.loading) {
+                        return null;
+                      }
+                      if (data.error) {
+                        return <p>{data.error.message}</p>;
+                      }
+                      return (
+                        <div style={styles.centerItemsQuery}>
+                          <Label size="big" basic color="teal">
+                            Amount of orders = {data.data.orders.totalCount}
+                          </Label>
+                        </div>
+                      );
+                    }}
+                  </Query></Grid.Column></Grid.Row>
             </Grid>
           </div>
         </div>
