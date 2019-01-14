@@ -27,6 +27,7 @@ import LoginPopupContent from "../../layout/AppLayout/Menu/LoginPopupContent";
 import IProduct from "src/models/IProduct";
 import { NavLink } from "react-router-dom";
 import BedragWaarde, { Valuta } from "../../reusable/BedragWaarde";
+import { userState } from "src";
 
 const createAnonymousOrderMutation = gql`
   mutation($data: CreateAnonymousOrderInput!) {
@@ -65,17 +66,19 @@ const styles = {
 interface IFormikValues {
   email: string,
   status: string,
-  bank: string,
+  bank: number | null,
   bankNumber: string,
   products: IProduct[];
+  iban: string;
 }
 
 const initialValues: IFormikValues = {
   email: "",
   status: "option",
-  bank: "",
+  bank: null,
   bankNumber: "",
   products: [],
+  iban: "",
 };
 
 const bankOptions = ["ING", "ABN Amro", "Rabobank"];
@@ -125,7 +128,7 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     formik.setSubmitting(false);
   };
 
-  private handleOrder = async (newEmail: string, boughtProducts: number[]) => {
+  private handleOrder = async ( boughtProducts: number[], newEmail: string) => {
     this.setState({process: true})
 
     const result = await this.props.client.mutate({
@@ -232,12 +235,46 @@ class Order extends React.Component<WithApolloClient<IProps>> {
             flexDirection: "row"
           }}
         >
-          <Field name="submenu" render={this.renderProducts} />
+          <Field name="submenu" render={this.renderProducts}/>
 
           <div>
-            <Field name="submenu" render={this.renderStatusBar} />
+            <Field name="submenu" render={this.renderStatusBar}/>
             <Form className="ui form">
-              <Field name="bank" render={this.renderBankField} />
+              <div style={{marginLeft: "1.5%", width: "150%"}}>
+                <Card fluid>
+                  <Card.Content>
+                    <Card.Header>
+                      <h3>Billing details</h3>
+                    </Card.Header>
+                    <Card.Description>
+                      <Field name="bank" render={this.renderBankSelectField}/>
+                    </Card.Description>
+                  </Card.Content>
+                  <Card.Content>
+                    <Card.Description>
+                      <div style={{display: "flex", alignItems: "center"}}>
+                        <span>IBAN:</span>
+                        <div style={{ width: 10 }} />
+                        <Field
+                          name="iban"
+                          render={this.renderIbanField}
+                          max={18}
+                        />
+                      </div>
+                    </Card.Description>
+                  </Card.Content>
+                  <Card.Content extra>
+                    <Button
+                      primary
+                      floated="right"
+                      onClick={() => this.setStatus("confirm")}
+                      disabled={formik.values.bank === null || formik.values.iban === "" || formik.values.iban.length !== 18}
+                    >
+                      Next
+                    </Button>
+                  </Card.Content>
+                </Card>
+              </div>
             </Form>
           </div>
         </div>
@@ -338,101 +375,82 @@ class Order extends React.Component<WithApolloClient<IProps>> {
     );
   };
 
-  private renderBankField = (fieldProps: FieldProps<IFormikValues>) => {
+  private renderBankSelectField = (fieldProps: FieldProps<IFormikValues>) => {
     return (
-      <div style={{ marginLeft: "1.5%", width: "150%" }}>
+      <Card.Description>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span>
+            Bank:
+          </span>
+          <div style={{ width: 10 }} />
+          <select
+            value={String(fieldProps.field.value)}
+            onChange={ev =>
+              fieldProps.form.setFieldValue(
+                fieldProps.field.name,
+                Number(ev.target.value)
+              )
+            }
+          >
+            <option value={String(null)} disabled>
+              Choose your bank
+            </option>
+            {bankOptions.map((bank, i) => (
+              <option key={i} value={String(i)}>
+                {bank}
+              </option>
+            ))}
+          </select>
+        </div>
+      </Card.Description>
+    );
+  };
+
+  private renderIbanField = (fieldProps: FieldProps<IFormikValues>) => {
+    return (
+      <Input
+        id="bankNumber"
+        iconPosition="left"
+        placeholder="NL12 XXXX 1234 5678 90"
+        size="large"
+      >
+        <Icon name="credit card"/>
+        <input {...fieldProps.field} />
+      </Input>
+    );
+  };
+
+  private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
+    const user = userState.state.user! as IUser;
+    return (
+      <div style={{marginLeft: "1.5%", width: "150%"}}>
         <Card fluid>
           <Card.Content>
-            <Card.Header>
-              <h3>Billing details</h3>
-            </Card.Header>
+            <p><b>Email address</b>: {fieldProps.form.values.email}</p>
           </Card.Content>
           <Card.Content>
-            <Card.Description>
-              Bank:
-              <select
-                value={String(fieldProps.field.value)}
-                onChange={ev =>
-                  fieldProps.form.setFieldValue(
-                    fieldProps.field.name,
-                    Number(ev.target.value)
-                  )
-                }
-              >
-                <option value={String(null)} disabled>
-                  Choose your bank
-                </option>
-                {bankOptions.map((bank, i) => (
-                  <option key={i} value={String(i)}>
-                    {bank}
-                  </option>
-                ))}
-              </select>
-            </Card.Description>
+            <p><b>Bank vendor</b>: {bankOptions[fieldProps.form.values.bank!]}</p>
           </Card.Content>
           <Card.Content>
-            <Card.Description>
-              Bank account number:{"  "}
-              <Input
-                id="bankNumberUser"
-                iconPosition="left"
-                placeholder="IBAN"
-                size="large"
-              >
-                <Icon name="btc" />
-                <input {...fieldProps.field.value} />
-              </Input>
-            </Card.Description>
+            <p><b>IBAN</b>: {fieldProps.form.values.iban}</p>
           </Card.Content>
           <Card.Content extra>
             <Button
               primary
               floated="right"
-              onClick={() => this.setStatus("confirm")}
-              disabled={fieldProps.field.value === null }
+              onClick={() =>
+                this.handleOrder(
+                  fieldProps.form.initialValues.products.map(x => x.id),
+                  user!.token!
+                )
+              }
+              disabled={this.state.process}
             >
-              Next
+              Purchase
             </Button>
           </Card.Content>
         </Card>
       </div>
-    );
-  };
-
-  private renderConfirmationField = (fieldProps: FieldProps<IFormikValues>) => {
-    return (
-      <Subscribe to={[CartState]}>
-        {(cartState: CartState) => (
-          <div style={{ marginLeft: "1.5%", width: "150%" }}>
-            <Card fluid>
-              <Card.Content>
-                <p>Your email address is: {fieldProps.form.values.email}</p>
-              </Card.Content>
-              <Card.Content>
-                <p>Your bank is: {bankOptions[fieldProps.form.values.bank!]}</p>
-              </Card.Content>
-              <Card.Content>
-                <p>Your bank account is: {fieldProps.form.values.bankNumber!}</p>
-              </Card.Content>
-              <Card.Content extra>
-                <Button
-                  primary
-                  floated="right"
-                  onClick={() =>
-                    this.handleOrder(
-                      fieldProps.form.values.email,
-                      fieldProps.form.initialValues.products.map(x => x.id)
-                    )
-                  }
-                  disabled={this.state.process}
-                >
-                  Buy
-                </Button>
-              </Card.Content>
-            </Card>
-          </div>
-        )}
-      </Subscribe>
     );
   };
 
